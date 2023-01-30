@@ -4,14 +4,14 @@
 <dict>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.com.instructure.Contexts</string>
-		<string>group.com.instructure.icanvas</string>
-		<string>group.instructure.shared</string>
+		<string>group.com.instructure.Contexts.2u</string>
+		<string>group.com.instructure.icanvas.2u</string>
+		<string>group.instructure.shared.2u</string>
 	</array>
 	<key>keychain-access-groups</key>
 	<array>
-		<string>$(AppIdentifierPrefix)com.instructure.icanvas</string>
-		<string>$(AppIdentifierPrefix)com.instructure.shared-credentials</string>
+		<string>$(AppIdentifierPrefix)com.instructure.icanvas.2u</string>
+		<string>$(AppIdentifierPrefix)com.instructure.shared-credentials.2u</string>
 	</array>
 </dict>
 </plist>
