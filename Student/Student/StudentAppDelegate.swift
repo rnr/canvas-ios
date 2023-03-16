@@ -24,7 +24,7 @@ import Heap
 import PSPDFKit
 import UIKit
 import UserNotifications
-// TEST commit
+// TEST commit #2
 @UIApplicationMain
 class StudentAppDelegate: UIResponder, UIApplicationDelegate, AppEnvironmentDelegate {
     lazy var window: UIWindow? = ActAsUserWindow(frame: UIScreen.main.bounds, loginDelegate: self)
