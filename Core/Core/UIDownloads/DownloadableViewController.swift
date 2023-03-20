@@ -28,14 +28,14 @@ struct DownloadsContentView: View {
         } label: {
             VStack {
                 HStack {
-                    Text("Downloads")
+                    Text("Saved Content")
                         .font(.semibold17)
                         .foregroundColor(Color(Brand.shared.linkColor))
                         .frame(height: 30)
                     Spacer()
                 }
                 Divider()
-            }.padding()
+            }.padding(.vertical)
         }
     }
 }
