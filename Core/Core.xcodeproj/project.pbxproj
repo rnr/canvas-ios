@@ -823,6 +823,11 @@
 		B4F0B08C292D01F000A3B41B /* GetEnvironmentFeatureFlagsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F0B08B292D01F000A3B41B /* GetEnvironmentFeatureFlagsTests.swift */; };
 		B4F523AF28E47323001A16BC /* IndeterminateBarProgressViewStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F523AE28E47323001A16BC /* IndeterminateBarProgressViewStyle.swift */; };
 		B4F523B128E4732D001A16BC /* DeterminateBarProgressViewStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F523B028E4732D001A16BC /* DeterminateBarProgressViewStyle.swift */; };
+		BA5B6CD329C8AA9D00BE6E19 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = BA5B6CD229C8AA9D00BE6E19 /* Realm */; };
+		BA5B6CD529C8AA9D00BE6E19 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = BA5B6CD429C8AA9D00BE6E19 /* RealmSwift */; };
+		BA5B6CD829C8AB3400BE6E19 /* Storable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5B6CD729C8AB3400BE6E19 /* Storable.swift */; };
+		BA5B6CDA29C8ABC400BE6E19 /* RealmConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5B6CD929C8ABC400BE6E19 /* RealmConfiguration.swift */; };
+		BA5B6CDC29C8ACEB00BE6E19 /* RealmStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5B6CDB29C8ACEB00BE6E19 /* RealmStorage.swift */; };
 		CEB57AE8286B32BB00F4BFC8 /* HelmNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB57AE7286B32BB00F4BFC8 /* HelmNavigationController.swift */; };
 		CEF0D1462837D571005867EF /* ContextCellBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF0D1442837D571005867EF /* ContextCellBackgroundView.swift */; };
 		CEF0D1472837D571005867EF /* ContextCellBackgroundView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEF0D1452837D571005867EF /* ContextCellBackgroundView.xib */; };
@@ -2399,6 +2404,9 @@
 		B4F0B08B292D01F000A3B41B /* GetEnvironmentFeatureFlagsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetEnvironmentFeatureFlagsTests.swift; sourceTree = "<group>"; };
 		B4F523AE28E47323001A16BC /* IndeterminateBarProgressViewStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndeterminateBarProgressViewStyle.swift; sourceTree = "<group>"; };
 		B4F523B028E4732D001A16BC /* DeterminateBarProgressViewStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeterminateBarProgressViewStyle.swift; sourceTree = "<group>"; };
+		BA5B6CD729C8AB3400BE6E19 /* Storable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storable.swift; sourceTree = "<group>"; };
+		BA5B6CD929C8ABC400BE6E19 /* RealmConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmConfiguration.swift; sourceTree = "<group>"; };
+		BA5B6CDB29C8ACEB00BE6E19 /* RealmStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmStorage.swift; sourceTree = "<group>"; };
 		CEB57AE7286B32BB00F4BFC8 /* HelmNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelmNavigationController.swift; sourceTree = "<group>"; };
 		CEF0D1442837D571005867EF /* ContextCellBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCellBackgroundView.swift; sourceTree = "<group>"; };
 		CEF0D1452837D571005867EF /* ContextCellBackgroundView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContextCellBackgroundView.xib; sourceTree = "<group>"; };
@@ -2930,6 +2938,8 @@
 			files = (
 				E87A5E4024D4B51C0065B2AA /* SwiftUI.framework in Frameworks */,
 				EFDD68BFDD537830A59DAC8D /* Pods_needs_pspdfkit_Core.framework in Frameworks */,
+				BA5B6CD329C8AA9D00BE6E19 /* Realm in Frameworks */,
+				BA5B6CD529C8AA9D00BE6E19 /* RealmSwift in Frameworks */,
 				CFD3EC37289422C0001E7D4E /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2981,6 +2991,7 @@
 		2C964830211E2F1A002C3255 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				BA5B6CD629C8AAAD00BE6E19 /* Storage */,
 				CF22C94125F286E000C2E012 /* Accessibility */,
 				7DB92CA824C5FD4A004A6C16 /* AccountNotifications */,
 				9FBFE6D122412B71002B3796 /* ActAsUser */,
@@ -4865,6 +4876,16 @@
 				B4F523AE28E47323001A16BC /* IndeterminateBarProgressViewStyle.swift */,
 			);
 			path = ProgressViewStyle;
+			sourceTree = "<group>";
+		};
+		BA5B6CD629C8AAAD00BE6E19 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				BA5B6CD729C8AB3400BE6E19 /* Storable.swift */,
+				BA5B6CD929C8ABC400BE6E19 /* RealmConfiguration.swift */,
+				BA5B6CDB29C8ACEB00BE6E19 /* RealmStorage.swift */,
+			);
+			path = Storage;
 			sourceTree = "<group>";
 		};
 		CF086070291D403C0013BDCE /* AnnotationContextMenu */ = {
@@ -6947,6 +6968,8 @@
 			name = Core;
 			packageProductDependencies = (
 				CFD3EC36289422C0001E7D4E /* Lottie */,
+				BA5B6CD229C8AA9D00BE6E19 /* Realm */,
+				BA5B6CD429C8AA9D00BE6E19 /* RealmSwift */,
 			);
 			productName = Core;
 			productReference = 2C96482E211E2F1A002C3255 /* Core.framework */;
@@ -7081,6 +7104,7 @@
 			mainGroup = 2C964824211E2F1A002C3255;
 			packageReferences = (
 				CFD3EC35289422C0001E7D4E /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				BA5B6CD129C8AA9D00BE6E19 /* XCRemoteSwiftPackageReference "realm-swift" */,
 			);
 			productRefGroup = 2C96482F211E2F1A002C3255 /* Products */;
 			projectDirPath = "";
@@ -8233,6 +8257,7 @@
 				7DA260DB23F72359005D2121 /* GradeCircleView.swift in Sources */,
 				7DA2603D23F722D9005D2121 /* ContextColor.swift in Sources */,
 				7D62716C245B591E00FC1798 /* GetDiscussions.swift in Sources */,
+				BA5B6CD829C8AB3400BE6E19 /* Storable.swift in Sources */,
 				7DA2603423F722D9005D2121 /* GradeViewable.swift in Sources */,
 				D9B6493D28F453350035CE14 /* SubmissionBreakdownViewModelProtocol.swift in Sources */,
 				7DA2605723F722D9005D2121 /* Page.swift in Sources */,
@@ -8420,6 +8445,7 @@
 				7DA2604323F722D9005D2121 /* DiscussionEntry.swift in Sources */,
 				D9D7EBE227BC0A1D00544339 /* CourseSettingsView.swift in Sources */,
 				CFDB61FC28AD2FC70008C3F3 /* FileSubmissionState.swift in Sources */,
+				BA5B6CDA29C8ABC400BE6E19 /* RealmConfiguration.swift in Sources */,
 				CFB06FA428C0E62400DAC40B /* FileUploadProgressObserversCache.swift in Sources */,
 				7D1E85622566E80100D093C5 /* CustomizeCourseView.swift in Sources */,
 				EB2A9BCF2632E40600A19A5A /* SideMenuItem.swift in Sources */,
@@ -8493,6 +8519,7 @@
 				7DA25F8B23F7211E005D2121 /* APIPlannable.swift in Sources */,
 				7DA2604823F722D9005D2121 /* FeatureFlag.swift in Sources */,
 				CFB9B2F928A2460600C18C79 /* AttachmentPreviewViewModel.swift in Sources */,
+				BA5B6CDC29C8ACEB00BE6E19 /* RealmStorage.swift in Sources */,
 				7DA2609E23F72348005D2121 /* APITodo.swift in Sources */,
 				CF8CB52F26CC0BF6008361E2 /* K5ResourcesContactViewModel.swift in Sources */,
 				7DA2605F23F722D9005D2121 /* Role.swift in Sources */,
@@ -9179,6 +9206,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		BA5B6CD129C8AA9D00BE6E19 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.37.0;
+			};
+		};
 		CFD3EC35289422C0001E7D4E /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
@@ -9190,6 +9225,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		BA5B6CD229C8AA9D00BE6E19 /* Realm */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BA5B6CD129C8AA9D00BE6E19 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = Realm;
+		};
+		BA5B6CD429C8AA9D00BE6E19 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BA5B6CD129C8AA9D00BE6E19 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
+		};
 		CFD3EC36289422C0001E7D4E /* Lottie */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = CFD3EC35289422C0001E7D4E /* XCRemoteSwiftPackageReference "lottie-ios" */;
