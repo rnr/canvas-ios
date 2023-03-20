@@ -28,6 +28,7 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
         let titleLabel =  UILabel()
         titleLabel.font = .systemFont(ofSize: 16, weight: .semibold)
         titleLabel.textColor = .textDarkest
+        titleLabel.numberOfLines = 2
         return titleLabel
     }()
 
