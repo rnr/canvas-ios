@@ -19,19 +19,6 @@
 import RealmSwift
 import Foundation
 
-public final class Dog: Object, Storable {
-   public convenience init(name: String, age: Int) {
-        self.init()
-        self.name = name
-        self.age = age
-       self._id = Foundation.UUID().uuidString
-    }
-
-    @Persisted(primaryKey: true) var _id: String
-    @Persisted public var name: String
-    @Persisted public var age: Int
-}
-
 public struct StorageProvider {
     static public var current: LocalStorage = RealmStorage.default
 }
