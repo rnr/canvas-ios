@@ -141,7 +141,7 @@
 		B1FF02D02404353E004B7B1C /* KeychainTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1FF02CF2404353E004B7B1C /* KeychainTests.swift */; };
 		B49725D0290C04D50067B91E /* Heap in Frameworks */ = {isa = PBXBuildFile; productRef = B49725CF290C04D50067B91E /* Heap */; };
 		B5E212D31D88856B009D8C07 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = B5E212D51D88856B009D8C07 /* Localizable.strings */; };
-		BAECEF3329CB463D00CB960A /* mobile-offline-downloader-ios in Frameworks */ = {isa = PBXBuildFile; productRef = BAECEF3229CB463D00CB960A /* mobile-offline-downloader-ios */; };
+		BAECEF3529CB75D700CB960A /* MobileOfflineDownloader in Frameworks */ = {isa = PBXBuildFile; productRef = BAECEF3429CB75D700CB960A /* MobileOfflineDownloader */; };
 		C9299FE528102A62003A47C2 /* DSAnnouncementsE2ETests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9299FE428102A62003A47C2 /* DSAnnouncementsE2ETests.swift */; };
 		C9299FEC2817CCF2003A47C2 /* DSDiscussionsE2ETest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9299FEB2817CCF2003A47C2 /* DSDiscussionsE2ETest.swift */; };
 		C935D41E26DD1BDE00C940F7 /* NewQuizzesE2ETests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C935D41D26DD1BDE00C940F7 /* NewQuizzesE2ETests.swift */; };
@@ -821,13 +821,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				2C67B0C61E01F05A00DDD191 /* AssetsLibrary.framework in Frameworks */,
+				BAECEF3529CB75D700CB960A /* MobileOfflineDownloader in Frameworks */,
 				B49725D0290C04D50067B91E /* Heap in Frameworks */,
 				61F438E31DD4E60B00552D14 /* AVFoundation.framework in Frameworks */,
 				7DBF920222690E9400710D0F /* CanvasCore.framework in Frameworks */,
 				7D1D7E05213743D300F7CCFE /* Core.framework in Frameworks */,
 				2C67B0CC1E01F06800DDD191 /* CoreMedia.framework in Frameworks */,
 				2C67B0C81E01F05F00DDD191 /* CoreTelephony.framework in Frameworks */,
-				BAECEF3329CB463D00CB960A /* mobile-offline-downloader-ios in Frameworks */,
 				2C67B0CA1E01F06300DDD191 /* CoreText.framework in Frameworks */,
 				2C67B0CE1E01F07200DDD191 /* CoreVideo.framework in Frameworks */,
 				49A04E7D1CF653050051E1E7 /* libc++.tbd in Frameworks */,
@@ -2036,7 +2036,7 @@
 			name = Student;
 			packageProductDependencies = (
 				B49725CF290C04D50067B91E /* Heap */,
-				BAECEF3229CB463D00CB960A /* mobile-offline-downloader-ios */,
+				BAECEF3429CB75D700CB960A /* MobileOfflineDownloader */,
 			);
 			productName = Canvas;
 			productReference = 492704731CF4AF7100C631C6 /* Student.app */;
@@ -3859,9 +3859,9 @@
 			package = B49725CE290C04D50067B91E /* XCRemoteSwiftPackageReference "heap-ios-sdk" */;
 			productName = Heap;
 		};
-		BAECEF3229CB463D00CB960A /* mobile-offline-downloader-ios */ = {
+		BAECEF3429CB75D700CB960A /* MobileOfflineDownloader */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = "mobile-offline-downloader-ios";
+			productName = MobileOfflineDownloader;
 		};
 		CF09E6A0283FB861000C72D0 /* FirebaseCrashlytics */ = {
 			isa = XCSwiftPackageProductDependency;

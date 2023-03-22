@@ -4,13 +4,13 @@
 import PackageDescription
 
 let package = Package(
-    name: "mobile-offline-downloader-ios",
+    name: "MobileOfflineDownloader",
     platforms: [.iOS("13.0")],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
-            name: "mobile-offline-downloader-ios",
-            targets: ["mobile-offline-downloader-ios"]),
+            name: "MobileOfflineDownloader",
+            targets: ["MobileOfflineDownloader"]),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -23,7 +23,7 @@ let package = Package(
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
-            name: "mobile-offline-downloader-ios",
+            name: "MobileOfflineDownloader",
             dependencies: [
                 .product(name: "Realm", package: "realm-swift"),
                 .product(name: "RealmSwift", package: "realm-swift")
@@ -31,8 +31,8 @@ let package = Package(
             path: "Sources"
         ),
         .testTarget(
-            name: "mobile-offline-downloader-iosTests",
-            dependencies: ["mobile-offline-downloader-ios"]
+            name: "MobileOfflineDownloaderTests",
+            dependencies: ["MobileOfflineDownloader"]
         ),
     ]
 )

@@ -25,7 +25,7 @@ import PSPDFKit
 import UIKit
 import UserNotifications
 
-import mobile_offline_downloader_ios
+import MobileOfflineDownloader
 import RealmSwift
 
 final class Person: StoreObject, Storable {
@@ -34,7 +34,6 @@ final class Person: StoreObject, Storable {
     convenience init(name: String) {
         self.init()
         self.name = name
-        self.id = Foundation.UUID().uuidString
     }
 }
 
