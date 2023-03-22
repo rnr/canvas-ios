@@ -24,7 +24,19 @@ import Heap
 import PSPDFKit
 import UIKit
 import UserNotifications
+
 import mobile_offline_downloader_ios
+import RealmSwift
+
+final class Person: StoreObject, Storable {
+    @Persisted var name: String
+
+    convenience init(name: String) {
+        self.init()
+        self.name = name
+        self.id = Foundation.UUID().uuidString
+    }
+}
 
 // TEST commit
 @UIApplicationMain
@@ -81,10 +93,13 @@ class StudentAppDelegate: UIResponder, UIApplicationDelegate, AppEnvironmentDele
             Analytics.shared.logScreenView(route: "/login", viewController: window?.rootViewController)
         }
 
-        StorageProvider.current.addOrUpdate(
-            value: <#T##Storable#>,
-            completionHandler: <#T##(Result<Void, Error>) -> Void#>
-        )
+        let person = Person(name: "Test")
+
+        StorageProvider.current.addOrUpdate(value: person) { result in
+            StorageProvider.current.objects(Person.self) { result in
+                print(result)
+            }
+        }
 
         return true
     }

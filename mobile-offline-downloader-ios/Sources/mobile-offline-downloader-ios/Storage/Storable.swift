@@ -23,7 +23,9 @@ public struct StorageProvider {
     static public var current: LocalStorage = RealmStorage.default
 }
 
-class StoreObject: Object {}
+open class StoreObject: Object {
+    @Persisted(primaryKey: true) public var id: String = Foundation.UUID().uuidString
+}
 
 public protocol Storable: Object, RealmFetchable {
     static func all(
