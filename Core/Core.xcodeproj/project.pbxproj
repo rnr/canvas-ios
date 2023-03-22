@@ -823,11 +823,14 @@
 		B4F0B08C292D01F000A3B41B /* GetEnvironmentFeatureFlagsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F0B08B292D01F000A3B41B /* GetEnvironmentFeatureFlagsTests.swift */; };
 		B4F523AF28E47323001A16BC /* IndeterminateBarProgressViewStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F523AE28E47323001A16BC /* IndeterminateBarProgressViewStyle.swift */; };
 		B4F523B128E4732D001A16BC /* DeterminateBarProgressViewStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F523B028E4732D001A16BC /* DeterminateBarProgressViewStyle.swift */; };
-		BA5B6CD329C8AA9D00BE6E19 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = BA5B6CD229C8AA9D00BE6E19 /* Realm */; };
-		BA5B6CD529C8AA9D00BE6E19 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = BA5B6CD429C8AA9D00BE6E19 /* RealmSwift */; };
-		BA5B6CD829C8AB3400BE6E19 /* Storable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5B6CD729C8AB3400BE6E19 /* Storable.swift */; };
-		BA5B6CDA29C8ABC400BE6E19 /* RealmConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5B6CD929C8ABC400BE6E19 /* RealmConfiguration.swift */; };
-		BA5B6CDC29C8ACEB00BE6E19 /* RealmStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5B6CDB29C8ACEB00BE6E19 /* RealmStorage.swift */; };
+		BA5B6CC929C8A0BA00BE6E19 /* DownloadPageListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5B6CC029C8A0BA00BE6E19 /* DownloadPageListTableViewCell.swift */; };
+		BA5B6CCA29C8A0BA00BE6E19 /* DownloadableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5B6CC129C8A0BA00BE6E19 /* DownloadableViewController.swift */; };
+		BA5B6CCB29C8A0BA00BE6E19 /* DownloadButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5B6CC329C8A0BA00BE6E19 /* DownloadButton.swift */; };
+		BA5B6CCC29C8A0BA00BE6E19 /* UIView+Constrants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5B6CC429C8A0BA00BE6E19 /* UIView+Constrants.swift */; };
+		BA5B6CCD29C8A0BA00BE6E19 /* RoundButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5B6CC529C8A0BA00BE6E19 /* RoundButton.swift */; };
+		BA5B6CCE29C8A0BA00BE6E19 /* WaitingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5B6CC629C8A0BA00BE6E19 /* WaitingView.swift */; };
+		BA5B6CCF29C8A0BA00BE6E19 /* ProgressButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5B6CC729C8A0BA00BE6E19 /* ProgressButton.swift */; };
+		BA5B6CD029C8A0BA00BE6E19 /* DownloadButton+TransitionAndAnimationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5B6CC829C8A0BA00BE6E19 /* DownloadButton+TransitionAndAnimationExtension.swift */; };
 		CEB57AE8286B32BB00F4BFC8 /* HelmNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB57AE7286B32BB00F4BFC8 /* HelmNavigationController.swift */; };
 		CEF0D1462837D571005867EF /* ContextCellBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF0D1442837D571005867EF /* ContextCellBackgroundView.swift */; };
 		CEF0D1472837D571005867EF /* ContextCellBackgroundView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEF0D1452837D571005867EF /* ContextCellBackgroundView.xib */; };
@@ -2404,9 +2407,14 @@
 		B4F0B08B292D01F000A3B41B /* GetEnvironmentFeatureFlagsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetEnvironmentFeatureFlagsTests.swift; sourceTree = "<group>"; };
 		B4F523AE28E47323001A16BC /* IndeterminateBarProgressViewStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndeterminateBarProgressViewStyle.swift; sourceTree = "<group>"; };
 		B4F523B028E4732D001A16BC /* DeterminateBarProgressViewStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeterminateBarProgressViewStyle.swift; sourceTree = "<group>"; };
-		BA5B6CD729C8AB3400BE6E19 /* Storable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storable.swift; sourceTree = "<group>"; };
-		BA5B6CD929C8ABC400BE6E19 /* RealmConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmConfiguration.swift; sourceTree = "<group>"; };
-		BA5B6CDB29C8ACEB00BE6E19 /* RealmStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmStorage.swift; sourceTree = "<group>"; };
+		BA5B6CC029C8A0BA00BE6E19 /* DownloadPageListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadPageListTableViewCell.swift; sourceTree = "<group>"; };
+		BA5B6CC129C8A0BA00BE6E19 /* DownloadableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadableViewController.swift; sourceTree = "<group>"; };
+		BA5B6CC329C8A0BA00BE6E19 /* DownloadButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadButton.swift; sourceTree = "<group>"; };
+		BA5B6CC429C8A0BA00BE6E19 /* UIView+Constrants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Constrants.swift"; sourceTree = "<group>"; };
+		BA5B6CC529C8A0BA00BE6E19 /* RoundButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundButton.swift; sourceTree = "<group>"; };
+		BA5B6CC629C8A0BA00BE6E19 /* WaitingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaitingView.swift; sourceTree = "<group>"; };
+		BA5B6CC729C8A0BA00BE6E19 /* ProgressButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressButton.swift; sourceTree = "<group>"; };
+		BA5B6CC829C8A0BA00BE6E19 /* DownloadButton+TransitionAndAnimationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DownloadButton+TransitionAndAnimationExtension.swift"; sourceTree = "<group>"; };
 		CEB57AE7286B32BB00F4BFC8 /* HelmNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelmNavigationController.swift; sourceTree = "<group>"; };
 		CEF0D1442837D571005867EF /* ContextCellBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCellBackgroundView.swift; sourceTree = "<group>"; };
 		CEF0D1452837D571005867EF /* ContextCellBackgroundView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContextCellBackgroundView.xib; sourceTree = "<group>"; };
@@ -2938,8 +2946,6 @@
 			files = (
 				E87A5E4024D4B51C0065B2AA /* SwiftUI.framework in Frameworks */,
 				EFDD68BFDD537830A59DAC8D /* Pods_needs_pspdfkit_Core.framework in Frameworks */,
-				BA5B6CD329C8AA9D00BE6E19 /* Realm in Frameworks */,
-				BA5B6CD529C8AA9D00BE6E19 /* RealmSwift in Frameworks */,
 				CFD3EC37289422C0001E7D4E /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2991,7 +2997,7 @@
 		2C964830211E2F1A002C3255 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				BA5B6CD629C8AAAD00BE6E19 /* Storage */,
+				BA5B6CBF29C8A0BA00BE6E19 /* UIDownloads */,
 				CF22C94125F286E000C2E012 /* Accessibility */,
 				7DB92CA824C5FD4A004A6C16 /* AccountNotifications */,
 				9FBFE6D122412B71002B3796 /* ActAsUser */,
@@ -4878,14 +4884,27 @@
 			path = ProgressViewStyle;
 			sourceTree = "<group>";
 		};
-		BA5B6CD629C8AAAD00BE6E19 /* Storage */ = {
+		BA5B6CBF29C8A0BA00BE6E19 /* UIDownloads */ = {
 			isa = PBXGroup;
 			children = (
-				BA5B6CD729C8AB3400BE6E19 /* Storable.swift */,
-				BA5B6CD929C8ABC400BE6E19 /* RealmConfiguration.swift */,
-				BA5B6CDB29C8ACEB00BE6E19 /* RealmStorage.swift */,
+				BA5B6CC029C8A0BA00BE6E19 /* DownloadPageListTableViewCell.swift */,
+				BA5B6CC129C8A0BA00BE6E19 /* DownloadableViewController.swift */,
+				BA5B6CC229C8A0BA00BE6E19 /* DownloadButton */,
 			);
-			path = Storage;
+			path = UIDownloads;
+			sourceTree = "<group>";
+		};
+		BA5B6CC229C8A0BA00BE6E19 /* DownloadButton */ = {
+			isa = PBXGroup;
+			children = (
+				BA5B6CC329C8A0BA00BE6E19 /* DownloadButton.swift */,
+				BA5B6CC429C8A0BA00BE6E19 /* UIView+Constrants.swift */,
+				BA5B6CC529C8A0BA00BE6E19 /* RoundButton.swift */,
+				BA5B6CC629C8A0BA00BE6E19 /* WaitingView.swift */,
+				BA5B6CC729C8A0BA00BE6E19 /* ProgressButton.swift */,
+				BA5B6CC829C8A0BA00BE6E19 /* DownloadButton+TransitionAndAnimationExtension.swift */,
+			);
+			path = DownloadButton;
 			sourceTree = "<group>";
 		};
 		CF086070291D403C0013BDCE /* AnnotationContextMenu */ = {
@@ -6968,8 +6987,6 @@
 			name = Core;
 			packageProductDependencies = (
 				CFD3EC36289422C0001E7D4E /* Lottie */,
-				BA5B6CD229C8AA9D00BE6E19 /* Realm */,
-				BA5B6CD429C8AA9D00BE6E19 /* RealmSwift */,
 			);
 			productName = Core;
 			productReference = 2C96482E211E2F1A002C3255 /* Core.framework */;
@@ -7104,7 +7121,6 @@
 			mainGroup = 2C964824211E2F1A002C3255;
 			packageReferences = (
 				CFD3EC35289422C0001E7D4E /* XCRemoteSwiftPackageReference "lottie-ios" */,
-				BA5B6CD129C8AA9D00BE6E19 /* XCRemoteSwiftPackageReference "realm-swift" */,
 			);
 			productRefGroup = 2C96482F211E2F1A002C3255 /* Products */;
 			projectDirPath = "";
@@ -8048,6 +8064,7 @@
 				7DFD5F7C23FF158700D988E0 /* PlannerViewController.swift in Sources */,
 				7DA2600D23F7227A005D2121 /* NSPredicateExtensions.swift in Sources */,
 				7DA25FF523F72268005D2121 /* CommentListCell.swift in Sources */,
+				BA5B6CD029C8A0BA00BE6E19 /* DownloadButton+TransitionAndAnimationExtension.swift in Sources */,
 				7DA2609B23F7233D005D2121 /* UseCase.swift in Sources */,
 				7D4F44FA241BF26700233B92 /* APIConference.swift in Sources */,
 				D9E1BABD258163DC0034C01E /* ContextCardSubmissionsView.swift in Sources */,
@@ -8062,6 +8079,7 @@
 				7DA260A323F7234C005D2121 /* IPC.swift in Sources */,
 				CF2091AA275E6553003E8EA6 /* DashboardGrid.swift in Sources */,
 				CF43DE8527CCDBCB00015B6F /* MotionDetector.swift in Sources */,
+				BA5B6CC929C8A0BA00BE6E19 /* DownloadPageListTableViewCell.swift in Sources */,
 				7D06A2B32469B7D100D76267 /* DiscussionReplyViewController.swift in Sources */,
 				CFDB61F528AD03050008C3F3 /* FileUploadItem.swift in Sources */,
 				CF490F162850E2750065D242 /* DragInfo.swift in Sources */,
@@ -8069,6 +8087,7 @@
 				D9B6493728F452D30035CE14 /* QuizDetailsView.swift in Sources */,
 				B102EEB6243B862C002E04F0 /* ModuleItemSequenceViewController.swift in Sources */,
 				7DA2605823F722D9005D2121 /* Permissions.swift in Sources */,
+				BA5B6CCF29C8A0BA00BE6E19 /* ProgressButton.swift in Sources */,
 				7DA260DA23F72359005D2121 /* FloatingButton.swift in Sources */,
 				CF6C100326C5235B002E7FE6 /* PlannerOverrideUpdater.swift in Sources */,
 				EBF58AC72721A7DD008EE2DF /* K5SubjectViewModel.swift in Sources */,
@@ -8203,8 +8222,10 @@
 				7D57E42E255EE3A100E0027B /* AssignmentDetailsView.swift in Sources */,
 				7DA25FB223F72136005D2121 /* APIFavorite.swift in Sources */,
 				7DA25FC123F72136005D2121 /* APIOAuth.swift in Sources */,
+				BA5B6CCD29C8A0BA00BE6E19 /* RoundButton.swift in Sources */,
 				7DA2601E23F7227A005D2121 /* URLExtensions.swift in Sources */,
 				CF490F142850CE230065D242 /* DragStartViewModel.swift in Sources */,
+				BA5B6CCE29C8A0BA00BE6E19 /* WaitingView.swift in Sources */,
 				CFCE214C2656895E00E3B32A /* Bounds.swift in Sources */,
 				7DA25FDA23F72148005D2121 /* Keychain.swift in Sources */,
 				CF6F91CC28929416009F147E /* AssignmentPickerListService.swift in Sources */,
@@ -8257,7 +8278,6 @@
 				7DA260DB23F72359005D2121 /* GradeCircleView.swift in Sources */,
 				7DA2603D23F722D9005D2121 /* ContextColor.swift in Sources */,
 				7D62716C245B591E00FC1798 /* GetDiscussions.swift in Sources */,
-				BA5B6CD829C8AB3400BE6E19 /* Storable.swift in Sources */,
 				7DA2603423F722D9005D2121 /* GradeViewable.swift in Sources */,
 				D9B6493D28F453350035CE14 /* SubmissionBreakdownViewModelProtocol.swift in Sources */,
 				7DA2605723F722D9005D2121 /* Page.swift in Sources */,
@@ -8299,6 +8319,7 @@
 				CF8CB54326CD17CE008361E2 /* K5ResourcesApplicationViewModel.swift in Sources */,
 				CF3E7623288AB07700276703 /* FileProgressListViewModelProtocol.swift in Sources */,
 				CFFE285C27AA9D410029A408 /* CourseListViewModel.swift in Sources */,
+				BA5B6CCA29C8A0BA00BE6E19 /* DownloadableViewController.swift in Sources */,
 				7D159CEC242E556900A77A15 /* ModuleListViewController.swift in Sources */,
 				7DA260C623F72352005D2121 /* GetConversationCourses.swift in Sources */,
 				7DA260B823F72352005D2121 /* GetQuiz.swift in Sources */,
@@ -8406,8 +8427,10 @@
 				7DA25FFA23F7226E005D2121 /* DocViewerCommentReplyAnnotation.swift in Sources */,
 				CF350F6B290C0F2C00ED656E /* DashboardSettingsInteractor.swift in Sources */,
 				EBF58AC92721A862008EE2DF /* K5SubjectView.swift in Sources */,
+				BA5B6CCB29C8A0BA00BE6E19 /* DownloadButton.swift in Sources */,
 				B4372B5B28AF9CB30030FFB9 /* FileUploadNotificationCardListViewModel.swift in Sources */,
 				7DA260C323F72352005D2121 /* UploadManager.swift in Sources */,
+				BA5B6CCC29C8A0BA00BE6E19 /* UIView+Constrants.swift in Sources */,
 				CF3A31E328FD6EA0002752D2 /* iOS15SwipeActions.swift in Sources */,
 				CF43DE8227CCD6CF00015B6F /* MotionScene.swift in Sources */,
 				7DA260F823F723AB005D2121 /* FileDetailsViewController.swift in Sources */,
@@ -8445,7 +8468,6 @@
 				7DA2604323F722D9005D2121 /* DiscussionEntry.swift in Sources */,
 				D9D7EBE227BC0A1D00544339 /* CourseSettingsView.swift in Sources */,
 				CFDB61FC28AD2FC70008C3F3 /* FileSubmissionState.swift in Sources */,
-				BA5B6CDA29C8ABC400BE6E19 /* RealmConfiguration.swift in Sources */,
 				CFB06FA428C0E62400DAC40B /* FileUploadProgressObserversCache.swift in Sources */,
 				7D1E85622566E80100D093C5 /* CustomizeCourseView.swift in Sources */,
 				EB2A9BCF2632E40600A19A5A /* SideMenuItem.swift in Sources */,
@@ -8519,7 +8541,6 @@
 				7DA25F8B23F7211E005D2121 /* APIPlannable.swift in Sources */,
 				7DA2604823F722D9005D2121 /* FeatureFlag.swift in Sources */,
 				CFB9B2F928A2460600C18C79 /* AttachmentPreviewViewModel.swift in Sources */,
-				BA5B6CDC29C8ACEB00BE6E19 /* RealmStorage.swift in Sources */,
 				7DA2609E23F72348005D2121 /* APITodo.swift in Sources */,
 				CF8CB52F26CC0BF6008361E2 /* K5ResourcesContactViewModel.swift in Sources */,
 				7DA2605F23F722D9005D2121 /* Role.swift in Sources */,
@@ -9206,14 +9227,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		BA5B6CD129C8AA9D00BE6E19 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/realm/realm-swift.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 10.37.0;
-			};
-		};
 		CFD3EC35289422C0001E7D4E /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
@@ -9225,16 +9238,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		BA5B6CD229C8AA9D00BE6E19 /* Realm */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = BA5B6CD129C8AA9D00BE6E19 /* XCRemoteSwiftPackageReference "realm-swift" */;
-			productName = Realm;
-		};
-		BA5B6CD429C8AA9D00BE6E19 /* RealmSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = BA5B6CD129C8AA9D00BE6E19 /* XCRemoteSwiftPackageReference "realm-swift" */;
-			productName = RealmSwift;
-		};
 		CFD3EC36289422C0001E7D4E /* Lottie */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = CFD3EC35289422C0001E7D4E /* XCRemoteSwiftPackageReference "lottie-ios" */;

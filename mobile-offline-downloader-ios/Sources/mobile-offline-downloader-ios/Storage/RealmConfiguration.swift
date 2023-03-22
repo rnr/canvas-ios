@@ -17,6 +17,7 @@
 //
 
 import RealmSwift
+import Foundation
 
 protocol Applyable { }
 

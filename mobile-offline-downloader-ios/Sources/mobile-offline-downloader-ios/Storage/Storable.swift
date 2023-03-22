@@ -23,6 +23,8 @@ public struct StorageProvider {
     static public var current: LocalStorage = RealmStorage.default
 }
 
+class StoreObject: Object {}
+
 public protocol Storable: Object, RealmFetchable {
     static func all(
         in storage: LocalStorage,

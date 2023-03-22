@@ -17,6 +17,7 @@
 //
 
 import RealmSwift
+import Foundation
 
 final class RealmStorage: LocalStorage {
 

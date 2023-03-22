@@ -24,6 +24,8 @@ import Heap
 import PSPDFKit
 import UIKit
 import UserNotifications
+import mobile_offline_downloader_ios
+
 // TEST commit
 @UIApplicationMain
 class StudentAppDelegate: UIResponder, UIApplicationDelegate, AppEnvironmentDelegate {
@@ -78,6 +80,11 @@ class StudentAppDelegate: UIResponder, UIApplicationDelegate, AppEnvironmentDele
             window?.makeKeyAndVisible()
             Analytics.shared.logScreenView(route: "/login", viewController: window?.rootViewController)
         }
+
+        StorageProvider.current.addOrUpdate(
+            value: <#T##Storable#>,
+            completionHandler: <#T##(Result<Void, Error>) -> Void#>
+        )
 
         return true
     }
