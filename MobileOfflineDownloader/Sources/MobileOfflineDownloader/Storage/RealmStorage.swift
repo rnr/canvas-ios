@@ -19,9 +19,9 @@
 import RealmSwift
 import Foundation
 
-final class RealmStorage: LocalStorage {
+final public class RealmStorage: LocalStorage {
 
-    static let `default`: RealmStorage = RealmStorage()
+    static public let `default`: RealmStorage = RealmStorage()
 
     private init() {
         configure()
@@ -38,7 +38,7 @@ final class RealmStorage: LocalStorage {
     }
     private var config: Realm.Configuration = .defaultConfiguration
 
-    func addOrUpdate<T>(
+    public func addOrUpdate<T>(
         value: T,
         completionHandler: @escaping (Result<Void, Error>) -> Void
     ) where T: Storable {
@@ -58,7 +58,7 @@ final class RealmStorage: LocalStorage {
         }
     }
 
-    func addOrUpdate<T>(
+    public func addOrUpdate<T>(
         values: [T],
         completionHandler: @escaping (Result<Void, Error>) -> Void
     ) where T: Storable {
@@ -82,7 +82,7 @@ final class RealmStorage: LocalStorage {
         }
     }
 
-    func objects<T>(
+    public func objects<T>(
         _ type: T.Type,
         completionHandler: @escaping ([T]) -> Void
     ) where T: Storable {
@@ -96,7 +96,7 @@ final class RealmStorage: LocalStorage {
         }
     }
 
-    func object<T, KeyType>(
+    public func object<T, KeyType>(
         _ type: T.Type,
         forPrimaryKey key: KeyType,
         completionHandler: @escaping (T?) -> Void
@@ -113,7 +113,7 @@ final class RealmStorage: LocalStorage {
         }
     }
 
-    func delete<T>(
+    public func delete<T>(
         value: T,
         completionHandler: @escaping (Result<Void, Error>) -> Void
     ) where T: Storable {
@@ -134,7 +134,7 @@ final class RealmStorage: LocalStorage {
         }
     }
 
-    func delete<T>(
+    public func delete<T>(
         values: [T],
         completionHandler: @escaping (Result<Void, Error>) -> Void
     ) where T: Storable {
@@ -158,7 +158,7 @@ final class RealmStorage: LocalStorage {
         }
     }
 
-    func deleteAll(completionHandler: @escaping (Result<Void, Error>) -> Void) {
+    public func deleteAll(completionHandler: @escaping (Result<Void, Error>) -> Void) {
         dataBaseQueue.background.async { [weak self] in
             guard let self = self else {
                 completionHandler(.failure(RealmError.error))

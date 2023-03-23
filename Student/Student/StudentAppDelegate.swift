@@ -25,18 +25,6 @@ import PSPDFKit
 import UIKit
 import UserNotifications
 
-import MobileOfflineDownloader
-import RealmSwift
-
-final class Person: StoreObject, Storable {
-    @Persisted var name: String
-
-    convenience init(name: String) {
-        self.init()
-        self.name = name
-    }
-}
-
 // TEST commit
 @UIApplicationMain
 class StudentAppDelegate: UIResponder, UIApplicationDelegate, AppEnvironmentDelegate {
@@ -90,14 +78,6 @@ class StudentAppDelegate: UIResponder, UIApplicationDelegate, AppEnvironmentDele
             window?.rootViewController = LoginNavigationController.create(loginDelegate: self, fromLaunch: true, app: .student)
             window?.makeKeyAndVisible()
             Analytics.shared.logScreenView(route: "/login", viewController: window?.rootViewController)
-        }
-
-        let person = Person(name: "Test")
-
-        StorageProvider.current.addOrUpdate(value: person) { result in
-            StorageProvider.current.objects(Person.self) { result in
-                print(result)
-            }
         }
 
         return true

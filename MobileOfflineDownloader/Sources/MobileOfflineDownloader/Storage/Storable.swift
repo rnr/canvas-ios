@@ -17,15 +17,6 @@
 //
 
 import RealmSwift
-import Foundation
-
-public struct StorageProvider {
-    static public var current: LocalStorage = RealmStorage.default
-}
-
-open class StoreObject: Object {
-    @Persisted(primaryKey: true) public var id: String = Foundation.UUID().uuidString
-}
 
 public protocol Storable: Object, RealmFetchable {
     static func all(
@@ -39,36 +30,18 @@ public protocol Storable: Object, RealmFetchable {
         completionHandler: @escaping (_ value: Self?) -> Void
     )
 
-    func addOrUpdate<T: Storable>(
+    func addOrUpdate(
         in storage: LocalStorage,
-        value: T,
         completionHandler: @escaping (Result<Void, Error>) -> Void
     )
 
-    func delete<T: Storable>(
+    func delete(
         in storage: LocalStorage,
-        value: T,
         completionHandler: @escaping (Result<Void, Error>) -> Void
     )
 }
 
 extension Storable {
-    func store(in storage: LocalStorage) async throws {
-        try await withCheckedThrowingContinuation { continuation in
-            storage.addOrUpdate(value: self) { result in
-                continuation.resume(with: result)
-            }
-        }
-    }
-
-    func delete(from storage: LocalStorage) async throws {
-        try await withCheckedThrowingContinuation { continuation in
-            storage.delete(value: self) { result in
-                continuation.resume(with: result)
-            }
-        }
-    }
-
     public static func all(
         in storage: LocalStorage,
         completionHandler: @escaping ([Self]) -> Void
@@ -84,50 +57,17 @@ extension Storable {
         storage.object(Self.self, forPrimaryKey: key, completionHandler: completionHandler)
     }
 
-    public func addOrUpdate<T: Storable>(
+    public func addOrUpdate(
         in storage: LocalStorage,
-        value: T,
         completionHandler: @escaping (Result<Void, Error>) -> Void
     ) {
-        storage.addOrUpdate(value: value, completionHandler: completionHandler)
+        storage.addOrUpdate(value: self, completionHandler: completionHandler)
     }
 
-    public func delete<T: Storable>(
+    public func delete(
         in storage: LocalStorage,
-        value: T,
         completionHandler: @escaping (Result<Void, Error>) -> Void
     ) {
         storage.delete(value: self, completionHandler: completionHandler)
     }
-}
-
-public protocol LocalStorage {
-    func objects<T: Storable>(
-        _ type: T.Type,
-        completionHandler: @escaping ([T]) -> Void
-    )
-    func object<T: Storable, KeyType>(
-        _ type: T.Type,
-        forPrimaryKey key: KeyType,
-        completionHandler: @escaping (_ value: T?) -> Void
-    )
-    func addOrUpdate<T: Storable>(
-        value: T,
-        completionHandler: @escaping (Result<Void, Error>) -> Void
-    )
-    func addOrUpdate<T: Storable>(
-        values: [T],
-        completionHandler: @escaping (Result<Void, Error>) -> Void
-    )
-    func delete<T: Storable>(
-        value: T,
-        completionHandler: @escaping (Result<Void, Error>) -> Void
-    )
-    func delete<T: Storable>(
-        values: [T],
-        completionHandler: @escaping (Result<Void, Error>) -> Void
-    )
-    func deleteAll(
-        completionHandler: @escaping (Result<Void, Error>) -> Void
-    )
 }
