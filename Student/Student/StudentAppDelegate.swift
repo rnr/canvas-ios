@@ -24,6 +24,7 @@ import Heap
 import PSPDFKit
 import UIKit
 import UserNotifications
+
 // TEST commit
 @UIApplicationMain
 class StudentAppDelegate: UIResponder, UIApplicationDelegate, AppEnvironmentDelegate {
