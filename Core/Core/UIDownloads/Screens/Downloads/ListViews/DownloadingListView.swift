@@ -1,0 +1,69 @@
+//
+// This file is part of Canvas.
+// Copyright (C) 2023-present  Instructure, Inc.
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+//
+import Combine
+import SwiftUI
+
+struct DownloadingListView: View {
+
+    let module: DownloadingModule
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            content
+        }
+        .contentShape(Rectangle())
+        .background(
+            RoundedRectangle(cornerRadius: 4)
+                .stroke(
+                    Color.gray,
+                    lineWidth: 1 / UIScreen.main.scale
+                )
+        )
+        .background(Color.backgroundLightest)
+        .cornerRadius(4)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 4)
+        .buttonStyle(PlainButtonStyle())
+    }
+
+    private var content: some View {
+        VStack(alignment: .leading, spacing: 3) {
+            Text(module.shortName)
+                .font(.semibold18)
+                .foregroundColor(.textDarkest)
+                .fixedSize(horizontal: false, vertical: true)
+                .lineLimit(2)
+            HStack(alignment: .center, spacing: 2) {
+                ProgressView(value: 1)
+                    .frame(height: 5)
+                Spacer()
+                Text("100%")
+                    .font(.caption.monospacedDigit())
+                    .foregroundColor(.secondary)
+                    .frame(width: 40)
+                Spacer()
+                Button {
+                    print("tap")
+                } label: {
+                    Image(systemName: "arrow.clockwise.circle.fill")
+                        .foregroundColor(.orange)
+                }
+            }
+        }.padding(.all, 10)
+    }
+}

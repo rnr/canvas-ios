@@ -823,6 +823,15 @@
 		B4F0B08C292D01F000A3B41B /* GetEnvironmentFeatureFlagsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F0B08B292D01F000A3B41B /* GetEnvironmentFeatureFlagsTests.swift */; };
 		B4F523AF28E47323001A16BC /* IndeterminateBarProgressViewStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F523AE28E47323001A16BC /* IndeterminateBarProgressViewStyle.swift */; };
 		B4F523B128E4732D001A16BC /* DeterminateBarProgressViewStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F523B028E4732D001A16BC /* DeterminateBarProgressViewStyle.swift */; };
+		BA0B7AC729CC92B9003FEAE4 /* DownloadsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0B7ABB29CC92B9003FEAE4 /* DownloadsView.swift */; };
+		BA0B7AC829CC92B9003FEAE4 /* DownloadDownloadingSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0B7ABD29CC92B9003FEAE4 /* DownloadDownloadingSectionView.swift */; };
+		BA0B7AC929CC92B9003FEAE4 /* DownloadCoursesSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0B7ABE29CC92B9003FEAE4 /* DownloadCoursesSectionView.swift */; };
+		BA0B7ACA29CC92B9003FEAE4 /* DownloadCourseListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0B7AC029CC92B9003FEAE4 /* DownloadCourseListView.swift */; };
+		BA0B7ACB29CC92B9003FEAE4 /* DownloadingListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0B7AC129CC92B9003FEAE4 /* DownloadingListView.swift */; };
+		BA0B7ACC29CC92B9003FEAE4 /* DownloaderContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0B7AC329CC92B9003FEAE4 /* DownloaderContentView.swift */; };
+		BA0B7ACD29CC92B9003FEAE4 /* DownloaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0B7AC429CC92B9003FEAE4 /* DownloaderViewModel.swift */; };
+		BA0B7ACE29CC92B9003FEAE4 /* DownloaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0B7AC529CC92B9003FEAE4 /* DownloaderView.swift */; };
+		BA0B7ACF29CC92B9003FEAE4 /* DownloadsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0B7AC629CC92B9003FEAE4 /* DownloadsViewModel.swift */; };
 		BA5B6CC929C8A0BA00BE6E19 /* DownloadPageListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5B6CC029C8A0BA00BE6E19 /* DownloadPageListTableViewCell.swift */; };
 		BA5B6CCA29C8A0BA00BE6E19 /* DownloadableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5B6CC129C8A0BA00BE6E19 /* DownloadableViewController.swift */; };
 		BA5B6CCB29C8A0BA00BE6E19 /* DownloadButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5B6CC329C8A0BA00BE6E19 /* DownloadButton.swift */; };
@@ -831,6 +840,8 @@
 		BA5B6CCE29C8A0BA00BE6E19 /* WaitingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5B6CC629C8A0BA00BE6E19 /* WaitingView.swift */; };
 		BA5B6CCF29C8A0BA00BE6E19 /* ProgressButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5B6CC729C8A0BA00BE6E19 /* ProgressButton.swift */; };
 		BA5B6CD029C8A0BA00BE6E19 /* DownloadButton+TransitionAndAnimationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5B6CC829C8A0BA00BE6E19 /* DownloadButton+TransitionAndAnimationExtension.swift */; };
+		BAA0EAC829CDD976008388BA /* LinkDownloadingHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA0EAC729CDD976008388BA /* LinkDownloadingHeader.swift */; };
+		BAA0EACA29CDD989008388BA /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA0EAC929CDD989008388BA /* Header.swift */; };
 		CEB57AE8286B32BB00F4BFC8 /* HelmNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB57AE7286B32BB00F4BFC8 /* HelmNavigationController.swift */; };
 		CEF0D1462837D571005867EF /* ContextCellBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF0D1442837D571005867EF /* ContextCellBackgroundView.swift */; };
 		CEF0D1472837D571005867EF /* ContextCellBackgroundView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEF0D1452837D571005867EF /* ContextCellBackgroundView.xib */; };
@@ -2407,6 +2418,15 @@
 		B4F0B08B292D01F000A3B41B /* GetEnvironmentFeatureFlagsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetEnvironmentFeatureFlagsTests.swift; sourceTree = "<group>"; };
 		B4F523AE28E47323001A16BC /* IndeterminateBarProgressViewStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndeterminateBarProgressViewStyle.swift; sourceTree = "<group>"; };
 		B4F523B028E4732D001A16BC /* DeterminateBarProgressViewStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeterminateBarProgressViewStyle.swift; sourceTree = "<group>"; };
+		BA0B7ABB29CC92B9003FEAE4 /* DownloadsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadsView.swift; sourceTree = "<group>"; };
+		BA0B7ABD29CC92B9003FEAE4 /* DownloadDownloadingSectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadDownloadingSectionView.swift; sourceTree = "<group>"; };
+		BA0B7ABE29CC92B9003FEAE4 /* DownloadCoursesSectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadCoursesSectionView.swift; sourceTree = "<group>"; };
+		BA0B7AC029CC92B9003FEAE4 /* DownloadCourseListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadCourseListView.swift; sourceTree = "<group>"; };
+		BA0B7AC129CC92B9003FEAE4 /* DownloadingListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadingListView.swift; sourceTree = "<group>"; };
+		BA0B7AC329CC92B9003FEAE4 /* DownloaderContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloaderContentView.swift; sourceTree = "<group>"; };
+		BA0B7AC429CC92B9003FEAE4 /* DownloaderViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloaderViewModel.swift; sourceTree = "<group>"; };
+		BA0B7AC529CC92B9003FEAE4 /* DownloaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloaderView.swift; sourceTree = "<group>"; };
+		BA0B7AC629CC92B9003FEAE4 /* DownloadsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadsViewModel.swift; sourceTree = "<group>"; };
 		BA5B6CC029C8A0BA00BE6E19 /* DownloadPageListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadPageListTableViewCell.swift; sourceTree = "<group>"; };
 		BA5B6CC129C8A0BA00BE6E19 /* DownloadableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadableViewController.swift; sourceTree = "<group>"; };
 		BA5B6CC329C8A0BA00BE6E19 /* DownloadButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadButton.swift; sourceTree = "<group>"; };
@@ -2415,6 +2435,8 @@
 		BA5B6CC629C8A0BA00BE6E19 /* WaitingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaitingView.swift; sourceTree = "<group>"; };
 		BA5B6CC729C8A0BA00BE6E19 /* ProgressButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressButton.swift; sourceTree = "<group>"; };
 		BA5B6CC829C8A0BA00BE6E19 /* DownloadButton+TransitionAndAnimationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DownloadButton+TransitionAndAnimationExtension.swift"; sourceTree = "<group>"; };
+		BAA0EAC729CDD976008388BA /* LinkDownloadingHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkDownloadingHeader.swift; sourceTree = "<group>"; };
+		BAA0EAC929CDD989008388BA /* Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
 		CEB57AE7286B32BB00F4BFC8 /* HelmNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelmNavigationController.swift; sourceTree = "<group>"; };
 		CEF0D1442837D571005867EF /* ContextCellBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCellBackgroundView.swift; sourceTree = "<group>"; };
 		CEF0D1452837D571005867EF /* ContextCellBackgroundView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContextCellBackgroundView.xib; sourceTree = "<group>"; };
@@ -4884,12 +4906,52 @@
 			path = ProgressViewStyle;
 			sourceTree = "<group>";
 		};
+		BA0B7ABA29CC92B9003FEAE4 /* Downloads */ = {
+			isa = PBXGroup;
+			children = (
+				BA0B7ABB29CC92B9003FEAE4 /* DownloadsView.swift */,
+				BA0B7AC629CC92B9003FEAE4 /* DownloadsViewModel.swift */,
+				BA0B7AC229CC92B9003FEAE4 /* Downloader */,
+				BA0B7ABC29CC92B9003FEAE4 /* Sections */,
+				BA0B7ABF29CC92B9003FEAE4 /* ListViews */,
+			);
+			path = Downloads;
+			sourceTree = "<group>";
+		};
+		BA0B7ABC29CC92B9003FEAE4 /* Sections */ = {
+			isa = PBXGroup;
+			children = (
+				BA0B7ABD29CC92B9003FEAE4 /* DownloadDownloadingSectionView.swift */,
+				BA0B7ABE29CC92B9003FEAE4 /* DownloadCoursesSectionView.swift */,
+			);
+			path = Sections;
+			sourceTree = "<group>";
+		};
+		BA0B7ABF29CC92B9003FEAE4 /* ListViews */ = {
+			isa = PBXGroup;
+			children = (
+				BA0B7AC029CC92B9003FEAE4 /* DownloadCourseListView.swift */,
+				BA0B7AC129CC92B9003FEAE4 /* DownloadingListView.swift */,
+			);
+			path = ListViews;
+			sourceTree = "<group>";
+		};
+		BA0B7AC229CC92B9003FEAE4 /* Downloader */ = {
+			isa = PBXGroup;
+			children = (
+				BA0B7AC329CC92B9003FEAE4 /* DownloaderContentView.swift */,
+				BA0B7AC429CC92B9003FEAE4 /* DownloaderViewModel.swift */,
+				BA0B7AC529CC92B9003FEAE4 /* DownloaderView.swift */,
+			);
+			path = Downloader;
+			sourceTree = "<group>";
+		};
 		BA5B6CBF29C8A0BA00BE6E19 /* UIDownloads */ = {
 			isa = PBXGroup;
 			children = (
-				BA5B6CC029C8A0BA00BE6E19 /* DownloadPageListTableViewCell.swift */,
-				BA5B6CC129C8A0BA00BE6E19 /* DownloadableViewController.swift */,
-				BA5B6CC229C8A0BA00BE6E19 /* DownloadButton */,
+				BAA0EACB29CDD9C5008388BA /* UIKitViews */,
+				BAA0EAC629CDD965008388BA /* SwiftUIVIews */,
+				BAA0EACC29CDDD33008388BA /* Screens */,
 			);
 			path = UIDownloads;
 			sourceTree = "<group>";
@@ -4905,6 +4967,33 @@
 				BA5B6CC829C8A0BA00BE6E19 /* DownloadButton+TransitionAndAnimationExtension.swift */,
 			);
 			path = DownloadButton;
+			sourceTree = "<group>";
+		};
+		BAA0EAC629CDD965008388BA /* SwiftUIVIews */ = {
+			isa = PBXGroup;
+			children = (
+				BAA0EAC729CDD976008388BA /* LinkDownloadingHeader.swift */,
+				BAA0EAC929CDD989008388BA /* Header.swift */,
+			);
+			path = SwiftUIVIews;
+			sourceTree = "<group>";
+		};
+		BAA0EACB29CDD9C5008388BA /* UIKitViews */ = {
+			isa = PBXGroup;
+			children = (
+				BA5B6CC229C8A0BA00BE6E19 /* DownloadButton */,
+				BA5B6CC029C8A0BA00BE6E19 /* DownloadPageListTableViewCell.swift */,
+				BA5B6CC129C8A0BA00BE6E19 /* DownloadableViewController.swift */,
+			);
+			path = UIKitViews;
+			sourceTree = "<group>";
+		};
+		BAA0EACC29CDDD33008388BA /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				BA0B7ABA29CC92B9003FEAE4 /* Downloads */,
+			);
+			path = Screens;
 			sourceTree = "<group>";
 		};
 		CF086070291D403C0013BDCE /* AnnotationContextMenu */ = {
@@ -7884,6 +7973,7 @@
 				7DA260A723F72352005D2121 /* GetArc.swift in Sources */,
 				7DA25FE723F721DE005D2121 /* APIConversation.swift in Sources */,
 				7DA260CE23F72359005D2121 /* CalendarDayIconView.swift in Sources */,
+				BA0B7ACB29CC92B9003FEAE4 /* DownloadingListView.swift in Sources */,
 				7DA25FEA23F721DE005D2121 /* Conversation.swift in Sources */,
 				CF60CC372645525400C1C173 /* K5HomeroomView.swift in Sources */,
 				CF7D4A892937678100463FBD /* TabBarMessageCountUpdater.swift in Sources */,
@@ -7965,6 +8055,7 @@
 				7DA260E023F72359005D2121 /* IconView.swift in Sources */,
 				EB35FA6626B0414E00AA8C22 /* K5GradeCellViewModel.swift in Sources */,
 				7D4B2740253CEE6800A98DE3 /* AudioPlayer.swift in Sources */,
+				BA0B7ACF29CC92B9003FEAE4 /* DownloadsViewModel.swift in Sources */,
 				CF598B3928256B8D0029BEBE /* UITextView.swift in Sources */,
 				7DFD5F7D23FF158700D988E0 /* CalendarViewController.swift in Sources */,
 				7DA25FEE23F721DE005D2121 /* GetConversations.swift in Sources */,
@@ -8050,6 +8141,7 @@
 				7DA2601223F7227A005D2121 /* UIFontExtensions.swift in Sources */,
 				CF3A32022907E333002752D2 /* GetCurrentUserCoursesRequest.swift in Sources */,
 				7DA2608B23F72315005D2121 /* SideMenuTransitioning.swift in Sources */,
+				BA0B7AC929CC92B9003FEAE4 /* DownloadCoursesSectionView.swift in Sources */,
 				D91BC852276B7B2D008371B0 /* AssignmentGroupView.swift in Sources */,
 				7DA2609D23F72348005D2121 /* TodoListViewController.swift in Sources */,
 				7DA25FE323F721DA005D2121 /* HTTPHeaderConstants.swift in Sources */,
@@ -8101,6 +8193,7 @@
 				7D5400B3252BD3D7003691F4 /* APIMock.swift in Sources */,
 				B4F523AF28E47323001A16BC /* IndeterminateBarProgressViewStyle.swift in Sources */,
 				E8AC2D3224AE3A160053AA8A /* APIAlertThreshold.swift in Sources */,
+				BA0B7ACD29CC92B9003FEAE4 /* DownloaderViewModel.swift in Sources */,
 				7DA25F9023F72123005D2121 /* SyllabusViewController.swift in Sources */,
 				CF0075DA28746E3B00588E40 /* APIFormData.swift in Sources */,
 				B1A7848B2441136C001A2B50 /* GetModules.swift in Sources */,
@@ -8288,6 +8381,7 @@
 				7D159CEA242E555A00A77A15 /* ModuleItemCell.swift in Sources */,
 				CFFB3AC9292CE8650093437D /* InboxMessageScopeFilter.swift in Sources */,
 				7DA25FE423F721DA005D2121 /* PermissionName.swift in Sources */,
+				BA0B7AC729CC92B9003FEAE4 /* DownloadsView.swift in Sources */,
 				7DA260A223F7234C005D2121 /* UITestHelpers.swift in Sources */,
 				7DA2601823F7227A005D2121 /* UITabBarExtensions.swift in Sources */,
 				7DA2610E23FCD907005D2121 /* CircleRefreshControl.swift in Sources */,
@@ -8435,6 +8529,7 @@
 				CF43DE8227CCD6CF00015B6F /* MotionScene.swift in Sources */,
 				7DA260F823F723AB005D2121 /* FileDetailsViewController.swift in Sources */,
 				7DA2609223F72315005D2121 /* UploadAvatar.swift in Sources */,
+				BAA0EAC829CDD976008388BA /* LinkDownloadingHeader.swift in Sources */,
 				CFAD79D826AEC02A0000A90D /* K5ScheduleEntryViewModel.swift in Sources */,
 				E8AC2D3724AE3A650053AA8A /* GetObservedStudents.swift in Sources */,
 				B17F27652459EDF100CD47A1 /* MasteryPathViewController.swift in Sources */,
@@ -8507,6 +8602,7 @@
 				D9B6493028F452B40035CE14 /* QuizDetailsViewModel.swift in Sources */,
 				7DA2608123F72303005D2121 /* APIUser.swift in Sources */,
 				7DA260EF23F72391005D2121 /* File.swift in Sources */,
+				BA0B7ACA29CC92B9003FEAE4 /* DownloadCourseListView.swift in Sources */,
 				7DA2605C23F722D9005D2121 /* QuizSubmission.swift in Sources */,
 				7DA2609C23F72341005D2121 /* TermsOfServiceViewController.swift in Sources */,
 				CFCB0F6A27CF8CED008DDEA4 /* DiscussionsPanda.swift in Sources */,
@@ -8531,6 +8627,7 @@
 				CF3E761F2889736600276703 /* FileProgressListView.swift in Sources */,
 				7DA2601723F7227A005D2121 /* UIScrollViewExtensions.swift in Sources */,
 				7D70869D256C1C6500647D37 /* ConferenceCard.swift in Sources */,
+				BA0B7ACC29CC92B9003FEAE4 /* DownloaderContentView.swift in Sources */,
 				CF43DE8727CCDDC000015B6F /* MotionModifier.swift in Sources */,
 				7DA25FA723F72136005D2121 /* APICourseSection.swift in Sources */,
 				7D742F34255471D800FD6CF1 /* GradeSubmission.swift in Sources */,
@@ -8577,6 +8674,7 @@
 				7DA25FB723F72136005D2121 /* APIGroup.swift in Sources */,
 				7DB92CA224C5F5ED004A6C16 /* GetAccountNotifications.swift in Sources */,
 				EBE92ED5279AF27A0053C9A4 /* K5ImportantDateCell.swift in Sources */,
+				BA0B7ACE29CC92B9003FEAE4 /* DownloaderView.swift in Sources */,
 				7DA2604123F722D9005D2121 /* CourseSection.swift in Sources */,
 				7DA25F8A23F7211E005D2121 /* GetPlannables.swift in Sources */,
 				7DA2602C23F722C2005D2121 /* LoginStartSessionCell.swift in Sources */,
@@ -8596,6 +8694,7 @@
 				7DA25FB923F72136005D2121 /* APILatePolicy.swift in Sources */,
 				D9D9F0F4276CC69D008846AE /* AccessIcon.swift in Sources */,
 				7DA260BA23F72352005D2121 /* GetQuizzes.swift in Sources */,
+				BA0B7AC829CC92B9003FEAE4 /* DownloadDownloadingSectionView.swift in Sources */,
 				3B4D89342450A8F4004ED120 /* ConversationDetailViewController.swift in Sources */,
 				7DA2603623F722D9005D2121 /* SubmissionViewable.swift in Sources */,
 				CFABA2502742B8AE0096948F /* DocViewerAnnotationContextMenuModel.swift in Sources */,
@@ -8610,6 +8709,7 @@
 				7DA25FF823F7226E005D2121 /* DocViewerAnnotationToolbar.swift in Sources */,
 				CF2091A8275A5B4E003E8EA6 /* AssignmentPickerListResponse.swift in Sources */,
 				7DA260E723F72359005D2121 /* SectionHeaderView.swift in Sources */,
+				BAA0EACA29CDD989008388BA /* Header.swift in Sources */,
 				CFB06F9628BD0D0D00DAC40B /* FileSubmissionSubmitter.swift in Sources */,
 				7DA260CC23F72359005D2121 /* BottomSheetPickerViewController.swift in Sources */,
 				E8D6949824D46B1E0080D883 /* CoreHostingController.swift in Sources */,

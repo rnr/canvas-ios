@@ -1,0 +1,61 @@
+//
+// This file is part of Canvas.
+// Copyright (C) 2023-present  Instructure, Inc.
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+//
+
+import SwiftUI
+
+struct DownloadCourseListView: View {
+
+    let course: DownloadedCourse
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            content
+        }
+        .contentShape(Rectangle())
+        .background(
+            RoundedRectangle(cornerRadius: 4)
+                .stroke(
+                    Color.gray,
+                    lineWidth: 1 / UIScreen.main.scale
+                )
+        )
+        .background(Color.backgroundLightest)
+        .cornerRadius(4)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 4)
+        .buttonStyle(PlainButtonStyle())
+    }
+
+    private var content: some View {
+        VStack(alignment: .leading, spacing: 3) {
+            Text(course.shortName)
+                .font(.semibold18)
+                .foregroundColor(.textDarkest)
+                .lineLimit(2)
+                .multilineTextAlignment(.leading)
+            Text(course.courseCode)
+                .font(.semibold12)
+                .foregroundColor(.textDark)
+                .lineLimit(2)
+                .multilineTextAlignment(.leading)
+
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.all, 10)
+    }
+}

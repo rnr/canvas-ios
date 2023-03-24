@@ -35,11 +35,14 @@ public struct DashboardCardView: View {
     @Environment(\.viewController) var controller
 
     @State var showGrade = AppEnvironment.shared.userDefaults?.showGradesOnDashboard == true
+    @State var isPresentedSheet: Bool = false
 
     private var activeGroups: [Group] { groups.all.filter { $0.isActive } }
     private var isGroupSectionActive: Bool { !activeGroups.isEmpty && shouldShowGroupList }
     private let shouldShowGroupList: Bool
     private let verticalSpacing: CGFloat = 16
+
+
 
     public init(shouldShowGroupList: Bool, showOnlyTeacherEnrollment: Bool) {
         cards = DashboardCardsViewModel(showOnlyTeacherEnrollment: showOnlyTeacherEnrollment)
@@ -58,7 +61,9 @@ public struct DashboardCardView: View {
             RefreshableScrollView {
                 VStack(spacing: 0) {
                     fileUploadNotificationCards()
-                    DownloadsContentView(action: {})
+                    DownloadsContentView {
+                        isPresentedSheet = true
+                    }
                     list(CGSize(width: geometry.size.width - 32, height: geometry.size.height))
                 }
                 .padding(.horizontal, verticalSpacing)
@@ -90,6 +95,10 @@ public struct DashboardCardView: View {
         .onReceive(viewModel.showSettings) { event in
             showSettings(event.view, viewSize: event.viewSize)
         }
+        .sheet(
+            isPresented: $isPresentedSheet,
+            content: { DownloadsView() }
+        )
     }
 
     private func showSettings(_ settingsViewController: UIViewController, viewSize: CGSize) {
