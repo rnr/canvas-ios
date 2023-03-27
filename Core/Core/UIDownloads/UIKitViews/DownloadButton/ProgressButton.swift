@@ -74,4 +74,59 @@ class ProgressButton: UIButton {
 
 }
 
+class CustomCircleProgressView: UIView {
 
+    // MARK: - Properties -
+
+    var mainTintColor: UIColor = .systemBlue {
+        didSet {
+            circleLayer.strokeColor = mainTintColor
+        }
+    }
+
+    /// progress is Float in rage of  0.00 - 1.00
+    var progress: Float = 0 {
+        didSet {
+            animateProgress(from: circleLayer.circleLayer.strokeEnd, to: CGFloat(progress))
+        }
+    }
+
+    var circleLayer: WaitingView = {
+        let layer = WaitingView()
+        layer.rotationStartingAngle = -CGFloat.pi/2
+        layer.rotationEndingAngle = layer.rotationStartingAngle + 2*CGFloat.pi
+        layer.shouldSpin = false
+        layer.isClockwise = true
+        return layer
+    }()
+
+    // MARK: - Initializers -
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        commonInit()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        commonInit()
+    }
+
+    private func commonInit() {
+        backgroundColor = .clear
+        /// progress circle view
+        circleLayer.strokeColor = mainTintColor
+        self.addSubview(circleLayer)
+        circleLayer.pinToSuperview()
+    }
+
+    private func animateProgress(from startValue: CGFloat? = 0, to endValue: CGFloat) {
+        circleLayer.circleLayer.strokeEnd = endValue
+        let animation = CABasicAnimation(keyPath: "strokeEnd")
+        animation.timingFunction = CAMediaTimingFunction(name: .easeOut)
+        animation.fromValue = startValue
+        animation.duration = 0.3
+        circleLayer.circleLayer.add(animation, forKey: nil)
+    }
+
+}

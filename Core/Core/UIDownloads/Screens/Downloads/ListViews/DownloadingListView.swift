@@ -42,28 +42,33 @@ struct DownloadingListView: View {
     }
 
     private var content: some View {
-        VStack(alignment: .leading, spacing: 3) {
-            Text(module.shortName)
-                .font(.semibold18)
-                .foregroundColor(.textDarkest)
-                .fixedSize(horizontal: false, vertical: true)
-                .lineLimit(2)
-            HStack(alignment: .center, spacing: 2) {
-                ProgressView(value: 1)
-                    .frame(height: 5)
-                Spacer()
-                Text("100%")
-                    .font(.caption.monospacedDigit())
-                    .foregroundColor(.secondary)
-                    .frame(width: 40)
-                Spacer()
-                Button {
-                    print("tap")
-                } label: {
-                    Image(systemName: "arrow.clockwise.circle.fill")
-                        .foregroundColor(.orange)
+        HStack {
+            VStack(alignment: .leading, spacing: 3) {
+                Text("asdfkcs;ndl ndsl nfsl knflsk nlskn lkn lkdnslk ndslk dnlksdn lsdkn lskdn ldsn sld")
+                    .font(.semibold18)
+                    .foregroundColor(.textDarkest)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .lineLimit(2)
+                HStack(alignment: .center, spacing: 2) {
+                    ProgressView(value: 1)
+                        .progressViewStyle(LinearProgressViewStyle(tint: Color(Brand.shared.linkColor)))
+                        .frame(height: 5)
+                    Spacer()
+                    Text("100%")
+                        .font(.caption.monospacedDigit())
+                        .foregroundColor(.secondary)
+                        .frame(width: 40)
+                    Spacer()
                 }
             }
+            Button {
+                print("tap")
+            } label: {
+                Image(systemName: "stop.circle")
+                    .resizable()
+                    .frame(width: 25, height: 25)
+                    .foregroundColor(Color(Brand.shared.linkColor))
+            }.padding(.trailing, 5)
         }.padding(.all, 10)
     }
 }

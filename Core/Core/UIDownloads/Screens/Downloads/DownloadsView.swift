@@ -19,7 +19,7 @@
 import Combine
 import SwiftUI
 
-struct DownloadsView: View {
+public struct DownloadsView: View {
 
     // MARK: - Injected -
 
@@ -32,9 +32,11 @@ struct DownloadsView: View {
 
     var isSheet: Bool = false
 
+    public init() {}
+
     // MARK: - Views -
 
-    var body: some View {
+    public var body: some View {
         NavigationView {
             if #available(iOS 15.0, *) {
                 content

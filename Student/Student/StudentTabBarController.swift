@@ -23,6 +23,8 @@ import Core
 class StudentTabBarController: UITabBarController {
     private var previousSelectedIndex = 0
 
+    lazy var downloadingBarView = DownloadingBarView()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         delegate = self
@@ -42,6 +44,8 @@ class StudentTabBarController: UITabBarController {
         tabBar.useGlobalNavStyle()
 
         reportScreenView(for: selectedIndex, viewController: viewControllers![selectedIndex])
+
+        attachDownloadingBarView()
     }
 
     func dashboardTab() -> UIViewController {
@@ -155,6 +159,18 @@ class StudentTabBarController: UITabBarController {
         let map = [AppEnvironment.shared.k5.isK5Enabled ? "homeroom": "dashboard", "calendar", "todo", "notifications", "conversations"]
         let event = map[tabIndex]
         Analytics.shared.logScreenView(route: "/tabs/" + event, viewController: viewController)
+    }
+
+    private func attachDownloadingBarView() {
+        downloadingBarView.attach(tabBar: tabBar, in: view)
+        downloadingBarView.onTap = { [weak self] in
+            self?.showDownloadingView()
+        }
+    }
+
+    private func showDownloadingView() {
+        let vc = CoreHostingController(DownloadsView())
+        present(vc, animated: true)
     }
 }
 

@@ -79,7 +79,7 @@ class StudentAppDelegate: UIResponder, UIApplicationDelegate, AppEnvironmentDele
             window?.makeKeyAndVisible()
             Analytics.shared.logScreenView(route: "/login", viewController: window?.rootViewController)
         }
-
+        
         return true
     }
 

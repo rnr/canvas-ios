@@ -823,6 +823,7 @@
 		B4F0B08C292D01F000A3B41B /* GetEnvironmentFeatureFlagsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F0B08B292D01F000A3B41B /* GetEnvironmentFeatureFlagsTests.swift */; };
 		B4F523AF28E47323001A16BC /* IndeterminateBarProgressViewStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F523AE28E47323001A16BC /* IndeterminateBarProgressViewStyle.swift */; };
 		B4F523B128E4732D001A16BC /* DeterminateBarProgressViewStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F523B028E4732D001A16BC /* DeterminateBarProgressViewStyle.swift */; };
+		BA0A28A629D1BEE400A8A201 /* DownloadingBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0A28A529D1BEE400A8A201 /* DownloadingBarView.swift */; };
 		BA0B7AC729CC92B9003FEAE4 /* DownloadsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0B7ABB29CC92B9003FEAE4 /* DownloadsView.swift */; };
 		BA0B7AC829CC92B9003FEAE4 /* DownloadDownloadingSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0B7ABD29CC92B9003FEAE4 /* DownloadDownloadingSectionView.swift */; };
 		BA0B7AC929CC92B9003FEAE4 /* DownloadCoursesSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0B7ABE29CC92B9003FEAE4 /* DownloadCoursesSectionView.swift */; };
@@ -2418,6 +2419,7 @@
 		B4F0B08B292D01F000A3B41B /* GetEnvironmentFeatureFlagsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetEnvironmentFeatureFlagsTests.swift; sourceTree = "<group>"; };
 		B4F523AE28E47323001A16BC /* IndeterminateBarProgressViewStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndeterminateBarProgressViewStyle.swift; sourceTree = "<group>"; };
 		B4F523B028E4732D001A16BC /* DeterminateBarProgressViewStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeterminateBarProgressViewStyle.swift; sourceTree = "<group>"; };
+		BA0A28A529D1BEE400A8A201 /* DownloadingBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadingBarView.swift; sourceTree = "<group>"; };
 		BA0B7ABB29CC92B9003FEAE4 /* DownloadsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadsView.swift; sourceTree = "<group>"; };
 		BA0B7ABD29CC92B9003FEAE4 /* DownloadDownloadingSectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadDownloadingSectionView.swift; sourceTree = "<group>"; };
 		BA0B7ABE29CC92B9003FEAE4 /* DownloadCoursesSectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadCoursesSectionView.swift; sourceTree = "<group>"; };
@@ -4984,6 +4986,7 @@
 				BA5B6CC229C8A0BA00BE6E19 /* DownloadButton */,
 				BA5B6CC029C8A0BA00BE6E19 /* DownloadPageListTableViewCell.swift */,
 				BA5B6CC129C8A0BA00BE6E19 /* DownloadableViewController.swift */,
+				BA0A28A529D1BEE400A8A201 /* DownloadingBarView.swift */,
 			);
 			path = UIKitViews;
 			sourceTree = "<group>";
@@ -8277,6 +8280,7 @@
 				CFE7B42326B19F3F0092593D /* K5ScheduleSubjectView.swift in Sources */,
 				7DA2609823F72338005D2121 /* Router.swift in Sources */,
 				7DA260D823F72359005D2121 /* EmptyViewController.swift in Sources */,
+				BA0A28A629D1BEE400A8A201 /* DownloadingBarView.swift in Sources */,
 				EBEA78DE2626D38C008B82E8 /* ProfileImagePicker.swift in Sources */,
 				7DA25FE223F721DA005D2121 /* UserAgent.swift in Sources */,
 				CFD6F6C026C12AEC00F5C445 /* K5ScheduleDayView.swift in Sources */,

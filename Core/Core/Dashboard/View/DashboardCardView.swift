@@ -42,8 +42,6 @@ public struct DashboardCardView: View {
     private let shouldShowGroupList: Bool
     private let verticalSpacing: CGFloat = 16
 
-
-
     public init(shouldShowGroupList: Bool, showOnlyTeacherEnrollment: Bool) {
         cards = DashboardCardsViewModel(showOnlyTeacherEnrollment: showOnlyTeacherEnrollment)
         self.shouldShowGroupList = shouldShowGroupList
@@ -215,6 +213,7 @@ public struct DashboardCardView: View {
 
             let hideColorOverlay = settings.first?.hideDashcardColorOverlays == true
             let layoutInfo = layoutViewModel.layoutInfo(for: size.width)
+            let cards = cards + cards + cards + cards + cards + cards
             DashboardGrid(itemCount: cards.count, itemWidth: layoutInfo.cardWidth, spacing: layoutInfo.spacing, columnCount: layoutInfo.columns) { cardIndex in
                 let card = cards[cardIndex]
                 CourseCard(card: card, hideColorOverlay: hideColorOverlay, showGrade: showGrade, width: layoutInfo.cardWidth, contextColor: card.color)
