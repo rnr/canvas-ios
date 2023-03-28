@@ -22,6 +22,8 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
 
     // MARK: - Properties -
 
+    var page: Page?
+
     private var accessIconView: AccessIconView = .init(frame: .zero)
 
     private var titleLabel: UILabel = {
@@ -98,41 +100,26 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
     // MARK: - Action -
 
     private func actions() {
-        downloadButton.onTap = { state in
-            switch state {
-            case .idle:
-                self.downloadButton.currentState = .waiting
-            case .downloaded:
-                self.downloadButton.currentState = .idle
-            default:
-                break
+        downloadButton.onTap = { [weak self] _ in
+            guard let page = self?.page else {
+                return
             }
-        }
-
-        var index: Float = 0.0
-        downloadButton.onState = { state in
-            switch state {
-            case .waiting:
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                    self.downloadButton.currentState = .downloading
-                    Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
-                        self.downloadButton.progress = index
-                        index += 0.01
-                        if self.downloadButton.progress > 1.0 {
-                            timer.invalidate()
-                            self.downloadButton.currentState = .downloaded
-                        }
-                    }
-                }
-            default:
-                break
-            }
+//            let pageEntity = PageEntity(
+//                title: page.title,
+//                contextId: page.contextID,
+//                pageId: page.id,
+//                htmlURL: page.htmlURL?.absoluteString ?? ""
+//            )
+//            pageEntity.addOrUpdate(in: .current) { result in
+//
+//            }
         }
     }
 
     // MARK: - Intent -
 
     func update(_ page: Page?, indexPath: IndexPath, color: UIColor?) {
+        self.page = page
         selectedBackgroundView = ContextCellBackgroundView.create(color: color)
         titleLabel.accessibilityIdentifier = "PageList.\(indexPath.row)"
         accessIconView.icon = UIImage.documentLine

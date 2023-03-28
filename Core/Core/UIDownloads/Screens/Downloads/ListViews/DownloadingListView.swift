@@ -44,7 +44,7 @@ struct DownloadingListView: View {
     private var content: some View {
         HStack {
             VStack(alignment: .leading, spacing: 3) {
-                Text("asdfkcs;ndl ndsl nfsl knflsk nlskn lkn lkdnslk ndslk dnlksdn lsdkn lskdn ldsn sld")
+                Text(module.shortName)
                     .font(.semibold18)
                     .foregroundColor(.textDarkest)
                     .fixedSize(horizontal: false, vertical: true)

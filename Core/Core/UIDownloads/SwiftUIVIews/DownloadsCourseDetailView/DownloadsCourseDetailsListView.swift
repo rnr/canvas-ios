@@ -18,27 +18,29 @@
 
 import SwiftUI
 
-struct DownloadCoursesSectionView: View {
+public struct DownloadsCourseDetailsListView: View {
 
-    @ObservedObject var viewModel: DownloadsViewModel
-    @State private var isActiveLink = false
+    public var body: some View {
+        Button(action: {
 
-    var body: some View {
-        ForEach(viewModel.courses, id: \.self) { course in
-            ZStack {
-                DownloadCourseListView(course: course)
-                    .listRowInsets(EdgeInsets())
-                    .buttonStyle(PlainButtonStyle())
-                NavigationLink(
-                    destination: DownloadsCourseDetailView(course: course),
-                    isActive: $isActiveLink
-                ) { SwiftUI.EmptyView() }.hidden()
-            }.onTapGesture {
-                isActiveLink = true
+        }, label: {
+            HStack(spacing: 12) {
+                Image(systemName: "folder")
+                    .frame(width: 20, height: 20)
+                    .foregroundColor(.black)
+                VStack(alignment: .leading) {
+                    Text("Test")
+                        .font(.semibold16)
+                        .foregroundColor(.textDarkest)
+                }
+                Spacer()
+                InstDisclosureIndicator()
             }
-        }
-        .onDelete { indexSet in
-            viewModel.swipeDelete(indexSet: indexSet)
-        }
+            .padding(.vertical, 13)
+            .padding(.horizontal, 16)
+            .fixedSize(horizontal: false, vertical: true)
+            .contentShape(Rectangle())
+            .frame(height: 54)
+        })
     }
 }

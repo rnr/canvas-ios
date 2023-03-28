@@ -41,15 +41,15 @@ public protocol Storable: Object, RealmFetchable {
     )
 }
 
-extension Storable {
-    public static func all(
+public extension Storable {
+    static func all(
         in storage: LocalStorage,
         completionHandler: @escaping ([Self]) -> Void
     ) {
         storage.objects(Self.self, completionHandler: completionHandler)
     }
 
-    public static func object<KeyType>(
+    static func object<KeyType>(
         in storage: LocalStorage,
         forPrimaryKey key: KeyType,
         completionHandler: @escaping (_ value: Self?) -> Void
@@ -57,14 +57,14 @@ extension Storable {
         storage.object(Self.self, forPrimaryKey: key, completionHandler: completionHandler)
     }
 
-    public func addOrUpdate(
+    func addOrUpdate(
         in storage: LocalStorage,
         completionHandler: @escaping (Result<Void, Error>) -> Void
     ) {
         storage.addOrUpdate(value: self, completionHandler: completionHandler)
     }
 
-    public func delete(
+    func delete(
         in storage: LocalStorage,
         completionHandler: @escaping (Result<Void, Error>) -> Void
     ) {
