@@ -17,11 +17,12 @@
 //
 
 import Foundation
+import RealmSwift
 
 public protocol LocalStorage {
     func objects<T: Storable>(
         _ type: T.Type,
-        completionHandler: @escaping ([T]) -> Void
+        completionHandler: @escaping (Result<Results<T>, Error>) -> Void
     )
     func object<T: Storable, KeyType>(
         _ type: T.Type,

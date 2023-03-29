@@ -24,7 +24,6 @@ final public class RealmStorage: LocalStorage {
     static public let `default`: RealmStorage = RealmStorage()
 
     private init() {
-        configure()
     }
 
     let dataBaseQueue: RealmDatabaseQueue = .init()
@@ -36,7 +35,11 @@ final public class RealmStorage: LocalStorage {
     var realm: Realm? {
         try? dataBaseThread.getInstance()
     }
-    private var config: Realm.Configuration = .defaultConfiguration
+    private var config: Realm.Configuration =  Realm.Configuration(
+        schemaVersion: 1,
+        migrationBlock: { _, _ in },
+        deleteRealmIfMigrationNeeded: true
+    )
 
     public func addOrUpdate<T>(
         value: T,
@@ -49,7 +52,7 @@ final public class RealmStorage: LocalStorage {
             }
             do {
                 try realm.write {
-                    realm.add(value)
+                    realm.add(value, update: .all)
                     completionHandler(.success(()))
                 }
             } catch {
@@ -84,15 +87,15 @@ final public class RealmStorage: LocalStorage {
 
     public func objects<T>(
         _ type: T.Type,
-        completionHandler: @escaping ([T]) -> Void
+        completionHandler: @escaping (Result<Results<T>, Error>) -> Void
     ) where T: Storable {
         dataBaseQueue.background.async { [weak self] in
             guard let realm = self?.realm else {
-                completionHandler([])
+                completionHandler(.failure(RealmError.error))
                 return
             }
             let objects = realm.objects(type)
-            completionHandler(Array(objects))
+            completionHandler(.success(objects))
         }
     }
 
@@ -172,14 +175,5 @@ final public class RealmStorage: LocalStorage {
                 print(error.localizedDescription)
             }
         }
-    }
-
-    private func configure() {
-        let config = Realm.Configuration(
-            schemaVersion: 1,
-            migrationBlock: { _, _ in },
-            deleteRealmIfMigrationNeeded: true
-        )
-        self.config = config
     }
 }

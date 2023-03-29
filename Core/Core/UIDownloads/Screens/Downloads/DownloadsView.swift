@@ -93,7 +93,7 @@ public struct DownloadsView: View {
             }
             switch viewModel.state {
             case .none, .loading:
-                placeholder
+                Text("Loading")
             case .loaded:
                 Header(title: "Courses")
                 courses
@@ -101,12 +101,6 @@ public struct DownloadsView: View {
         }
         .listStyle(.inset)
         .background(Color.backgroundLightest.ignoresSafeArea())
-    }
-
-    private var placeholder: some View {
-        Section(header: Text("")) {
-            Text("Downloads")
-        }
     }
 
     private var modules: some View {

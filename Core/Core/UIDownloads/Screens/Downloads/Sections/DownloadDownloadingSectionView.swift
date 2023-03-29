@@ -20,6 +20,8 @@ import SwiftUI
 
 struct DownloadDownloadingSectionView: View {
 
+    // MARK: - Properties -
+
     @ObservedObject var viewModel: DownloadsViewModel
 
     var body: some View {
@@ -27,12 +29,14 @@ struct DownloadDownloadingSectionView: View {
             Array(viewModel.modules.prefix(3).enumerated()),
             id: \.element.id
         ) { index, module in
-            DownloadingListView(module: module)
+            DownloadingCellView(module: module)
         }
         .onDelete { indexSet in
             viewModel.swipeDeleteDownloading(indexSet: indexSet)
         }
     }
+
+    // MARK: - Views -
 
     private var headerModules: some View {
         HStack {

@@ -19,8 +19,25 @@
 import Combine
 import SwiftUI
 
-final class DownloadedCourse: Identifiable, Hashable {
-    static func == (lhs: DownloadedCourse, rhs: DownloadedCourse) -> Bool {
+final class DownloadsCourseDetailsViewModel: Identifiable, Hashable {
+    static func == (lhs: DownloadsCourseDetailsViewModel, rhs: DownloadsCourseDetailsViewModel) -> Bool {
+        lhs.id == rhs.id
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+
+    let id: String = Foundation.UUID().uuidString
+    let title: String
+
+    init(title: String) {
+        self.title = title
+    }
+}
+
+final class DownloadCourseViewModel: Identifiable, Hashable {
+    static func == (lhs: DownloadCourseViewModel, rhs: DownloadCourseViewModel) -> Bool {
         lhs.id == rhs.id
     }
 
@@ -33,9 +50,9 @@ final class DownloadedCourse: Identifiable, Hashable {
     let courseCode: String
 
     init(shortName: String, courseCode: String) {
-       self.shortName = shortName
-       self.courseCode = courseCode
-   }
+        self.shortName = shortName
+        self.courseCode = courseCode
+    }
 }
 
 final class DownloadingModule: Identifiable, Hashable {
@@ -59,9 +76,11 @@ final class DownloadsViewModel: ObservableObject {
 
     // MARK: - Injections -
 
+    @Injected(\.storage) var storage: LocalStorage
+
     // MARK: - Content -
 
-    private(set) var courses: [DownloadedCourse] = []
+    private(set) var courses: [DownloadCourseViewModel] = []
     private var cancellables: [AnyCancellable] = []
 
     enum State {
@@ -118,12 +137,25 @@ final class DownloadsViewModel: ObservableObject {
     // MARK: - Private methods -
 
     func fetch() {
-        modules.append(DownloadingModule(shortName: "Demo downloading"))
-        modules.append(DownloadingModule(shortName: "Demo downloading1"))
-        courses.append(DownloadedCourse(shortName: "Demo course", courseCode: "Demosaved"))
-        courses.append(DownloadedCourse(shortName: "Demo course1", courseCode: "Demosaved"))
-
-        state = .loaded
+        storage.objects(CourseEntity.self) { [weak self] result in
+            guard let self = self else {
+                return
+            }
+            switch result {
+            case .success(let results):
+                self.courses = results.compactMap { courseEntity in
+                    DownloadCourseViewModel(
+                        shortName: courseEntity.name,
+                        courseCode: courseEntity.courseCode
+                    )
+                }
+                DispatchQueue.main.async {
+                    self.state = .loaded
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
 
     private func setIsEmpty() {

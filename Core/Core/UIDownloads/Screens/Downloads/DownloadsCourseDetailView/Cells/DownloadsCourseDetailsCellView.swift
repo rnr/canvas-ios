@@ -18,20 +18,26 @@
 
 import SwiftUI
 
-public struct DownloadsCourseDetailsListView: View {
+public struct DownloadsCourseDetailsCellView: View {
+
+    // MARK: - Properties -
+
+    let content: DownloadsCourseDetailsViewModel
+
+    // MARK: - Views -
 
     public var body: some View {
         Button(action: {
 
         }, label: {
             HStack(spacing: 12) {
-                Image(systemName: "folder")
+                Image(uiImage: .folderLine)
                     .frame(width: 20, height: 20)
-                    .foregroundColor(.black)
+                    .foregroundColor(.oxford)
                 VStack(alignment: .leading) {
-                    Text("Test")
+                    Text(content.title)
                         .font(.semibold16)
-                        .foregroundColor(.textDarkest)
+                        .foregroundColor(.oxford)
                 }
                 Spacer()
                 InstDisclosureIndicator()

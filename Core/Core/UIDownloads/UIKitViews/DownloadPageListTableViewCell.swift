@@ -23,6 +23,7 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
     // MARK: - Properties -
 
     var page: Page?
+    var course: Course?
 
     private var accessIconView: AccessIconView = .init(frame: .zero)
 
@@ -101,25 +102,30 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
 
     private func actions() {
         downloadButton.onTap = { [weak self] _ in
-            guard let page = self?.page else {
+            guard let course = self?.course, let page = self?.page else {
                 return
             }
-//            let pageEntity = PageEntity(
-//                title: page.title,
-//                contextId: page.contextID,
-//                pageId: page.id,
-//                htmlURL: page.htmlURL?.absoluteString ?? ""
-//            )
-//            pageEntity.addOrUpdate(in: .current) { result in
-//
-//            }
+
+            let storage: LocalStorage =  .current
+            CourseEntity(
+                courseId: course.id,
+                name: course.name,
+                courseCode: course.courseCode
+            ).addOrUpdate(in: storage) { _ in }
+            PageEntity(
+                title: page.title,
+                contextId: page.contextID,
+                pageId: page.id,
+                htmlURL: page.htmlURL?.absoluteString ?? ""
+            ).addOrUpdate(in: storage) { _ in}
         }
     }
 
     // MARK: - Intent -
 
-    func update(_ page: Page?, indexPath: IndexPath, color: UIColor?) {
+    func update(_ page: Page?, course: Course?, indexPath: IndexPath, color: UIColor?) {
         self.page = page
+        self.course = course
         selectedBackgroundView = ContextCellBackgroundView.create(color: color)
         titleLabel.accessibilityIdentifier = "PageList.\(indexPath.row)"
         accessIconView.icon = UIImage.documentLine

@@ -34,7 +34,6 @@ extension NSObject: Applyable { }
 extension Realm: Applyable {}
 extension RealmDatabaseThread: Applyable {}
 
-
 private enum DispatchQueueLabels {
     static let backgroundLabel: String = "io.realm.Database.backgroundQueue"
 }

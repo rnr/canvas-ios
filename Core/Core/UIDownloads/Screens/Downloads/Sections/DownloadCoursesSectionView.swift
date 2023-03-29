@@ -20,13 +20,17 @@ import SwiftUI
 
 struct DownloadCoursesSectionView: View {
 
+    // MARK: - Properties -
+
     @ObservedObject var viewModel: DownloadsViewModel
     @State private var isActiveLink = false
+
+    // MARK: - Views -
 
     var body: some View {
         ForEach(viewModel.courses, id: \.self) { course in
             ZStack {
-                DownloadCourseListView(course: course)
+                DownloadCourseCellView(course: course)
                     .listRowInsets(EdgeInsets())
                     .buttonStyle(PlainButtonStyle())
                 NavigationLink(

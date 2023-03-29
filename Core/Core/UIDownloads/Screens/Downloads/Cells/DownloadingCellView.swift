@@ -18,7 +18,7 @@
 import Combine
 import SwiftUI
 
-struct DownloadingListView: View {
+struct DownloadingCellView: View {
 
     let module: DownloadingModule
 

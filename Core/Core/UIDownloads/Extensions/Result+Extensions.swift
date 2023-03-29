@@ -16,27 +16,19 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-//import Foundation
-//import MobileOfflineDownloader
-//import RealmSwift
-//
-//final public class PageEntity: StoreObject, Storable {
-//
-//    @Persisted public var title: String
-//    @Persisted public var contextId: String
-//    @Persisted public var pageId: String
-//    @Persisted public var htmlURL: String
-//
-//    public convenience init(
-//        title: String,
-//        contextId: String,
-//        pageId: String,
-//        htmlURL: String
-//    ) {
-//        self.init()
-//        self.title = title
-//        self.contextId = contextId
-//        self.pageId = pageId
-//        self.htmlURL = htmlURL
-//    }
-//}
+import Foundation
+
+extension Result {
+    @discardableResult
+    func success(_ handler: (Success) -> Void) -> Self {
+        guard case let .success(value) = self else { return self }
+        handler(value)
+        return self
+    }
+    @discardableResult
+    func failure(_ handler: (Failure) -> Void) -> Self {
+        guard case let .failure(error) = self else { return self }
+        handler(error)
+        return self
+    }
+}

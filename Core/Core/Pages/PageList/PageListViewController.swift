@@ -188,7 +188,7 @@ extension PageListViewController: UITableViewDataSource, UITableViewDelegate {
             return LoadingCell(style: .default, reuseIdentifier: nil)
         }
         let cell: DownloadPageListTableViewCell = tableView.dequeue(for: indexPath)
-        cell.update(pages[indexPath.row], indexPath: indexPath, color: color)
+        cell.update(pages[indexPath.row], course: course.first, indexPath: indexPath, color: color)
         return cell
     }
 

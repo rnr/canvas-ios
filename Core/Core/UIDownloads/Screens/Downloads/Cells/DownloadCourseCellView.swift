@@ -18,9 +18,9 @@
 
 import SwiftUI
 
-struct DownloadCourseListView: View {
+struct DownloadCourseCellView: View {
 
-    let course: DownloadedCourse
+    let course: DownloadCourseViewModel
 
     var body: some View {
         VStack(alignment: .leading) {

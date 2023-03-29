@@ -17,8 +17,22 @@
 //
 
 import RealmSwift
-import Foundation
 
-open class StoreObject: Object {
-    @Persisted(primaryKey: true) public var id: String = Foundation.UUID().uuidString
+final public class CourseEntity: StoreObject, Storable {
+
+    @Persisted public var courseId: String
+    @Persisted public var name: String
+    @Persisted public var courseCode: String
+
+    public convenience init(
+        courseId: String,
+        name: String?,
+        courseCode: String?
+    ) {
+        self.init()
+        self.id = courseId
+        self.courseId = courseId
+        self.name = name ?? ""
+        self.courseCode = courseCode ?? ""
+    }
 }

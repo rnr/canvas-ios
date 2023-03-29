@@ -21,7 +21,7 @@ import RealmSwift
 public protocol Storable: Object, RealmFetchable {
     static func all(
         in storage: LocalStorage,
-        completionHandler: @escaping ([Self]) -> Void
+        completionHandler: @escaping (Result<Results<Self>, Error>) -> Void
     )
 
     static func object<KeyType>(
@@ -44,7 +44,7 @@ public protocol Storable: Object, RealmFetchable {
 public extension Storable {
     static func all(
         in storage: LocalStorage,
-        completionHandler: @escaping ([Self]) -> Void
+        completionHandler: @escaping (Result<Results<Self>, Error>) -> Void
     ) {
         storage.objects(Self.self, completionHandler: completionHandler)
     }

@@ -32,7 +32,7 @@ struct DownloaderContentView: View {
                 Array(viewModel.modules.enumerated()),
                 id: \.offset
             ) { _, module in
-                DownloadingListView(module: module)
+                DownloadingCellView(module: module)
                     .listRowInsets(EdgeInsets())
                     .buttonStyle(PlainButtonStyle())
                     .padding(.vertical, 5)
