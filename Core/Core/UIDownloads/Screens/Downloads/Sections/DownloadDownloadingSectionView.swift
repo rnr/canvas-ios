@@ -28,7 +28,7 @@ struct DownloadDownloadingSectionView: View {
         ForEach(
             Array(viewModel.modules.prefix(3).enumerated()),
             id: \.element.id
-        ) { index, module in
+        ) { _, module in
             DownloadingCellView(module: module)
         }
         .onDelete { indexSet in

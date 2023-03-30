@@ -19,27 +19,6 @@
 import UIKit
 import SwiftUI
 
-struct DownloadsContentView: View {
-    var action: () -> Void
-
-    var body: some View {
-        Button {
-            action()
-        } label: {
-            VStack {
-                HStack {
-                    Text("Saved Content")
-                        .font(.semibold17)
-                        .foregroundColor(Color(Brand.shared.linkColor))
-                        .frame(height: 30)
-                    Spacer()
-                }
-                Divider()
-            }.padding(.vertical)
-        }
-    }
-}
-
 public class DownloadableViewController: UIViewController {
 
     // MARK: - Properties -

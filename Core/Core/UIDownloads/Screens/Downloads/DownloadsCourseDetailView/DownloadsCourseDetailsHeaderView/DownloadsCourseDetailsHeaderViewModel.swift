@@ -31,12 +31,12 @@ public class DownloadsCourseDetailsHeaderViewModel: ObservableObject {
 
     public let height: CGFloat = 235
 
-    init(course: DownloadCourseViewModel) {
-        courseName = course.shortName
+    init(courseViewModel: DownloadCourseViewModel) {
+        courseName = courseViewModel.course.name
         imageURL = URL(
             string: "https://fastly.picsum.photos/id/870/536/354.jpg?blur=2&grayscale&hmac=A5T7lnprlMMlQ18KQcVMi3b7Bwa1Qq5YJFp8LSudZ84"
         )
-        termName = "Test"
+        termName = courseViewModel.course.courseCode
         courseColor = .systemGroupedBackground
     }
 

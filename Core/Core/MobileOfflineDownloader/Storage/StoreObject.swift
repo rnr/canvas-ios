@@ -19,7 +19,7 @@
 import RealmSwift
 import Foundation
 
-open class StoreObject: Object {
+open class StoreObject: Object, ObjectKeyIdentifiable {
     @Persisted(primaryKey: true) public var id: String = Foundation.UUID().uuidString
 
     public override init() {}

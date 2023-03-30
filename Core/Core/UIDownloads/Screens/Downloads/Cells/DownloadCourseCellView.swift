@@ -20,7 +20,7 @@ import SwiftUI
 
 struct DownloadCourseCellView: View {
 
-    let course: DownloadCourseViewModel
+    let courseViewModel: DownloadCourseViewModel
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -43,12 +43,12 @@ struct DownloadCourseCellView: View {
 
     private var content: some View {
         VStack(alignment: .leading, spacing: 3) {
-            Text(course.shortName)
+            Text(courseViewModel.course.name)
                 .font(.semibold18)
                 .foregroundColor(.textDarkest)
                 .lineLimit(2)
                 .multilineTextAlignment(.leading)
-            Text(course.courseCode)
+            Text(courseViewModel.course.courseCode)
                 .font(.semibold12)
                 .foregroundColor(.textDark)
                 .lineLimit(2)

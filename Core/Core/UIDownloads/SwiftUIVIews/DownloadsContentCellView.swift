@@ -16,32 +16,25 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-import RealmSwift
+import SwiftUI
 
-final public class PageEntity: StoreObject, Storable {
+struct DownloadsContentCellView: View {
+    var action: () -> Void
 
-    @Persisted public var title: String
-    @Persisted public var contextId: String
-    @Persisted public var pageId: String
-    @Persisted public var courseId: String
-    @Persisted public var htmlURL: String
-    @Persisted public var lastUpdated: Date?
-
-    public convenience init(
-        title: String,
-        contextId: String,
-        pageId: String,
-        courseId: String,
-        htmlURL: String,
-        lastUpdated: Date?
-    ) {
-        self.init()
-        self.id = pageId
-        self.title = title
-        self.contextId = contextId
-        self.pageId = pageId
-        self.courseId = courseId
-        self.htmlURL = htmlURL
-        self.lastUpdated = lastUpdated
+    var body: some View {
+        Button {
+            action()
+        } label: {
+            VStack {
+                HStack {
+                    Text("Saved Content")
+                        .font(.semibold17)
+                        .foregroundColor(Color(Brand.shared.linkColor))
+                        .frame(height: 30)
+                    Spacer()
+                }
+                Divider()
+            }.padding(.vertical)
+        }
     }
 }

@@ -17,6 +17,7 @@
 //
 
 import Foundation
+import RealmSwift
 
 final class DownloadsCourseDetailViewModel: ObservableObject {
 
@@ -36,13 +37,13 @@ final class DownloadsCourseDetailViewModel: ObservableObject {
 
     // MARK: - Content -
 
-    let course: DownloadCourseViewModel
-    var courseContent: [DownloadsCourseDetailsViewModel] = []
+    let courseViewModel: DownloadCourseViewModel
+    var detailViewModels: [DownloadsCourseDetailsViewModel] = []
 
     // MARK: - Lifecycle -
 
-    init(course: DownloadCourseViewModel) {
-        self.course = course
+    init(courseViewModel: DownloadCourseViewModel) {
+        self.courseViewModel = courseViewModel
     }
 
     // MARK: - Intents -
@@ -51,11 +52,21 @@ final class DownloadsCourseDetailViewModel: ObservableObject {
         let group = DispatchGroup()
         group.enter()
         storage.objects(PageEntity.self) { [weak self] results in
-            results.success {
-                guard !$0.isEmpty else {
+            guard let self = self else {
+                return
+            }
+            results.success { results in
+                let pages = results.where { $0.courseId == self.courseViewModel.course.courseId }
+                guard !pages.isEmpty else {
                     return
                 }
-                self?.courseContent.append(DownloadsCourseDetailsViewModel(title: "Page"))
+                self.detailViewModels.append(
+                    DownloadsCourseDetailsViewModel(
+                        course: self.courseViewModel.course,
+                        contentType: .page(Array(pages))
+                    )
+                )
+
             }
             group.leave()
         }

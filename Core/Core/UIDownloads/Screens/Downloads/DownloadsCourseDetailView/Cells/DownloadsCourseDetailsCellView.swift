@@ -22,31 +22,67 @@ public struct DownloadsCourseDetailsCellView: View {
 
     // MARK: - Properties -
 
-    let content: DownloadsCourseDetailsViewModel
+    let detailViewModel: DownloadsCourseDetailsViewModel
 
     // MARK: - Views -
 
     public var body: some View {
-        Button(action: {
-
-        }, label: {
-            HStack(spacing: 12) {
-                Image(uiImage: .folderLine)
-                    .frame(width: 20, height: 20)
+        HStack(spacing: 12) {
+            Image(uiImage: .folderLine)
+                .frame(width: 20, height: 20)
+                .foregroundColor(.oxford)
+            VStack(alignment: .leading) {
+                Text(detailViewModel.title)
+                    .font(.semibold16)
                     .foregroundColor(.oxford)
-                VStack(alignment: .leading) {
-                    Text(content.title)
-                        .font(.semibold16)
-                        .foregroundColor(.oxford)
-                }
-                Spacer()
-                InstDisclosureIndicator()
             }
-            .padding(.vertical, 13)
-            .padding(.horizontal, 16)
-            .fixedSize(horizontal: false, vertical: true)
-            .contentShape(Rectangle())
-            .frame(height: 54)
-        })
+            Spacer()
+            InstDisclosureIndicator()
+        }
+        .padding(.vertical, 13)
+        .padding(.horizontal, 16)
+        .fixedSize(horizontal: false, vertical: true)
+        .contentShape(Rectangle())
+        .frame(height: 54)
+    }
+}
+
+public struct DownloadsPagesCellView: View {
+
+    // MARK: - Properties -
+
+    let page: PageEntity
+
+    // MARK: - Views -
+
+    public var body: some View {
+        HStack(spacing: 15) {
+            Image(uiImage: .folderLine)
+                .frame(width: 20, height: 20)
+                .foregroundColor(.oxford)
+            VStack(alignment: .leading) {
+                Text(page.title)
+                    .font(.semibold16)
+                    .foregroundColor(.oxford)
+                page.lastUpdated.flatMap(dateText)
+            }
+            Spacer()
+            InstDisclosureIndicator()
+        }
+        .padding(.vertical, 8)
+        .padding(.horizontal, 15)
+        .contentShape(Rectangle())
+    }
+
+    private func dateText(date: Date) -> some View {
+        Text(
+            DateFormatter.localizedString(
+                from: date,
+                dateStyle: .medium,
+                timeStyle: .short
+            )
+        )
+        .font(.regular14)
+        .foregroundColor(.oxford)
     }
 }

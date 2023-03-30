@@ -33,13 +33,13 @@ final public class RealmStorage: LocalStorage {
         }
     }
     var realm: Realm? {
-        try? dataBaseThread.getInstance()
+        do {
+            return try dataBaseThread.getInstance()
+        } catch {
+            print("‼️ Realm error: \(error) ‼️")
+            return nil
+        }
     }
-    private var config: Realm.Configuration =  Realm.Configuration(
-        schemaVersion: 1,
-        migrationBlock: { _, _ in },
-        deleteRealmIfMigrationNeeded: true
-    )
 
     public func addOrUpdate<T>(
         value: T,
@@ -47,16 +47,22 @@ final public class RealmStorage: LocalStorage {
     ) where T: Storable {
         dataBaseQueue.background.async { [weak self] in
             guard let realm = self?.realm else {
-                completionHandler(.failure(RealmError.error))
+                DispatchQueue.main.async {
+                    completionHandler(.failure(RealmError.error))
+                }
                 return
             }
             do {
                 try realm.write {
                     realm.add(value, update: .all)
-                    completionHandler(.success(()))
+                    DispatchQueue.main.async {
+                        completionHandler(.success(()))
+                    }
                 }
             } catch {
-                completionHandler(.failure(error))
+                DispatchQueue.main.async {
+                    completionHandler(.failure(error))
+                }
             }
         }
     }
@@ -67,7 +73,9 @@ final public class RealmStorage: LocalStorage {
     ) where T: Storable {
         dataBaseQueue.background.async { [weak self] in
             guard let self = self else {
-                completionHandler(.failure(RealmError.error))
+                DispatchQueue.main.async {
+                    completionHandler(.failure(RealmError.error))
+                }
                 return
             }
             let group = DispatchGroup()
@@ -79,7 +87,7 @@ final public class RealmStorage: LocalStorage {
                     group.leave()
                 }
             }
-            group.notify(queue: self.dataBaseQueue.background) {
+            group.notify(queue: .main) {
                 completionHandler(.success(()))
             }
         }
@@ -90,12 +98,26 @@ final public class RealmStorage: LocalStorage {
         completionHandler: @escaping (Result<Results<T>, Error>) -> Void
     ) where T: Storable {
         dataBaseQueue.background.async { [weak self] in
-            guard let realm = self?.realm else {
-                completionHandler(.failure(RealmError.error))
+            guard let self = self else {
+                DispatchQueue.main.async {
+                    completionHandler(.failure(RealmError.error))
+                }
                 return
             }
-            let objects = realm.objects(type)
-            completionHandler(.success(objects))
+            guard let realm = self.realm else {
+                DispatchQueue.main.async {
+                    completionHandler(.failure(RealmError.error))
+                }
+                return
+            }
+
+            let results = ThreadSafeReference(to: realm.objects(type))
+            DispatchQueue.main.async {
+                guard let resultsMain = self.realm?.resolve(results) else {
+                    return
+                }
+                completionHandler(.success(resultsMain))
+            }
         }
     }
 
@@ -106,13 +128,26 @@ final public class RealmStorage: LocalStorage {
     ) where T: Storable {
         dataBaseQueue.background.async { [weak self] in
             guard let realm = self?.realm else {
-                completionHandler(nil)
+                DispatchQueue.main.async {
+                    completionHandler(nil)
+                }
                 return
             }
 
-            let object = realm.object(ofType: type, forPrimaryKey: key)
-            completionHandler(object)
+            guard let object = realm.object(ofType: type, forPrimaryKey: key) else {
+                DispatchQueue.main.async {
+                    completionHandler(nil)
+                }
+                return
+            }
 
+            let results = ThreadSafeReference(to: object)
+            DispatchQueue.main.async {
+                guard let resultsMain = self?.realm?.resolve(results) else {
+                    return
+                }
+                completionHandler(resultsMain)
+            }
         }
     }
 
@@ -122,17 +157,22 @@ final public class RealmStorage: LocalStorage {
     ) where T: Storable {
         dataBaseQueue.background.async { [weak self] in
             guard let realm = self?.realm else {
-                completionHandler(.failure(RealmError.error))
+                DispatchQueue.main.async {
+                    completionHandler(.failure(RealmError.error))
+                }
                 return
             }
             do {
                 try realm.write {
                     realm.delete(value)
-                    completionHandler(.success(()))
+                    DispatchQueue.main.async {
+                        completionHandler(.success(()))
+                    }
                 }
             } catch {
-                print(error.localizedDescription)
-                completionHandler(.failure(error))
+                DispatchQueue.main.async {
+                    completionHandler(.failure(error))
+                }
             }
         }
     }
@@ -143,7 +183,9 @@ final public class RealmStorage: LocalStorage {
     ) where T: Storable {
         dataBaseQueue.background.async { [weak self] in
             guard let self = self else {
-                completionHandler(.failure(RealmError.error))
+                DispatchQueue.main.async {
+                    completionHandler(.failure(RealmError.error))
+                }
                 return
             }
             let group = DispatchGroup()
@@ -155,7 +197,7 @@ final public class RealmStorage: LocalStorage {
                     group.leave()
                 }
             }
-            group.notify(queue: self.dataBaseQueue.background) {
+            group.notify(queue: .main) {
                 completionHandler(.success(()))
             }
         }
@@ -164,7 +206,9 @@ final public class RealmStorage: LocalStorage {
     public func deleteAll(completionHandler: @escaping (Result<Void, Error>) -> Void) {
         dataBaseQueue.background.async { [weak self] in
             guard let self = self else {
-                completionHandler(.failure(RealmError.error))
+                DispatchQueue.main.async {
+                    completionHandler(.failure(RealmError.error))
+                }
                 return
             }
             do {

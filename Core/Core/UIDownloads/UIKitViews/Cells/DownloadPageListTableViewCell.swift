@@ -20,6 +20,10 @@ import UIKit
 
 final public class DownloadPageListTableViewCell: UITableViewCell {
 
+    // MARK: - Injected -
+
+    @Injected(\.storage) var storage: LocalStorage
+
     // MARK: - Properties -
 
     var page: Page?
@@ -102,10 +106,10 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
 
     private func actions() {
         downloadButton.onTap = { [weak self] _ in
-            guard let course = self?.course, let page = self?.page else {
+            guard let self = self, let course = self.course, let page = self.page else {
                 return
             }
-
+            self.downloadButton.currentState = .downloading
             let storage: LocalStorage =  .current
             CourseEntity(
                 courseId: course.id,
@@ -116,8 +120,14 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
                 title: page.title,
                 contextId: page.contextID,
                 pageId: page.id,
-                htmlURL: page.htmlURL?.absoluteString ?? ""
-            ).addOrUpdate(in: storage) { _ in}
+                courseId: course.id,
+                htmlURL: page.htmlURL?.absoluteString ?? "",
+                lastUpdated: page.lastUpdated
+            ).addOrUpdate(in: storage) { _ in
+                DispatchQueue.main.async {
+                    self.downloadButton.currentState = .downloaded
+                }
+            }
         }
     }
 
@@ -136,5 +146,18 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
         dateLabel.setText(dateText, style: .textCellSupportingText)
         titleLabel.setText(page?.title, style: .textCellTitle)
         titleLabel.lineBreakMode = .byTruncatingTail
+        page.flatMap(isDownloaded)
+
+    }
+
+    private func isDownloaded(page: Page) {
+        storage.object(PageEntity.self, forPrimaryKey: page.id) { [weak self] pageEntity in
+            guard let self = self else {
+                return
+            }
+
+            self.downloadButton.currentState = pageEntity == nil ? .idle : .downloaded
+            self.downloadButton.isUserInteractionEnabled = self.downloadButton.currentState != .downloaded
+        }
     }
 }

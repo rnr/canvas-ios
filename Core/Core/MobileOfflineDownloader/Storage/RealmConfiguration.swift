@@ -73,7 +73,13 @@ final class RealmDatabaseThread {
             }
             return realm
         }
-        let realm = try Realm(queue: workingQueue?(key))
+        let realm = try Realm(
+            configuration: Realm.Configuration(
+                schemaVersion: 1,
+                migrationBlock: { _, _ in },
+                deleteRealmIfMigrationNeeded: true
+            ), queue: workingQueue?(key)
+        )
         realms[key] = realm
         return realm
     }

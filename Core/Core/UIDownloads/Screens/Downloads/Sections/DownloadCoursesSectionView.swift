@@ -28,13 +28,13 @@ struct DownloadCoursesSectionView: View {
     // MARK: - Views -
 
     var body: some View {
-        ForEach(viewModel.courses, id: \.self) { course in
+        ForEach(viewModel.courseViewModels, id: \.self) { courseViewModel in
             ZStack {
-                DownloadCourseCellView(course: course)
+                DownloadCourseCellView(courseViewModel: courseViewModel)
                     .listRowInsets(EdgeInsets())
                     .buttonStyle(PlainButtonStyle())
                 NavigationLink(
-                    destination: DownloadsCourseDetailView(course: course),
+                    destination: DownloadsCourseDetailView(courseViewModel: courseViewModel),
                     isActive: $isActiveLink
                 ) { SwiftUI.EmptyView() }.hidden()
             }.onTapGesture {

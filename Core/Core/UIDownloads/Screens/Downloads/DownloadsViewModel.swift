@@ -29,10 +29,24 @@ final class DownloadsCourseDetailsViewModel: Identifiable, Hashable {
     }
 
     let id: String = Foundation.UUID().uuidString
-    let title: String
 
-    init(title: String) {
-        self.title = title
+    enum ContentType {
+        case page([PageEntity])
+    }
+    let contentType: ContentType
+
+    let course: CourseEntity
+
+    var title: String {
+        switch contentType {
+        case .page:
+            return "Pages"
+        }
+    }
+
+    init(course: CourseEntity, contentType: ContentType) {
+        self.contentType = contentType
+        self.course = course
     }
 }
 
@@ -45,13 +59,10 @@ final class DownloadCourseViewModel: Identifiable, Hashable {
         hasher.combine(id)
     }
 
-    let id: String = Foundation.UUID().uuidString
-    let shortName: String
-    let courseCode: String
+    let course: CourseEntity
 
-    init(shortName: String, courseCode: String) {
-        self.shortName = shortName
-        self.courseCode = courseCode
+    init(course: CourseEntity) {
+        self.course = course
     }
 }
 
@@ -80,7 +91,7 @@ final class DownloadsViewModel: ObservableObject {
 
     // MARK: - Content -
 
-    private(set) var courses: [DownloadCourseViewModel] = []
+    private(set) var courseViewModels: [DownloadCourseViewModel] = []
     private var cancellables: [AnyCancellable] = []
 
     enum State {
@@ -118,7 +129,7 @@ final class DownloadsViewModel: ObservableObject {
 
     func deleteAll() {
         modules = []
-        courses = []
+        courseViewModels = []
         state = .loaded
     }
 
@@ -130,7 +141,7 @@ final class DownloadsViewModel: ObservableObject {
 
     func swipeDelete(indexSet: IndexSet) {
         indexSet.forEach { index in
-            courses.remove(at: index)
+            courseViewModels.remove(at: index)
         }
     }
 
@@ -143,15 +154,12 @@ final class DownloadsViewModel: ObservableObject {
             }
             switch result {
             case .success(let results):
-                self.courses = results.compactMap { courseEntity in
+                self.courseViewModels = results.compactMap { courseEntity in
                     DownloadCourseViewModel(
-                        shortName: courseEntity.name,
-                        courseCode: courseEntity.courseCode
+                        course: courseEntity
                     )
                 }
-                DispatchQueue.main.async {
-                    self.state = .loaded
-                }
+                self.state = .loaded
             case .failure(let error):
                 print(error)
             }
@@ -161,10 +169,10 @@ final class DownloadsViewModel: ObservableObject {
     private func setIsEmpty() {
         switch state {
         case .loaded:
-            if !isConnected && courses.isEmpty {
+            if !isConnected && courseViewModels.isEmpty {
                 isEmpty = true
             } else {
-                isEmpty = modules.isEmpty && courses.isEmpty
+                isEmpty = modules.isEmpty && courseViewModels.isEmpty
             }
         default:
             break

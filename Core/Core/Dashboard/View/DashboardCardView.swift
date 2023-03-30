@@ -59,7 +59,7 @@ public struct DashboardCardView: View {
             RefreshableScrollView {
                 VStack(spacing: 0) {
                     fileUploadNotificationCards()
-                    DownloadsContentView {
+                    DownloadsContentCellView {
                         isPresentedSheet = true
                     }
                     list(CGSize(width: geometry.size.width - 32, height: geometry.size.height))

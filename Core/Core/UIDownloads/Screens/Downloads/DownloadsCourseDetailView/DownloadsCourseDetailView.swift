@@ -24,12 +24,14 @@ struct DownloadsCourseDetailView: View {
     // MARK: - Properties -
 
     @StateObject var viewModel: DownloadsCourseDetailViewModel
+    @State var isActiveLink: Bool = false
+
     let headerViewModel: DownloadsCourseDetailsHeaderViewModel
 
-    init(course: DownloadCourseViewModel) {
-        let model = DownloadsCourseDetailViewModel(course: course)
+    init(courseViewModel: DownloadCourseViewModel) {
+        let model = DownloadsCourseDetailViewModel(courseViewModel: courseViewModel)
         self._viewModel = .init(wrappedValue: model)
-        self.headerViewModel = DownloadsCourseDetailsHeaderViewModel(course: course)
+        self.headerViewModel = DownloadsCourseDetailsHeaderViewModel(courseViewModel: courseViewModel)
     }
 
     // MARK: - Views -
@@ -47,7 +49,7 @@ struct DownloadsCourseDetailView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    Text(viewModel.course.courseCode)
+                    Text(viewModel.courseViewModel.course.courseCode)
                         .foregroundColor(.textDarkest)
                         .font(.semibold16)
                 }
@@ -58,11 +60,19 @@ struct DownloadsCourseDetailView: View {
 
     private func content(geometry: GeometryProxy) -> some View {
         ZStack(alignment: .top) {
-            imageHeader(geometry: geometry, course: viewModel.course)
+            imageHeader(geometry: geometry)
             List {
                 VStack(spacing: 0) {
-                    ForEach(viewModel.courseContent, id: \.self) { content in
-                        DownloadsCourseDetailsCellView(content: content)
+                    ForEach(viewModel.detailViewModels, id: \.self) { detailViewModel in
+                        ZStack {
+                            DownloadsCourseDetailsCellView(detailViewModel: detailViewModel)
+                            NavigationLink(
+                                destination: destination(contentType: detailViewModel.contentType),
+                                isActive: $isActiveLink
+                            ) { SwiftUI.EmptyView() }.hidden()
+                        }.onTapGesture {
+                            isActiveLink = true
+                        }
                         Divider()
                     }
                 }
@@ -81,10 +91,16 @@ struct DownloadsCourseDetailView: View {
     }
 
     @ViewBuilder
-    private func imageHeader(geometry: GeometryProxy, course: DownloadCourseViewModel) -> some View {
+    private func imageHeader(geometry: GeometryProxy) -> some View {
         if headerViewModel.shouldShowHeader(for: geometry.size.height) {
             DownloadsCourseDetailsHeaderView(viewModel: headerViewModel, width: geometry.size.width)
         }
     }
-}
 
+    private func destination(contentType: DownloadsCourseDetailsViewModel.ContentType) -> some View {
+        switch contentType {
+        case .page(let pages):
+            return DownloadsPagesView(pages: pages)
+        }
+    }
+}

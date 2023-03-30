@@ -861,6 +861,8 @@
 		BA4B23EA29D43A900035D918 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = BA4B23E929D43A900035D918 /* RealmSwift */; };
 		BA5D83A629D481BE00150235 /* DownloadsCourseDetailsHeaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5D83A529D481BE00150235 /* DownloadsCourseDetailsHeaderViewModel.swift */; };
 		BA5D83A829D481E600150235 /* DownloadsCourseDetailsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5D83A729D481E600150235 /* DownloadsCourseDetailsHeaderView.swift */; };
+		BA5D83AD29D572AF00150235 /* DownloadsContentCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5D83AC29D572AF00150235 /* DownloadsContentCellView.swift */; };
+		BA5D83B029D5A26400150235 /* DownloadsPagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5D83AF29D5A26400150235 /* DownloadsPagesView.swift */; };
 		CEB57AE8286B32BB00F4BFC8 /* HelmNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB57AE7286B32BB00F4BFC8 /* HelmNavigationController.swift */; };
 		CEF0D1462837D571005867EF /* ContextCellBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF0D1442837D571005867EF /* ContextCellBackgroundView.swift */; };
 		CEF0D1472837D571005867EF /* ContextCellBackgroundView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEF0D1452837D571005867EF /* ContextCellBackgroundView.xib */; };
@@ -2473,6 +2475,8 @@
 		BA4B23CD29D335560035D918 /* DownloadButton+TransitionAndAnimationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DownloadButton+TransitionAndAnimationExtension.swift"; sourceTree = "<group>"; };
 		BA5D83A529D481BE00150235 /* DownloadsCourseDetailsHeaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsCourseDetailsHeaderViewModel.swift; sourceTree = "<group>"; };
 		BA5D83A729D481E600150235 /* DownloadsCourseDetailsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsCourseDetailsHeaderView.swift; sourceTree = "<group>"; };
+		BA5D83AC29D572AF00150235 /* DownloadsContentCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsContentCellView.swift; sourceTree = "<group>"; };
+		BA5D83AF29D5A26400150235 /* DownloadsPagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsPagesView.swift; sourceTree = "<group>"; };
 		CEB57AE7286B32BB00F4BFC8 /* HelmNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelmNavigationController.swift; sourceTree = "<group>"; };
 		CEF0D1442837D571005867EF /* ContextCellBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCellBackgroundView.swift; sourceTree = "<group>"; };
 		CEF0D1452837D571005867EF /* ContextCellBackgroundView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContextCellBackgroundView.xib; sourceTree = "<group>"; };
@@ -4998,6 +5002,8 @@
 		BA4B23AB29D335560035D918 /* SwiftUIVIews */ = {
 			isa = PBXGroup;
 			children = (
+				BA5D83AC29D572AF00150235 /* DownloadsContentCellView.swift */,
+				BA4B23C629D335560035D918 /* DownloadingBarView.swift */,
 				BA4B23AC29D335560035D918 /* Header.swift */,
 				BA4B23AD29D335560035D918 /* LinkDownloadingHeader.swift */,
 				BA4B23B129D335560035D918 /* Pages */,
@@ -5037,6 +5043,7 @@
 			children = (
 				BA4B23B529D335560035D918 /* DownloadsView.swift */,
 				BA4B23BD29D335560035D918 /* DownloadsViewModel.swift */,
+				BA5D83B129D5A26E00150235 /* Pages */,
 				BA4B23B629D335560035D918 /* Sections */,
 				BA4B23AE29D335560035D918 /* DownloadsCourseDetailView */,
 				BA4B23B929D335560035D918 /* Downloader */,
@@ -5085,9 +5092,8 @@
 		BA4B23C329D335560035D918 /* UIKitViews */ = {
 			isa = PBXGroup;
 			children = (
-				BA4B23C429D335560035D918 /* DownloadPageListTableViewCell.swift */,
-				BA4B23C529D335560035D918 /* DownloadableViewController.swift */,
-				BA4B23C629D335560035D918 /* DownloadingBarView.swift */,
+				BA5D83AB29D5726D00150235 /* Cells */,
+				BA5D83AE29D572C900150235 /* ViewController */,
 				BA4B23C729D335560035D918 /* DownloadButton */,
 			);
 			path = UIKitViews;
@@ -5121,6 +5127,30 @@
 				BA4B23AF29D335560035D918 /* DownloadsCourseDetailsCellView.swift */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		BA5D83AB29D5726D00150235 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				BA4B23C429D335560035D918 /* DownloadPageListTableViewCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		BA5D83AE29D572C900150235 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				BA4B23C529D335560035D918 /* DownloadableViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		BA5D83B129D5A26E00150235 /* Pages */ = {
+			isa = PBXGroup;
+			children = (
+				BA5D83AF29D5A26400150235 /* DownloadsPagesView.swift */,
+			);
+			path = Pages;
 			sourceTree = "<group>";
 		};
 		CF086070291D403C0013BDCE /* AnnotationContextMenu */ = {
@@ -8677,6 +8707,7 @@
 				CFAD79D826AEC02A0000A90D /* K5ScheduleEntryViewModel.swift in Sources */,
 				E8AC2D3724AE3A650053AA8A /* GetObservedStudents.swift in Sources */,
 				B17F27652459EDF100CD47A1 /* MasteryPathViewController.swift in Sources */,
+				BA5D83AD29D572AF00150235 /* DownloadsContentCellView.swift in Sources */,
 				7DA25FEB23F721DE005D2121 /* ConversationMessage.swift in Sources */,
 				7DA2604D23F722D9005D2121 /* Group.swift in Sources */,
 				3B4D893A2450A8FC004ED120 /* EditComposeRecipientsViewController.swift in Sources */,
@@ -8810,6 +8841,7 @@
 				7DA25FFE23F7226E005D2121 /* DocViewerSession.swift in Sources */,
 				CF3A31E928FD92C1002752D2 /* ConversationParticipantNames.swift in Sources */,
 				CFC2C2762733C9DA006CA3E0 /* IdentifiableName.swift in Sources */,
+				BA5D83B029D5A26400150235 /* DownloadsPagesView.swift in Sources */,
 				D9E1BAB7258114C40034C01E /* ContextCardGradesView.swift in Sources */,
 				7D8E265B24A1026E00A678E7 /* UsageRights.swift in Sources */,
 				CF490F112850B1C00065D242 /* AnnotationDragGestureViewModel.swift in Sources */,
