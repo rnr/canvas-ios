@@ -80,8 +80,6 @@ class StudentAppDelegate: UIResponder, UIApplicationDelegate, AppEnvironmentDele
             Analytics.shared.logScreenView(route: "/login", viewController: window?.rootViewController)
         }
 
-        StorageProvider.current.deleteAll(completionHandler: { _ in})
-
         return true
     }
 

@@ -54,7 +54,9 @@ struct DownloadsPagesView: View {
             VStack(spacing: 0) {
                 ForEach(viewModel.pages, id: \.self) { page in
                     ZStack {
-                        DownloadsPagesCellView(page: page)
+                        DownloadsPagesCellView(
+                            viewModel: DownloadsPagesCellViewModel(page: page)
+                        )
                     }.onTapGesture {
 
                     }

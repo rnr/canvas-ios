@@ -16,8 +16,21 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-import SwiftUI
+import Foundation
 
-struct DownloadedPageDetailView {
+final class DownloadsPagesCellViewModel: ObservableObject {
 
+    private let page: PageEntity
+
+    var title: String {
+        page.title
+    }
+
+    var lastUpdated: Date? {
+        page.lastUpdated
+    }
+
+    init(page: PageEntity) {
+        self.page = page
+    }
 }

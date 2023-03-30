@@ -18,31 +18,42 @@
 
 import SwiftUI
 
-public struct DownloadsCourseDetailsCellView: View {
+public struct DownloadsPagesCellView: View {
 
     // MARK: - Properties -
 
-    let detailViewModel: DownloadsCourseDetailsViewModel
+    let viewModel: DownloadsPagesCellViewModel
 
     // MARK: - Views -
 
     public var body: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: 15) {
             Image(uiImage: .folderLine)
                 .frame(width: 20, height: 20)
                 .foregroundColor(.oxford)
             VStack(alignment: .leading) {
-                Text(detailViewModel.title)
+                Text(viewModel.title)
                     .font(.semibold16)
                     .foregroundColor(.oxford)
+                viewModel.lastUpdated.flatMap(dateText)
             }
             Spacer()
             InstDisclosureIndicator()
         }
-        .padding(.vertical, 13)
-        .padding(.horizontal, 16)
-        .fixedSize(horizontal: false, vertical: true)
+        .padding(.vertical, 8)
+        .padding(.horizontal, 15)
         .contentShape(Rectangle())
-        .frame(height: 54)
+    }
+
+    private func dateText(date: Date) -> some View {
+        Text(
+            DateFormatter.localizedString(
+                from: date,
+                dateStyle: .medium,
+                timeStyle: .short
+            )
+        )
+        .font(.regular14)
+        .foregroundColor(.oxford)
     }
 }
