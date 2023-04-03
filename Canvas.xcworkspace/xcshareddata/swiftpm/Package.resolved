@@ -19,6 +19,15 @@
       }
     },
     {
+      "identity" : "combinereachability",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/istvan-kreisz/CombineReachability.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "ba1cb2adeb111ee3ce475404ca1cdfb322505281"
+      }
+    },
+    {
       "identity" : "firebase-ios-sdk",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/firebase-ios-sdk.git",
@@ -115,6 +124,15 @@
       "state" : {
         "revision" : "3e4e743631e86c8c70dbc6efdc7beaa6e90fd3bb",
         "version" : "2.1.1"
+      }
+    },
+    {
+      "identity" : "reachability.swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ashleymills/Reachability.swift",
+      "state" : {
+        "revision" : "c01bbdf2d633cf049ae1ed1a68a2020a8bda32e2",
+        "version" : "5.1.0"
       }
     },
     {

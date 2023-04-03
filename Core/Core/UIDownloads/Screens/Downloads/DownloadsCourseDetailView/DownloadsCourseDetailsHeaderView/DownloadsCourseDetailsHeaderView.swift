@@ -21,7 +21,7 @@ import SwiftUI
 struct DownloadsCourseDetailsHeaderView: View {
 
     // MARK: - Properties -
-    
+
     @ObservedObject private var viewModel: DownloadsCourseDetailsHeaderViewModel
     private let width: CGFloat
 

@@ -43,12 +43,12 @@ struct DownloadCourseCellView: View {
 
     private var content: some View {
         VStack(alignment: .leading, spacing: 3) {
-            Text(courseViewModel.course.name)
+            Text(courseViewModel.name)
                 .font(.semibold18)
                 .foregroundColor(.textDarkest)
                 .lineLimit(2)
                 .multilineTextAlignment(.leading)
-            Text(courseViewModel.course.courseCode)
+            Text(courseViewModel.courseCode)
                 .font(.semibold12)
                 .foregroundColor(.textDark)
                 .lineLimit(2)

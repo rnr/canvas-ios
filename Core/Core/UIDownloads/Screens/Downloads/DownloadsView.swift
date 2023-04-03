@@ -59,13 +59,18 @@ public struct DownloadsView: View {
         ZStack {
             Color(.systemBackground)
                 .ignoresSafeArea()
-            VStack {
-                if viewModel.isEmpty {
-                    VStack {
-                      Text("Test")
+            switch viewModel.state {
+            case .none, .loading:
+                LoadingView()
+            case .loaded:
+                VStack {
+                    if viewModel.isEmpty {
+                        VStack {
+                            Text("Test")
+                        }
+                    } else {
+                        list
                     }
-                } else {
-                    list
                 }
             }
         }
@@ -91,13 +96,8 @@ public struct DownloadsView: View {
                 LinkDownloadingHeader(destination: DownloaderView(), title: "Downloading")
                 modules
             }
-            switch viewModel.state {
-            case .none, .loading:
-                Text("Loading")
-            case .loaded:
-                Header(title: "Courses")
-                courses
-            }
+            Header(title: "Courses")
+            courses
         }
         .listStyle(.inset)
         .background(Color.backgroundLightest.ignoresSafeArea())

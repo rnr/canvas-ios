@@ -26,7 +26,7 @@ struct DownloadsCourseDetailView: View {
     @StateObject var viewModel: DownloadsCourseDetailViewModel
     @State var isActiveLink: Bool = false
 
-    let headerViewModel: DownloadsCourseDetailsHeaderViewModel
+    private let headerViewModel: DownloadsCourseDetailsHeaderViewModel
 
     init(courseViewModel: DownloadCourseViewModel) {
         let model = DownloadsCourseDetailViewModel(courseViewModel: courseViewModel)
@@ -43,13 +43,14 @@ struct DownloadsCourseDetailView: View {
                 case .loaded:
                     content(geometry: geometry)
                 case .loading, .none:
-                    Text("Loading").onAppear { viewModel.fetch() }
+                    LoadingView()
+                        .onAppear { viewModel.fetch() }
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    Text(viewModel.courseViewModel.course.courseCode)
+                    Text(viewModel.title)
                         .foregroundColor(.textDarkest)
                         .font(.semibold16)
                 }

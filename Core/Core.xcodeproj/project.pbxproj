@@ -864,6 +864,12 @@
 		BA5D83B029D5A26400150235 /* DownloadsPagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5D83AF29D5A26400150235 /* DownloadsPagesView.swift */; };
 		BA5D83B429D5CF5C00150235 /* DownloadsPagesCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5D83B329D5CF5C00150235 /* DownloadsPagesCellView.swift */; };
 		BA5D83B629D5CFFA00150235 /* DownloadsPagesCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5D83B529D5CFFA00150235 /* DownloadsPagesCellViewModel.swift */; };
+		BA5D83B829DAC7BD00150235 /* DownloadsCourseDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5D83B729DAC7BD00150235 /* DownloadsCourseDetailsViewModel.swift */; };
+		BA5D83BA29DAC7E300150235 /* DownloadCourseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5D83B929DAC7E300150235 /* DownloadCourseViewModel.swift */; };
+		BA5D83BC29DAC8A800150235 /* DownloadingModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5D83BB29DAC8A800150235 /* DownloadingModule.swift */; };
+		BA5D83BE29DADE9200150235 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5D83BD29DADE9200150235 /* LoadingView.swift */; };
+		BA5D83C129DB0CB500150235 /* CombineReachability in Frameworks */ = {isa = PBXBuildFile; productRef = BA5D83C029DB0CB500150235 /* CombineReachability */; };
+		BA5D83C429DB2C6900150235 /* ReachabilityProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5D83C329DB2C6900150235 /* ReachabilityProvider.swift */; };
 		CEB57AE8286B32BB00F4BFC8 /* HelmNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB57AE7286B32BB00F4BFC8 /* HelmNavigationController.swift */; };
 		CEF0D1462837D571005867EF /* ContextCellBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF0D1442837D571005867EF /* ContextCellBackgroundView.swift */; };
 		CEF0D1472837D571005867EF /* ContextCellBackgroundView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEF0D1452837D571005867EF /* ContextCellBackgroundView.xib */; };
@@ -2479,6 +2485,11 @@
 		BA5D83AF29D5A26400150235 /* DownloadsPagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsPagesView.swift; sourceTree = "<group>"; };
 		BA5D83B329D5CF5C00150235 /* DownloadsPagesCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsPagesCellView.swift; sourceTree = "<group>"; };
 		BA5D83B529D5CFFA00150235 /* DownloadsPagesCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsPagesCellViewModel.swift; sourceTree = "<group>"; };
+		BA5D83B729DAC7BD00150235 /* DownloadsCourseDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsCourseDetailsViewModel.swift; sourceTree = "<group>"; };
+		BA5D83B929DAC7E300150235 /* DownloadCourseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadCourseViewModel.swift; sourceTree = "<group>"; };
+		BA5D83BB29DAC8A800150235 /* DownloadingModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadingModule.swift; sourceTree = "<group>"; };
+		BA5D83BD29DADE9200150235 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		BA5D83C329DB2C6900150235 /* ReachabilityProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachabilityProvider.swift; sourceTree = "<group>"; };
 		CEB57AE7286B32BB00F4BFC8 /* HelmNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelmNavigationController.swift; sourceTree = "<group>"; };
 		CEF0D1442837D571005867EF /* ContextCellBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCellBackgroundView.swift; sourceTree = "<group>"; };
 		CEF0D1452837D571005867EF /* ContextCellBackgroundView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContextCellBackgroundView.xib; sourceTree = "<group>"; };
@@ -3013,6 +3024,7 @@
 				BA4B23E829D43A900035D918 /* Realm in Frameworks */,
 				BA4B23EA29D43A900035D918 /* RealmSwift in Frameworks */,
 				CFD3EC37289422C0001E7D4E /* Lottie in Frameworks */,
+				BA5D83C129DB0CB500150235 /* CombineReachability in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4954,6 +4966,7 @@
 		BA3D51D829D4465A0011A14A /* MobileOfflineDownloader */ = {
 			isa = PBXGroup;
 			children = (
+				BA5D83C229DB2C5500150235 /* Reachability */,
 				BA3D51D929D4465A0011A14A /* Injected */,
 				BA3D51DB29D4465A0011A14A /* Storage */,
 			);
@@ -5008,6 +5021,7 @@
 				BA4B23C629D335560035D918 /* DownloadingBarView.swift */,
 				BA4B23AC29D335560035D918 /* Header.swift */,
 				BA4B23AD29D335560035D918 /* LinkDownloadingHeader.swift */,
+				BA5D83BD29DADE9200150235 /* LoadingView.swift */,
 			);
 			path = SwiftUIVIews;
 			sourceTree = "<group>";
@@ -5060,6 +5074,7 @@
 				BA4B23BA29D335560035D918 /* DownloaderContentView.swift */,
 				BA4B23BB29D335560035D918 /* DownloaderViewModel.swift */,
 				BA4B23BC29D335560035D918 /* DownloaderView.swift */,
+				BA5D83BB29DAC8A800150235 /* DownloadingModule.swift */,
 			);
 			path = Downloader;
 			sourceTree = "<group>";
@@ -5067,6 +5082,7 @@
 		BA4B23BE29D335560035D918 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				BA5D83B929DAC7E300150235 /* DownloadCourseViewModel.swift */,
 				BA3D51F029D47EAF0011A14A /* DownloadCourseCellView.swift */,
 				BA4B23BF29D335560035D918 /* DownloadingCellView.swift */,
 			);
@@ -5118,6 +5134,7 @@
 			isa = PBXGroup;
 			children = (
 				BA4B23AF29D335560035D918 /* DownloadsCourseDetailsCellView.swift */,
+				BA5D83B729DAC7BD00150235 /* DownloadsCourseDetailsViewModel.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -5154,6 +5171,14 @@
 				BA5D83B529D5CFFA00150235 /* DownloadsPagesCellViewModel.swift */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		BA5D83C229DB2C5500150235 /* Reachability */ = {
+			isa = PBXGroup;
+			children = (
+				BA5D83C329DB2C6900150235 /* ReachabilityProvider.swift */,
+			);
+			path = Reachability;
 			sourceTree = "<group>";
 		};
 		CF086070291D403C0013BDCE /* AnnotationContextMenu */ = {
@@ -7238,6 +7263,7 @@
 				CFD3EC36289422C0001E7D4E /* Lottie */,
 				BA4B23E729D43A900035D918 /* Realm */,
 				BA4B23E929D43A900035D918 /* RealmSwift */,
+				BA5D83C029DB0CB500150235 /* CombineReachability */,
 			);
 			productName = Core;
 			productReference = 2C96482E211E2F1A002C3255 /* Core.framework */;
@@ -7373,6 +7399,7 @@
 			packageReferences = (
 				CFD3EC35289422C0001E7D4E /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				BA4B23E629D43A900035D918 /* XCRemoteSwiftPackageReference "realm-swift" */,
+				BA5D83BF29DB0CB500150235 /* XCRemoteSwiftPackageReference "CombineReachability" */,
 			);
 			productRefGroup = 2C96482F211E2F1A002C3255 /* Products */;
 			projectDirPath = "";
@@ -8327,6 +8354,7 @@
 				7DA260D723F72359005D2121 /* EmptyView.swift in Sources */,
 				7DFD5F7C23FF158700D988E0 /* PlannerViewController.swift in Sources */,
 				7DA2600D23F7227A005D2121 /* NSPredicateExtensions.swift in Sources */,
+				BA5D83B829DAC7BD00150235 /* DownloadsCourseDetailsViewModel.swift in Sources */,
 				7DA25FF523F72268005D2121 /* CommentListCell.swift in Sources */,
 				7DA2609B23F7233D005D2121 /* UseCase.swift in Sources */,
 				7D4F44FA241BF26700233B92 /* APIConference.swift in Sources */,
@@ -8436,6 +8464,7 @@
 				7DA2601023F7227A005D2121 /* UIColorExtensions.swift in Sources */,
 				7DA25FD123F72136005D2121 /* APIURL.swift in Sources */,
 				CF3A31D928F70BD7002752D2 /* InboxMessageListItem.swift in Sources */,
+				BA5D83BA29DAC7E300150235 /* DownloadCourseViewModel.swift in Sources */,
 				49428D5A24BA526F00EF3EAB /* GradeStatisticGraphView.swift in Sources */,
 				7DA260C923F72359005D2121 /* AlertAction.swift in Sources */,
 				CF9DFB602584F3EE004E27A5 /* ColorExtensions.swift in Sources */,
@@ -8610,6 +8639,7 @@
 				CFB06FA628C2AA7100DAC40B /* AllFileUploadFinishedCheck.swift in Sources */,
 				CFE7E362267CD47A00F8EB7B /* UISplitViewControllerExtensions.swift in Sources */,
 				B14707B42437BC1C00CE1DBD /* ExternalURLViewController.swift in Sources */,
+				BA5D83C429DB2C6900150235 /* ReachabilityProvider.swift in Sources */,
 				CFB3A1E4269C8D4A00429B3E /* K5State.swift in Sources */,
 				BA3D51F129D47EAF0011A14A /* DownloadCourseCellView.swift in Sources */,
 				CFBF1DFD281FEE1300DA99F7 /* DocViewerAnnotationDeleteResponseHandler.swift in Sources */,
@@ -8781,6 +8811,7 @@
 				7DA2608F23F72315005D2121 /* HelpLink.swift in Sources */,
 				7DA260ED23F7235F005D2121 /* WrongAppViewController.swift in Sources */,
 				7DA260D923F72359005D2121 /* FilterHeaderView.swift in Sources */,
+				BA5D83BE29DADE9200150235 /* LoadingView.swift in Sources */,
 				CFCB0F6127CE7B21008DDEA4 /* GradesPanda.swift in Sources */,
 				D9B6493028F452B40035CE14 /* QuizDetailsViewModel.swift in Sources */,
 				7DA2608123F72303005D2121 /* APIUser.swift in Sources */,
@@ -8848,6 +8879,7 @@
 				CFC2C2762733C9DA006CA3E0 /* IdentifiableName.swift in Sources */,
 				BA5D83B029D5A26400150235 /* DownloadsPagesView.swift in Sources */,
 				D9E1BAB7258114C40034C01E /* ContextCardGradesView.swift in Sources */,
+				BA5D83BC29DAC8A800150235 /* DownloadingModule.swift in Sources */,
 				7D8E265B24A1026E00A678E7 /* UsageRights.swift in Sources */,
 				CF490F112850B1C00065D242 /* AnnotationDragGestureViewModel.swift in Sources */,
 				CF8D5356280851A70038B0B2 /* EmbeddedWebPageView.swift in Sources */,
@@ -9518,6 +9550,14 @@
 				minimumVersion = 10.37.1;
 			};
 		};
+		BA5D83BF29DB0CB500150235 /* XCRemoteSwiftPackageReference "CombineReachability" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/istvan-kreisz/CombineReachability.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		CFD3EC35289422C0001E7D4E /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
@@ -9538,6 +9578,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = BA4B23E629D43A900035D918 /* XCRemoteSwiftPackageReference "realm-swift" */;
 			productName = RealmSwift;
+		};
+		BA5D83C029DB0CB500150235 /* CombineReachability */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BA5D83BF29DB0CB500150235 /* XCRemoteSwiftPackageReference "CombineReachability" */;
+			productName = CombineReachability;
 		};
 		CFD3EC36289422C0001E7D4E /* Lottie */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -32,12 +32,10 @@ public class DownloadsCourseDetailsHeaderViewModel: ObservableObject {
     public let height: CGFloat = 235
 
     init(courseViewModel: DownloadCourseViewModel) {
-        courseName = courseViewModel.course.name
-        imageURL = URL(
-            string: "https://fastly.picsum.photos/id/870/536/354.jpg?blur=2&grayscale&hmac=A5T7lnprlMMlQ18KQcVMi3b7Bwa1Qq5YJFp8LSudZ84"
-        )
-        termName = courseViewModel.course.courseCode
-        courseColor = .systemGroupedBackground
+        courseName = courseViewModel.name
+        imageURL = courseViewModel.imageURL
+        termName = courseViewModel.termName
+        courseColor = courseViewModel.color
     }
 
     public func scrollPositionChanged(_ bounds: ViewBoundsKey.Value) {

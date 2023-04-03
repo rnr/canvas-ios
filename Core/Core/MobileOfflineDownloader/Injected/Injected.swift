@@ -50,7 +50,6 @@ public struct InjectedValues {
     }
 }
 
-
 public protocol InjectionKey {
 
     /// The associated type representing the type of the dependency injection key's value.
@@ -60,15 +59,22 @@ public protocol InjectionKey {
     static var currentValue: Self.Value { get set }
 }
 
-
 public extension InjectedValues {
     var storage: LocalStorage {
         get { Self[LocalStorageInjectionKey.self] }
         set { Self[LocalStorageInjectionKey.self] = newValue }
     }
-}
 
+    var reachability: ReachabilityProvider {
+        get { Self[NetworkProviderKey.self] }
+        set { Self[NetworkProviderKey.self] = newValue }
+    }
+}
 
 private struct LocalStorageInjectionKey: InjectionKey {
     static var currentValue: LocalStorage = StorageProvider.current
+}
+
+private struct NetworkProviderKey: InjectionKey {
+    static var currentValue: ReachabilityProvider = ReachabilityProvider()
 }

@@ -37,8 +37,12 @@ final class DownloadsCourseDetailViewModel: ObservableObject {
 
     // MARK: - Content -
 
-    let courseViewModel: DownloadCourseViewModel
+    private let courseViewModel: DownloadCourseViewModel
     var detailViewModels: [DownloadsCourseDetailsViewModel] = []
+
+    var title: String {
+        courseViewModel.courseCode
+    }
 
     // MARK: - Lifecycle -
 
@@ -56,7 +60,7 @@ final class DownloadsCourseDetailViewModel: ObservableObject {
                 return
             }
             results.success { results in
-                let pages = results.where { $0.courseId == self.courseViewModel.course.courseId }
+                let pages = results.where { $0.courseId == self.courseViewModel.courseId }
                 guard !pages.isEmpty else {
                     return
                 }

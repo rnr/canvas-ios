@@ -23,16 +23,25 @@ final public class CourseEntity: StoreObject, Storable {
     @Persisted public var courseId: String
     @Persisted public var name: String
     @Persisted public var courseCode: String
+    @Persisted public var termName: String
+    @Persisted public var courseColor: String
+    @Persisted public var imageDownloadURL: String
 
     public convenience init(
         courseId: String,
         name: String?,
-        courseCode: String?
+        courseCode: String?,
+        termName: String?,
+        courseColor: String?,
+        imageDownloadURL: String?
     ) {
         self.init()
         self.id = courseId
         self.courseId = courseId
         self.name = name ?? ""
         self.courseCode = courseCode ?? ""
+        self.termName = termName ?? ""
+        self.courseColor = courseColor ?? ""
+        self.imageDownloadURL = imageDownloadURL ?? ""
     }
 }

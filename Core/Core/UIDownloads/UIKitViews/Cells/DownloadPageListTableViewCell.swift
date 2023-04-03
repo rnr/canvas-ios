@@ -114,7 +114,10 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
             CourseEntity(
                 courseId: course.id,
                 name: course.name,
-                courseCode: course.courseCode
+                courseCode: course.courseCode,
+                termName: course.termName,
+                courseColor: course.courseColor,
+                imageDownloadURL: course.imageDownloadURL?.absoluteString
             ).addOrUpdate(in: storage) { _ in }
             PageEntity(
                 title: page.title,

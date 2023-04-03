@@ -19,70 +19,6 @@
 import Combine
 import SwiftUI
 
-final class DownloadsCourseDetailsViewModel: Identifiable, Hashable {
-    static func == (lhs: DownloadsCourseDetailsViewModel, rhs: DownloadsCourseDetailsViewModel) -> Bool {
-        lhs.id == rhs.id
-    }
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
-
-    let id: String = Foundation.UUID().uuidString
-
-    enum ContentType {
-        case page([PageEntity])
-    }
-    let contentType: ContentType
-
-    let course: CourseEntity
-
-    var title: String {
-        switch contentType {
-        case .page:
-            return "Pages"
-        }
-    }
-
-    init(course: CourseEntity, contentType: ContentType) {
-        self.contentType = contentType
-        self.course = course
-    }
-}
-
-final class DownloadCourseViewModel: Identifiable, Hashable {
-    static func == (lhs: DownloadCourseViewModel, rhs: DownloadCourseViewModel) -> Bool {
-        lhs.id == rhs.id
-    }
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
-
-    let course: CourseEntity
-
-    init(course: CourseEntity) {
-        self.course = course
-    }
-}
-
-final class DownloadingModule: Identifiable, Hashable {
-    static func == (lhs: DownloadingModule, rhs: DownloadingModule) -> Bool {
-        lhs.id == rhs.id
-    }
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
-
-    let id: String = Foundation.UUID().uuidString
-    let shortName: String
-
-    init(shortName: String) {
-       self.shortName = shortName
-   }
-}
-
 final class DownloadsViewModel: ObservableObject {
 
     // MARK: - Injections -
@@ -148,6 +84,7 @@ final class DownloadsViewModel: ObservableObject {
     // MARK: - Private methods -
 
     func fetch() {
+        state = .loading
         storage.objects(CourseEntity.self) { [weak self] result in
             guard let self = self else {
                 return
@@ -159,10 +96,10 @@ final class DownloadsViewModel: ObservableObject {
                         course: courseEntity
                     )
                 }
-                self.state = .loaded
             case .failure(let error):
                 print(error)
             }
+            self.state = .loaded
         }
     }
 
