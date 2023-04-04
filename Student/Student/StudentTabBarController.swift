@@ -19,17 +19,12 @@
 import UIKit
 import CanvasCore
 import Core
-import Reachability
-import Combine
 
 class StudentTabBarController: UITabBarController {
     private var previousSelectedIndex = 0
 
     lazy var downloadingBarView = DownloadingBarView()
-
-    @Injected(\.reachability)  var reachability: ReachabilityProvider
-
-    private var cancellables: [AnyCancellable] = []
+    lazy var connectionBarView = NotConnectionBarView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,16 +47,7 @@ class StudentTabBarController: UITabBarController {
         reportScreenView(for: selectedIndex, viewController: viewControllers![selectedIndex])
 
         attachDownloadingBarView()
-
-        reachability.newtorkReachabilityPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] isConnected in
-                guard let self = self else {
-                    return
-                }
-                print(isConnected, "isConnected")
-            }
-            .store(in: &cancellables)
+        attachConnectionBarView()
     }
 
     func dashboardTab() -> UIViewController {
@@ -182,6 +168,11 @@ class StudentTabBarController: UITabBarController {
         downloadingBarView.onTap = { [weak self] in
             self?.showDownloadingView()
         }
+        downloadingBarView.isHidden = true
+    }
+
+    private func attachConnectionBarView() {
+        connectionBarView.attach(tabBar: tabBar, in: view)
     }
 
     private func showDownloadingView() {
