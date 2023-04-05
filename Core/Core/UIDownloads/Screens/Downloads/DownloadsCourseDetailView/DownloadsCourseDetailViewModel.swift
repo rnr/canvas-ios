@@ -37,7 +37,7 @@ final class DownloadsCourseDetailViewModel: ObservableObject {
 
     // MARK: - Content -
 
-    private let courseViewModel: DownloadCourseViewModel
+    let courseViewModel: DownloadCourseViewModel
     var detailViewModels: [DownloadsCourseDetailsViewModel] = []
 
     var title: String {

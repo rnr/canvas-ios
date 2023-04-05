@@ -53,6 +53,7 @@ public struct DownloadsView: View {
                     )
             }
         }
+        .accentColor(Color(Brand.shared.linkColor))
     }
 
     private var content: some View {
