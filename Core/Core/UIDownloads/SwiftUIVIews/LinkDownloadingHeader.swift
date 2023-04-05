@@ -20,7 +20,7 @@ import SwiftUI
 
 struct LinkDownloadingHeader<Destination: View>: View {
 
-    let destination: Destination
+    let destination: Destination?
     let title: String
 
     @State private var linkIsActive: Bool = false

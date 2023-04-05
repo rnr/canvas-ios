@@ -28,7 +28,7 @@ public struct DownloadsPagesCellView: View {
 
     public var body: some View {
         HStack(spacing: 15) {
-            Image(uiImage: .folderLine)
+            Image(uiImage: .documentLine)
                 .frame(width: 20, height: 20)
                 .foregroundColor(.oxford)
             VStack(alignment: .leading) {
