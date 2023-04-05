@@ -30,7 +30,7 @@ public struct DownloadsCourseDetailsCellView: View {
         HStack(spacing: 12) {
             Image(uiImage: .documentLine)
                 .frame(width: 20, height: 20)
-                .foregroundColor(.oxford)
+                .foregroundColor(Color(detailViewModel.courseColor))
             VStack(alignment: .leading) {
                 Text(detailViewModel.title)
                     .font(.semibold16)

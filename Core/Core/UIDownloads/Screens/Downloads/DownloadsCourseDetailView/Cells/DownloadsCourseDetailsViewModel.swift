@@ -36,6 +36,10 @@ final class DownloadsCourseDetailsViewModel: Identifiable, Hashable {
 
     let course: CourseEntity
 
+    var courseColor: UIColor {
+        course.color
+    }
+
     var title: String {
         switch contentType {
         case .page:

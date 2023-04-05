@@ -53,11 +53,7 @@ final class DownloadCourseViewModel: Identifiable, Hashable {
     }
 
     var color: UIColor {
-        if AppEnvironment.shared.k5.isK5Enabled {
-            return UIColor(hexString: course.courseColor)?.ensureContrast() ?? .oxford
-        } else {
-            return .ash
-        }
+        course.color
     }
 
     init(course: CourseEntity) {

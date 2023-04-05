@@ -45,3 +45,13 @@ final public class CourseEntity: StoreObject, Storable {
         self.imageDownloadURL = imageDownloadURL ?? ""
     }
 }
+
+public extension CourseEntity {
+    var color: UIColor {
+        if AppEnvironment.shared.k5.isK5Enabled {
+            return UIColor(hexString: courseColor)?.ensureContrast() ?? .oxford
+        } else {
+            return .ash
+        }
+    }
+}
