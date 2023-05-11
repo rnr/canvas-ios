@@ -106,9 +106,13 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
 
     private func actions() {
         downloadButton.onTap = { [weak self] _ in
-            guard let self = self, let course = self.course, let page = self.page else {
+            guard let self = self, let course = self.course, let page = self.page, let data = OfflineStorageManager.shared.dataModel(for: page) else {
                 return
             }
+            
+            let entry = OfflineDownloaderEntry(dataModel: data, parts: [])
+            OfflineDownloadsManager.shared.add(entry: entry)
+
             self.downloadButton.currentState = .downloading
             let storage: LocalStorage =  .current
             CourseEntity(

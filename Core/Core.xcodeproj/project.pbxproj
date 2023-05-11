@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		060B7E5C2A0BBA900098D1D3 /* OfflineDownloadsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E572A0BA5FF0098D1D3 /* OfflineDownloadsManager.swift */; };
+		060B7E5D2A0BBA900098D1D3 /* OfflineDownloaderEntryPart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E552A0BA5C70098D1D3 /* OfflineDownloaderEntryPart.swift */; };
+		060B7E5E2A0BBA900098D1D3 /* OfflineDownloaderEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E532A0BA5810098D1D3 /* OfflineDownloaderEntry.swift */; };
+		060B7E5F2A0BBA900098D1D3 /* OfflineDownloaderConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E592A0BA61B0098D1D3 /* OfflineDownloaderConfiguration.swift */; };
+		060B7E602A0BBA900098D1D3 /* OfflineStorageDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E4D2A0B9F7D0098D1D3 /* OfflineStorageDataModel.swift */; };
+		060B7E612A0BBA900098D1D3 /* OfflineStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E492A0B9EF70098D1D3 /* OfflineStorageManager.swift */; };
+		060B7E622A0BBA900098D1D3 /* OfflineStorageConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E4B2A0B9F360098D1D3 /* OfflineStorageConfig.swift */; };
+		060B7E652A0C18160098D1D3 /* DownloaderClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E642A0C18160098D1D3 /* DownloaderClient.swift */; };
+		060B7E672A0C3E620098D1D3 /* OfflineEntryDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E662A0C3E620098D1D3 /* OfflineEntryDownloader.swift */; };
 		2C964838211E2F1A002C3255 /* Core.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C96482E211E2F1A002C3255 /* Core.framework */; };
 		2C96483F211E2F1A002C3255 /* Core.h in Headers */ = {isa = PBXBuildFile; fileRef = 2C964831211E2F1A002C3255 /* Core.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2C96485B211E30B3002C3255 /* RouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C96485A211E30B3002C3255 /* RouterTests.swift */; };
@@ -1433,6 +1442,15 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		060B7E492A0B9EF70098D1D3 /* OfflineStorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineStorageManager.swift; sourceTree = "<group>"; };
+		060B7E4B2A0B9F360098D1D3 /* OfflineStorageConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineStorageConfig.swift; sourceTree = "<group>"; };
+		060B7E4D2A0B9F7D0098D1D3 /* OfflineStorageDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineStorageDataModel.swift; sourceTree = "<group>"; };
+		060B7E532A0BA5810098D1D3 /* OfflineDownloaderEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineDownloaderEntry.swift; sourceTree = "<group>"; };
+		060B7E552A0BA5C70098D1D3 /* OfflineDownloaderEntryPart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineDownloaderEntryPart.swift; sourceTree = "<group>"; };
+		060B7E572A0BA5FF0098D1D3 /* OfflineDownloadsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineDownloadsManager.swift; sourceTree = "<group>"; };
+		060B7E592A0BA61B0098D1D3 /* OfflineDownloaderConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineDownloaderConfiguration.swift; sourceTree = "<group>"; };
+		060B7E642A0C18160098D1D3 /* DownloaderClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloaderClient.swift; sourceTree = "<group>"; };
+		060B7E662A0C3E620098D1D3 /* OfflineEntryDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineEntryDownloader.swift; sourceTree = "<group>"; };
 		180BC2536A70738540E5EE74 /* Pods_needs_pspdfkit_CoreTester.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_needs_pspdfkit_CoreTester.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BD6D7F6C2DD1E2A87C8C4B3 /* Pods-needs-pspdfkit-Core.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-needs-pspdfkit-Core.debug.xcconfig"; path = "Target Support Files/Pods-needs-pspdfkit-Core/Pods-needs-pspdfkit-Core.debug.xcconfig"; sourceTree = "<group>"; };
 		2C96482E211E2F1A002C3255 /* Core.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Core.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -3052,6 +3070,37 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		060B7E482A0B9ECD0098D1D3 /* DownloaderPackage */ = {
+			isa = PBXGroup;
+			children = (
+				060B7E5B2A0BA73E0098D1D3 /* OfflineDownloader */,
+				060B7E492A0B9EF70098D1D3 /* OfflineStorageManager.swift */,
+				060B7E4B2A0B9F360098D1D3 /* OfflineStorageConfig.swift */,
+				060B7E4D2A0B9F7D0098D1D3 /* OfflineStorageDataModel.swift */,
+				060B7E532A0BA5810098D1D3 /* OfflineDownloaderEntry.swift */,
+				060B7E552A0BA5C70098D1D3 /* OfflineDownloaderEntryPart.swift */,
+				060B7E572A0BA5FF0098D1D3 /* OfflineDownloadsManager.swift */,
+				060B7E592A0BA61B0098D1D3 /* OfflineDownloaderConfiguration.swift */,
+			);
+			path = DownloaderPackage;
+			sourceTree = "<group>";
+		};
+		060B7E5B2A0BA73E0098D1D3 /* OfflineDownloader */ = {
+			isa = PBXGroup;
+			children = (
+				060B7E662A0C3E620098D1D3 /* OfflineEntryDownloader.swift */,
+			);
+			path = OfflineDownloader;
+			sourceTree = "<group>";
+		};
+		060B7E632A0C179B0098D1D3 /* DownloaderClient */ = {
+			isa = PBXGroup;
+			children = (
+				060B7E642A0C18160098D1D3 /* DownloaderClient.swift */,
+			);
+			path = DownloaderClient;
+			sourceTree = "<group>";
+		};
 		2C964824211E2F1A002C3255 = {
 			isa = PBXGroup;
 			children = (
@@ -3077,6 +3126,8 @@
 		2C964830211E2F1A002C3255 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				060B7E632A0C179B0098D1D3 /* DownloaderClient */,
+				060B7E482A0B9ECD0098D1D3 /* DownloaderPackage */,
 				BA3D51D829D4465A0011A14A /* MobileOfflineDownloader */,
 				BA4B23AA29D335560035D918 /* UIDownloads */,
 				CF22C94125F286E000C2E012 /* Accessibility */,
@@ -8158,6 +8209,7 @@
 				CFE721E72656925D006AE4AD /* TopBarSelectionShape.swift in Sources */,
 				CFCB0F5E27CE712E008DDEA4 /* BouncyImage.swift in Sources */,
 				7DA260F423F72397005D2121 /* FilePickerCell.swift in Sources */,
+				060B7E672A0C3E620098D1D3 /* OfflineEntryDownloader.swift in Sources */,
 				D9D7EBE627C67EE300544339 /* TabName.swift in Sources */,
 				D9D7EBD727B2B0A900544339 /* CourseDetailsCellView.swift in Sources */,
 				7DA25FDD23F72148005D2121 /* Secret.swift in Sources */,
@@ -8269,6 +8321,7 @@
 				CF53F73C266FBB6000FA58D7 /* GetK5HomeroomMissingSubmissionsCount.swift in Sources */,
 				7DA2607123F722E9005D2121 /* NotificationCategory.swift in Sources */,
 				97DDE0DA24119D6800A05B55 /* CreateTodoViewController.swift in Sources */,
+				060B7E612A0BBA900098D1D3 /* OfflineStorageManager.swift in Sources */,
 				CF086072291D40500013BDCE /* MenuItems.swift in Sources */,
 				B14D993524BE65A9006DFF12 /* CommonCourse.swift in Sources */,
 				CF3E761D2889610300276703 /* FileProgressListViewModel.swift in Sources */,
@@ -8335,6 +8388,7 @@
 				CF0075E22875E4AF00588E40 /* OutputStreamExtensions.swift in Sources */,
 				BA4B23E429D335560035D918 /* ProgressButton.swift in Sources */,
 				D97020C52581013C002B7B73 /* ContextCardHeaderView.swift in Sources */,
+				060B7E5F2A0BBA900098D1D3 /* OfflineDownloaderConfiguration.swift in Sources */,
 				CFAD0D15281839FC0017D07B /* DocViewerAnnotationUploader.swift in Sources */,
 				BA4B23E329D335560035D918 /* WaitingView.swift in Sources */,
 				CF53F73F266FBB8E00FA58D7 /* K5HomeroomMissingSubmissionsCount.swift in Sources */,
@@ -8355,6 +8409,7 @@
 				3B4D892B2450A8E9004ED120 /* ComposeViewController.swift in Sources */,
 				CF8ADC562563D96400F3DBA9 /* HelpItemView.swift in Sources */,
 				7DA2606923F722D9005D2121 /* TTL.swift in Sources */,
+				060B7E652A0C18160098D1D3 /* DownloaderClient.swift in Sources */,
 				7DA260D723F72359005D2121 /* EmptyView.swift in Sources */,
 				7DFD5F7C23FF158700D988E0 /* PlannerViewController.swift in Sources */,
 				7DA2600D23F7227A005D2121 /* NSPredicateExtensions.swift in Sources */,
@@ -8380,6 +8435,8 @@
 				7DA2605323F722D9005D2121 /* Module.swift in Sources */,
 				D9B6493728F452D30035CE14 /* QuizDetailsView.swift in Sources */,
 				B102EEB6243B862C002E04F0 /* ModuleItemSequenceViewController.swift in Sources */,
+				060B7E602A0BBA900098D1D3 /* OfflineStorageDataModel.swift in Sources */,
+				060B7E5D2A0BBA900098D1D3 /* OfflineDownloaderEntryPart.swift in Sources */,
 				7DA2605823F722D9005D2121 /* Permissions.swift in Sources */,
 				7DA260DA23F72359005D2121 /* FloatingButton.swift in Sources */,
 				CF6C100326C5235B002E7FE6 /* PlannerOverrideUpdater.swift in Sources */,
@@ -8473,6 +8530,7 @@
 				7DA260C923F72359005D2121 /* AlertAction.swift in Sources */,
 				CF9DFB602584F3EE004E27A5 /* ColorExtensions.swift in Sources */,
 				7DA2604B23F722D9005D2121 /* GradingPeriod.swift in Sources */,
+				060B7E5E2A0BBA900098D1D3 /* OfflineDownloaderEntry.swift in Sources */,
 				7DA2603A23F722D9005D2121 /* Assignment.swift in Sources */,
 				7DA25FDF23F72148005D2121 /* UUID.swift in Sources */,
 				7DA2606523F722D9005D2121 /* Syllabus.swift in Sources */,
@@ -8769,6 +8827,7 @@
 				7D70868B2568937D00647D37 /* CourseCard.swift in Sources */,
 				7DA25FF123F7225D005D2121 /* AccountNotification.swift in Sources */,
 				CF6C7FCD26F9CBAF002937E5 /* CoursePickerViewModel.swift in Sources */,
+				060B7E622A0BBA900098D1D3 /* OfflineStorageConfig.swift in Sources */,
 				7DA2600B23F7227A005D2121 /* NSNumberExtensions.swift in Sources */,
 				CF911BA627A29B1800E1EECB /* iOS15Refreshable.swift in Sources */,
 				7DA25FC223F72136005D2121 /* APIPage.swift in Sources */,
@@ -8804,6 +8863,7 @@
 				7DA2606223F722D9005D2121 /* SubmissionComment.swift in Sources */,
 				EB2460262728380E00E4F331 /* K5SubjectHeaderView.swift in Sources */,
 				7DA25FF323F72260005D2121 /* DeveloperMenuViewController.swift in Sources */,
+				060B7E5C2A0BBA900098D1D3 /* OfflineDownloadsManager.swift in Sources */,
 				7DA25FFF23F7226E005D2121 /* DocViewerViewController.swift in Sources */,
 				D9E1BAC12581666B0034C01E /* ContextCardSubmissionRow.swift in Sources */,
 				BA4B23D929D335560035D918 /* DownloadsViewModel.swift in Sources */,
