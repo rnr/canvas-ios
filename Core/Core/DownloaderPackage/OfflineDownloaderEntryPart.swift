@@ -19,12 +19,13 @@
 import Foundation
 
 enum OfflineDownloaderEntryValue {
-    case html(String)
+    case html(html: String, baseURL: String?)
     case url(String)
 }
 
 class OfflineDownloaderEntryPart {
     var value: OfflineDownloaderEntryValue
+    var links: [OfflineDownloaderLink] = []
 
     init(value: OfflineDownloaderEntryValue) {
         self.value = value

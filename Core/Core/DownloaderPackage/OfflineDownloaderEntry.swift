@@ -19,7 +19,15 @@
 import Foundation
 
 enum OfflineDownloaderStatus {
-    case initialized, paused, active, partialy, completed
+    case initialized, preparing, paused, active, partialy, completed
+
+    var canResume: Bool {
+        return self == .paused
+    }
+
+    var canStart: Bool {
+        return self == .initialized || self == .paused
+    }
 }
 
 public class OfflineDownloaderEntry {
@@ -37,6 +45,12 @@ public class OfflineDownloaderEntry {
     }
 
     public func addHtmlPart(_ html: String, baseURL: String?) {
-
+        let part = OfflineDownloaderEntryPart(value: .html(html: html, baseURL: baseURL))
+        parts.append(part)
+    }
+    
+    public func addURLPart(_ link: String) {
+        let part = OfflineDownloaderEntryPart(value: .url(link))
+        parts.append(part)
     }
 }

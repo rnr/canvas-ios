@@ -18,17 +18,19 @@
 
 import Foundation
 class OfflineEntryDownloader {
+    var config: OfflineDownloaderConfig
     var entry: OfflineDownloaderEntry
-    
-    init(entry: OfflineDownloaderEntry) {
+
+    init(entry: OfflineDownloaderEntry, config: OfflineDownloaderConfig) {
         self.entry = entry
+        self.config = config
     }
-    
+
     func start() {
         
     }
-    
+
     func cancel() {
-        
+
     }
 }

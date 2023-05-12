@@ -18,11 +18,6 @@
 
 import Foundation
 
-public class OfflineDownloaderConfig {
-    var preparationBlock: ((OfflineDownloaderEntry, @escaping () -> Void) -> Void)?
-    public var limitOfConcurrentDownloads: Int = 3
-
-    public init(preparationBlock: ((OfflineDownloaderEntry, @escaping () -> Void) -> Void)? = nil) {
-        self.preparationBlock = preparationBlock
-    }
+class OfflineDownloaderLink {
+    
 }

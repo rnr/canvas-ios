@@ -16,6 +16,7 @@
 		060B7E622A0BBA900098D1D3 /* OfflineStorageConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E4B2A0B9F360098D1D3 /* OfflineStorageConfig.swift */; };
 		060B7E652A0C18160098D1D3 /* DownloaderClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E642A0C18160098D1D3 /* DownloaderClient.swift */; };
 		060B7E672A0C3E620098D1D3 /* OfflineEntryDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E662A0C3E620098D1D3 /* OfflineEntryDownloader.swift */; };
+		060B7E692A0D8E390098D1D3 /* OfflineDownloaderLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E682A0D8E390098D1D3 /* OfflineDownloaderLink.swift */; };
 		2C964838211E2F1A002C3255 /* Core.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C96482E211E2F1A002C3255 /* Core.framework */; };
 		2C96483F211E2F1A002C3255 /* Core.h in Headers */ = {isa = PBXBuildFile; fileRef = 2C964831211E2F1A002C3255 /* Core.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2C96485B211E30B3002C3255 /* RouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C96485A211E30B3002C3255 /* RouterTests.swift */; };
@@ -1451,6 +1452,7 @@
 		060B7E592A0BA61B0098D1D3 /* OfflineDownloaderConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineDownloaderConfiguration.swift; sourceTree = "<group>"; };
 		060B7E642A0C18160098D1D3 /* DownloaderClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloaderClient.swift; sourceTree = "<group>"; };
 		060B7E662A0C3E620098D1D3 /* OfflineEntryDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineEntryDownloader.swift; sourceTree = "<group>"; };
+		060B7E682A0D8E390098D1D3 /* OfflineDownloaderLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineDownloaderLink.swift; sourceTree = "<group>"; };
 		180BC2536A70738540E5EE74 /* Pods_needs_pspdfkit_CoreTester.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_needs_pspdfkit_CoreTester.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BD6D7F6C2DD1E2A87C8C4B3 /* Pods-needs-pspdfkit-Core.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-needs-pspdfkit-Core.debug.xcconfig"; path = "Target Support Files/Pods-needs-pspdfkit-Core/Pods-needs-pspdfkit-Core.debug.xcconfig"; sourceTree = "<group>"; };
 		2C96482E211E2F1A002C3255 /* Core.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Core.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -3089,6 +3091,7 @@
 			isa = PBXGroup;
 			children = (
 				060B7E662A0C3E620098D1D3 /* OfflineEntryDownloader.swift */,
+				060B7E682A0D8E390098D1D3 /* OfflineDownloaderLink.swift */,
 			);
 			path = OfflineDownloader;
 			sourceTree = "<group>";
@@ -8185,6 +8188,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				060B7E692A0D8E390098D1D3 /* OfflineDownloaderLink.swift in Sources */,
 				BA4B23CE29D335560035D918 /* Header.swift in Sources */,
 				BA3D51E829D4465B0011A14A /* LocalStorage.swift in Sources */,
 				EB71A2532615AD840003241C /* SideMenuView.swift in Sources */,
