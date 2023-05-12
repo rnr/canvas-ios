@@ -10,13 +10,18 @@
 		060B7E5C2A0BBA900098D1D3 /* OfflineDownloadsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E572A0BA5FF0098D1D3 /* OfflineDownloadsManager.swift */; };
 		060B7E5D2A0BBA900098D1D3 /* OfflineDownloaderEntryPart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E552A0BA5C70098D1D3 /* OfflineDownloaderEntryPart.swift */; };
 		060B7E5E2A0BBA900098D1D3 /* OfflineDownloaderEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E532A0BA5810098D1D3 /* OfflineDownloaderEntry.swift */; };
-		060B7E5F2A0BBA900098D1D3 /* OfflineDownloaderConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E592A0BA61B0098D1D3 /* OfflineDownloaderConfiguration.swift */; };
+		060B7E5F2A0BBA900098D1D3 /* OfflineDownloaderConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E592A0BA61B0098D1D3 /* OfflineDownloaderConfig.swift */; };
 		060B7E602A0BBA900098D1D3 /* OfflineStorageDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E4D2A0B9F7D0098D1D3 /* OfflineStorageDataModel.swift */; };
 		060B7E612A0BBA900098D1D3 /* OfflineStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E492A0B9EF70098D1D3 /* OfflineStorageManager.swift */; };
 		060B7E622A0BBA900098D1D3 /* OfflineStorageConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E4B2A0B9F360098D1D3 /* OfflineStorageConfig.swift */; };
 		060B7E652A0C18160098D1D3 /* DownloaderClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E642A0C18160098D1D3 /* DownloaderClient.swift */; };
 		060B7E672A0C3E620098D1D3 /* OfflineEntryDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E662A0C3E620098D1D3 /* OfflineEntryDownloader.swift */; };
 		060B7E692A0D8E390098D1D3 /* OfflineDownloaderLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E682A0D8E390098D1D3 /* OfflineDownloaderLink.swift */; };
+		060B7E6C2A0E59090098D1D3 /* OfflineLinksExtractorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E6B2A0E59090098D1D3 /* OfflineLinksExtractorProtocol.swift */; };
+		060B7E712A0E5A690098D1D3 /* OfflineBackgroundWebview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E702A0E5A690098D1D3 /* OfflineBackgroundWebview.swift */; };
+		060B7E732A0E5AEE0098D1D3 /* OfflineHTMLLinksExtractorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E722A0E5AEE0098D1D3 /* OfflineHTMLLinksExtractorProtocol.swift */; };
+		060B7E762A0E5B520098D1D3 /* OfflineHTMLLinksExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E752A0E5B520098D1D3 /* OfflineHTMLLinksExtractor.swift */; };
+		060B7E792A0E5E130098D1D3 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 060B7E782A0E5E130098D1D3 /* SwiftSoup */; };
 		2C964838211E2F1A002C3255 /* Core.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C96482E211E2F1A002C3255 /* Core.framework */; };
 		2C96483F211E2F1A002C3255 /* Core.h in Headers */ = {isa = PBXBuildFile; fileRef = 2C964831211E2F1A002C3255 /* Core.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2C96485B211E30B3002C3255 /* RouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C96485A211E30B3002C3255 /* RouterTests.swift */; };
@@ -1449,10 +1454,14 @@
 		060B7E532A0BA5810098D1D3 /* OfflineDownloaderEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineDownloaderEntry.swift; sourceTree = "<group>"; };
 		060B7E552A0BA5C70098D1D3 /* OfflineDownloaderEntryPart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineDownloaderEntryPart.swift; sourceTree = "<group>"; };
 		060B7E572A0BA5FF0098D1D3 /* OfflineDownloadsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineDownloadsManager.swift; sourceTree = "<group>"; };
-		060B7E592A0BA61B0098D1D3 /* OfflineDownloaderConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineDownloaderConfiguration.swift; sourceTree = "<group>"; };
+		060B7E592A0BA61B0098D1D3 /* OfflineDownloaderConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineDownloaderConfig.swift; sourceTree = "<group>"; };
 		060B7E642A0C18160098D1D3 /* DownloaderClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloaderClient.swift; sourceTree = "<group>"; };
 		060B7E662A0C3E620098D1D3 /* OfflineEntryDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineEntryDownloader.swift; sourceTree = "<group>"; };
 		060B7E682A0D8E390098D1D3 /* OfflineDownloaderLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineDownloaderLink.swift; sourceTree = "<group>"; };
+		060B7E6B2A0E59090098D1D3 /* OfflineLinksExtractorProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineLinksExtractorProtocol.swift; sourceTree = "<group>"; };
+		060B7E702A0E5A690098D1D3 /* OfflineBackgroundWebview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineBackgroundWebview.swift; sourceTree = "<group>"; };
+		060B7E722A0E5AEE0098D1D3 /* OfflineHTMLLinksExtractorProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineHTMLLinksExtractorProtocol.swift; sourceTree = "<group>"; };
+		060B7E752A0E5B520098D1D3 /* OfflineHTMLLinksExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineHTMLLinksExtractor.swift; sourceTree = "<group>"; };
 		180BC2536A70738540E5EE74 /* Pods_needs_pspdfkit_CoreTester.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_needs_pspdfkit_CoreTester.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BD6D7F6C2DD1E2A87C8C4B3 /* Pods-needs-pspdfkit-Core.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-needs-pspdfkit-Core.debug.xcconfig"; path = "Target Support Files/Pods-needs-pspdfkit-Core/Pods-needs-pspdfkit-Core.debug.xcconfig"; sourceTree = "<group>"; };
 		2C96482E211E2F1A002C3255 /* Core.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Core.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -3047,6 +3056,7 @@
 				BA4B23EA29D43A900035D918 /* RealmSwift in Frameworks */,
 				CFD3EC37289422C0001E7D4E /* Lottie in Frameworks */,
 				BA5D83C129DB0CB500150235 /* CombineReachability in Frameworks */,
+				060B7E792A0E5E130098D1D3 /* SwiftSoup in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3075,14 +3085,12 @@
 		060B7E482A0B9ECD0098D1D3 /* DownloaderPackage */ = {
 			isa = PBXGroup;
 			children = (
+				060B7E742A0E5B3F0098D1D3 /* Utilites */,
+				060B7E6F2A0E5A470098D1D3 /* Views */,
+				060B7E6E2A0E59720098D1D3 /* Managers */,
+				060B7E6D2A0E593D0098D1D3 /* Models */,
+				060B7E6A2A0E58EB0098D1D3 /* Protocols */,
 				060B7E5B2A0BA73E0098D1D3 /* OfflineDownloader */,
-				060B7E492A0B9EF70098D1D3 /* OfflineStorageManager.swift */,
-				060B7E4B2A0B9F360098D1D3 /* OfflineStorageConfig.swift */,
-				060B7E4D2A0B9F7D0098D1D3 /* OfflineStorageDataModel.swift */,
-				060B7E532A0BA5810098D1D3 /* OfflineDownloaderEntry.swift */,
-				060B7E552A0BA5C70098D1D3 /* OfflineDownloaderEntryPart.swift */,
-				060B7E572A0BA5FF0098D1D3 /* OfflineDownloadsManager.swift */,
-				060B7E592A0BA61B0098D1D3 /* OfflineDownloaderConfiguration.swift */,
 			);
 			path = DownloaderPackage;
 			sourceTree = "<group>";
@@ -3091,7 +3099,6 @@
 			isa = PBXGroup;
 			children = (
 				060B7E662A0C3E620098D1D3 /* OfflineEntryDownloader.swift */,
-				060B7E682A0D8E390098D1D3 /* OfflineDownloaderLink.swift */,
 			);
 			path = OfflineDownloader;
 			sourceTree = "<group>";
@@ -3102,6 +3109,53 @@
 				060B7E642A0C18160098D1D3 /* DownloaderClient.swift */,
 			);
 			path = DownloaderClient;
+			sourceTree = "<group>";
+		};
+		060B7E6A2A0E58EB0098D1D3 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				060B7E6B2A0E59090098D1D3 /* OfflineLinksExtractorProtocol.swift */,
+				060B7E722A0E5AEE0098D1D3 /* OfflineHTMLLinksExtractorProtocol.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		060B7E6D2A0E593D0098D1D3 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				060B7E682A0D8E390098D1D3 /* OfflineDownloaderLink.swift */,
+				060B7E4B2A0B9F360098D1D3 /* OfflineStorageConfig.swift */,
+				060B7E4D2A0B9F7D0098D1D3 /* OfflineStorageDataModel.swift */,
+				060B7E532A0BA5810098D1D3 /* OfflineDownloaderEntry.swift */,
+				060B7E552A0BA5C70098D1D3 /* OfflineDownloaderEntryPart.swift */,
+				060B7E592A0BA61B0098D1D3 /* OfflineDownloaderConfig.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		060B7E6E2A0E59720098D1D3 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				060B7E492A0B9EF70098D1D3 /* OfflineStorageManager.swift */,
+				060B7E572A0BA5FF0098D1D3 /* OfflineDownloadsManager.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+		060B7E6F2A0E5A470098D1D3 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				060B7E702A0E5A690098D1D3 /* OfflineBackgroundWebview.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		060B7E742A0E5B3F0098D1D3 /* Utilites */ = {
+			isa = PBXGroup;
+			children = (
+				060B7E752A0E5B520098D1D3 /* OfflineHTMLLinksExtractor.swift */,
+			);
+			path = Utilites;
 			sourceTree = "<group>";
 		};
 		2C964824211E2F1A002C3255 = {
@@ -7321,6 +7375,7 @@
 				BA4B23E729D43A900035D918 /* Realm */,
 				BA4B23E929D43A900035D918 /* RealmSwift */,
 				BA5D83C029DB0CB500150235 /* CombineReachability */,
+				060B7E782A0E5E130098D1D3 /* SwiftSoup */,
 			);
 			productName = Core;
 			productReference = 2C96482E211E2F1A002C3255 /* Core.framework */;
@@ -7457,6 +7512,7 @@
 				CFD3EC35289422C0001E7D4E /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				BA4B23E629D43A900035D918 /* XCRemoteSwiftPackageReference "realm-swift" */,
 				BA5D83BF29DB0CB500150235 /* XCRemoteSwiftPackageReference "CombineReachability" */,
+				060B7E772A0E5E130098D1D3 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
 			);
 			productRefGroup = 2C96482F211E2F1A002C3255 /* Products */;
 			projectDirPath = "";
@@ -8241,6 +8297,7 @@
 				7DA2609923F7233D005D2121 /* Scope.swift in Sources */,
 				7D0A28DD251952A2004FB3B6 /* RemoteImage.swift in Sources */,
 				7DA2607C23F722FA005D2121 /* PageViewEventRequestManager.swift in Sources */,
+				060B7E712A0E5A690098D1D3 /* OfflineBackgroundWebview.swift in Sources */,
 				CFA56E4728352AB0007C15D7 /* DashboardInvitationViewModel.swift in Sources */,
 				CF60CC5C26496ECF00C1C173 /* K5HomeroomViewModel.swift in Sources */,
 				7DA2607723F722F6005D2121 /* PageListViewController.swift in Sources */,
@@ -8356,10 +8413,12 @@
 				CF598B32282552150029BEBE /* View.swift in Sources */,
 				CFCB0F6627CE7E57008DDEA4 /* ImageBackground.swift in Sources */,
 				7DA2605623F722D9005D2121 /* ModuleItemType.swift in Sources */,
+				060B7E6C2A0E59090098D1D3 /* OfflineLinksExtractorProtocol.swift in Sources */,
 				CF748D1D274D43B9000EA34E /* DashboardConferencesViewModel.swift in Sources */,
 				CF60CC5F26496EDE00C1C173 /* K5GradesViewModel.swift in Sources */,
 				CF5234EB28B8D11500D2D3B9 /* FileUploadProgressObserver.swift in Sources */,
 				D94FA2AE26CBE787007B9CA4 /* K5GradeProgressBar.swift in Sources */,
+				060B7E732A0E5AEE0098D1D3 /* OfflineHTMLLinksExtractorProtocol.swift in Sources */,
 				CF3A31E728FD8112002752D2 /* NoResultsPanda.swift in Sources */,
 				CF12DFC026CE9BE7000BE452 /* K5ScheduleMissingItemsView.swift in Sources */,
 				D9B6493328F452B40035CE14 /* QuizSubmissionBreakdownViewModel.swift in Sources */,
@@ -8392,7 +8451,7 @@
 				CF0075E22875E4AF00588E40 /* OutputStreamExtensions.swift in Sources */,
 				BA4B23E429D335560035D918 /* ProgressButton.swift in Sources */,
 				D97020C52581013C002B7B73 /* ContextCardHeaderView.swift in Sources */,
-				060B7E5F2A0BBA900098D1D3 /* OfflineDownloaderConfiguration.swift in Sources */,
+				060B7E5F2A0BBA900098D1D3 /* OfflineDownloaderConfig.swift in Sources */,
 				CFAD0D15281839FC0017D07B /* DocViewerAnnotationUploader.swift in Sources */,
 				BA4B23E329D335560035D918 /* WaitingView.swift in Sources */,
 				CF53F73F266FBB8E00FA58D7 /* K5HomeroomMissingSubmissionsCount.swift in Sources */,
@@ -8738,6 +8797,7 @@
 				7DA260E923F72359005D2121 /* SwitchTableViewCell.swift in Sources */,
 				7DA2608723F72315005D2121 /* NotificationCategoriesViewController.swift in Sources */,
 				BA4B23CF29D335560035D918 /* LinkDownloadingHeader.swift in Sources */,
+				060B7E762A0E5B520098D1D3 /* OfflineHTMLLinksExtractor.swift in Sources */,
 				7DA25F9523F7212C005D2121 /* ActAsUserWindow.swift in Sources */,
 				CF598B302825290E0029BEBE /* TypographyTestViews.swift in Sources */,
 				D9E1BABA25811BD70034C01E /* ContextCardBoxView.swift in Sources */,
@@ -9610,6 +9670,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		060B7E772A0E5E130098D1D3 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scinfu/SwiftSoup.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 		BA4B23E629D43A900035D918 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/realm/realm-swift.git";
@@ -9637,6 +9705,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		060B7E782A0E5E130098D1D3 /* SwiftSoup */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 060B7E772A0E5E130098D1D3 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
+			productName = SwiftSoup;
+		};
 		BA4B23E729D43A900035D918 /* Realm */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = BA4B23E629D43A900035D918 /* XCRemoteSwiftPackageReference "realm-swift" */;

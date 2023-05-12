@@ -17,35 +17,6 @@
 //
 
 import Foundation
-class OfflineEntryDownloader {
-    var config: OfflineDownloaderConfig
-    var entry: OfflineDownloaderEntry
-    private var task: Task<(), Never>?
-
-    init(entry: OfflineDownloaderEntry, config: OfflineDownloaderConfig) {
-        self.entry = entry
-        self.config = config
-    }
-
-    func start() {
-        task = Task {
-            await prepare()
-        }
-    }
-
-    private func prepare() async {
-        await withCheckedContinuation {[weak self] continuation in
-            guard let self = self else {
-                continuation.resume()
-                return
-            }
-            self.config.preparationBlock?(self.entry) {
-                continuation.resume()
-            }
-        }
-    }
-
-    func cancel() {
-        task?.cancel()
-    }
+protocol OfflineLinksExtractorProtocol {
+    func links() async throws -> [OfflineDownloaderLink]
 }

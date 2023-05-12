@@ -48,7 +48,7 @@ public class OfflineDownloaderEntry {
         let part = OfflineDownloaderEntryPart(value: .html(html: html, baseURL: baseURL))
         parts.append(part)
     }
-    
+
     public func addURLPart(_ link: String) {
         let part = OfflineDownloaderEntryPart(value: .url(link))
         parts.append(part)

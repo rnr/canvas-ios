@@ -17,35 +17,20 @@
 //
 
 import Foundation
-class OfflineEntryDownloader {
-    var config: OfflineDownloaderConfig
-    var entry: OfflineDownloaderEntry
-    private var task: Task<(), Never>?
-
-    init(entry: OfflineDownloaderEntry, config: OfflineDownloaderConfig) {
-        self.entry = entry
-        self.config = config
+import SwiftSoup
+protocol OfflineHTMLLinksExtractorProtocol {}
+extension OfflineHTMLLinksExtractorProtocol {
+    var sourceAttributes: [String] {
+        ["src", "href", "poster"]
     }
 
-    func start() {
-        task = Task {
-            await prepare()
-        }
+    var sourceTags: [String] {
+        ["img", "link", "script", "video", "audio", "iframe", "source", "track", "a"]
     }
 
-    private func prepare() async {
-        await withCheckedContinuation {[weak self] continuation in
-            guard let self = self else {
-                continuation.resume()
-                return
-            }
-            self.config.preparationBlock?(self.entry) {
-                continuation.resume()
-            }
-        }
+    var documentExtensions: [String] {
+        ["xls", "xlsx", "pdf", "ppt", "pptx", "txt", "doc", "docx",
+        "rtf", "key", "numbers", "pages", "png", "gif", "jpg", "jpeg", "mp4", "mp3", "bin"]
     }
 
-    func cancel() {
-        task?.cancel()
-    }
 }
