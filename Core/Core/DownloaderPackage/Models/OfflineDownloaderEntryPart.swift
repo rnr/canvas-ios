@@ -30,4 +30,8 @@ class OfflineDownloaderEntryPart {
     init(value: OfflineDownloaderEntryValue) {
         self.value = value
     }
+    
+    func append(links: [OfflineDownloaderLink]) {
+        self.links.append(contentsOf: links)
+    }
 }

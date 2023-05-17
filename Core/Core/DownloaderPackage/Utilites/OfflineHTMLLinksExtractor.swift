@@ -16,7 +16,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-import Foundation
+import SwiftSoup
 
 struct OfflineHTMLLinksExtractor: OfflineLinksExtractorProtocol, OfflineHTMLLinksExtractorProtocol {
 
@@ -24,59 +24,54 @@ struct OfflineHTMLLinksExtractor: OfflineLinksExtractorProtocol, OfflineHTMLLink
     var baseURL: String
 
     func links() async throws -> [OfflineDownloaderLink] {
-        /*
         if Task.isCancelled { throw URLError(.cancelled) }
         do {
             let doc: Document = try SwiftSoup.parse(html)
-            var links: [HTMLLink] = []
+            var links: [OfflineDownloaderLink] = []
             for tag in sourceTags {
                 let tagLinks = try linksForTag(tag, in: doc)
                 links.append(contentsOf: tagLinks)
             }
-            return HTMLLinksStorage(links: links)
+            return links
         } catch {
-            throw HTMLLinksExtractorError.soupError(error: error)
+            throw OfflineHTMLLinksExtractorError.soupError(error: error)
         }
-         */
-        return []
     }
-/*
-    private func linksForTag(_ name: String, in doc: Document) throws -> [HTMLLink] {
-        var links: [HTMLLink] = []
+
+    private func linksForTag(_ name: String, in doc: Document) throws -> [OfflineDownloaderLink] {
+        var links: [OfflineDownloaderLink] = []
         let tags = try doc.getElementsByTag(name)
         for tag in tags {
             for attr in sourceAttributes {
                 if let link = try? tag.attr(attr),
                     !link.isEmpty,
                     canLoad(link: link, for: name) {
-                    let htmlLink = HTMLLink(
-                        document: doc,
-                        element: tag,
-                        attribute: attr,
-                        link: link.fixLink(with: baseURL)
+                    let webLink = OfflineDownloaderLink(
+                        link: link.fixLink(with: baseURL),
+                        tag: tag.tagName(),
+                        attribute: attr
                     )
-                    links.append(htmlLink)
+                    links.append(webLink)
                 }
             }
 
-            // get youtube or vimeo link
+            // get youtube or vimeo link from videoJS
             if name.lowercased() == "video" {
                 let attr = "data-setup"
                 if let jsonString = try? tag.attr(attr),
                     let jsonData = jsonString.data(using: .utf8),
                     let pluginObject = try? JSONDecoder().decode(
-                        HTMLVideoVimeoAndYoutubePluginObject.self,
+                        YoutubeAndVimeoPlugin.self,
                         from: jsonData
                     ),
                     let source = pluginObject.sources.first {
                     let link = source.src
-                    let htmlLink = HTMLLink(
-                        document: doc,
-                        element: tag,
-                        attribute: attr,
-                        link: link.fixLink(with: baseURL)
+                    let webLink = OfflineDownloaderLink(
+                        link: link.fixLink(with: baseURL),
+                        tag: tag.tagName(),
+                        attribute: attr
                     )
-                    links.append(htmlLink)
+                    links.append(webLink)
                 }
             }
         }
@@ -100,11 +95,10 @@ struct OfflineHTMLLinksExtractor: OfflineLinksExtractorProtocol, OfflineHTMLLink
 
         return true
     }
-    */
 }
-/*
-extension HTMLLinksExtractor {
-    enum HTMLLinksExtractorError: Error, LocalizedError {
+
+extension OfflineHTMLLinksExtractor {
+    enum OfflineHTMLLinksExtractorError: Error, LocalizedError {
         case soupError(error: Error)
 
         var errorDescription: String? {
@@ -115,4 +109,3 @@ extension HTMLLinksExtractor {
         }
     }
 }
-*/

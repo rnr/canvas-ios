@@ -28,7 +28,7 @@ public class OfflineStorageManager {
 
     func save<T>(_ object: T) {
         let data = dataModel(for: object)
-        //TODO: Save to database
+        // TODO: Save to database
     }
 
     func load<T>(for id: String, castingType: T.Type) -> T? {
@@ -47,7 +47,7 @@ public class OfflineStorageManager {
     func dataModel<T>(for object: T) -> OfflineStorageDataModel? {
         config.toDataBlock?(object)
     }
-    
+
     public func object<T>(from data: OfflineStorageDataModel, for type: T.Type) -> T? {
         config.fromDataBlock?(data) as? T
     }

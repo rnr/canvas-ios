@@ -20,6 +20,9 @@ import Foundation
 
 public class OfflineDownloaderConfig {
     var preparationBlock: ((OfflineDownloaderEntry, @escaping () -> Void) -> Void)?
+    var shouldCacheCSS: Bool = true
+    var rootPath: String = NSTemporaryDirectory()
+
     public var limitOfConcurrentDownloads: Int = 3
 
     public init(preparationBlock: ((OfflineDownloaderEntry, @escaping () -> Void) -> Void)? = nil) {

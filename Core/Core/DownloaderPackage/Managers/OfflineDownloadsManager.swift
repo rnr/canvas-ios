@@ -80,7 +80,7 @@ public class OfflineDownloadsManager {
     }
 
     func getDownloader(for entry: OfflineDownloaderEntry) -> OfflineEntryDownloader? {
-        downloaders.first { 
+        downloaders.first {
             $0.entry.dataModel.id == entry.dataModel.id &&
             $0.entry.dataModel.type == entry.dataModel.type
         }

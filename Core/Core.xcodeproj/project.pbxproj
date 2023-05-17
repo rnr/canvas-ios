@@ -22,6 +22,21 @@
 		060B7E732A0E5AEE0098D1D3 /* OfflineHTMLLinksExtractorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E722A0E5AEE0098D1D3 /* OfflineHTMLLinksExtractorProtocol.swift */; };
 		060B7E762A0E5B520098D1D3 /* OfflineHTMLLinksExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E752A0E5B520098D1D3 /* OfflineHTMLLinksExtractor.swift */; };
 		060B7E792A0E5E130098D1D3 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 060B7E782A0E5E130098D1D3 /* SwiftSoup */; };
+		060B7E7B2A13A1550098D1D3 /* OfflineStorageDataProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E7A2A13A1550098D1D3 /* OfflineStorageDataProtocol.swift */; };
+		060B7E7E2A13BA030098D1D3 /* String+Offline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E7D2A13BA030098D1D3 /* String+Offline.swift */; };
+		060B7E862A13BA570098D1D3 /* HapyakVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E832A13BA560098D1D3 /* HapyakVideo.swift */; };
+		060B7E872A13BA570098D1D3 /* HapyakAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E842A13BA560098D1D3 /* HapyakAsset.swift */; };
+		060B7E882A13BA570098D1D3 /* HapyakMedia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E852A13BA570098D1D3 /* HapyakMedia.swift */; };
+		060B7E8C2A13BA7D0098D1D3 /* WistiaSubtitles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E892A13BA7C0098D1D3 /* WistiaSubtitles.swift */; };
+		060B7E8D2A13BA7D0098D1D3 /* WistiaAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E8A2A13BA7C0098D1D3 /* WistiaAsset.swift */; };
+		060B7E8E2A13BA7D0098D1D3 /* WistiaVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E8B2A13BA7C0098D1D3 /* WistiaVideo.swift */; };
+		060B7E932A13BA9D0098D1D3 /* VimeoRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E8F2A13BA9C0098D1D3 /* VimeoRequest.swift */; };
+		060B7E942A13BA9D0098D1D3 /* VimeoVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E902A13BA9C0098D1D3 /* VimeoVideo.swift */; };
+		060B7E952A13BA9D0098D1D3 /* VimeoFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E912A13BA9D0098D1D3 /* VimeoFiles.swift */; };
+		060B7E962A13BA9D0098D1D3 /* VimeoProgressive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E922A13BA9D0098D1D3 /* VimeoProgressive.swift */; };
+		060B7E9A2A13BB120098D1D3 /* YoutubeAndVimeoPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E992A13BB120098D1D3 /* YoutubeAndVimeoPlugin.swift */; };
+		060B7E9C2A13C6AA0098D1D3 /* OfflineHTMLDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E9B2A13C6AA0098D1D3 /* OfflineHTMLDownloader.swift */; };
+		060B7E9E2A14B0D60098D1D3 /* OfflineURLDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E9D2A14B0D60098D1D3 /* OfflineURLDownloader.swift */; };
 		2C964838211E2F1A002C3255 /* Core.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C96482E211E2F1A002C3255 /* Core.framework */; };
 		2C96483F211E2F1A002C3255 /* Core.h in Headers */ = {isa = PBXBuildFile; fileRef = 2C964831211E2F1A002C3255 /* Core.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2C96485B211E30B3002C3255 /* RouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C96485A211E30B3002C3255 /* RouterTests.swift */; };
@@ -1462,6 +1477,21 @@
 		060B7E702A0E5A690098D1D3 /* OfflineBackgroundWebview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineBackgroundWebview.swift; sourceTree = "<group>"; };
 		060B7E722A0E5AEE0098D1D3 /* OfflineHTMLLinksExtractorProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineHTMLLinksExtractorProtocol.swift; sourceTree = "<group>"; };
 		060B7E752A0E5B520098D1D3 /* OfflineHTMLLinksExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineHTMLLinksExtractor.swift; sourceTree = "<group>"; };
+		060B7E7A2A13A1550098D1D3 /* OfflineStorageDataProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineStorageDataProtocol.swift; sourceTree = "<group>"; };
+		060B7E7D2A13BA030098D1D3 /* String+Offline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Offline.swift"; sourceTree = "<group>"; };
+		060B7E832A13BA560098D1D3 /* HapyakVideo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HapyakVideo.swift; sourceTree = "<group>"; };
+		060B7E842A13BA560098D1D3 /* HapyakAsset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HapyakAsset.swift; sourceTree = "<group>"; };
+		060B7E852A13BA570098D1D3 /* HapyakMedia.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HapyakMedia.swift; sourceTree = "<group>"; };
+		060B7E892A13BA7C0098D1D3 /* WistiaSubtitles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WistiaSubtitles.swift; sourceTree = "<group>"; };
+		060B7E8A2A13BA7C0098D1D3 /* WistiaAsset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WistiaAsset.swift; sourceTree = "<group>"; };
+		060B7E8B2A13BA7C0098D1D3 /* WistiaVideo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WistiaVideo.swift; sourceTree = "<group>"; };
+		060B7E8F2A13BA9C0098D1D3 /* VimeoRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VimeoRequest.swift; sourceTree = "<group>"; };
+		060B7E902A13BA9C0098D1D3 /* VimeoVideo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VimeoVideo.swift; sourceTree = "<group>"; };
+		060B7E912A13BA9D0098D1D3 /* VimeoFiles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VimeoFiles.swift; sourceTree = "<group>"; };
+		060B7E922A13BA9D0098D1D3 /* VimeoProgressive.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VimeoProgressive.swift; sourceTree = "<group>"; };
+		060B7E992A13BB120098D1D3 /* YoutubeAndVimeoPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YoutubeAndVimeoPlugin.swift; sourceTree = "<group>"; };
+		060B7E9B2A13C6AA0098D1D3 /* OfflineHTMLDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineHTMLDownloader.swift; sourceTree = "<group>"; };
+		060B7E9D2A14B0D60098D1D3 /* OfflineURLDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineURLDownloader.swift; sourceTree = "<group>"; };
 		180BC2536A70738540E5EE74 /* Pods_needs_pspdfkit_CoreTester.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_needs_pspdfkit_CoreTester.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BD6D7F6C2DD1E2A87C8C4B3 /* Pods-needs-pspdfkit-Core.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-needs-pspdfkit-Core.debug.xcconfig"; path = "Target Support Files/Pods-needs-pspdfkit-Core/Pods-needs-pspdfkit-Core.debug.xcconfig"; sourceTree = "<group>"; };
 		2C96482E211E2F1A002C3255 /* Core.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Core.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -3085,22 +3115,14 @@
 		060B7E482A0B9ECD0098D1D3 /* DownloaderPackage */ = {
 			isa = PBXGroup;
 			children = (
+				060B7E7C2A13B9BA0098D1D3 /* Extensions */,
 				060B7E742A0E5B3F0098D1D3 /* Utilites */,
 				060B7E6F2A0E5A470098D1D3 /* Views */,
 				060B7E6E2A0E59720098D1D3 /* Managers */,
 				060B7E6D2A0E593D0098D1D3 /* Models */,
 				060B7E6A2A0E58EB0098D1D3 /* Protocols */,
-				060B7E5B2A0BA73E0098D1D3 /* OfflineDownloader */,
 			);
 			path = DownloaderPackage;
-			sourceTree = "<group>";
-		};
-		060B7E5B2A0BA73E0098D1D3 /* OfflineDownloader */ = {
-			isa = PBXGroup;
-			children = (
-				060B7E662A0C3E620098D1D3 /* OfflineEntryDownloader.swift */,
-			);
-			path = OfflineDownloader;
 			sourceTree = "<group>";
 		};
 		060B7E632A0C179B0098D1D3 /* DownloaderClient */ = {
@@ -3116,6 +3138,7 @@
 			children = (
 				060B7E6B2A0E59090098D1D3 /* OfflineLinksExtractorProtocol.swift */,
 				060B7E722A0E5AEE0098D1D3 /* OfflineHTMLLinksExtractorProtocol.swift */,
+				060B7E7A2A13A1550098D1D3 /* OfflineStorageDataProtocol.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -3123,6 +3146,7 @@
 		060B7E6D2A0E593D0098D1D3 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				060B7E7F2A13BA180098D1D3 /* Video */,
 				060B7E682A0D8E390098D1D3 /* OfflineDownloaderLink.swift */,
 				060B7E4B2A0B9F360098D1D3 /* OfflineStorageConfig.swift */,
 				060B7E4D2A0B9F7D0098D1D3 /* OfflineStorageDataModel.swift */,
@@ -3154,8 +3178,69 @@
 			isa = PBXGroup;
 			children = (
 				060B7E752A0E5B520098D1D3 /* OfflineHTMLLinksExtractor.swift */,
+				060B7E9B2A13C6AA0098D1D3 /* OfflineHTMLDownloader.swift */,
+				060B7E9D2A14B0D60098D1D3 /* OfflineURLDownloader.swift */,
+				060B7E662A0C3E620098D1D3 /* OfflineEntryDownloader.swift */,
 			);
 			path = Utilites;
+			sourceTree = "<group>";
+		};
+		060B7E7C2A13B9BA0098D1D3 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				060B7E7D2A13BA030098D1D3 /* String+Offline.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		060B7E7F2A13BA180098D1D3 /* Video */ = {
+			isa = PBXGroup;
+			children = (
+				060B7E972A13BAE90098D1D3 /* YoutubeAndVimeoPlugin */,
+				060B7E822A13BA370098D1D3 /* Hapyak */,
+				060B7E812A13BA2F0098D1D3 /* Wistia */,
+				060B7E802A13BA280098D1D3 /* Vimeo */,
+			);
+			path = Video;
+			sourceTree = "<group>";
+		};
+		060B7E802A13BA280098D1D3 /* Vimeo */ = {
+			isa = PBXGroup;
+			children = (
+				060B7E912A13BA9D0098D1D3 /* VimeoFiles.swift */,
+				060B7E922A13BA9D0098D1D3 /* VimeoProgressive.swift */,
+				060B7E8F2A13BA9C0098D1D3 /* VimeoRequest.swift */,
+				060B7E902A13BA9C0098D1D3 /* VimeoVideo.swift */,
+			);
+			path = Vimeo;
+			sourceTree = "<group>";
+		};
+		060B7E812A13BA2F0098D1D3 /* Wistia */ = {
+			isa = PBXGroup;
+			children = (
+				060B7E8A2A13BA7C0098D1D3 /* WistiaAsset.swift */,
+				060B7E892A13BA7C0098D1D3 /* WistiaSubtitles.swift */,
+				060B7E8B2A13BA7C0098D1D3 /* WistiaVideo.swift */,
+			);
+			path = Wistia;
+			sourceTree = "<group>";
+		};
+		060B7E822A13BA370098D1D3 /* Hapyak */ = {
+			isa = PBXGroup;
+			children = (
+				060B7E842A13BA560098D1D3 /* HapyakAsset.swift */,
+				060B7E852A13BA570098D1D3 /* HapyakMedia.swift */,
+				060B7E832A13BA560098D1D3 /* HapyakVideo.swift */,
+			);
+			path = Hapyak;
+			sourceTree = "<group>";
+		};
+		060B7E972A13BAE90098D1D3 /* YoutubeAndVimeoPlugin */ = {
+			isa = PBXGroup;
+			children = (
+				060B7E992A13BB120098D1D3 /* YoutubeAndVimeoPlugin.swift */,
+			);
+			path = YoutubeAndVimeoPlugin;
 			sourceTree = "<group>";
 		};
 		2C964824211E2F1A002C3255 = {
@@ -8324,6 +8409,7 @@
 				7D6E57392550C57F0068D3C3 /* DiscussionListViewController.swift in Sources */,
 				BA4B23DC29D335560035D918 /* PageEntity.swift in Sources */,
 				CFFE285E27AABCC20029A408 /* CourseSectionStatus.swift in Sources */,
+				060B7E8C2A13BA7D0098D1D3 /* WistiaSubtitles.swift in Sources */,
 				CF490F2E28575B4F0065D242 /* DocumentExtensions.swift in Sources */,
 				7DA2601F23F7227A005D2121 /* URLResponseExtensions.swift in Sources */,
 				7DA2602423F722B3005D2121 /* LogEventListViewController.swift in Sources */,
@@ -8494,6 +8580,7 @@
 				CF43DE8527CCDBCB00015B6F /* MotionDetector.swift in Sources */,
 				7D06A2B32469B7D100D76267 /* DiscussionReplyViewController.swift in Sources */,
 				CFDB61F528AD03050008C3F3 /* FileUploadItem.swift in Sources */,
+				060B7E952A13BA9D0098D1D3 /* VimeoFiles.swift in Sources */,
 				CF490F162850E2750065D242 /* DragInfo.swift in Sources */,
 				7DA2605323F722D9005D2121 /* Module.swift in Sources */,
 				D9B6493728F452D30035CE14 /* QuizDetailsView.swift in Sources */,
@@ -8548,6 +8635,7 @@
 				EBE92ED2279864380053C9A4 /* K5ImportantDateItem.swift in Sources */,
 				7D7F71D6241C2A5A00D6F9CB /* ConferenceListViewController.swift in Sources */,
 				7D62716A245B422900FC1798 /* DiscussionParticipant.swift in Sources */,
+				060B7E7E2A13BA030098D1D3 /* String+Offline.swift in Sources */,
 				CF3A31DD28F840DA002752D2 /* InboxMessageView.swift in Sources */,
 				D91BC855276B7B3C008371B0 /* AssignmentListViewModel.swift in Sources */,
 				CF3A31DB28F83D39002752D2 /* InboxView.swift in Sources */,
@@ -8622,6 +8710,7 @@
 				7DA260E323F72359005D2121 /* ListFormatter.swift in Sources */,
 				CFBF1DF7281FE20200DA99F7 /* DocViewerAnnotationPutResponseHandler.swift in Sources */,
 				D9DE56D2255053B700CF8B22 /* SyllabusEditorView.swift in Sources */,
+				060B7E9C2A13C6AA0098D1D3 /* OfflineHTMLDownloader.swift in Sources */,
 				CF2F7E7A27FF211500942241 /* FontPreview.swift in Sources */,
 				CFB9B2F728A12DB000C18C79 /* FilePreviewProvider.swift in Sources */,
 				3BA649CD2423E0080047D8DC /* APIPairingCode.swift in Sources */,
@@ -8671,6 +8760,7 @@
 				7DA2604E23F722D9005D2121 /* LatePolicyInterval.swift in Sources */,
 				B4D7405128D864C80004CA1A /* DeterminateCircleProgressViewStyle.swift in Sources */,
 				CFDB620028AE46C80008C3F3 /* FileSubmissionAssembly.swift in Sources */,
+				060B7E872A13BA570098D1D3 /* HapyakAsset.swift in Sources */,
 				7DA2600423F7227A005D2121 /* DateExtensions.swift in Sources */,
 				7DA25FDE23F72148005D2121 /* SessionDefaults.swift in Sources */,
 				7DA2600723F7227A005D2121 /* LoggerExtensions.swift in Sources */,
@@ -8820,10 +8910,12 @@
 				CF6A07C126FDDBCE0056EEC1 /* AttachmentPreviewView.swift in Sources */,
 				7DA260E623F72359005D2121 /* RightDetailTableViewCell.swift in Sources */,
 				7DA2600823F7227A005D2121 /* NotificationCenterExtensions.swift in Sources */,
+				060B7E882A13BA570098D1D3 /* HapyakMedia.swift in Sources */,
 				CFFE285A27AA9D380029A408 /* CourseListCellView.swift in Sources */,
 				CEF0D1462837D571005867EF /* ContextCellBackgroundView.swift in Sources */,
 				7DA2606723F722D9005D2121 /* TabType.swift in Sources */,
 				CFB06FA828C3F80E00DAC40B /* FileSubmissionTargetsRequester.swift in Sources */,
+				060B7E9E2A14B0D60098D1D3 /* OfflineURLDownloader.swift in Sources */,
 				3BA649D324251FE50047D8DC /* PairWithObserverViewController.swift in Sources */,
 				7D630B6F24A511120039A45D /* Folder.swift in Sources */,
 				7D75FF1824085E95000544E7 /* ListBackgroundView.swift in Sources */,
@@ -8836,6 +8928,7 @@
 				CF7C36742677B0D200ACAC79 /* UIBarButtonItemExtensions.swift in Sources */,
 				CF9D2262291EB12000B19EF0 /* DashboardViewModel.swift in Sources */,
 				7DA2602223F7227A005D2121 /* UIButtonExtensions.swift in Sources */,
+				060B7E8E2A13BA7D0098D1D3 /* WistiaVideo.swift in Sources */,
 				7DA2609A23F7233D005D2121 /* Store.swift in Sources */,
 				7DA2601523F7227A005D2121 /* UIImageViewExtensions.swift in Sources */,
 				7DA25FE923F721DE005D2121 /* APISearchRecipient.swift in Sources */,
@@ -8857,6 +8950,8 @@
 				7DA2601D23F7227A005D2121 /* URLComponentsExtensions.swift in Sources */,
 				CF21E75928D3068300F73066 /* BackgroundActivity.swift in Sources */,
 				7DA25FFA23F7226E005D2121 /* DocViewerCommentReplyAnnotation.swift in Sources */,
+				060B7E862A13BA570098D1D3 /* HapyakVideo.swift in Sources */,
+				060B7E932A13BA9D0098D1D3 /* VimeoRequest.swift in Sources */,
 				CF350F6B290C0F2C00ED656E /* DashboardSettingsInteractor.swift in Sources */,
 				EBF58AC92721A862008EE2DF /* K5SubjectView.swift in Sources */,
 				B4372B5B28AF9CB30030FFB9 /* FileUploadNotificationCardListViewModel.swift in Sources */,
@@ -8912,12 +9007,14 @@
 				BA3D51E529D4465B0011A14A /* StoreObject.swift in Sources */,
 				7DA2603523F722D9005D2121 /* LockStatusViewable.swift in Sources */,
 				7D4B274F253F47EC00A98DE3 /* AudioRecorder.swift in Sources */,
+				060B7E962A13BA9D0098D1D3 /* VimeoProgressive.swift in Sources */,
 				E8A8FA8E24D328C3000B27DF /* SearchBar.swift in Sources */,
 				7D70868F2568D6CA00647D37 /* GroupCard.swift in Sources */,
 				7DA2608823F72315005D2121 /* NotificationChannelsViewController.swift in Sources */,
 				D9FD8EF5254185DF00C6842B /* SyllabusTabViewController.swift in Sources */,
 				BA3D51EC29D47C0C0011A14A /* DownloadsCourseDetailViewModel.swift in Sources */,
 				EB35FA5526B0085B00AA8C22 /* K5GradeCell.swift in Sources */,
+				060B7E9A2A13BB120098D1D3 /* YoutubeAndVimeoPlugin.swift in Sources */,
 				7DA2606C23F722D9005D2121 /* Activity.swift in Sources */,
 				3B4D89272450A8E9004ED120 /* ComposeReplyViewController.swift in Sources */,
 				7DA260F123F72391005D2121 /* FileUploadTarget.swift in Sources */,
@@ -8967,6 +9064,7 @@
 				7D7BA23524D8959300B1A68B /* PageEditorView.swift in Sources */,
 				CF3E761F2889736600276703 /* FileProgressListView.swift in Sources */,
 				7DA2601723F7227A005D2121 /* UIScrollViewExtensions.swift in Sources */,
+				060B7E942A13BA9D0098D1D3 /* VimeoVideo.swift in Sources */,
 				7D70869D256C1C6500647D37 /* ConferenceCard.swift in Sources */,
 				CF43DE8727CCDDC000015B6F /* MotionModifier.swift in Sources */,
 				7DA25FA723F72136005D2121 /* APICourseSection.swift in Sources */,
@@ -8989,6 +9087,7 @@
 				CF5F603225DBD84700E7E0ED /* UINavigationControllerTheme.swift in Sources */,
 				CF60CC5626496EA500C1C173 /* K5ScheduleViewModel.swift in Sources */,
 				BA4B23DF29D335560035D918 /* DownloadingBarView.swift in Sources */,
+				060B7E7B2A13A1550098D1D3 /* OfflineStorageDataProtocol.swift in Sources */,
 				7D630B7124A52C050039A45D /* GetFolders.swift in Sources */,
 				7DA25FF423F72260005D2121 /* ExperimentalFeaturesViewController.swift in Sources */,
 				7D7F71DA241C41BC00D6F9CB /* APIDate.swift in Sources */,
@@ -9001,6 +9100,7 @@
 				7DA25FF723F7226E005D2121 /* DocViewerAnnotationStateManager.swift in Sources */,
 				CF11565026FB56E900DE25B6 /* AttachmentCopyService.swift in Sources */,
 				7DA2602923F722C2005D2121 /* LoginManualOAuthViewController.swift in Sources */,
+				060B7E8D2A13BA7D0098D1D3 /* WistiaAsset.swift in Sources */,
 				CF60CC3A2645525F00C1C173 /* K5ResourcesView.swift in Sources */,
 				7DA25FFE23F7226E005D2121 /* DocViewerSession.swift in Sources */,
 				CF3A31E928FD92C1002752D2 /* ConversationParticipantNames.swift in Sources */,

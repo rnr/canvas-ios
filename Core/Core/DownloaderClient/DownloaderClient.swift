@@ -18,6 +18,7 @@
 
 import Foundation
 
+
 public struct DownloaderClient {
     public static func setup() {
         let storageConfig = OfflineStorageConfig { model in
@@ -106,16 +107,17 @@ public struct DownloaderClient {
                     if let page = OfflineStorageManager.shared.object(from: entry.dataModel, for: Page.self),
                        let context = Context(canvasContextID: page.contextID) {
 
-                        pages = env.subscribe(GetPage(context: context, url: page.url)) {
+                        pages = env.subscribe(GetPage(context: context, url: page.url)) {}
 
-                        }
                         pages?.refresh(force: true, callback: {[weak entry] page in
                             if let body = page?.body {
                                 let fullHTML = CoreWebView().html(for: body)
                                 entry?.parts.removeAll()
                                 entry?.addHtmlPart(fullHTML, baseURL: page?.html_url.absoluteString)
                             }
+                            completionHandler()
                         })
+                        return
                     }
                 }
                 completionHandler()
