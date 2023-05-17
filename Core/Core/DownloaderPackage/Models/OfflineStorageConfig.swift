@@ -19,11 +19,5 @@
 import Foundation
 
 public class OfflineStorageConfig {
-    var fromDataBlock: ((OfflineStorageDataModel) -> Any?)?
-    var toDataBlock: ((Any) -> OfflineStorageDataModel?)?
-
-    public init(fromDataBlock: ((OfflineStorageDataModel) -> Any?)? = nil, toDataBlock: ( (Any) -> OfflineStorageDataModel?)? = nil) {
-        self.fromDataBlock = fromDataBlock
-        self.toDataBlock = toDataBlock
-    }
+    var helpers: [any OfflineStorageDataProtocol] = []
 }

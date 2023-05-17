@@ -18,15 +18,6 @@
 
 import Foundation
 
-protocol OfflineStorageDataProtocol {
-    associatedtype OfflineObject
-
-    func toOfflineModel(_ object: OfflineObject) -> OfflineStorageDataModel
-    func fromOfflineModel(_ model: OfflineStorageDataModel) -> OfflineObject?
-}
-
-extension OfflineStorageDataProtocol {
-    var offlineType: OfflineObject.Type {
-        OfflineObject.self
-    }
+protocol OfflineDownloadHelperProtocol {
+    
 }

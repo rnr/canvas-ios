@@ -27,7 +27,8 @@ public class OfflineStorageManager {
     }
 
     func save<T>(_ object: T) {
-        let data = dataModel(for: object)
+        guard let helper = helper(for: object) else { return }
+        let data = helper.toOfflineModel()
         // TODO: Save to database
     }
 
@@ -35,7 +36,7 @@ public class OfflineStorageManager {
         let typeString = String(describing: castingType)
         // TODO: get data from database for id and typeString
         let data = OfflineStorageDataModel(id: "testId", type: typeString, json: "{}")
-        return config.fromDataBlock?(data) as? T
+        return object(from: data, for: castingType)
     }
 
     func loadAll<T>(of type: T.Type) -> [T] {
@@ -45,10 +46,19 @@ public class OfflineStorageManager {
     }
 
     func dataModel<T>(for object: T) -> OfflineStorageDataModel? {
-        config.toDataBlock?(object)
+        helper(for: object)?.toOfflineModel()
     }
 
     public func object<T>(from data: OfflineStorageDataModel, for type: T.Type) -> T? {
-        config.fromDataBlock?(data) as? T
+        guard let helper = helper(for: type) else { return nil }
+        return helper.fromOfflineModel(data) as? T
+    }
+
+    func helper<T>(for object: T) -> (any OfflineStorageDataProtocol)? {
+        helper(for: type(of: object))
+    }
+
+    func helper<T>(for type: T.Type) -> (any OfflineStorageDataProtocol)? {
+        config.helpers.first(where: {$0.offlineType == type})
     }
 }

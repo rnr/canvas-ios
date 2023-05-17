@@ -37,6 +37,8 @@
 		060B7E9A2A13BB120098D1D3 /* YoutubeAndVimeoPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E992A13BB120098D1D3 /* YoutubeAndVimeoPlugin.swift */; };
 		060B7E9C2A13C6AA0098D1D3 /* OfflineHTMLDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E9B2A13C6AA0098D1D3 /* OfflineHTMLDownloader.swift */; };
 		060B7E9E2A14B0D60098D1D3 /* OfflineURLDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E9D2A14B0D60098D1D3 /* OfflineURLDownloader.swift */; };
+		060B7EA02A14B81B0098D1D3 /* OfflineDownloadHelperProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E9F2A14B81B0098D1D3 /* OfflineDownloadHelperProtocol.swift */; };
+		060B7EA22A14BC2D0098D1D3 /* Page+OfflineStorageDataProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7EA12A14BC2D0098D1D3 /* Page+OfflineStorageDataProtocol.swift */; };
 		2C964838211E2F1A002C3255 /* Core.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C96482E211E2F1A002C3255 /* Core.framework */; };
 		2C96483F211E2F1A002C3255 /* Core.h in Headers */ = {isa = PBXBuildFile; fileRef = 2C964831211E2F1A002C3255 /* Core.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2C96485B211E30B3002C3255 /* RouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C96485A211E30B3002C3255 /* RouterTests.swift */; };
@@ -1492,6 +1494,8 @@
 		060B7E992A13BB120098D1D3 /* YoutubeAndVimeoPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YoutubeAndVimeoPlugin.swift; sourceTree = "<group>"; };
 		060B7E9B2A13C6AA0098D1D3 /* OfflineHTMLDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineHTMLDownloader.swift; sourceTree = "<group>"; };
 		060B7E9D2A14B0D60098D1D3 /* OfflineURLDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineURLDownloader.swift; sourceTree = "<group>"; };
+		060B7E9F2A14B81B0098D1D3 /* OfflineDownloadHelperProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineDownloadHelperProtocol.swift; sourceTree = "<group>"; };
+		060B7EA12A14BC2D0098D1D3 /* Page+OfflineStorageDataProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Page+OfflineStorageDataProtocol.swift"; sourceTree = "<group>"; };
 		180BC2536A70738540E5EE74 /* Pods_needs_pspdfkit_CoreTester.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_needs_pspdfkit_CoreTester.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BD6D7F6C2DD1E2A87C8C4B3 /* Pods-needs-pspdfkit-Core.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-needs-pspdfkit-Core.debug.xcconfig"; path = "Target Support Files/Pods-needs-pspdfkit-Core/Pods-needs-pspdfkit-Core.debug.xcconfig"; sourceTree = "<group>"; };
 		2C96482E211E2F1A002C3255 /* Core.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Core.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -3129,6 +3133,7 @@
 			isa = PBXGroup;
 			children = (
 				060B7E642A0C18160098D1D3 /* DownloaderClient.swift */,
+				060B7EA12A14BC2D0098D1D3 /* Page+OfflineStorageDataProtocol.swift */,
 			);
 			path = DownloaderClient;
 			sourceTree = "<group>";
@@ -3139,6 +3144,7 @@
 				060B7E6B2A0E59090098D1D3 /* OfflineLinksExtractorProtocol.swift */,
 				060B7E722A0E5AEE0098D1D3 /* OfflineHTMLLinksExtractorProtocol.swift */,
 				060B7E7A2A13A1550098D1D3 /* OfflineStorageDataProtocol.swift */,
+				060B7E9F2A14B81B0098D1D3 /* OfflineDownloadHelperProtocol.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -8370,6 +8376,7 @@
 				CF7D4A892937678100463FBD /* TabBarMessageCountUpdater.swift in Sources */,
 				CF0894FB26FA218C0051A1BA /* AssignmentPickerViewModel.swift in Sources */,
 				BA18C1C429DC426300090221 /* NotConnectionBarView.swift in Sources */,
+				060B7EA02A14B81B0098D1D3 /* OfflineDownloadHelperProtocol.swift in Sources */,
 				7DA2600323F7227A005D2121 /* BundleExtensions.swift in Sources */,
 				3B4D89412450AD58004ED120 /* UITextViewExtensions.swift in Sources */,
 				CF3763152837A30D00F25B81 /* DashboardInvitationAPIItem.swift in Sources */,
@@ -8683,6 +8690,7 @@
 				7DA2604B23F722D9005D2121 /* GradingPeriod.swift in Sources */,
 				060B7E5E2A0BBA900098D1D3 /* OfflineDownloaderEntry.swift in Sources */,
 				7DA2603A23F722D9005D2121 /* Assignment.swift in Sources */,
+				060B7EA22A14BC2D0098D1D3 /* Page+OfflineStorageDataProtocol.swift in Sources */,
 				7DA25FDF23F72148005D2121 /* UUID.swift in Sources */,
 				7DA2606523F722D9005D2121 /* Syllabus.swift in Sources */,
 				CFE7B42326B19F3F0092593D /* K5ScheduleSubjectView.swift in Sources */,
