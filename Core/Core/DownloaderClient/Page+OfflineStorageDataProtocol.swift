@@ -17,8 +17,8 @@
 //
 
 import Foundation
-struct PageHelper: OfflineStorageDataProtocol {
-    func fromOfflineModel(_ model: OfflineStorageDataModel) -> Page? {
+extension Page: OfflineStorageDataProtocol {
+    public static func fromOfflineModel(_ model: OfflineStorageDataModel) -> Page? {
         let env = AppEnvironment.shared
         if model.type.lowercased().contains("page") {
             let data = model.json.data(using: .utf8)
@@ -73,7 +73,7 @@ struct PageHelper: OfflineStorageDataProtocol {
         return nil
     }
 
-    func toOfflineModel(_ object: Page) -> OfflineStorageDataModel {
+    public func toOfflineModel() -> OfflineStorageDataModel {
         let dictionary: [String: Any] = [
             "url": object.url,
             "lastUpdated": object.lastUpdated?.timeIntervalSince1970 ?? 0,

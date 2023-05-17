@@ -18,6 +18,5 @@
 
 import Foundation
 
-public class OfflineStorageConfig {
-    var helpers: [any OfflineStorageDataProtocol] = []
+public class OfflineStorageConfig {    
 }

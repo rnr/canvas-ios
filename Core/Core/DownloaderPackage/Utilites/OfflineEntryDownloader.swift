@@ -61,10 +61,10 @@ class OfflineEntryDownloader {
         } else if link.isIframe {
             // Extract link if need
         } else {
-            
+
         }
     }
-    
+
     private func prepare() async {
         await withCheckedContinuation {[weak self] continuation in
             guard let self = self else {

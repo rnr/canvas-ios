@@ -21,7 +21,6 @@ import Foundation
 public struct DownloaderClient {
     public static func setup() {
         let storageConfig = OfflineStorageConfig()
-        storageConfig.helpers = [PageHelper()]
         OfflineStorageManager.shared.setConfig(config: storageConfig)
 
         let env = AppEnvironment.shared

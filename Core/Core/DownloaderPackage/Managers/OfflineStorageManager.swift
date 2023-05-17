@@ -26,39 +26,29 @@ public class OfflineStorageManager {
         self.config = config
     }
 
-    func save<T>(_ object: T) {
-        guard let helper = helper(for: object) else { return }
-        let data = helper.toOfflineModel()
+    func save<T: OfflineStorageDataProtocol>(_ object: T) {
+        let data = dataModel(for: object)
         // TODO: Save to database
     }
 
-    func load<T>(for id: String, castingType: T.Type) -> T? {
+    func load<T: OfflineStorageDataProtocol>(for id: String, castingType: T.Type) -> T? {
         let typeString = String(describing: castingType)
         // TODO: get data from database for id and typeString
         let data = OfflineStorageDataModel(id: "testId", type: typeString, json: "{}")
         return object(from: data, for: castingType)
     }
 
-    func loadAll<T>(of type: T.Type) -> [T] {
+    func loadAll<T:OfflineStorageDataProtocol>(of type: T.Type) -> [T] {
         let typeString = String(describing: type)
         // TODO: load all entries for type = typeString
         return []
     }
 
-    func dataModel<T>(for object: T) -> OfflineStorageDataModel? {
-        helper(for: object)?.toOfflineModel()
+    func dataModel<T:OfflineStorageDataProtocol>(for object: T) -> OfflineStorageDataModel? {
+        object.toOfflineModel()
     }
 
-    public func object<T>(from data: OfflineStorageDataModel, for type: T.Type) -> T? {
-        guard let helper = helper(for: type) else { return nil }
-        return helper.fromOfflineModel(data) as? T
-    }
-
-    func helper<T>(for object: T) -> (any OfflineStorageDataProtocol)? {
-        helper(for: type(of: object))
-    }
-
-    func helper<T>(for type: T.Type) -> (any OfflineStorageDataProtocol)? {
-        config.helpers.first(where: {$0.offlineType == type})
+    public func object<T: OfflineStorageDataProtocol>(from data: OfflineStorageDataModel, for type: T.Type) -> T? {
+        type.fromOfflineModel(data)
     }
 }
