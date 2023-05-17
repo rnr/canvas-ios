@@ -39,6 +39,7 @@
 		060B7E9E2A14B0D60098D1D3 /* OfflineURLDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E9D2A14B0D60098D1D3 /* OfflineURLDownloader.swift */; };
 		060B7EA02A14B81B0098D1D3 /* OfflineDownloadHelperProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E9F2A14B81B0098D1D3 /* OfflineDownloadHelperProtocol.swift */; };
 		060B7EA22A14BC2D0098D1D3 /* Page+OfflineStorageDataProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7EA12A14BC2D0098D1D3 /* Page+OfflineStorageDataProtocol.swift */; };
+		060B7EA42A14E5E40098D1D3 /* Page+OfflineDownloadHelperProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7EA32A14E5E40098D1D3 /* Page+OfflineDownloadHelperProtocol.swift */; };
 		2C964838211E2F1A002C3255 /* Core.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C96482E211E2F1A002C3255 /* Core.framework */; };
 		2C96483F211E2F1A002C3255 /* Core.h in Headers */ = {isa = PBXBuildFile; fileRef = 2C964831211E2F1A002C3255 /* Core.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2C96485B211E30B3002C3255 /* RouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C96485A211E30B3002C3255 /* RouterTests.swift */; };
@@ -1496,6 +1497,7 @@
 		060B7E9D2A14B0D60098D1D3 /* OfflineURLDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineURLDownloader.swift; sourceTree = "<group>"; };
 		060B7E9F2A14B81B0098D1D3 /* OfflineDownloadHelperProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineDownloadHelperProtocol.swift; sourceTree = "<group>"; };
 		060B7EA12A14BC2D0098D1D3 /* Page+OfflineStorageDataProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Page+OfflineStorageDataProtocol.swift"; sourceTree = "<group>"; };
+		060B7EA32A14E5E40098D1D3 /* Page+OfflineDownloadHelperProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Page+OfflineDownloadHelperProtocol.swift"; sourceTree = "<group>"; };
 		180BC2536A70738540E5EE74 /* Pods_needs_pspdfkit_CoreTester.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_needs_pspdfkit_CoreTester.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BD6D7F6C2DD1E2A87C8C4B3 /* Pods-needs-pspdfkit-Core.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-needs-pspdfkit-Core.debug.xcconfig"; path = "Target Support Files/Pods-needs-pspdfkit-Core/Pods-needs-pspdfkit-Core.debug.xcconfig"; sourceTree = "<group>"; };
 		2C96482E211E2F1A002C3255 /* Core.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Core.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -3134,6 +3136,7 @@
 			children = (
 				060B7E642A0C18160098D1D3 /* DownloaderClient.swift */,
 				060B7EA12A14BC2D0098D1D3 /* Page+OfflineStorageDataProtocol.swift */,
+				060B7EA32A14E5E40098D1D3 /* Page+OfflineDownloadHelperProtocol.swift */,
 			);
 			path = DownloaderClient;
 			sourceTree = "<group>";
@@ -8607,6 +8610,7 @@
 				CF575E3F26667AB700F8515F /* GetLatestAnnouncements.swift in Sources */,
 				7D5400B3252BD3D7003691F4 /* APIMock.swift in Sources */,
 				B4F523AF28E47323001A16BC /* IndeterminateBarProgressViewStyle.swift in Sources */,
+				060B7EA42A14E5E40098D1D3 /* Page+OfflineDownloadHelperProtocol.swift in Sources */,
 				E8AC2D3224AE3A160053AA8A /* APIAlertThreshold.swift in Sources */,
 				7DA25F9023F72123005D2121 /* SyllabusViewController.swift in Sources */,
 				CF0075DA28746E3B00588E40 /* APIFormData.swift in Sources */,
