@@ -17,12 +17,13 @@
 //
 
 import Foundation
+import mobile_offline_downloader_ios
 
 public struct DownloaderClient {
     public static func setup() {
         let storageConfig = OfflineStorageConfig()
         OfflineStorageManager.shared.setConfig(config: storageConfig)
-        
+
         let downloaderConfig = OfflineDownloaderConfig()
         OfflineDownloadsManager.shared.setConfig(downloaderConfig)
     }

@@ -17,6 +17,8 @@
 //
 
 import Foundation
+import mobile_offline_downloader_ios
+
 extension Page: OfflineDownloadHelperProtocol {
     public static func prepareForDownload(entry: OfflineDownloaderEntry) async throws {
         try await withCheckedThrowingContinuation({[weak entry] continuation in

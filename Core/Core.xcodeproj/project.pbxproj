@@ -7,39 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		060B7E5C2A0BBA900098D1D3 /* OfflineDownloadsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E572A0BA5FF0098D1D3 /* OfflineDownloadsManager.swift */; };
-		060B7E5D2A0BBA900098D1D3 /* OfflineDownloaderEntryPart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E552A0BA5C70098D1D3 /* OfflineDownloaderEntryPart.swift */; };
-		060B7E5E2A0BBA900098D1D3 /* OfflineDownloaderEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E532A0BA5810098D1D3 /* OfflineDownloaderEntry.swift */; };
-		060B7E5F2A0BBA900098D1D3 /* OfflineDownloaderConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E592A0BA61B0098D1D3 /* OfflineDownloaderConfig.swift */; };
-		060B7E602A0BBA900098D1D3 /* OfflineStorageDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E4D2A0B9F7D0098D1D3 /* OfflineStorageDataModel.swift */; };
-		060B7E612A0BBA900098D1D3 /* OfflineStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E492A0B9EF70098D1D3 /* OfflineStorageManager.swift */; };
-		060B7E622A0BBA900098D1D3 /* OfflineStorageConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E4B2A0B9F360098D1D3 /* OfflineStorageConfig.swift */; };
 		060B7E652A0C18160098D1D3 /* DownloaderClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E642A0C18160098D1D3 /* DownloaderClient.swift */; };
-		060B7E672A0C3E620098D1D3 /* OfflineEntryDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E662A0C3E620098D1D3 /* OfflineEntryDownloader.swift */; };
-		060B7E692A0D8E390098D1D3 /* OfflineDownloaderLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E682A0D8E390098D1D3 /* OfflineDownloaderLink.swift */; };
-		060B7E6C2A0E59090098D1D3 /* OfflineLinksExtractorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E6B2A0E59090098D1D3 /* OfflineLinksExtractorProtocol.swift */; };
-		060B7E712A0E5A690098D1D3 /* OfflineBackgroundWebview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E702A0E5A690098D1D3 /* OfflineBackgroundWebview.swift */; };
-		060B7E732A0E5AEE0098D1D3 /* OfflineHTMLLinksExtractorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E722A0E5AEE0098D1D3 /* OfflineHTMLLinksExtractorProtocol.swift */; };
-		060B7E762A0E5B520098D1D3 /* OfflineHTMLLinksExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E752A0E5B520098D1D3 /* OfflineHTMLLinksExtractor.swift */; };
 		060B7E792A0E5E130098D1D3 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 060B7E782A0E5E130098D1D3 /* SwiftSoup */; };
-		060B7E7B2A13A1550098D1D3 /* OfflineStorageDataProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E7A2A13A1550098D1D3 /* OfflineStorageDataProtocol.swift */; };
-		060B7E7E2A13BA030098D1D3 /* String+Offline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E7D2A13BA030098D1D3 /* String+Offline.swift */; };
-		060B7E862A13BA570098D1D3 /* HapyakVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E832A13BA560098D1D3 /* HapyakVideo.swift */; };
-		060B7E872A13BA570098D1D3 /* HapyakAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E842A13BA560098D1D3 /* HapyakAsset.swift */; };
-		060B7E882A13BA570098D1D3 /* HapyakMedia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E852A13BA570098D1D3 /* HapyakMedia.swift */; };
-		060B7E8C2A13BA7D0098D1D3 /* WistiaSubtitles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E892A13BA7C0098D1D3 /* WistiaSubtitles.swift */; };
-		060B7E8D2A13BA7D0098D1D3 /* WistiaAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E8A2A13BA7C0098D1D3 /* WistiaAsset.swift */; };
-		060B7E8E2A13BA7D0098D1D3 /* WistiaVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E8B2A13BA7C0098D1D3 /* WistiaVideo.swift */; };
-		060B7E932A13BA9D0098D1D3 /* VimeoRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E8F2A13BA9C0098D1D3 /* VimeoRequest.swift */; };
-		060B7E942A13BA9D0098D1D3 /* VimeoVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E902A13BA9C0098D1D3 /* VimeoVideo.swift */; };
-		060B7E952A13BA9D0098D1D3 /* VimeoFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E912A13BA9D0098D1D3 /* VimeoFiles.swift */; };
-		060B7E962A13BA9D0098D1D3 /* VimeoProgressive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E922A13BA9D0098D1D3 /* VimeoProgressive.swift */; };
-		060B7E9A2A13BB120098D1D3 /* YoutubeAndVimeoPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E992A13BB120098D1D3 /* YoutubeAndVimeoPlugin.swift */; };
-		060B7E9C2A13C6AA0098D1D3 /* OfflineHTMLDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E9B2A13C6AA0098D1D3 /* OfflineHTMLDownloader.swift */; };
-		060B7E9E2A14B0D60098D1D3 /* OfflineURLDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E9D2A14B0D60098D1D3 /* OfflineURLDownloader.swift */; };
-		060B7EA02A14B81B0098D1D3 /* OfflineDownloadHelperProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E9F2A14B81B0098D1D3 /* OfflineDownloadHelperProtocol.swift */; };
 		060B7EA22A14BC2D0098D1D3 /* Page+OfflineStorageDataProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7EA12A14BC2D0098D1D3 /* Page+OfflineStorageDataProtocol.swift */; };
 		060B7EA42A14E5E40098D1D3 /* Page+OfflineDownloadHelperProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7EA32A14E5E40098D1D3 /* Page+OfflineDownloadHelperProtocol.swift */; };
+		06D42D8D2A1672D5002EB070 /* mobile-offline-downloader-ios in Frameworks */ = {isa = PBXBuildFile; productRef = 06D42D8C2A1672D5002EB070 /* mobile-offline-downloader-ios */; };
 		2C964838211E2F1A002C3255 /* Core.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C96482E211E2F1A002C3255 /* Core.framework */; };
 		2C96483F211E2F1A002C3255 /* Core.h in Headers */ = {isa = PBXBuildFile; fileRef = 2C964831211E2F1A002C3255 /* Core.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2C96485B211E30B3002C3255 /* RouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C96485A211E30B3002C3255 /* RouterTests.swift */; };
@@ -1466,38 +1438,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		060B7E492A0B9EF70098D1D3 /* OfflineStorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineStorageManager.swift; sourceTree = "<group>"; };
-		060B7E4B2A0B9F360098D1D3 /* OfflineStorageConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineStorageConfig.swift; sourceTree = "<group>"; };
-		060B7E4D2A0B9F7D0098D1D3 /* OfflineStorageDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineStorageDataModel.swift; sourceTree = "<group>"; };
-		060B7E532A0BA5810098D1D3 /* OfflineDownloaderEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineDownloaderEntry.swift; sourceTree = "<group>"; };
-		060B7E552A0BA5C70098D1D3 /* OfflineDownloaderEntryPart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineDownloaderEntryPart.swift; sourceTree = "<group>"; };
-		060B7E572A0BA5FF0098D1D3 /* OfflineDownloadsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineDownloadsManager.swift; sourceTree = "<group>"; };
-		060B7E592A0BA61B0098D1D3 /* OfflineDownloaderConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineDownloaderConfig.swift; sourceTree = "<group>"; };
 		060B7E642A0C18160098D1D3 /* DownloaderClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloaderClient.swift; sourceTree = "<group>"; };
-		060B7E662A0C3E620098D1D3 /* OfflineEntryDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineEntryDownloader.swift; sourceTree = "<group>"; };
-		060B7E682A0D8E390098D1D3 /* OfflineDownloaderLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineDownloaderLink.swift; sourceTree = "<group>"; };
-		060B7E6B2A0E59090098D1D3 /* OfflineLinksExtractorProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineLinksExtractorProtocol.swift; sourceTree = "<group>"; };
-		060B7E702A0E5A690098D1D3 /* OfflineBackgroundWebview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineBackgroundWebview.swift; sourceTree = "<group>"; };
-		060B7E722A0E5AEE0098D1D3 /* OfflineHTMLLinksExtractorProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineHTMLLinksExtractorProtocol.swift; sourceTree = "<group>"; };
-		060B7E752A0E5B520098D1D3 /* OfflineHTMLLinksExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineHTMLLinksExtractor.swift; sourceTree = "<group>"; };
-		060B7E7A2A13A1550098D1D3 /* OfflineStorageDataProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineStorageDataProtocol.swift; sourceTree = "<group>"; };
-		060B7E7D2A13BA030098D1D3 /* String+Offline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Offline.swift"; sourceTree = "<group>"; };
-		060B7E832A13BA560098D1D3 /* HapyakVideo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HapyakVideo.swift; sourceTree = "<group>"; };
-		060B7E842A13BA560098D1D3 /* HapyakAsset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HapyakAsset.swift; sourceTree = "<group>"; };
-		060B7E852A13BA570098D1D3 /* HapyakMedia.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HapyakMedia.swift; sourceTree = "<group>"; };
-		060B7E892A13BA7C0098D1D3 /* WistiaSubtitles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WistiaSubtitles.swift; sourceTree = "<group>"; };
-		060B7E8A2A13BA7C0098D1D3 /* WistiaAsset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WistiaAsset.swift; sourceTree = "<group>"; };
-		060B7E8B2A13BA7C0098D1D3 /* WistiaVideo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WistiaVideo.swift; sourceTree = "<group>"; };
-		060B7E8F2A13BA9C0098D1D3 /* VimeoRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VimeoRequest.swift; sourceTree = "<group>"; };
-		060B7E902A13BA9C0098D1D3 /* VimeoVideo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VimeoVideo.swift; sourceTree = "<group>"; };
-		060B7E912A13BA9D0098D1D3 /* VimeoFiles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VimeoFiles.swift; sourceTree = "<group>"; };
-		060B7E922A13BA9D0098D1D3 /* VimeoProgressive.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VimeoProgressive.swift; sourceTree = "<group>"; };
-		060B7E992A13BB120098D1D3 /* YoutubeAndVimeoPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YoutubeAndVimeoPlugin.swift; sourceTree = "<group>"; };
-		060B7E9B2A13C6AA0098D1D3 /* OfflineHTMLDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineHTMLDownloader.swift; sourceTree = "<group>"; };
-		060B7E9D2A14B0D60098D1D3 /* OfflineURLDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineURLDownloader.swift; sourceTree = "<group>"; };
-		060B7E9F2A14B81B0098D1D3 /* OfflineDownloadHelperProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineDownloadHelperProtocol.swift; sourceTree = "<group>"; };
 		060B7EA12A14BC2D0098D1D3 /* Page+OfflineStorageDataProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Page+OfflineStorageDataProtocol.swift"; sourceTree = "<group>"; };
 		060B7EA32A14E5E40098D1D3 /* Page+OfflineDownloadHelperProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Page+OfflineDownloadHelperProtocol.swift"; sourceTree = "<group>"; };
+		06D42D8B2A1672C4002EB070 /* mobile-offline-downloader-ios */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "mobile-offline-downloader-ios"; path = "../mobile-offline-downloader-ios"; sourceTree = "<group>"; };
 		180BC2536A70738540E5EE74 /* Pods_needs_pspdfkit_CoreTester.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_needs_pspdfkit_CoreTester.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BD6D7F6C2DD1E2A87C8C4B3 /* Pods-needs-pspdfkit-Core.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-needs-pspdfkit-Core.debug.xcconfig"; path = "Target Support Files/Pods-needs-pspdfkit-Core/Pods-needs-pspdfkit-Core.debug.xcconfig"; sourceTree = "<group>"; };
 		2C96482E211E2F1A002C3255 /* Core.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Core.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -3087,6 +3031,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E87A5E4024D4B51C0065B2AA /* SwiftUI.framework in Frameworks */,
+				06D42D8D2A1672D5002EB070 /* mobile-offline-downloader-ios in Frameworks */,
 				EFDD68BFDD537830A59DAC8D /* Pods_needs_pspdfkit_Core.framework in Frameworks */,
 				BA4B23E829D43A900035D918 /* Realm in Frameworks */,
 				BA4B23EA29D43A900035D918 /* RealmSwift in Frameworks */,
@@ -3118,19 +3063,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		060B7E482A0B9ECD0098D1D3 /* DownloaderPackage */ = {
-			isa = PBXGroup;
-			children = (
-				060B7E7C2A13B9BA0098D1D3 /* Extensions */,
-				060B7E742A0E5B3F0098D1D3 /* Utilites */,
-				060B7E6F2A0E5A470098D1D3 /* Views */,
-				060B7E6E2A0E59720098D1D3 /* Managers */,
-				060B7E6D2A0E593D0098D1D3 /* Models */,
-				060B7E6A2A0E58EB0098D1D3 /* Protocols */,
-			);
-			path = DownloaderPackage;
-			sourceTree = "<group>";
-		};
 		060B7E632A0C179B0098D1D3 /* DownloaderClient */ = {
 			isa = PBXGroup;
 			children = (
@@ -3141,120 +3073,18 @@
 			path = DownloaderClient;
 			sourceTree = "<group>";
 		};
-		060B7E6A2A0E58EB0098D1D3 /* Protocols */ = {
+		06D42D8A2A1672C4002EB070 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
-				060B7E6B2A0E59090098D1D3 /* OfflineLinksExtractorProtocol.swift */,
-				060B7E722A0E5AEE0098D1D3 /* OfflineHTMLLinksExtractorProtocol.swift */,
-				060B7E7A2A13A1550098D1D3 /* OfflineStorageDataProtocol.swift */,
-				060B7E9F2A14B81B0098D1D3 /* OfflineDownloadHelperProtocol.swift */,
+				06D42D8B2A1672C4002EB070 /* mobile-offline-downloader-ios */,
 			);
-			path = Protocols;
-			sourceTree = "<group>";
-		};
-		060B7E6D2A0E593D0098D1D3 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				060B7E7F2A13BA180098D1D3 /* Video */,
-				060B7E682A0D8E390098D1D3 /* OfflineDownloaderLink.swift */,
-				060B7E4B2A0B9F360098D1D3 /* OfflineStorageConfig.swift */,
-				060B7E4D2A0B9F7D0098D1D3 /* OfflineStorageDataModel.swift */,
-				060B7E532A0BA5810098D1D3 /* OfflineDownloaderEntry.swift */,
-				060B7E552A0BA5C70098D1D3 /* OfflineDownloaderEntryPart.swift */,
-				060B7E592A0BA61B0098D1D3 /* OfflineDownloaderConfig.swift */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		060B7E6E2A0E59720098D1D3 /* Managers */ = {
-			isa = PBXGroup;
-			children = (
-				060B7E492A0B9EF70098D1D3 /* OfflineStorageManager.swift */,
-				060B7E572A0BA5FF0098D1D3 /* OfflineDownloadsManager.swift */,
-			);
-			path = Managers;
-			sourceTree = "<group>";
-		};
-		060B7E6F2A0E5A470098D1D3 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				060B7E702A0E5A690098D1D3 /* OfflineBackgroundWebview.swift */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
-		060B7E742A0E5B3F0098D1D3 /* Utilites */ = {
-			isa = PBXGroup;
-			children = (
-				060B7E752A0E5B520098D1D3 /* OfflineHTMLLinksExtractor.swift */,
-				060B7E9B2A13C6AA0098D1D3 /* OfflineHTMLDownloader.swift */,
-				060B7E9D2A14B0D60098D1D3 /* OfflineURLDownloader.swift */,
-				060B7E662A0C3E620098D1D3 /* OfflineEntryDownloader.swift */,
-			);
-			path = Utilites;
-			sourceTree = "<group>";
-		};
-		060B7E7C2A13B9BA0098D1D3 /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				060B7E7D2A13BA030098D1D3 /* String+Offline.swift */,
-			);
-			path = Extensions;
-			sourceTree = "<group>";
-		};
-		060B7E7F2A13BA180098D1D3 /* Video */ = {
-			isa = PBXGroup;
-			children = (
-				060B7E972A13BAE90098D1D3 /* YoutubeAndVimeoPlugin */,
-				060B7E822A13BA370098D1D3 /* Hapyak */,
-				060B7E812A13BA2F0098D1D3 /* Wistia */,
-				060B7E802A13BA280098D1D3 /* Vimeo */,
-			);
-			path = Video;
-			sourceTree = "<group>";
-		};
-		060B7E802A13BA280098D1D3 /* Vimeo */ = {
-			isa = PBXGroup;
-			children = (
-				060B7E912A13BA9D0098D1D3 /* VimeoFiles.swift */,
-				060B7E922A13BA9D0098D1D3 /* VimeoProgressive.swift */,
-				060B7E8F2A13BA9C0098D1D3 /* VimeoRequest.swift */,
-				060B7E902A13BA9C0098D1D3 /* VimeoVideo.swift */,
-			);
-			path = Vimeo;
-			sourceTree = "<group>";
-		};
-		060B7E812A13BA2F0098D1D3 /* Wistia */ = {
-			isa = PBXGroup;
-			children = (
-				060B7E8A2A13BA7C0098D1D3 /* WistiaAsset.swift */,
-				060B7E892A13BA7C0098D1D3 /* WistiaSubtitles.swift */,
-				060B7E8B2A13BA7C0098D1D3 /* WistiaVideo.swift */,
-			);
-			path = Wistia;
-			sourceTree = "<group>";
-		};
-		060B7E822A13BA370098D1D3 /* Hapyak */ = {
-			isa = PBXGroup;
-			children = (
-				060B7E842A13BA560098D1D3 /* HapyakAsset.swift */,
-				060B7E852A13BA570098D1D3 /* HapyakMedia.swift */,
-				060B7E832A13BA560098D1D3 /* HapyakVideo.swift */,
-			);
-			path = Hapyak;
-			sourceTree = "<group>";
-		};
-		060B7E972A13BAE90098D1D3 /* YoutubeAndVimeoPlugin */ = {
-			isa = PBXGroup;
-			children = (
-				060B7E992A13BB120098D1D3 /* YoutubeAndVimeoPlugin.swift */,
-			);
-			path = YoutubeAndVimeoPlugin;
+			name = Packages;
 			sourceTree = "<group>";
 		};
 		2C964824211E2F1A002C3255 = {
 			isa = PBXGroup;
 			children = (
+				06D42D8A2A1672C4002EB070 /* Packages */,
 				2C964830211E2F1A002C3255 /* Core */,
 				2C96483B211E2F1A002C3255 /* CoreTests */,
 				DFE1FF26212F69B3003F27AA /* CoreTester */,
@@ -3278,7 +3108,6 @@
 			isa = PBXGroup;
 			children = (
 				060B7E632A0C179B0098D1D3 /* DownloaderClient */,
-				060B7E482A0B9ECD0098D1D3 /* DownloaderPackage */,
 				BA3D51D829D4465A0011A14A /* MobileOfflineDownloader */,
 				BA4B23AA29D335560035D918 /* UIDownloads */,
 				CF22C94125F286E000C2E012 /* Accessibility */,
@@ -7470,6 +7299,7 @@
 				BA4B23E929D43A900035D918 /* RealmSwift */,
 				BA5D83C029DB0CB500150235 /* CombineReachability */,
 				060B7E782A0E5E130098D1D3 /* SwiftSoup */,
+				06D42D8C2A1672D5002EB070 /* mobile-offline-downloader-ios */,
 			);
 			productName = Core;
 			productReference = 2C96482E211E2F1A002C3255 /* Core.framework */;
@@ -8338,7 +8168,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				060B7E692A0D8E390098D1D3 /* OfflineDownloaderLink.swift in Sources */,
 				BA4B23CE29D335560035D918 /* Header.swift in Sources */,
 				BA3D51E829D4465B0011A14A /* LocalStorage.swift in Sources */,
 				EB71A2532615AD840003241C /* SideMenuView.swift in Sources */,
@@ -8363,7 +8192,6 @@
 				CFE721E72656925D006AE4AD /* TopBarSelectionShape.swift in Sources */,
 				CFCB0F5E27CE712E008DDEA4 /* BouncyImage.swift in Sources */,
 				7DA260F423F72397005D2121 /* FilePickerCell.swift in Sources */,
-				060B7E672A0C3E620098D1D3 /* OfflineEntryDownloader.swift in Sources */,
 				D9D7EBE627C67EE300544339 /* TabName.swift in Sources */,
 				D9D7EBD727B2B0A900544339 /* CourseDetailsCellView.swift in Sources */,
 				7DA25FDD23F72148005D2121 /* Secret.swift in Sources */,
@@ -8379,7 +8207,6 @@
 				CF7D4A892937678100463FBD /* TabBarMessageCountUpdater.swift in Sources */,
 				CF0894FB26FA218C0051A1BA /* AssignmentPickerViewModel.swift in Sources */,
 				BA18C1C429DC426300090221 /* NotConnectionBarView.swift in Sources */,
-				060B7EA02A14B81B0098D1D3 /* OfflineDownloadHelperProtocol.swift in Sources */,
 				7DA2600323F7227A005D2121 /* BundleExtensions.swift in Sources */,
 				3B4D89412450AD58004ED120 /* UITextViewExtensions.swift in Sources */,
 				CF3763152837A30D00F25B81 /* DashboardInvitationAPIItem.swift in Sources */,
@@ -8392,7 +8219,6 @@
 				7DA2609923F7233D005D2121 /* Scope.swift in Sources */,
 				7D0A28DD251952A2004FB3B6 /* RemoteImage.swift in Sources */,
 				7DA2607C23F722FA005D2121 /* PageViewEventRequestManager.swift in Sources */,
-				060B7E712A0E5A690098D1D3 /* OfflineBackgroundWebview.swift in Sources */,
 				CFA56E4728352AB0007C15D7 /* DashboardInvitationViewModel.swift in Sources */,
 				CF60CC5C26496ECF00C1C173 /* K5HomeroomViewModel.swift in Sources */,
 				7DA2607723F722F6005D2121 /* PageListViewController.swift in Sources */,
@@ -8419,7 +8245,6 @@
 				7D6E57392550C57F0068D3C3 /* DiscussionListViewController.swift in Sources */,
 				BA4B23DC29D335560035D918 /* PageEntity.swift in Sources */,
 				CFFE285E27AABCC20029A408 /* CourseSectionStatus.swift in Sources */,
-				060B7E8C2A13BA7D0098D1D3 /* WistiaSubtitles.swift in Sources */,
 				CF490F2E28575B4F0065D242 /* DocumentExtensions.swift in Sources */,
 				7DA2601F23F7227A005D2121 /* URLResponseExtensions.swift in Sources */,
 				7DA2602423F722B3005D2121 /* LogEventListViewController.swift in Sources */,
@@ -8478,7 +8303,6 @@
 				CF53F73C266FBB6000FA58D7 /* GetK5HomeroomMissingSubmissionsCount.swift in Sources */,
 				7DA2607123F722E9005D2121 /* NotificationCategory.swift in Sources */,
 				97DDE0DA24119D6800A05B55 /* CreateTodoViewController.swift in Sources */,
-				060B7E612A0BBA900098D1D3 /* OfflineStorageManager.swift in Sources */,
 				CF086072291D40500013BDCE /* MenuItems.swift in Sources */,
 				B14D993524BE65A9006DFF12 /* CommonCourse.swift in Sources */,
 				CF3E761D2889610300276703 /* FileProgressListViewModel.swift in Sources */,
@@ -8509,12 +8333,10 @@
 				CF598B32282552150029BEBE /* View.swift in Sources */,
 				CFCB0F6627CE7E57008DDEA4 /* ImageBackground.swift in Sources */,
 				7DA2605623F722D9005D2121 /* ModuleItemType.swift in Sources */,
-				060B7E6C2A0E59090098D1D3 /* OfflineLinksExtractorProtocol.swift in Sources */,
 				CF748D1D274D43B9000EA34E /* DashboardConferencesViewModel.swift in Sources */,
 				CF60CC5F26496EDE00C1C173 /* K5GradesViewModel.swift in Sources */,
 				CF5234EB28B8D11500D2D3B9 /* FileUploadProgressObserver.swift in Sources */,
 				D94FA2AE26CBE787007B9CA4 /* K5GradeProgressBar.swift in Sources */,
-				060B7E732A0E5AEE0098D1D3 /* OfflineHTMLLinksExtractorProtocol.swift in Sources */,
 				CF3A31E728FD8112002752D2 /* NoResultsPanda.swift in Sources */,
 				CF12DFC026CE9BE7000BE452 /* K5ScheduleMissingItemsView.swift in Sources */,
 				D9B6493328F452B40035CE14 /* QuizSubmissionBreakdownViewModel.swift in Sources */,
@@ -8547,7 +8369,6 @@
 				CF0075E22875E4AF00588E40 /* OutputStreamExtensions.swift in Sources */,
 				BA4B23E429D335560035D918 /* ProgressButton.swift in Sources */,
 				D97020C52581013C002B7B73 /* ContextCardHeaderView.swift in Sources */,
-				060B7E5F2A0BBA900098D1D3 /* OfflineDownloaderConfig.swift in Sources */,
 				CFAD0D15281839FC0017D07B /* DocViewerAnnotationUploader.swift in Sources */,
 				BA4B23E329D335560035D918 /* WaitingView.swift in Sources */,
 				CF53F73F266FBB8E00FA58D7 /* K5HomeroomMissingSubmissionsCount.swift in Sources */,
@@ -8590,13 +8411,10 @@
 				CF43DE8527CCDBCB00015B6F /* MotionDetector.swift in Sources */,
 				7D06A2B32469B7D100D76267 /* DiscussionReplyViewController.swift in Sources */,
 				CFDB61F528AD03050008C3F3 /* FileUploadItem.swift in Sources */,
-				060B7E952A13BA9D0098D1D3 /* VimeoFiles.swift in Sources */,
 				CF490F162850E2750065D242 /* DragInfo.swift in Sources */,
 				7DA2605323F722D9005D2121 /* Module.swift in Sources */,
 				D9B6493728F452D30035CE14 /* QuizDetailsView.swift in Sources */,
 				B102EEB6243B862C002E04F0 /* ModuleItemSequenceViewController.swift in Sources */,
-				060B7E602A0BBA900098D1D3 /* OfflineStorageDataModel.swift in Sources */,
-				060B7E5D2A0BBA900098D1D3 /* OfflineDownloaderEntryPart.swift in Sources */,
 				7DA2605823F722D9005D2121 /* Permissions.swift in Sources */,
 				7DA260DA23F72359005D2121 /* FloatingButton.swift in Sources */,
 				CF6C100326C5235B002E7FE6 /* PlannerOverrideUpdater.swift in Sources */,
@@ -8646,7 +8464,6 @@
 				EBE92ED2279864380053C9A4 /* K5ImportantDateItem.swift in Sources */,
 				7D7F71D6241C2A5A00D6F9CB /* ConferenceListViewController.swift in Sources */,
 				7D62716A245B422900FC1798 /* DiscussionParticipant.swift in Sources */,
-				060B7E7E2A13BA030098D1D3 /* String+Offline.swift in Sources */,
 				CF3A31DD28F840DA002752D2 /* InboxMessageView.swift in Sources */,
 				D91BC855276B7B3C008371B0 /* AssignmentListViewModel.swift in Sources */,
 				CF3A31DB28F83D39002752D2 /* InboxView.swift in Sources */,
@@ -8692,7 +8509,6 @@
 				7DA260C923F72359005D2121 /* AlertAction.swift in Sources */,
 				CF9DFB602584F3EE004E27A5 /* ColorExtensions.swift in Sources */,
 				7DA2604B23F722D9005D2121 /* GradingPeriod.swift in Sources */,
-				060B7E5E2A0BBA900098D1D3 /* OfflineDownloaderEntry.swift in Sources */,
 				7DA2603A23F722D9005D2121 /* Assignment.swift in Sources */,
 				060B7EA22A14BC2D0098D1D3 /* Page+OfflineStorageDataProtocol.swift in Sources */,
 				7DA25FDF23F72148005D2121 /* UUID.swift in Sources */,
@@ -8722,7 +8538,6 @@
 				7DA260E323F72359005D2121 /* ListFormatter.swift in Sources */,
 				CFBF1DF7281FE20200DA99F7 /* DocViewerAnnotationPutResponseHandler.swift in Sources */,
 				D9DE56D2255053B700CF8B22 /* SyllabusEditorView.swift in Sources */,
-				060B7E9C2A13C6AA0098D1D3 /* OfflineHTMLDownloader.swift in Sources */,
 				CF2F7E7A27FF211500942241 /* FontPreview.swift in Sources */,
 				CFB9B2F728A12DB000C18C79 /* FilePreviewProvider.swift in Sources */,
 				3BA649CD2423E0080047D8DC /* APIPairingCode.swift in Sources */,
@@ -8772,7 +8587,6 @@
 				7DA2604E23F722D9005D2121 /* LatePolicyInterval.swift in Sources */,
 				B4D7405128D864C80004CA1A /* DeterminateCircleProgressViewStyle.swift in Sources */,
 				CFDB620028AE46C80008C3F3 /* FileSubmissionAssembly.swift in Sources */,
-				060B7E872A13BA570098D1D3 /* HapyakAsset.swift in Sources */,
 				7DA2600423F7227A005D2121 /* DateExtensions.swift in Sources */,
 				7DA25FDE23F72148005D2121 /* SessionDefaults.swift in Sources */,
 				7DA2600723F7227A005D2121 /* LoggerExtensions.swift in Sources */,
@@ -8899,7 +8713,6 @@
 				7DA260E923F72359005D2121 /* SwitchTableViewCell.swift in Sources */,
 				7DA2608723F72315005D2121 /* NotificationCategoriesViewController.swift in Sources */,
 				BA4B23CF29D335560035D918 /* LinkDownloadingHeader.swift in Sources */,
-				060B7E762A0E5B520098D1D3 /* OfflineHTMLLinksExtractor.swift in Sources */,
 				7DA25F9523F7212C005D2121 /* ActAsUserWindow.swift in Sources */,
 				CF598B302825290E0029BEBE /* TypographyTestViews.swift in Sources */,
 				D9E1BABA25811BD70034C01E /* ContextCardBoxView.swift in Sources */,
@@ -8922,12 +8735,10 @@
 				CF6A07C126FDDBCE0056EEC1 /* AttachmentPreviewView.swift in Sources */,
 				7DA260E623F72359005D2121 /* RightDetailTableViewCell.swift in Sources */,
 				7DA2600823F7227A005D2121 /* NotificationCenterExtensions.swift in Sources */,
-				060B7E882A13BA570098D1D3 /* HapyakMedia.swift in Sources */,
 				CFFE285A27AA9D380029A408 /* CourseListCellView.swift in Sources */,
 				CEF0D1462837D571005867EF /* ContextCellBackgroundView.swift in Sources */,
 				7DA2606723F722D9005D2121 /* TabType.swift in Sources */,
 				CFB06FA828C3F80E00DAC40B /* FileSubmissionTargetsRequester.swift in Sources */,
-				060B7E9E2A14B0D60098D1D3 /* OfflineURLDownloader.swift in Sources */,
 				3BA649D324251FE50047D8DC /* PairWithObserverViewController.swift in Sources */,
 				7D630B6F24A511120039A45D /* Folder.swift in Sources */,
 				7D75FF1824085E95000544E7 /* ListBackgroundView.swift in Sources */,
@@ -8940,7 +8751,6 @@
 				CF7C36742677B0D200ACAC79 /* UIBarButtonItemExtensions.swift in Sources */,
 				CF9D2262291EB12000B19EF0 /* DashboardViewModel.swift in Sources */,
 				7DA2602223F7227A005D2121 /* UIButtonExtensions.swift in Sources */,
-				060B7E8E2A13BA7D0098D1D3 /* WistiaVideo.swift in Sources */,
 				7DA2609A23F7233D005D2121 /* Store.swift in Sources */,
 				7DA2601523F7227A005D2121 /* UIImageViewExtensions.swift in Sources */,
 				7DA25FE923F721DE005D2121 /* APISearchRecipient.swift in Sources */,
@@ -8962,8 +8772,6 @@
 				7DA2601D23F7227A005D2121 /* URLComponentsExtensions.swift in Sources */,
 				CF21E75928D3068300F73066 /* BackgroundActivity.swift in Sources */,
 				7DA25FFA23F7226E005D2121 /* DocViewerCommentReplyAnnotation.swift in Sources */,
-				060B7E862A13BA570098D1D3 /* HapyakVideo.swift in Sources */,
-				060B7E932A13BA9D0098D1D3 /* VimeoRequest.swift in Sources */,
 				CF350F6B290C0F2C00ED656E /* DashboardSettingsInteractor.swift in Sources */,
 				EBF58AC92721A862008EE2DF /* K5SubjectView.swift in Sources */,
 				B4372B5B28AF9CB30030FFB9 /* FileUploadNotificationCardListViewModel.swift in Sources */,
@@ -8998,7 +8806,6 @@
 				7D70868B2568937D00647D37 /* CourseCard.swift in Sources */,
 				7DA25FF123F7225D005D2121 /* AccountNotification.swift in Sources */,
 				CF6C7FCD26F9CBAF002937E5 /* CoursePickerViewModel.swift in Sources */,
-				060B7E622A0BBA900098D1D3 /* OfflineStorageConfig.swift in Sources */,
 				7DA2600B23F7227A005D2121 /* NSNumberExtensions.swift in Sources */,
 				CF911BA627A29B1800E1EECB /* iOS15Refreshable.swift in Sources */,
 				7DA25FC223F72136005D2121 /* APIPage.swift in Sources */,
@@ -9019,14 +8826,12 @@
 				BA3D51E529D4465B0011A14A /* StoreObject.swift in Sources */,
 				7DA2603523F722D9005D2121 /* LockStatusViewable.swift in Sources */,
 				7D4B274F253F47EC00A98DE3 /* AudioRecorder.swift in Sources */,
-				060B7E962A13BA9D0098D1D3 /* VimeoProgressive.swift in Sources */,
 				E8A8FA8E24D328C3000B27DF /* SearchBar.swift in Sources */,
 				7D70868F2568D6CA00647D37 /* GroupCard.swift in Sources */,
 				7DA2608823F72315005D2121 /* NotificationChannelsViewController.swift in Sources */,
 				D9FD8EF5254185DF00C6842B /* SyllabusTabViewController.swift in Sources */,
 				BA3D51EC29D47C0C0011A14A /* DownloadsCourseDetailViewModel.swift in Sources */,
 				EB35FA5526B0085B00AA8C22 /* K5GradeCell.swift in Sources */,
-				060B7E9A2A13BB120098D1D3 /* YoutubeAndVimeoPlugin.swift in Sources */,
 				7DA2606C23F722D9005D2121 /* Activity.swift in Sources */,
 				3B4D89272450A8E9004ED120 /* ComposeReplyViewController.swift in Sources */,
 				7DA260F123F72391005D2121 /* FileUploadTarget.swift in Sources */,
@@ -9036,7 +8841,6 @@
 				7DA2606223F722D9005D2121 /* SubmissionComment.swift in Sources */,
 				EB2460262728380E00E4F331 /* K5SubjectHeaderView.swift in Sources */,
 				7DA25FF323F72260005D2121 /* DeveloperMenuViewController.swift in Sources */,
-				060B7E5C2A0BBA900098D1D3 /* OfflineDownloadsManager.swift in Sources */,
 				7DA25FFF23F7226E005D2121 /* DocViewerViewController.swift in Sources */,
 				D9E1BAC12581666B0034C01E /* ContextCardSubmissionRow.swift in Sources */,
 				BA4B23D929D335560035D918 /* DownloadsViewModel.swift in Sources */,
@@ -9076,7 +8880,6 @@
 				7D7BA23524D8959300B1A68B /* PageEditorView.swift in Sources */,
 				CF3E761F2889736600276703 /* FileProgressListView.swift in Sources */,
 				7DA2601723F7227A005D2121 /* UIScrollViewExtensions.swift in Sources */,
-				060B7E942A13BA9D0098D1D3 /* VimeoVideo.swift in Sources */,
 				7D70869D256C1C6500647D37 /* ConferenceCard.swift in Sources */,
 				CF43DE8727CCDDC000015B6F /* MotionModifier.swift in Sources */,
 				7DA25FA723F72136005D2121 /* APICourseSection.swift in Sources */,
@@ -9099,7 +8902,6 @@
 				CF5F603225DBD84700E7E0ED /* UINavigationControllerTheme.swift in Sources */,
 				CF60CC5626496EA500C1C173 /* K5ScheduleViewModel.swift in Sources */,
 				BA4B23DF29D335560035D918 /* DownloadingBarView.swift in Sources */,
-				060B7E7B2A13A1550098D1D3 /* OfflineStorageDataProtocol.swift in Sources */,
 				7D630B7124A52C050039A45D /* GetFolders.swift in Sources */,
 				7DA25FF423F72260005D2121 /* ExperimentalFeaturesViewController.swift in Sources */,
 				7D7F71DA241C41BC00D6F9CB /* APIDate.swift in Sources */,
@@ -9112,7 +8914,6 @@
 				7DA25FF723F7226E005D2121 /* DocViewerAnnotationStateManager.swift in Sources */,
 				CF11565026FB56E900DE25B6 /* AttachmentCopyService.swift in Sources */,
 				7DA2602923F722C2005D2121 /* LoginManualOAuthViewController.swift in Sources */,
-				060B7E8D2A13BA7D0098D1D3 /* WistiaAsset.swift in Sources */,
 				CF60CC3A2645525F00C1C173 /* K5ResourcesView.swift in Sources */,
 				7DA25FFE23F7226E005D2121 /* DocViewerSession.swift in Sources */,
 				CF3A31E928FD92C1002752D2 /* ConversationParticipantNames.swift in Sources */,
@@ -9821,6 +9622,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 060B7E772A0E5E130098D1D3 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
 			productName = SwiftSoup;
+		};
+		06D42D8C2A1672D5002EB070 /* mobile-offline-downloader-ios */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = "mobile-offline-downloader-ios";
 		};
 		BA4B23E729D43A900035D918 /* Realm */ = {
 			isa = XCSwiftPackageProductDependency;

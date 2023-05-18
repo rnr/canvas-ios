@@ -17,6 +17,7 @@
 //
 
 import UIKit
+import mobile_offline_downloader_ios
 
 final public class DownloadPageListTableViewCell: UITableViewCell {
 

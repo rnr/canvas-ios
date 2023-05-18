@@ -17,6 +17,8 @@
 //
 
 import Foundation
+import mobile_offline_downloader_ios
+
 extension Page: OfflineStorageDataProtocol {
     public static func fromOfflineModel(_ model: OfflineStorageDataModel) -> Page? {
         let env = AppEnvironment.shared
