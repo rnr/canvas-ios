@@ -25,6 +25,7 @@ public struct DownloaderClient {
         OfflineStorageManager.shared.setConfig(config: storageConfig)
 
         let downloaderConfig = OfflineDownloaderConfig()
+        downloaderConfig.downloadTypes = [Page.self]
         OfflineDownloadsManager.shared.setConfig(downloaderConfig)
     }
 }

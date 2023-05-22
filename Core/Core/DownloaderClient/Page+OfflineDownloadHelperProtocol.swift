@@ -19,7 +19,11 @@
 import Foundation
 import mobile_offline_downloader_ios
 
-extension Page: OfflineDownloadHelperProtocol {
+extension Page: OfflineDownloadTypeProtocol {
+    public static func canDownload(entry: OfflineDownloaderEntry) -> Bool {
+        return entry.dataModel.type.lowercased().contains("page")
+    }
+
     public static func prepareForDownload(entry: OfflineDownloaderEntry) async throws {
         try await withCheckedThrowingContinuation({[weak entry] continuation in
             let env = AppEnvironment.shared
