@@ -18,6 +18,7 @@
 
 import Combine
 import SwiftUI
+import mobile_offline_downloader_ios
 
 final class DownloadsViewModel: ObservableObject {
 

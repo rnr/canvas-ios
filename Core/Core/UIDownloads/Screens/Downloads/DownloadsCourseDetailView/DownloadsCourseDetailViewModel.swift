@@ -18,6 +18,7 @@
 
 import Foundation
 import RealmSwift
+import mobile_offline_downloader_ios
 
 final class DownloadsCourseDetailViewModel: ObservableObject {
 

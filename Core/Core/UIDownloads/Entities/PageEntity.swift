@@ -17,6 +17,7 @@
 //
 
 import RealmSwift
+import mobile_offline_downloader_ios
 
 final public class PageEntity: StoreObject, Storable {
 

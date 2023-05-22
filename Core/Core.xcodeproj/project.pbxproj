@@ -830,12 +830,6 @@
 		B4F523B128E4732D001A16BC /* DeterminateBarProgressViewStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F523B028E4732D001A16BC /* DeterminateBarProgressViewStyle.swift */; };
 		BA18C1C429DC426300090221 /* NotConnectionBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA18C1C329DC426300090221 /* NotConnectionBarView.swift */; };
 		BA3D51E229D4465B0011A14A /* Injected.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA3D51DA29D4465A0011A14A /* Injected.swift */; };
-		BA3D51E329D4465B0011A14A /* RealmConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA3D51DC29D4465A0011A14A /* RealmConfiguration.swift */; };
-		BA3D51E429D4465B0011A14A /* StorageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA3D51DD29D4465A0011A14A /* StorageProvider.swift */; };
-		BA3D51E529D4465B0011A14A /* StoreObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA3D51DE29D4465A0011A14A /* StoreObject.swift */; };
-		BA3D51E629D4465B0011A14A /* RealmStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA3D51DF29D4465A0011A14A /* RealmStorage.swift */; };
-		BA3D51E729D4465B0011A14A /* Storable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA3D51E029D4465A0011A14A /* Storable.swift */; };
-		BA3D51E829D4465B0011A14A /* LocalStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA3D51E129D4465A0011A14A /* LocalStorage.swift */; };
 		BA3D51EA29D45A120011A14A /* CourseEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA3D51E929D45A120011A14A /* CourseEntity.swift */; };
 		BA3D51EC29D47C0C0011A14A /* DownloadsCourseDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA3D51EB29D47C0C0011A14A /* DownloadsCourseDetailViewModel.swift */; };
 		BA3D51EF29D47C490011A14A /* Result+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA3D51EE29D47C490011A14A /* Result+Extensions.swift */; };
@@ -1441,7 +1435,6 @@
 		060B7E642A0C18160098D1D3 /* DownloaderClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloaderClient.swift; sourceTree = "<group>"; };
 		060B7EA12A14BC2D0098D1D3 /* Page+OfflineStorageDataProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Page+OfflineStorageDataProtocol.swift"; sourceTree = "<group>"; };
 		060B7EA32A14E5E40098D1D3 /* Page+OfflineDownloadHelperProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Page+OfflineDownloadHelperProtocol.swift"; sourceTree = "<group>"; };
-		06D42D8B2A1672C4002EB070 /* mobile-offline-downloader-ios */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "mobile-offline-downloader-ios"; path = "../mobile-offline-downloader-ios"; sourceTree = "<group>"; };
 		180BC2536A70738540E5EE74 /* Pods_needs_pspdfkit_CoreTester.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_needs_pspdfkit_CoreTester.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BD6D7F6C2DD1E2A87C8C4B3 /* Pods-needs-pspdfkit-Core.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-needs-pspdfkit-Core.debug.xcconfig"; path = "Target Support Files/Pods-needs-pspdfkit-Core/Pods-needs-pspdfkit-Core.debug.xcconfig"; sourceTree = "<group>"; };
 		2C96482E211E2F1A002C3255 /* Core.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Core.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2458,12 +2451,6 @@
 		B4F523B028E4732D001A16BC /* DeterminateBarProgressViewStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeterminateBarProgressViewStyle.swift; sourceTree = "<group>"; };
 		BA18C1C329DC426300090221 /* NotConnectionBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotConnectionBarView.swift; sourceTree = "<group>"; };
 		BA3D51DA29D4465A0011A14A /* Injected.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Injected.swift; sourceTree = "<group>"; };
-		BA3D51DC29D4465A0011A14A /* RealmConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmConfiguration.swift; sourceTree = "<group>"; };
-		BA3D51DD29D4465A0011A14A /* StorageProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorageProvider.swift; sourceTree = "<group>"; };
-		BA3D51DE29D4465A0011A14A /* StoreObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreObject.swift; sourceTree = "<group>"; };
-		BA3D51DF29D4465A0011A14A /* RealmStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmStorage.swift; sourceTree = "<group>"; };
-		BA3D51E029D4465A0011A14A /* Storable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Storable.swift; sourceTree = "<group>"; };
-		BA3D51E129D4465A0011A14A /* LocalStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalStorage.swift; sourceTree = "<group>"; };
 		BA3D51E929D45A120011A14A /* CourseEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseEntity.swift; sourceTree = "<group>"; };
 		BA3D51EB29D47C0C0011A14A /* DownloadsCourseDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsCourseDetailViewModel.swift; sourceTree = "<group>"; };
 		BA3D51EE29D47C490011A14A /* Result+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Result+Extensions.swift"; sourceTree = "<group>"; };
@@ -2501,6 +2488,7 @@
 		BA5D83BB29DAC8A800150235 /* DownloadingModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadingModule.swift; sourceTree = "<group>"; };
 		BA5D83BD29DADE9200150235 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		BA5D83C329DB2C6900150235 /* ReachabilityProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachabilityProvider.swift; sourceTree = "<group>"; };
+		BABA71502A17BBCD0025BE44 /* mobile-offline-downloader-ios */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "mobile-offline-downloader-ios"; path = "../../mobile-offline-downloader-ios"; sourceTree = "<group>"; };
 		CEB57AE7286B32BB00F4BFC8 /* HelmNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelmNavigationController.swift; sourceTree = "<group>"; };
 		CEF0D1442837D571005867EF /* ContextCellBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCellBackgroundView.swift; sourceTree = "<group>"; };
 		CEF0D1452837D571005867EF /* ContextCellBackgroundView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContextCellBackgroundView.xib; sourceTree = "<group>"; };
@@ -3066,6 +3054,8 @@
 		060B7E632A0C179B0098D1D3 /* DownloaderClient */ = {
 			isa = PBXGroup;
 			children = (
+				BA3D51D929D4465A0011A14A /* Injected */,
+				BA5D83C229DB2C5500150235 /* Reachability */,
 				060B7E642A0C18160098D1D3 /* DownloaderClient.swift */,
 				060B7EA12A14BC2D0098D1D3 /* Page+OfflineStorageDataProtocol.swift */,
 				060B7EA32A14E5E40098D1D3 /* Page+OfflineDownloadHelperProtocol.swift */,
@@ -3073,18 +3063,10 @@
 			path = DownloaderClient;
 			sourceTree = "<group>";
 		};
-		06D42D8A2A1672C4002EB070 /* Packages */ = {
-			isa = PBXGroup;
-			children = (
-				06D42D8B2A1672C4002EB070 /* mobile-offline-downloader-ios */,
-			);
-			name = Packages;
-			sourceTree = "<group>";
-		};
 		2C964824211E2F1A002C3255 = {
 			isa = PBXGroup;
 			children = (
-				06D42D8A2A1672C4002EB070 /* Packages */,
+				BABA714F2A17BBCD0025BE44 /* Packages */,
 				2C964830211E2F1A002C3255 /* Core */,
 				2C96483B211E2F1A002C3255 /* CoreTests */,
 				DFE1FF26212F69B3003F27AA /* CoreTester */,
@@ -3108,7 +3090,6 @@
 			isa = PBXGroup;
 			children = (
 				060B7E632A0C179B0098D1D3 /* DownloaderClient */,
-				BA3D51D829D4465A0011A14A /* MobileOfflineDownloader */,
 				BA4B23AA29D335560035D918 /* UIDownloads */,
 				CF22C94125F286E000C2E012 /* Accessibility */,
 				7DB92CA824C5FD4A004A6C16 /* AccountNotifications */,
@@ -4996,35 +4977,12 @@
 			path = ProgressViewStyle;
 			sourceTree = "<group>";
 		};
-		BA3D51D829D4465A0011A14A /* MobileOfflineDownloader */ = {
-			isa = PBXGroup;
-			children = (
-				BA5D83C229DB2C5500150235 /* Reachability */,
-				BA3D51D929D4465A0011A14A /* Injected */,
-				BA3D51DB29D4465A0011A14A /* Storage */,
-			);
-			path = MobileOfflineDownloader;
-			sourceTree = "<group>";
-		};
 		BA3D51D929D4465A0011A14A /* Injected */ = {
 			isa = PBXGroup;
 			children = (
 				BA3D51DA29D4465A0011A14A /* Injected.swift */,
 			);
 			path = Injected;
-			sourceTree = "<group>";
-		};
-		BA3D51DB29D4465A0011A14A /* Storage */ = {
-			isa = PBXGroup;
-			children = (
-				BA3D51DC29D4465A0011A14A /* RealmConfiguration.swift */,
-				BA3D51DD29D4465A0011A14A /* StorageProvider.swift */,
-				BA3D51DE29D4465A0011A14A /* StoreObject.swift */,
-				BA3D51DF29D4465A0011A14A /* RealmStorage.swift */,
-				BA3D51E029D4465A0011A14A /* Storable.swift */,
-				BA3D51E129D4465A0011A14A /* LocalStorage.swift */,
-			);
-			path = Storage;
 			sourceTree = "<group>";
 		};
 		BA3D51ED29D47C370011A14A /* Extensions */ = {
@@ -5213,6 +5171,14 @@
 				BA5D83C329DB2C6900150235 /* ReachabilityProvider.swift */,
 			);
 			path = Reachability;
+			sourceTree = "<group>";
+		};
+		BABA714F2A17BBCD0025BE44 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				BABA71502A17BBCD0025BE44 /* mobile-offline-downloader-ios */,
+			);
+			name = Packages;
 			sourceTree = "<group>";
 		};
 		CF086070291D403C0013BDCE /* AnnotationContextMenu */ = {
@@ -8169,7 +8135,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				BA4B23CE29D335560035D918 /* Header.swift in Sources */,
-				BA3D51E829D4465B0011A14A /* LocalStorage.swift in Sources */,
 				EB71A2532615AD840003241C /* SideMenuView.swift in Sources */,
 				7DA260F623F72397005D2121 /* FilePickerViewController.swift in Sources */,
 				3BA649D7242530470047D8DC /* NotificationView.swift in Sources */,
@@ -8541,7 +8506,6 @@
 				CF2F7E7A27FF211500942241 /* FontPreview.swift in Sources */,
 				CFB9B2F728A12DB000C18C79 /* FilePreviewProvider.swift in Sources */,
 				3BA649CD2423E0080047D8DC /* APIPairingCode.swift in Sources */,
-				BA3D51E629D4465B0011A14A /* RealmStorage.swift in Sources */,
 				7DA2603F23F722D9005D2121 /* Course.swift in Sources */,
 				7DA25FB423F72136005D2121 /* GetEnabledFeatureFlagsRequest.swift in Sources */,
 				7DA260E823F72359005D2121 /* SubtitleTableViewCell.swift in Sources */,
@@ -8559,7 +8523,6 @@
 				7DA25FB223F72136005D2121 /* APIFavorite.swift in Sources */,
 				BA4B23E029D335560035D918 /* DownloadButton.swift in Sources */,
 				7DA25FC123F72136005D2121 /* APIOAuth.swift in Sources */,
-				BA3D51E729D4465B0011A14A /* Storable.swift in Sources */,
 				7DA2601E23F7227A005D2121 /* URLExtensions.swift in Sources */,
 				CF490F142850CE230065D242 /* DragStartViewModel.swift in Sources */,
 				CFCE214C2656895E00E3B32A /* Bounds.swift in Sources */,
@@ -8568,7 +8531,6 @@
 				7DA2609323F72315005D2121 /* UserProfile.swift in Sources */,
 				BA4B23D329D335560035D918 /* DownloadsView.swift in Sources */,
 				7DA260FE23F773D9005D2121 /* PlannerListViewController.swift in Sources */,
-				BA3D51E429D4465B0011A14A /* StorageProvider.swift in Sources */,
 				7DA2605023F722D9005D2121 /* LogEvent.swift in Sources */,
 				B49A3C1F28F6C8AE007E14AB /* TableViewBackgroundView.swift in Sources */,
 				CFCB0F6827CF85EB008DDEA4 /* SpacePanda.swift in Sources */,
@@ -8644,7 +8606,6 @@
 				7DA2604423F722D9005D2121 /* DiscussionTopic.swift in Sources */,
 				B4F523B128E4732D001A16BC /* DeterminateBarProgressViewStyle.swift in Sources */,
 				EB2A9BC62632E31F00A19A5A /* SideMenuFooterView.swift in Sources */,
-				BA3D51E329D4465B0011A14A /* RealmConfiguration.swift in Sources */,
 				CF3A31FD290182B6002752D2 /* InboxFilterBarView.swift in Sources */,
 				7D1E856B2567356400D093C5 /* JustifiedGrid.swift in Sources */,
 				EB2A9BCC2632E3D300A19A5A /* SideMenuSubHeaderView.swift in Sources */,
@@ -8823,7 +8784,6 @@
 				7DA2605523F722D9005D2121 /* ModuleItemCompletionRequirement.swift in Sources */,
 				977EAC432412A2DC005E1290 /* CreatePlannerNote.swift in Sources */,
 				CF9A0EE027E38CFC00762228 /* SyllabusCellViewModel.swift in Sources */,
-				BA3D51E529D4465B0011A14A /* StoreObject.swift in Sources */,
 				7DA2603523F722D9005D2121 /* LockStatusViewable.swift in Sources */,
 				7D4B274F253F47EC00A98DE3 /* AudioRecorder.swift in Sources */,
 				E8A8FA8E24D328C3000B27DF /* SearchBar.swift in Sources */,
@@ -9596,7 +9556,7 @@
 			repositoryURL = "https://github.com/realm/realm-swift.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 10.37.1;
+				minimumVersion = 10.39.1;
 			};
 		};
 		BA5D83BF29DB0CB500150235 /* XCRemoteSwiftPackageReference "CombineReachability" */ = {

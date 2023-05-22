@@ -17,6 +17,7 @@
 //
 
 import UIKit
+import mobile_offline_downloader_ios
 
 public class PageListViewController: UIViewController, ColoredNavViewProtocol {
     @IBOutlet weak var emptyMessageLabel: UILabel!

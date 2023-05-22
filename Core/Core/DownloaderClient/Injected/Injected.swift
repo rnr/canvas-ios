@@ -17,6 +17,7 @@
 //
 
 import Foundation
+import mobile_offline_downloader_ios
 
 @propertyWrapper
 public struct Injected<T> {

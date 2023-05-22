@@ -141,6 +141,7 @@
 		B1FF02D02404353E004B7B1C /* KeychainTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1FF02CF2404353E004B7B1C /* KeychainTests.swift */; };
 		B49725D0290C04D50067B91E /* Heap in Frameworks */ = {isa = PBXBuildFile; productRef = B49725CF290C04D50067B91E /* Heap */; };
 		B5E212D31D88856B009D8C07 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = B5E212D51D88856B009D8C07 /* Localizable.strings */; };
+		BAD3D97B2A1B919F00DAE7CB /* mobile-offline-downloader-ios in Frameworks */ = {isa = PBXBuildFile; productRef = BAD3D97A2A1B919F00DAE7CB /* mobile-offline-downloader-ios */; };
 		C9299FE528102A62003A47C2 /* DSAnnouncementsE2ETests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9299FE428102A62003A47C2 /* DSAnnouncementsE2ETests.swift */; };
 		C9299FEC2817CCF2003A47C2 /* DSDiscussionsE2ETest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9299FEB2817CCF2003A47C2 /* DSDiscussionsE2ETest.swift */; };
 		C935D41E26DD1BDE00C940F7 /* NewQuizzesE2ETests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C935D41D26DD1BDE00C940F7 /* NewQuizzesE2ETests.swift */; };
@@ -857,6 +858,7 @@
 			files = (
 				CF09E6A1283FB861000C72D0 /* FirebaseCrashlytics in Frameworks */,
 				B1BB7A9122BADAC1006CA068 /* Core.framework in Frameworks */,
+				BAD3D97B2A1B919F00DAE7CB /* mobile-offline-downloader-ios in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2095,6 +2097,7 @@
 			name = SubmitAssignment;
 			packageProductDependencies = (
 				CF09E6A0283FB861000C72D0 /* FirebaseCrashlytics */,
+				BAD3D97A2A1B919F00DAE7CB /* mobile-offline-downloader-ios */,
 			);
 			productName = ShareSubmission;
 			productReference = B1BB7A8222BAC820006CA068 /* SubmitAssignment.appex */;
@@ -3855,6 +3858,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B49725CE290C04D50067B91E /* XCRemoteSwiftPackageReference "heap-ios-sdk" */;
 			productName = Heap;
+		};
+		BAD3D97A2A1B919F00DAE7CB /* mobile-offline-downloader-ios */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = "mobile-offline-downloader-ios";
 		};
 		CF09E6A0283FB861000C72D0 /* FirebaseCrashlytics */ = {
 			isa = XCSwiftPackageProductDependency;
