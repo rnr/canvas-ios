@@ -18,16 +18,16 @@
 
 import RealmSwift
 
-final public class CourseEntity: StoreObject, Storable {
+final public class CourseEntity {
 
-    @Persisted public var courseId: String
-    @Persisted public var name: String
-    @Persisted public var courseCode: String
-    @Persisted public var termName: String
-    @Persisted public var courseColor: String
-    @Persisted public var imageDownloadURL: String
+    public var courseId: String
+    public var name: String
+    public var courseCode: String
+    public var termName: String
+    public var courseColor: String
+    public var imageDownloadURL: String
 
-    public convenience init(
+    init(
         courseId: String,
         name: String?,
         courseCode: String?,
@@ -35,8 +35,6 @@ final public class CourseEntity: StoreObject, Storable {
         courseColor: String?,
         imageDownloadURL: String?
     ) {
-        self.init()
-        self.id = courseId
         self.courseId = courseId
         self.name = name ?? ""
         self.courseCode = courseCode ?? ""

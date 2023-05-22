@@ -16,18 +16,23 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-import RealmSwift
+import mobile_offline_downloader_ios
 
-final public class PageEntity: StoreObject, Storable {
+final public class PageEntity: Hashable {
 
-    @Persisted public var title: String
-    @Persisted public var contextId: String
-    @Persisted public var pageId: String
-    @Persisted public var courseId: String
-    @Persisted public var htmlURL: String
-    @Persisted public var lastUpdated: Date?
+    public static func == (lhs: PageEntity, rhs: PageEntity) -> Bool {
+        lhs.id == rhs.id
+    }
 
-    public convenience init(
+    public var id: String
+    public var title: String
+    public var contextId: String
+    public var pageId: String
+    public var courseId: String
+    public var htmlURL: String
+    public var lastUpdated: Date?
+
+    public init(
         title: String,
         contextId: String,
         pageId: String,
@@ -35,13 +40,20 @@ final public class PageEntity: StoreObject, Storable {
         htmlURL: String,
         lastUpdated: Date?
     ) {
-        self.init()
         self.id = pageId
+        self.pageId = pageId
         self.title = title
         self.contextId = contextId
         self.pageId = pageId
         self.courseId = courseId
         self.htmlURL = htmlURL
         self.lastUpdated = lastUpdated
+        
+        OfflineStorageManager.shared.load(for: "ifif", castingType: Page.self)
+        OfflineStorageManager.shared.object(from: <#T##OfflineStorageDataModel#>, for: <#T##OfflineStorageDataProtocol.Protocol#>)
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 }

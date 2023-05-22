@@ -18,12 +18,13 @@
 
 import Combine
 import SwiftUI
+//import mobile_offline_downloader_ios
 
 final class DownloadsViewModel: ObservableObject {
 
     // MARK: - Injections -
 
-    @Injected(\.storage) var storage: LocalStorage
+//    @Injected(\.storage) var storage: LocalStorage
 
     // MARK: - Content -
 
@@ -84,23 +85,23 @@ final class DownloadsViewModel: ObservableObject {
     // MARK: - Private methods -
 
     func fetch() {
-        state = .loading
-        storage.objects(CourseEntity.self) { [weak self] result in
-            guard let self = self else {
-                return
-            }
-            switch result {
-            case .success(let results):
-                self.courseViewModels = results.compactMap { courseEntity in
-                    DownloadCourseViewModel(
-                        course: courseEntity
-                    )
-                }
-            case .failure(let error):
-                print(error)
-            }
-            self.state = .loaded
-        }
+//        state = .loading
+//        storage.objects(CourseEntity.self) { [weak self] result in
+//            guard let self = self else {
+//                return
+//            }
+//            switch result {
+//            case .success(let results):
+//                self.courseViewModels = results.compactMap { courseEntity in
+//                    DownloadCourseViewModel(
+//                        course: courseEntity
+//                    )
+//                }
+//            case .failure(let error):
+//                print(error)
+//            }
+//            self.state = .loaded
+//        }
     }
 
     private func setIsEmpty() {

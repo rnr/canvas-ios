@@ -17,13 +17,13 @@
 //
 
 import UIKit
-import mobile_offline_downloader_ios
+//import mobile_offline_downloader_ios
 
 final public class DownloadPageListTableViewCell: UITableViewCell {
 
     // MARK: - Injected -
 
-    @Injected(\.storage) var storage: LocalStorage
+//    @Injected(\.storage) var storage: LocalStorage
 
     // MARK: - Properties -
 
@@ -107,35 +107,35 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
 
     private func actions() {
         downloadButton.onTap = { [weak self] _ in
-            guard let self = self, let course = self.course, let page = self.page, let data = OfflineStorageManager.shared.dataModel(for: page) else {
-                return
-            }
+//            guard let self = self, let course = self.course, let page = self.page, let data = OfflineStorageManager.shared.dataModel(for: page) else {
+//                return
+//            }
+//
+//            let entry = OfflineDownloaderEntry(dataModel: data, parts: [])
+//            OfflineDownloadsManager.shared.addAndStart(entry: entry)
 
-            let entry = OfflineDownloaderEntry(dataModel: data, parts: [])
-            OfflineDownloadsManager.shared.addAndStart(entry: entry)
-
-            self.downloadButton.currentState = .downloading
-            let storage: LocalStorage =  .current
-            CourseEntity(
-                courseId: course.id,
-                name: course.name,
-                courseCode: course.courseCode,
-                termName: course.termName,
-                courseColor: course.courseColor,
-                imageDownloadURL: course.imageDownloadURL?.absoluteString
-            ).addOrUpdate(in: storage) { _ in }
-            PageEntity(
-                title: page.title,
-                contextId: page.contextID,
-                pageId: page.id,
-                courseId: course.id,
-                htmlURL: page.htmlURL?.absoluteString ?? "",
-                lastUpdated: page.lastUpdated
-            ).addOrUpdate(in: storage) { _ in
-                DispatchQueue.main.async {
-                    self.downloadButton.currentState = .downloaded
-                }
-            }
+//            self.downloadButton.currentState = .downloading
+//            let storage: LocalStorage =  .current
+//            CourseEntity(
+//                courseId: course.id,
+//                name: course.name,
+//                courseCode: course.courseCode,
+//                termName: course.termName,
+//                courseColor: course.courseColor,
+//                imageDownloadURL: course.imageDownloadURL?.absoluteString
+//            ).addOrUpdate(in: storage) { _ in }
+//            PageEntity(
+//                title: page.title,
+//                contextId: page.contextID,
+//                pageId: page.id,
+//                courseId: course.id,
+//                htmlURL: page.htmlURL?.absoluteString ?? "",
+//                lastUpdated: page.lastUpdated
+//            ).addOrUpdate(in: storage) { _ in
+//                DispatchQueue.main.async {
+//                    self.downloadButton.currentState = .downloaded
+//                }
+//            }
         }
     }
 
@@ -159,13 +159,13 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
     }
 
     private func isDownloaded(page: Page) {
-        storage.object(PageEntity.self, forPrimaryKey: page.id) { [weak self] pageEntity in
-            guard let self = self else {
-                return
-            }
-
-            self.downloadButton.currentState = pageEntity == nil ? .idle : .downloaded
-            self.downloadButton.isUserInteractionEnabled = self.downloadButton.currentState != .downloaded
-        }
+//        storage.object(PageEntity.self, forPrimaryKey: page.id) { [weak self] pageEntity in
+//            guard let self = self else {
+//                return
+//            }
+//
+//            self.downloadButton.currentState = pageEntity == nil ? .idle : .downloaded
+//            self.downloadButton.isUserInteractionEnabled = self.downloadButton.currentState != .downloaded
+//        }
     }
 }

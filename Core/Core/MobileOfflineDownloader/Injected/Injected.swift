@@ -17,6 +17,7 @@
 //
 
 import Foundation
+//import mobile_offline_downloader_ios
 
 @propertyWrapper
 public struct Injected<T> {
@@ -58,22 +59,22 @@ public protocol InjectionKey {
     /// The default value for the dependency injection key.
     static var currentValue: Self.Value { get set }
 }
-
+//
 public extension InjectedValues {
-    var storage: LocalStorage {
-        get { Self[LocalStorageInjectionKey.self] }
-        set { Self[LocalStorageInjectionKey.self] = newValue }
-    }
-
+//    var storage: LocalStorage {
+//        get { Self[LocalStorageInjectionKey.self] }
+//        set { Self[LocalStorageInjectionKey.self] = newValue }
+//    }
+//
     var reachability: ReachabilityProvider {
         get { Self[NetworkProviderKey.self] }
         set { Self[NetworkProviderKey.self] = newValue }
     }
 }
 
-private struct LocalStorageInjectionKey: InjectionKey {
-    static var currentValue: LocalStorage = StorageProvider.current
-}
+//private struct LocalStorageInjectionKey: InjectionKey {
+//    static var currentValue: LocalStorage = StorageProvider.current
+//}
 
 private struct NetworkProviderKey: InjectionKey {
     static var currentValue: ReachabilityProvider = ReachabilityProvider()

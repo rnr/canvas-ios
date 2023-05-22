@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		060B7E652A0C18160098D1D3 /* DownloaderClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7E642A0C18160098D1D3 /* DownloaderClient.swift */; };
-		060B7E792A0E5E130098D1D3 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 060B7E782A0E5E130098D1D3 /* SwiftSoup */; };
 		060B7EA22A14BC2D0098D1D3 /* Page+OfflineStorageDataProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7EA12A14BC2D0098D1D3 /* Page+OfflineStorageDataProtocol.swift */; };
 		060B7EA42A14E5E40098D1D3 /* Page+OfflineDownloadHelperProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060B7EA32A14E5E40098D1D3 /* Page+OfflineDownloadHelperProtocol.swift */; };
 		06D42D8D2A1672D5002EB070 /* mobile-offline-downloader-ios in Frameworks */ = {isa = PBXBuildFile; productRef = 06D42D8C2A1672D5002EB070 /* mobile-offline-downloader-ios */; };
@@ -830,12 +829,6 @@
 		B4F523B128E4732D001A16BC /* DeterminateBarProgressViewStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F523B028E4732D001A16BC /* DeterminateBarProgressViewStyle.swift */; };
 		BA18C1C429DC426300090221 /* NotConnectionBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA18C1C329DC426300090221 /* NotConnectionBarView.swift */; };
 		BA3D51E229D4465B0011A14A /* Injected.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA3D51DA29D4465A0011A14A /* Injected.swift */; };
-		BA3D51E329D4465B0011A14A /* RealmConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA3D51DC29D4465A0011A14A /* RealmConfiguration.swift */; };
-		BA3D51E429D4465B0011A14A /* StorageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA3D51DD29D4465A0011A14A /* StorageProvider.swift */; };
-		BA3D51E529D4465B0011A14A /* StoreObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA3D51DE29D4465A0011A14A /* StoreObject.swift */; };
-		BA3D51E629D4465B0011A14A /* RealmStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA3D51DF29D4465A0011A14A /* RealmStorage.swift */; };
-		BA3D51E729D4465B0011A14A /* Storable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA3D51E029D4465A0011A14A /* Storable.swift */; };
-		BA3D51E829D4465B0011A14A /* LocalStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA3D51E129D4465A0011A14A /* LocalStorage.swift */; };
 		BA3D51EA29D45A120011A14A /* CourseEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA3D51E929D45A120011A14A /* CourseEntity.swift */; };
 		BA3D51EC29D47C0C0011A14A /* DownloadsCourseDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA3D51EB29D47C0C0011A14A /* DownloadsCourseDetailViewModel.swift */; };
 		BA3D51EF29D47C490011A14A /* Result+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA3D51EE29D47C490011A14A /* Result+Extensions.swift */; };
@@ -862,8 +855,6 @@
 		BA4B23E329D335560035D918 /* WaitingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA4B23CB29D335560035D918 /* WaitingView.swift */; };
 		BA4B23E429D335560035D918 /* ProgressButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA4B23CC29D335560035D918 /* ProgressButton.swift */; };
 		BA4B23E529D335560035D918 /* DownloadButton+TransitionAndAnimationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA4B23CD29D335560035D918 /* DownloadButton+TransitionAndAnimationExtension.swift */; };
-		BA4B23E829D43A900035D918 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = BA4B23E729D43A900035D918 /* Realm */; };
-		BA4B23EA29D43A900035D918 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = BA4B23E929D43A900035D918 /* RealmSwift */; };
 		BA5D83A629D481BE00150235 /* DownloadsCourseDetailsHeaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5D83A529D481BE00150235 /* DownloadsCourseDetailsHeaderViewModel.swift */; };
 		BA5D83A829D481E600150235 /* DownloadsCourseDetailsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5D83A729D481E600150235 /* DownloadsCourseDetailsHeaderView.swift */; };
 		BA5D83AD29D572AF00150235 /* DownloadsContentCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5D83AC29D572AF00150235 /* DownloadsContentCellView.swift */; };
@@ -2458,12 +2449,6 @@
 		B4F523B028E4732D001A16BC /* DeterminateBarProgressViewStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeterminateBarProgressViewStyle.swift; sourceTree = "<group>"; };
 		BA18C1C329DC426300090221 /* NotConnectionBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotConnectionBarView.swift; sourceTree = "<group>"; };
 		BA3D51DA29D4465A0011A14A /* Injected.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Injected.swift; sourceTree = "<group>"; };
-		BA3D51DC29D4465A0011A14A /* RealmConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmConfiguration.swift; sourceTree = "<group>"; };
-		BA3D51DD29D4465A0011A14A /* StorageProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorageProvider.swift; sourceTree = "<group>"; };
-		BA3D51DE29D4465A0011A14A /* StoreObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreObject.swift; sourceTree = "<group>"; };
-		BA3D51DF29D4465A0011A14A /* RealmStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmStorage.swift; sourceTree = "<group>"; };
-		BA3D51E029D4465A0011A14A /* Storable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Storable.swift; sourceTree = "<group>"; };
-		BA3D51E129D4465A0011A14A /* LocalStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalStorage.swift; sourceTree = "<group>"; };
 		BA3D51E929D45A120011A14A /* CourseEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseEntity.swift; sourceTree = "<group>"; };
 		BA3D51EB29D47C0C0011A14A /* DownloadsCourseDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsCourseDetailViewModel.swift; sourceTree = "<group>"; };
 		BA3D51EE29D47C490011A14A /* Result+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Result+Extensions.swift"; sourceTree = "<group>"; };
@@ -3033,11 +3018,8 @@
 				E87A5E4024D4B51C0065B2AA /* SwiftUI.framework in Frameworks */,
 				06D42D8D2A1672D5002EB070 /* mobile-offline-downloader-ios in Frameworks */,
 				EFDD68BFDD537830A59DAC8D /* Pods_needs_pspdfkit_Core.framework in Frameworks */,
-				BA4B23E829D43A900035D918 /* Realm in Frameworks */,
-				BA4B23EA29D43A900035D918 /* RealmSwift in Frameworks */,
 				CFD3EC37289422C0001E7D4E /* Lottie in Frameworks */,
 				BA5D83C129DB0CB500150235 /* CombineReachability in Frameworks */,
-				060B7E792A0E5E130098D1D3 /* SwiftSoup in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5001,7 +4983,6 @@
 			children = (
 				BA5D83C229DB2C5500150235 /* Reachability */,
 				BA3D51D929D4465A0011A14A /* Injected */,
-				BA3D51DB29D4465A0011A14A /* Storage */,
 			);
 			path = MobileOfflineDownloader;
 			sourceTree = "<group>";
@@ -5012,19 +4993,6 @@
 				BA3D51DA29D4465A0011A14A /* Injected.swift */,
 			);
 			path = Injected;
-			sourceTree = "<group>";
-		};
-		BA3D51DB29D4465A0011A14A /* Storage */ = {
-			isa = PBXGroup;
-			children = (
-				BA3D51DC29D4465A0011A14A /* RealmConfiguration.swift */,
-				BA3D51DD29D4465A0011A14A /* StorageProvider.swift */,
-				BA3D51DE29D4465A0011A14A /* StoreObject.swift */,
-				BA3D51DF29D4465A0011A14A /* RealmStorage.swift */,
-				BA3D51E029D4465A0011A14A /* Storable.swift */,
-				BA3D51E129D4465A0011A14A /* LocalStorage.swift */,
-			);
-			path = Storage;
 			sourceTree = "<group>";
 		};
 		BA3D51ED29D47C370011A14A /* Extensions */ = {
@@ -7295,10 +7263,7 @@
 			name = Core;
 			packageProductDependencies = (
 				CFD3EC36289422C0001E7D4E /* Lottie */,
-				BA4B23E729D43A900035D918 /* Realm */,
-				BA4B23E929D43A900035D918 /* RealmSwift */,
 				BA5D83C029DB0CB500150235 /* CombineReachability */,
-				060B7E782A0E5E130098D1D3 /* SwiftSoup */,
 				06D42D8C2A1672D5002EB070 /* mobile-offline-downloader-ios */,
 			);
 			productName = Core;
@@ -7434,9 +7399,7 @@
 			mainGroup = 2C964824211E2F1A002C3255;
 			packageReferences = (
 				CFD3EC35289422C0001E7D4E /* XCRemoteSwiftPackageReference "lottie-ios" */,
-				BA4B23E629D43A900035D918 /* XCRemoteSwiftPackageReference "realm-swift" */,
 				BA5D83BF29DB0CB500150235 /* XCRemoteSwiftPackageReference "CombineReachability" */,
-				060B7E772A0E5E130098D1D3 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
 			);
 			productRefGroup = 2C96482F211E2F1A002C3255 /* Products */;
 			projectDirPath = "";
@@ -8169,7 +8132,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				BA4B23CE29D335560035D918 /* Header.swift in Sources */,
-				BA3D51E829D4465B0011A14A /* LocalStorage.swift in Sources */,
 				EB71A2532615AD840003241C /* SideMenuView.swift in Sources */,
 				7DA260F623F72397005D2121 /* FilePickerViewController.swift in Sources */,
 				3BA649D7242530470047D8DC /* NotificationView.swift in Sources */,
@@ -8541,7 +8503,6 @@
 				CF2F7E7A27FF211500942241 /* FontPreview.swift in Sources */,
 				CFB9B2F728A12DB000C18C79 /* FilePreviewProvider.swift in Sources */,
 				3BA649CD2423E0080047D8DC /* APIPairingCode.swift in Sources */,
-				BA3D51E629D4465B0011A14A /* RealmStorage.swift in Sources */,
 				7DA2603F23F722D9005D2121 /* Course.swift in Sources */,
 				7DA25FB423F72136005D2121 /* GetEnabledFeatureFlagsRequest.swift in Sources */,
 				7DA260E823F72359005D2121 /* SubtitleTableViewCell.swift in Sources */,
@@ -8559,7 +8520,6 @@
 				7DA25FB223F72136005D2121 /* APIFavorite.swift in Sources */,
 				BA4B23E029D335560035D918 /* DownloadButton.swift in Sources */,
 				7DA25FC123F72136005D2121 /* APIOAuth.swift in Sources */,
-				BA3D51E729D4465B0011A14A /* Storable.swift in Sources */,
 				7DA2601E23F7227A005D2121 /* URLExtensions.swift in Sources */,
 				CF490F142850CE230065D242 /* DragStartViewModel.swift in Sources */,
 				CFCE214C2656895E00E3B32A /* Bounds.swift in Sources */,
@@ -8568,7 +8528,6 @@
 				7DA2609323F72315005D2121 /* UserProfile.swift in Sources */,
 				BA4B23D329D335560035D918 /* DownloadsView.swift in Sources */,
 				7DA260FE23F773D9005D2121 /* PlannerListViewController.swift in Sources */,
-				BA3D51E429D4465B0011A14A /* StorageProvider.swift in Sources */,
 				7DA2605023F722D9005D2121 /* LogEvent.swift in Sources */,
 				B49A3C1F28F6C8AE007E14AB /* TableViewBackgroundView.swift in Sources */,
 				CFCB0F6827CF85EB008DDEA4 /* SpacePanda.swift in Sources */,
@@ -8644,7 +8603,6 @@
 				7DA2604423F722D9005D2121 /* DiscussionTopic.swift in Sources */,
 				B4F523B128E4732D001A16BC /* DeterminateBarProgressViewStyle.swift in Sources */,
 				EB2A9BC62632E31F00A19A5A /* SideMenuFooterView.swift in Sources */,
-				BA3D51E329D4465B0011A14A /* RealmConfiguration.swift in Sources */,
 				CF3A31FD290182B6002752D2 /* InboxFilterBarView.swift in Sources */,
 				7D1E856B2567356400D093C5 /* JustifiedGrid.swift in Sources */,
 				EB2A9BCC2632E3D300A19A5A /* SideMenuSubHeaderView.swift in Sources */,
@@ -8823,7 +8781,6 @@
 				7DA2605523F722D9005D2121 /* ModuleItemCompletionRequirement.swift in Sources */,
 				977EAC432412A2DC005E1290 /* CreatePlannerNote.swift in Sources */,
 				CF9A0EE027E38CFC00762228 /* SyllabusCellViewModel.swift in Sources */,
-				BA3D51E529D4465B0011A14A /* StoreObject.swift in Sources */,
 				7DA2603523F722D9005D2121 /* LockStatusViewable.swift in Sources */,
 				7D4B274F253F47EC00A98DE3 /* AudioRecorder.swift in Sources */,
 				E8A8FA8E24D328C3000B27DF /* SearchBar.swift in Sources */,
@@ -9583,22 +9540,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		060B7E772A0E5E130098D1D3 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/scinfu/SwiftSoup.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.0;
-			};
-		};
-		BA4B23E629D43A900035D918 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/realm/realm-swift.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 10.37.1;
-			};
-		};
 		BA5D83BF29DB0CB500150235 /* XCRemoteSwiftPackageReference "CombineReachability" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/istvan-kreisz/CombineReachability.git";
@@ -9618,24 +9559,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		060B7E782A0E5E130098D1D3 /* SwiftSoup */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 060B7E772A0E5E130098D1D3 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
-			productName = SwiftSoup;
-		};
 		06D42D8C2A1672D5002EB070 /* mobile-offline-downloader-ios */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = "mobile-offline-downloader-ios";
-		};
-		BA4B23E729D43A900035D918 /* Realm */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = BA4B23E629D43A900035D918 /* XCRemoteSwiftPackageReference "realm-swift" */;
-			productName = Realm;
-		};
-		BA4B23E929D43A900035D918 /* RealmSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = BA4B23E629D43A900035D918 /* XCRemoteSwiftPackageReference "realm-swift" */;
-			productName = RealmSwift;
 		};
 		BA5D83C029DB0CB500150235 /* CombineReachability */ = {
 			isa = XCSwiftPackageProductDependency;
