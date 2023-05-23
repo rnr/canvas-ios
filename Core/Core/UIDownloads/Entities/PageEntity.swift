@@ -47,10 +47,7 @@ final public class PageEntity: Hashable {
         self.pageId = pageId
         self.courseId = courseId
         self.htmlURL = htmlURL
-        self.lastUpdated = lastUpdated
-        
-        OfflineStorageManager.shared.load(for: "ifif", castingType: Page.self)
-        OfflineStorageManager.shared.object(from: <#T##OfflineStorageDataModel#>, for: <#T##OfflineStorageDataProtocol.Protocol#>)
+        self.lastUpdated = lastUpdated        
     }
 
     public func hash(into hasher: inout Hasher) {
