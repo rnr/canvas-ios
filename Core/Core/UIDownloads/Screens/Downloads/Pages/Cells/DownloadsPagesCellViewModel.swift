@@ -20,7 +20,7 @@ import Foundation
 
 final class DownloadsPagesCellViewModel: ObservableObject {
 
-    private let page: PageEntity
+    private let page: Page
 
     var title: String {
         page.title
@@ -30,7 +30,7 @@ final class DownloadsPagesCellViewModel: ObservableObject {
         page.lastUpdated
     }
 
-    init(page: PageEntity) {
+    init(page: Page) {
         self.page = page
     }
 }

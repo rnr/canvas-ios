@@ -28,26 +28,26 @@ final class DownloadCourseViewModel: Identifiable, Hashable {
         hasher.combine(id)
     }
 
-    let course: CourseEntity
+    let course: Course
 
     var courseId: String {
-        course.courseId
+        course.id
     }
 
     var name: String {
-        course.name
+        course.name ?? ""
     }
 
     var courseCode: String {
-        course.courseCode
+        course.courseCode ?? ""
     }
 
     var termName: String {
-        course.termName
+        course.termName ?? ""
     }
 
     var imageURL: URL? {
-        guard let imageDownloadURL = URL(string: course.imageDownloadURL) else {
+        guard let imageDownloadURL = course.imageDownloadURL else {
             return nil
         }
         return imageDownloadURL
@@ -57,7 +57,7 @@ final class DownloadCourseViewModel: Identifiable, Hashable {
         course.color
     }
 
-    init(course: CourseEntity) {
+    init(course: Course) {
         self.course = course
     }
 }

@@ -17,8 +17,7 @@
 //
 
 import Foundation
-import RealmSwift
-//import mobile_offline_downloader_ios
+import mobile_offline_downloader_ios
 
 final class DownloadsCourseDetailViewModel: ObservableObject {
 
@@ -54,30 +53,25 @@ final class DownloadsCourseDetailViewModel: ObservableObject {
     // MARK: - Intents -
 
     func fetch() {
-        let group = DispatchGroup()
-        group.enter()
-//        storage.objects(PageEntity.self) { [weak self] results in
-//            guard let self = self else {
-//                return
-//            }
-//            results.success { results in
-//                let pages = results.where { $0.courseId == self.courseViewModel.courseId }
-//                guard !pages.isEmpty else {
-//                    return
-//                }
-//                self.detailViewModels.append(
-//                    DownloadsCourseDetailsViewModel(
-//                        course: self.courseViewModel.course,
-//                        contentType: .page(Array(pages))
-//                    )
-//                )
-//
-//            }
-//            group.leave()
-//        }
-
-        group.notify(queue: .main) {
-            self.state = .loaded
+        OfflineStorageManager.shared.loadAll(of: Page.self) { [weak self] result in
+            guard let self = self else {
+                return
+            }
+            result.success { pages in
+                let pages = pages.filter { $0.contextID.contains(self.courseViewModel.courseId) }
+                guard !pages.isEmpty else {
+                    return
+                }
+                self.detailViewModels.append(
+                    DownloadsCourseDetailsViewModel(
+                        course: self.courseViewModel.course,
+                        contentType: .page(Array(pages))
+                    )
+                )
+            }
+            DispatchQueue.main.async {
+                self.state = .loaded
+            }
         }
     }
 }

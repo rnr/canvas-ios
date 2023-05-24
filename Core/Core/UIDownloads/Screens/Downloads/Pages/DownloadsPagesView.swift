@@ -20,9 +20,9 @@ import SwiftUI
 
 final class DownloadsPagesViewModel: ObservableObject {
 
-    var pages: [PageEntity]
+    var pages: [Page]
 
-    init(pages: [PageEntity]) {
+    init(pages: [Page]) {
         self.pages = pages
     }
 
@@ -32,7 +32,7 @@ struct DownloadsPagesView: View {
 
     @StateObject var viewModel: DownloadsPagesViewModel
 
-    init(pages: [PageEntity]) {
+    init(pages: [Page]) {
         let viewModel = DownloadsPagesViewModel(pages: pages)
         self._viewModel = .init(wrappedValue: viewModel)
     }

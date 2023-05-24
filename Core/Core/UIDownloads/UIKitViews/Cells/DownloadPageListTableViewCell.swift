@@ -17,13 +17,13 @@
 //
 
 import UIKit
-//import mobile_offline_downloader_ios
+import mobile_offline_downloader_ios
 
 final public class DownloadPageListTableViewCell: UITableViewCell {
 
     // MARK: - Injected -
 
-//    @Injected(\.storage) var storage: LocalStorage
+    let storageManager = OfflineStorageManager.shared
 
     // MARK: - Properties -
 
@@ -106,36 +106,21 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
     // MARK: - Action -
 
     private func actions() {
-        downloadButton.onTap = { [weak self] _ in
-//            guard let self = self, let course = self.course, let page = self.page, let data = OfflineStorageManager.shared.dataModel(for: page) else {
-//                return
-//            }
-//
-//            let entry = OfflineDownloaderEntry(dataModel: data, parts: [])
-//            OfflineDownloadsManager.shared.addAndStart(entry: entry)
+        downloadButton.onTap = { [weak self] state in
+            guard let self = self, let course = self.course, let page = self.page else {
+                return
+            }
 
-//            self.downloadButton.currentState = .downloading
-//            let storage: LocalStorage =  .current
-//            CourseEntity(
-//                courseId: course.id,
-//                name: course.name,
-//                courseCode: course.courseCode,
-//                termName: course.termName,
-//                courseColor: course.courseColor,
-//                imageDownloadURL: course.imageDownloadURL?.absoluteString
-//            ).addOrUpdate(in: storage) { _ in }
-//            PageEntity(
-//                title: page.title,
-//                contextId: page.contextID,
-//                pageId: page.id,
-//                courseId: course.id,
-//                htmlURL: page.htmlURL?.absoluteString ?? "",
-//                lastUpdated: page.lastUpdated
-//            ).addOrUpdate(in: storage) { _ in
-//                DispatchQueue.main.async {
-//                    self.downloadButton.currentState = .downloaded
-//                }
-//            }
+            switch state {
+            case .downloaded:
+                self.delete(page)
+            case .downloading:
+                print("downloaded")
+            case .idle:
+                self.download(page, for: course)
+            default:
+                break
+            }
         }
     }
 
@@ -158,14 +143,36 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
 
     }
 
+    private func download(_ page: Page, for course: Course) {
+        downloadButton.currentState = .downloading
+        storageManager.save(page) { [weak self] result in
+            guard let self = self else {
+                return
+            }
+            result.success {
+                self.storageManager.save(course) { result in
+                    result.success {
+                        self.downloadButton.currentState = .downloaded
+                    }
+                }
+            }
+        }
+    }
+
+    private func delete(_ page: Page) {
+        storageManager.delete(page) { [weak self] result in
+            result.success {
+                self?.downloadButton.currentState = .idle
+            }
+        }
+    }
+
     private func isDownloaded(page: Page) {
-//        storage.object(PageEntity.self, forPrimaryKey: page.id) { [weak self] pageEntity in
-//            guard let self = self else {
-//                return
-//            }
-//
-//            self.downloadButton.currentState = pageEntity == nil ? .idle : .downloaded
-//            self.downloadButton.isUserInteractionEnabled = self.downloadButton.currentState != .downloaded
-//        }
+        storageManager.isSaved(for: page.id) { [weak self] isSaved in
+            guard let self = self else {
+                return
+            }
+            self.downloadButton.currentState = isSaved ? .downloaded : .idle
+        }
     }
 }

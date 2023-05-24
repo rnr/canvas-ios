@@ -30,11 +30,11 @@ final class DownloadsCourseDetailsViewModel: Identifiable, Hashable {
     let id: String = Foundation.UUID().uuidString
 
     enum ContentType {
-        case page([PageEntity])
+        case page([Page])
     }
     let contentType: ContentType
 
-    let course: CourseEntity
+    let course: Course
 
     var courseColor: UIColor {
         course.color
@@ -47,7 +47,7 @@ final class DownloadsCourseDetailsViewModel: Identifiable, Hashable {
         }
     }
 
-    init(course: CourseEntity, contentType: ContentType) {
+    init(course: Course, contentType: ContentType) {
         self.contentType = contentType
         self.course = course
     }

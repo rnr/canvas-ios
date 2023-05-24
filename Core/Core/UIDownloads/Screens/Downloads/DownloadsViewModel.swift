@@ -18,13 +18,13 @@
 
 import Combine
 import SwiftUI
-//import mobile_offline_downloader_ios
+import mobile_offline_downloader_ios
 
 final class DownloadsViewModel: ObservableObject {
 
     // MARK: - Injections -
 
-//    @Injected(\.storage) var storage: LocalStorage
+    private var storageManager: OfflineStorageManager = .shared
 
     // MARK: - Content -
 
@@ -78,30 +78,36 @@ final class DownloadsViewModel: ObservableObject {
 
     func swipeDelete(indexSet: IndexSet) {
         indexSet.forEach { index in
-            courseViewModels.remove(at: index)
+            let viewModel = courseViewModels.remove(at: index)
+            storageManager.delete(viewModel.course) { _ in }
+            storageManager.loadAll(of: Page.self) { [weak self] result in
+                result.success { pages in
+                    let pages = pages.filter { $0.contextID.contains(viewModel.courseId) }
+                    self?.storageManager.delete(pages) { _ in }
+                }
+            }
         }
+        state = .loaded
     }
 
     // MARK: - Private methods -
 
     func fetch() {
-//        state = .loading
-//        storage.objects(CourseEntity.self) { [weak self] result in
-//            guard let self = self else {
-//                return
-//            }
-//            switch result {
-//            case .success(let results):
-//                self.courseViewModels = results.compactMap { courseEntity in
-//                    DownloadCourseViewModel(
-//                        course: courseEntity
-//                    )
-//                }
-//            case .failure(let error):
-//                print(error)
-//            }
-//            self.state = .loaded
-//        }
+        state = .loading
+        storageManager.loadAll(of: Course.self) { [weak self] result in
+            guard let self = self else {
+                return
+            }
+
+            result.success { courses in
+                self.courseViewModels = courses.compactMap { courseEntity in
+                    DownloadCourseViewModel(
+                        course: courseEntity
+                    )
+                }
+            }
+            self.state = .loaded
+        }
     }
 
     private func setIsEmpty() {
