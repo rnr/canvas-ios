@@ -51,7 +51,7 @@ struct DownloadsCourseDetailView: View {
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text(viewModel.title)
-                        .foregroundColor(.textDarkest)
+                        .foregroundColor(.white)
                         .font(.semibold16)
                 }
             }

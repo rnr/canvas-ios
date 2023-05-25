@@ -19,11 +19,11 @@
 import SwiftUI
 
 struct DownloadsContentCellView: View {
-    var action: () -> Void
+    var action: (() -> Void)?
 
     var body: some View {
         Button {
-            action()
+            action?()
         } label: {
             VStack {
                 HStack {
