@@ -16,6 +16,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
+import Combine
 import UIKit
 import mobile_offline_downloader_ios
 
@@ -143,11 +144,20 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
 
     }
 
+    private var offlineCancellable: AnyCancellable?
     private func download(_ page: Page, for course: Course) {
         downloadButton.currentState = .downloading
         if let entry = try? page.downloaderEntry() {
             OfflineDownloadsManager.shared.addAndStart(entry: entry)
         }
+        offlineCancellable = OfflineDownloadsManager.shared.publisher.sink(receiveValue: { event in
+            switch event {
+            case .statusChanged(object: let object):
+                if page == object.object as? Page {
+                    print("ALARM: ", object)
+                }
+            }
+        })
         storageManager.save(page) { [weak self] result in
             guard let self = self else {
                 return
@@ -171,11 +181,12 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
     }
 
     private func isDownloaded(page: Page) {
-        OfflineDownloadsManager.shared.isDownloaded(object: page) {[weak self] result in
-            guard let self = self else {
+        OfflineDownloadsManager.shared.isDownloaded(object: page) {[weak self, weak page] result in
+            guard let self = self, self.page == page else {
                 return
             }
             if case let .success(isSaved) = result {
+                print("ALARM: ", page?.id)
                 self.downloadButton.currentState = isSaved ? .downloaded : .idle
             } else {
                 self.downloadButton.currentState = .idle

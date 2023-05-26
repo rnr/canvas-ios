@@ -75,8 +75,25 @@ extension Page: OfflineStorageDataProtocol {
         throw OfflineStorageDataError.cantCreateObject(type: Page.self)
     }
 
-    public func toOfflineModel() -> OfflineStorageDataModel {
-        if let jsonData = try? JSONSerialization.data(withJSONObject: json),
+//<<<<<<< HEAD
+    public func toOfflineModel() throws -> OfflineStorageDataModel {
+        let dictionary: [String: Any] = [
+            "url": url,
+            "lastUpdated": lastUpdated?.timeIntervalSince1970 ?? 0,
+            "isFrontPage": isFrontPage,
+            "id": id,
+            "title": title,
+            "htmlURL": htmlURL?.absoluteString ?? "",
+            "published": published,
+            "body": body,
+            "editingRoles": editingRoles,
+            "contextID": contextID
+        ]
+        if let jsonData = try? JSONSerialization.data(withJSONObject: dictionary),
+//=======
+//    public func toOfflineModel() -> OfflineStorageDataModel {
+//        if let jsonData = try? JSONSerialization.data(withJSONObject: json),
+//>>>>>>> origin/feat/open_page
            let jsonString = String(data: jsonData, encoding: .utf8) {
             return OfflineStorageDataModel(
                 id: id,
