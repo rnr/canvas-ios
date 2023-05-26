@@ -76,23 +76,14 @@ extension Page: OfflineStorageDataProtocol {
     }
 
     public func toOfflineModel() -> OfflineStorageDataModel {
-        let dictionary: [String: Any] = [
-            "url": url,
-            "lastUpdated": lastUpdated?.timeIntervalSince1970 ?? 0,
-            "isFrontPage": isFrontPage,
-            "id": id,
-            "title": title,
-            "htmlURL": htmlURL?.absoluteString ?? "",
-            "published": published,
-            "body": body,
-            "editingRoles": editingRoles,
-            "contextID": contextID
-        ]
-        if let jsonData = try? JSONSerialization.data(withJSONObject: dictionary),
+        if let jsonData = try? JSONSerialization.data(withJSONObject: json),
            let jsonString = String(data: jsonData, encoding: .utf8) {
-            return OfflineStorageDataModel(id: id, type: String(describing: type(of: self)), json: jsonString)
+            return OfflineStorageDataModel(
+                id: id,
+                type: String(describing: type(of: self)),
+                json: jsonString
+            )
         }
-
         return OfflineStorageDataModel(id: "", type: "", json: "")
     }
 }

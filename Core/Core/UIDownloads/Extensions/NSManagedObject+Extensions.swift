@@ -17,46 +17,16 @@
 //
 
 import Foundation
+import CoreData
 
-final class DownloadCourseViewModel: Identifiable, Hashable {
-    static func == (lhs: DownloadCourseViewModel, rhs: DownloadCourseViewModel) -> Bool {
-        lhs.id == rhs.id
-    }
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
-
-    let course: Course
-
-    var courseId: String {
-        course.id
-    }
-
-    var name: String {
-        course.name ?? ""
-    }
-
-    var courseCode: String {
-        course.courseCode ?? ""
-    }
-
-    var termName: String {
-        course.termName ?? ""
-    }
-
-    var imageURL: URL? {
-        guard let imageDownloadURL = course.imageDownloadURL else {
-            return nil
+extension NSManagedObject {
+    var json: [String: Any] {
+        var dict: [String: Any] = [:]
+        for attribute in entity.attributesByName {
+            if let value = value(forKey: attribute.key) {
+                dict[attribute.key] = value
+            }
         }
-        return imageDownloadURL
-    }
-
-    var color: UIColor {
-        course.color
-    }
-
-    init(course: Course) {
-        self.course = course
+        return dict
     }
 }

@@ -827,6 +827,7 @@
 		B4F0B08C292D01F000A3B41B /* GetEnvironmentFeatureFlagsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F0B08B292D01F000A3B41B /* GetEnvironmentFeatureFlagsTests.swift */; };
 		B4F523AF28E47323001A16BC /* IndeterminateBarProgressViewStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F523AE28E47323001A16BC /* IndeterminateBarProgressViewStyle.swift */; };
 		B4F523B128E4732D001A16BC /* DeterminateBarProgressViewStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F523B028E4732D001A16BC /* DeterminateBarProgressViewStyle.swift */; };
+		BA101B832A20B0DD00AF7EDD /* NSManagedObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA101B822A20B0DD00AF7EDD /* NSManagedObject+Extensions.swift */; };
 		BA18C1C429DC426300090221 /* NotConnectionBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA18C1C329DC426300090221 /* NotConnectionBarView.swift */; };
 		BA3D51E229D4465B0011A14A /* Injected.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA3D51DA29D4465A0011A14A /* Injected.swift */; };
 		BA3D51EC29D47C0C0011A14A /* DownloadsCourseDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA3D51EB29D47C0C0011A14A /* DownloadsCourseDetailViewModel.swift */; };
@@ -2446,6 +2447,7 @@
 		B4F0B08B292D01F000A3B41B /* GetEnvironmentFeatureFlagsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetEnvironmentFeatureFlagsTests.swift; sourceTree = "<group>"; };
 		B4F523AE28E47323001A16BC /* IndeterminateBarProgressViewStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndeterminateBarProgressViewStyle.swift; sourceTree = "<group>"; };
 		B4F523B028E4732D001A16BC /* DeterminateBarProgressViewStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeterminateBarProgressViewStyle.swift; sourceTree = "<group>"; };
+		BA101B822A20B0DD00AF7EDD /* NSManagedObject+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSManagedObject+Extensions.swift"; sourceTree = "<group>"; };
 		BA18C1C329DC426300090221 /* NotConnectionBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotConnectionBarView.swift; sourceTree = "<group>"; };
 		BA3D51DA29D4465A0011A14A /* Injected.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Injected.swift; sourceTree = "<group>"; };
 		BA3D51EB29D47C0C0011A14A /* DownloadsCourseDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsCourseDetailViewModel.swift; sourceTree = "<group>"; };
@@ -4990,6 +4992,7 @@
 			isa = PBXGroup;
 			children = (
 				BA3D51EE29D47C490011A14A /* Result+Extensions.swift */,
+				BA101B822A20B0DD00AF7EDD /* NSManagedObject+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -8890,6 +8893,7 @@
 				3B4D89342450A8F4004ED120 /* ConversationDetailViewController.swift in Sources */,
 				7DA2603623F722D9005D2121 /* SubmissionViewable.swift in Sources */,
 				CFABA2502742B8AE0096948F /* DocViewerAnnotationContextMenuModel.swift in Sources */,
+				BA101B832A20B0DD00AF7EDD /* NSManagedObject+Extensions.swift in Sources */,
 				7DA2603023F722C9005D2121 /* GoogleCloudAssignmentViewController.swift in Sources */,
 				D97020BD257FB554002B7B73 /* ContextCardView.swift in Sources */,
 				7DA2607923F722FA005D2121 /* AppBackgroundHelperProtocol.swift in Sources */,
