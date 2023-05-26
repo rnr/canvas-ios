@@ -29,7 +29,7 @@ extension Page: OfflineDownloadTypeProtocol {
             let env = AppEnvironment.shared
             var pages: Store<GetPage>?
             if entry?.dataModel.type.lowercased().contains("page") == true {
-                if let dataModel = entry?.dataModel, let page = Page.fromOfflineModel(dataModel),
+                if let dataModel = entry?.dataModel, let page = try? Page.fromOfflineModel(dataModel),
                    let context = Context(canvasContextID: page.contextID) {
 
                     pages = env.subscribe(GetPage(context: context, url: page.url)) {}
@@ -49,5 +49,10 @@ extension Page: OfflineDownloadTypeProtocol {
             }
             continuation.resume()
         })
+    }
+    
+    public func downloaderEntry() throws -> OfflineDownloaderEntry {
+        let model = try self.toOfflineModel()
+        return OfflineDownloaderEntry(dataModel: model, parts: [])
     }
 }

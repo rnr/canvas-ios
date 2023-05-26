@@ -20,7 +20,7 @@ import Foundation
 import mobile_offline_downloader_ios
 
 extension Course: OfflineStorageDataProtocol {
-    public static func fromOfflineModel(_ model: OfflineStorageDataModel) -> Course? {
+    public static func fromOfflineModel(_ model: OfflineStorageDataModel) throws -> Course {
         let env = AppEnvironment.shared
         if model.type.lowercased().contains("course") {
             let data = model.json.data(using: .utf8)
@@ -104,10 +104,10 @@ extension Course: OfflineStorageDataProtocol {
             return course
         }
 
-        return nil
+        throw OfflineStorageDataError.cantCreateObject(type: Course.self)
     }
 
-    public func toOfflineModel() -> OfflineStorageDataModel {
+    public func toOfflineModel() throws -> OfflineStorageDataModel {
         let dictionary: [String: Any] = [
             "accessRestrictedByDate": accessRestrictedByDate,
             "bannerImageDownloadURL": bannerImageDownloadURL?.absoluteString ?? "",

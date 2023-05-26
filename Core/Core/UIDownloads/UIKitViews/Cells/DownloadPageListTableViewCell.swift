@@ -145,6 +145,9 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
 
     private func download(_ page: Page, for course: Course) {
         downloadButton.currentState = .downloading
+        if let entry = try? page.downloaderEntry() {
+            OfflineDownloadsManager.shared.addAndStart(entry: entry)
+        }
         storageManager.save(page) { [weak self] result in
             guard let self = self else {
                 return
@@ -168,11 +171,15 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
     }
 
     private func isDownloaded(page: Page) {
-        storageManager.isSaved(for: page.id) { [weak self] isSaved in
+        OfflineDownloadsManager.shared.isDownloaded(object: page) {[weak self] result in
             guard let self = self else {
                 return
             }
-            self.downloadButton.currentState = isSaved ? .downloaded : .idle
+            if case let .success(isSaved) = result {
+                self.downloadButton.currentState = isSaved ? .downloaded : .idle
+            } else {
+                self.downloadButton.currentState = .idle
+            }
         }
     }
 }
