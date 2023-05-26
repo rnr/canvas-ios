@@ -156,7 +156,12 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
                 if page == object.object as? Page {
                     print("ALARM: ", object)
                 }
+            case .progressChanged(object: let object):
+                if page == object.object as? Page {
+                    print("ALARM: Cell progress ", object.progress)
+                }
             }
+            
         })
         storageManager.save(page) { [weak self] result in
             guard let self = self else {
