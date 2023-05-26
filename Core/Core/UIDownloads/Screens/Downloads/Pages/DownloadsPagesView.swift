@@ -30,20 +30,41 @@ final class DownloadsPagesViewModel: ObservableObject {
 
 struct DownloadsPagesView: View {
 
+    // MARK: - Injected -
+
+    @Environment(\.viewController) var controller
+
+    // MARK: - Properties -
+    
     @StateObject var viewModel: DownloadsPagesViewModel
+    private let env = AppEnvironment.shared
+
+    private var navigationController: UINavigationController? {
+        guard let topViewController = env.topViewController as? UITabBarController,
+              let helmSplitViewController = topViewController.viewControllers?.first as? UISplitViewController,
+              let navigationController = helmSplitViewController.viewControllers.first as? UINavigationController
+             else {
+            return nil
+        }
+        return navigationController
+    }
 
     init(pages: [Page]) {
         let viewModel = DownloadsPagesViewModel(pages: pages)
         self._viewModel = .init(wrappedValue: viewModel)
     }
 
+    // MARK: - Views -
+
     var body: some View {
         content
-            .navigationBarTitleDisplayMode(.inline)
+            .onAppear {
+                navigationController?.navigationBar.useGlobalNavStyle()
+            }
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text("Pages")
-                        .foregroundColor(.textDarkest)
+                        .foregroundColor(.white)
                         .font(.semibold16)
                 }
             }
@@ -53,12 +74,10 @@ struct DownloadsPagesView: View {
         List {
             VStack(spacing: 0) {
                 ForEach(viewModel.pages, id: \.self) { page in
-                    ZStack {
-                        DownloadsPagesCellView(
-                            viewModel: DownloadsPagesCellViewModel(page: page)
-                        )
-                    }.onTapGesture {
-
+                    DownloadsPagesCellView(
+                        viewModel: DownloadsPagesCellViewModel(page: page)
+                    ).onTapGesture {
+                        destination(page: page)
                     }
                     Divider()
                 }
@@ -70,5 +89,16 @@ struct DownloadsPagesView: View {
         }
         .listStyle(.plain)
         .iOS16HideListScrollContentBackground()
+    }
+
+    private func destination(page: Page) {
+        guard let htmlURL = page.htmlURL else {
+            return
+        }
+        guard  let pageDetailViewController = env.router.match(htmlURL) else {
+            return
+        }
+        self.navigationController?.navigationBar.useGlobalNavStyle()
+        navigationController?.pushViewController(pageDetailViewController, animated: true)
     }
 }

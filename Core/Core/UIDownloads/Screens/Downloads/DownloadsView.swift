@@ -37,23 +37,21 @@ public struct DownloadsView: View {
     // MARK: - Views -
 
     public var body: some View {
-        NavigationView {
-            if #available(iOS 15.0, *) {
-                content
-                    .alert(
-                        "Are you sure you want to remove all downloaded content?",
-                        isPresented: $isDisplayingAlert,
-                        actions: actions
-                    )
-            } else {
-                content
-                    .alert(
-                        isPresented: $isDisplayingAlert,
-                        content: alert
-                    )
-            }
+        if #available(iOS 15.0, *) {
+            content
+                .alert(
+                    "Are you sure you want to remove all downloaded content?",
+                    isPresented: $isDisplayingAlert,
+                    actions: actions
+                )
+        } else {
+            content
+                .accentColor(Color(Brand.shared.linkColor))
+                .alert(
+                    isPresented: $isDisplayingAlert,
+                    content: alert
+                )
         }
-        .accentColor(Color(Brand.shared.linkColor))
     }
 
     private var content: some View {
@@ -75,15 +73,11 @@ public struct DownloadsView: View {
                 }
             }
         }
-        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .principal) {
                 Text("Downloads")
-                    .foregroundColor(.textDarkest)
+                    .foregroundColor(.white)
                     .font(.semibold16)
-            }
-            ToolbarItem(placement: .navigationBarLeading) {
-                closeButton
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 deleteAllButton
@@ -120,7 +114,7 @@ public struct DownloadsView: View {
         Button("Delete all") {
             isDisplayingAlert = true
         }
-        .foregroundColor(Color(Brand.shared.linkColor))
+        .foregroundColor(.white)
     }
 
     @ViewBuilder

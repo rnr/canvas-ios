@@ -16,25 +16,17 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-import SwiftUI
+import Foundation
+import CoreData
 
-struct DownloadsContentCellView: View {
-    var action: (() -> Void)?
-
-    var body: some View {
-        Button {
-            action?()
-        } label: {
-            VStack {
-                HStack {
-                    Text("Saved Content")
-                        .font(.semibold17)
-                        .foregroundColor(Color(Brand.shared.linkColor))
-                        .frame(height: 30)
-                    Spacer()
-                }
-                Divider()
-            }.padding(.vertical)
+extension NSManagedObject {
+    var json: [String: Any] {
+        var dict: [String: Any] = [:]
+        for attribute in entity.attributesByName {
+            if let value = value(forKey: attribute.key) {
+                dict[attribute.key] = value
+            }
         }
+        return dict
     }
 }

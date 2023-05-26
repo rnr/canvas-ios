@@ -20,7 +20,11 @@ import SwiftUI
 
 struct DownloadingCellView: View {
 
+    // MARK: - Properties -
+
     let module: DownloadingModule
+
+    // MARK: - Views -
 
     var body: some View {
         VStack(alignment: .leading) {

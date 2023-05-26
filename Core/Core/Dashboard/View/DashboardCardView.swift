@@ -35,7 +35,6 @@ public struct DashboardCardView: View {
     @Environment(\.viewController) var controller
 
     @State var showGrade = AppEnvironment.shared.userDefaults?.showGradesOnDashboard == true
-    @State var isPresentedSheet: Bool = false
 
     private var activeGroups: [Group] { groups.all.filter { $0.isActive } }
     private var isGroupSectionActive: Bool { !activeGroups.isEmpty && shouldShowGroupList }
@@ -60,7 +59,7 @@ public struct DashboardCardView: View {
                 VStack(spacing: 0) {
                     fileUploadNotificationCards()
                     DownloadsContentCellView {
-                        isPresentedSheet = true
+                        showDownloads()
                     }
                     list(CGSize(width: geometry.size.width - 32, height: geometry.size.height))
                 }
@@ -93,10 +92,6 @@ public struct DashboardCardView: View {
         .onReceive(viewModel.showSettings) { event in
             showSettings(event.view, viewSize: event.viewSize)
         }
-        .sheet(
-            isPresented: $isPresentedSheet,
-            content: { DownloadsView() }
-        )
     }
 
     private func showSettings(_ settingsViewController: UIViewController, viewSize: CGSize) {
@@ -286,5 +281,14 @@ public struct DashboardCardView: View {
 
     func showAllCourses() {
         env.router.route(to: "/courses", from: controller)
+    }
+
+    func showDownloads() {
+        let downloadsViewHostingController = UIHostingController(rootView: DownloadsView())
+        env.router.show(
+            downloadsViewHostingController,
+            from: controller,
+            options: .push
+        )
     }
 }
