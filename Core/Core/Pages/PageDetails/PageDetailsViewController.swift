@@ -17,6 +17,7 @@
 //
 
 import UIKit
+import mobile_offline_downloader_ios
 
 public class PageDetailsViewController: DownloadableViewController, ColoredNavViewProtocol, ErrorViewController {
     lazy var optionsButton = UIBarButtonItem(image: .moreLine, style: .plain, target: self, action: #selector(showOptions))
@@ -88,6 +89,7 @@ public class PageDetailsViewController: DownloadableViewController, ColoredNavVi
         }
         pages.refresh(force: true)
         NotificationCenter.default.post(moduleItem: .page(pageURL), completedRequirement: .view, courseID: context.id)
+        actions()
     }
 
     public override func viewWillAppear(_ animated: Bool) {
@@ -115,6 +117,7 @@ public class PageDetailsViewController: DownloadableViewController, ColoredNavVi
         optionsButton.accessibilityIdentifier = "PageDetails.options"
         navigationItem.rightBarButtonItem = canEdit ? optionsButton : nil
         webView.loadHTMLString(page.body, baseURL: page.htmlURL)
+        isDownloaded()
     }
 
     private func updatePages() {
@@ -168,5 +171,101 @@ extension PageDetailsViewController: CoreWebViewLinkDelegate {
 
     public func finishedNavigation() {
         UIAccessibility.post(notification: .screenChanged, argument: titleSubtitleView)
+    }
+}
+
+extension PageDetailsViewController {
+
+    // MARK: - Actions -
+
+    func actions() {
+        downloadButton.onTap = { [weak self] state in
+            switch state {
+            case .downloaded:
+                self?.delete()
+            case .downloading:
+                print("downloaded")
+            case .idle:
+                self?.download()
+            default:
+                break
+            }
+        }
+
+        var index: Float = 0.0
+        downloadButton.onState = { state in
+            switch state {
+            case .waiting:
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    self.downloadButton.currentState = .downloading
+                    Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
+                        self.downloadButton.progress = index
+                        index += 0.01
+                        if self.downloadButton.progress > 1.0 {
+                            timer.invalidate()
+                            self.downloadButton.currentState = .downloaded
+                        }
+                    }
+                }
+            default:
+                break
+            }
+        }
+    }
+
+    func download() {
+        if let entry = try? page?.downloaderEntry() {
+            OfflineDownloadsManager.shared.addAndStart(entry: entry)
+        }
+
+        OfflineDownloadsManager
+            .shared
+            .publisher
+            .sink { [weak self] event in
+                guard let self = self else {
+                    return
+                }
+                switch event {
+                case .statusChanged(object: let event):
+                    switch event.status {
+                    case .completed:
+                        self.downloadButton.currentState = .downloaded
+                    case .active, .preparing, .initialized:
+                        self.downloadButton.currentState = .downloading
+                    default:
+                        self.downloadButton.currentState = .idle
+                    }
+                case .progressChanged(object: let event):
+                    print(event.progress, "progress")
+                    self.downloadButton.progress = Float(event.progress)
+                }
+            }.store(in: &cancellables)
+    }
+
+    func delete() {
+        guard let page = page else {
+            return
+        }
+        OfflineStorageManager.shared.delete(page) { [weak self] result in
+            result.success {
+                self?.downloadButton.currentState = .idle
+            }
+        }
+    }
+
+    private func isDownloaded() {
+        guard let page = page else {
+            return
+        }
+        OfflineDownloadsManager.shared.isDownloaded(object: page) { [weak self] result in
+            guard let self = self else {
+                return
+            }
+            if case let .success(isSaved) = result {
+                self.downloadButton.currentState = isSaved ? .downloaded : .idle
+            } else {
+                self.downloadButton.currentState = .idle
+            }
+        }
     }
 }

@@ -18,10 +18,14 @@
 
 import UIKit
 import SwiftUI
+import Combine
+import  mobile_offline_downloader_ios
 
 public class DownloadableViewController: UIViewController {
 
     // MARK: - Properties -
+
+    var cancellables = Set<AnyCancellable>()
 
     public var downloadButton: DownloadButton = {
         let downloadButton = DownloadButton()
@@ -41,7 +45,6 @@ public class DownloadableViewController: UIViewController {
 
     public func configure() {
         layout()
-        actions()
     }
 
     // MARK: - Layout -
@@ -55,40 +58,5 @@ public class DownloadableViewController: UIViewController {
         downloadButton.translatesAutoresizingMaskIntoConstraints = false
         downloadButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
         downloadButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
-    }
-
-    // MARK: - Actions -
-
-    func actions() {
-        downloadButton.onTap = { state in
-            switch state {
-            case .idle:
-                self.downloadButton.currentState = .waiting
-            case .downloaded:
-                self.downloadButton.currentState = .idle
-            default:
-                break
-            }
-        }
-
-        var index: Float = 0.0
-        downloadButton.onState = { state in
-            switch state {
-            case .waiting:
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                    self.downloadButton.currentState = .downloading
-                    Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
-                        self.downloadButton.progress = index
-                        index += 0.01
-                        if self.downloadButton.progress > 1.0 {
-                            timer.invalidate()
-                            self.downloadButton.currentState = .downloaded
-                        }
-                    }
-                }
-            default:
-                break
-            }
-        }
     }
 }

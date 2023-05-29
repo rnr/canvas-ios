@@ -50,7 +50,7 @@ extension Page: OfflineDownloadTypeProtocol {
             continuation.resume()
         })
     }
-    
+
     public func downloaderEntry() throws -> OfflineDownloaderEntry {
         let model = try self.toOfflineModel()
         return OfflineDownloaderEntry(dataModel: model, parts: [])

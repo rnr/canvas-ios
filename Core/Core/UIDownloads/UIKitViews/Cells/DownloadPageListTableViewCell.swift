@@ -30,6 +30,8 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
 
     var page: Page?
     var course: Course?
+    var indexPath: IndexPath?
+    private var offlineCancellable: AnyCancellable?
 
     private var accessIconView: AccessIconView = .init(frame: .zero)
 
@@ -52,6 +54,7 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
         let downloadButton = DownloadButton()
         downloadButton.mainTintColor = Brand.shared.linkColor
         downloadButton.currentState = .idle
+        downloadButton.isHidden = true
         return downloadButton
     }()
 
@@ -107,22 +110,22 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
     // MARK: - Action -
 
     private func actions() {
-        downloadButton.onTap = { [weak self] state in
-            guard let self = self, let course = self.course, let page = self.page else {
-                return
-            }
-
-            switch state {
-            case .downloaded:
-                self.delete(page)
-            case .downloading:
-                print("downloaded")
-            case .idle:
-                self.download(page, for: course)
-            default:
-                break
-            }
-        }
+//        downloadButton.onTap = { [weak self] state in
+//            guard let self = self, let course = self.course, let page = self.page else {
+//                return
+//            }
+//
+//            switch state {
+//            case .downloaded:
+//                self.delete(page)
+//            case .downloading:
+//                print("downloaded")
+//            case .idle:
+//                self.download(page, for: course)
+//            default:
+//                break
+//            }
+//        }
     }
 
     // MARK: - Intent -
@@ -130,6 +133,8 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
     func update(_ page: Page?, course: Course?, indexPath: IndexPath, color: UIColor?) {
         self.page = page
         self.course = course
+        self.indexPath = indexPath
+        downloadButton.tag = indexPath.row
         selectedBackgroundView = ContextCellBackgroundView.create(color: color)
         titleLabel.accessibilityIdentifier = "PageList.\(indexPath.row)"
         accessIconView.icon = UIImage.documentLine
@@ -140,36 +145,35 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
         dateLabel.setText(dateText, style: .textCellSupportingText)
         titleLabel.setText(page?.title, style: .textCellTitle)
         titleLabel.lineBreakMode = .byTruncatingTail
-        page.flatMap(isDownloaded)
 
-    }
-
-    private var offlineCancellable: AnyCancellable?
-    private func download(_ page: Page, for course: Course) {
-        downloadButton.currentState = .downloading
-        if let entry = try? page.downloaderEntry() {
-            OfflineDownloadsManager.shared.addAndStart(entry: entry)
-        }
-        offlineCancellable = OfflineDownloadsManager.shared.publisher.sink(receiveValue: { event in
-            switch event {
-            case .statusChanged(object: let object):
-                if page == object.object as? Page {
-                    print("ALARM: ", object)
+        offlineCancellable = OfflineDownloadsManager
+            .shared
+            .publisher
+            .sink { [weak self] event in
+                guard let self = self else {
+                    return
                 }
-            }
-        })
-        storageManager.save(page) { [weak self] result in
-            guard let self = self else {
-                return
-            }
-            result.success {
-                self.storageManager.save(course) { result in
-                    result.success {
-                        self.downloadButton.currentState = .downloaded
+                switch event {
+                case .statusChanged(object: let event):
+                    guard self.indexPath?.row == self.downloadButton.tag else {
+                        return
                     }
+                    switch event.status {
+                    case .completed:
+                        self.downloadButton.currentState = .downloaded
+                    case .active, .preparing, .initialized:
+                        self.downloadButton.currentState = .downloading
+                    default:
+                        self.downloadButton.currentState = .idle
+                    }
+                case .progressChanged(object: let event):
+                    guard self.indexPath?.row == self.downloadButton.tag else {
+                        return
+                    }
+                    print(event.progress, "progress")
+                    self.downloadButton.progress = Float(event.progress)
                 }
             }
-        }
     }
 
     private func delete(_ page: Page) {
@@ -181,12 +185,11 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
     }
 
     private func isDownloaded(page: Page) {
-        OfflineDownloadsManager.shared.isDownloaded(object: page) {[weak self, weak page] result in
+        OfflineDownloadsManager.shared.isDownloaded(object: page) { [weak self, weak page] result in
             guard let self = self, self.page == page else {
                 return
             }
             if case let .success(isSaved) = result {
-                print("ALARM: ", page?.id)
                 self.downloadButton.currentState = isSaved ? .downloaded : .idle
             } else {
                 self.downloadButton.currentState = .idle
