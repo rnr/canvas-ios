@@ -31,6 +31,7 @@ public class DownloadableViewController: UIViewController {
         let downloadButton = DownloadButton()
         downloadButton.mainTintColor = .white
         downloadButton.currentState = .idle
+        downloadButton.isHidden = true
         return downloadButton
     }()
 

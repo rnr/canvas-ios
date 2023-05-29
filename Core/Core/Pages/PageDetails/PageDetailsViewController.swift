@@ -174,9 +174,8 @@ extension PageDetailsViewController: CoreWebViewLinkDelegate {
     }
 }
 
+// MARK: - Download -
 extension PageDetailsViewController {
-
-    // MARK: - Actions -
 
     func actions() {
         downloadButton.onTap = { [weak self] state in
@@ -187,26 +186,6 @@ extension PageDetailsViewController {
                 print("downloaded")
             case .idle:
                 self?.download()
-            default:
-                break
-            }
-        }
-
-        var index: Float = 0.0
-        downloadButton.onState = { state in
-            switch state {
-            case .waiting:
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                    self.downloadButton.currentState = .downloading
-                    Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
-                        self.downloadButton.progress = index
-                        index += 0.01
-                        if self.downloadButton.progress > 1.0 {
-                            timer.invalidate()
-                            self.downloadButton.currentState = .downloaded
-                        }
-                    }
-                }
             default:
                 break
             }
@@ -232,6 +211,7 @@ extension PageDetailsViewController {
                         self.downloadButton.currentState = .downloaded
                     case .active, .preparing, .initialized:
                         self.downloadButton.currentState = .downloading
+                        self.saveCourse()
                     default:
                         self.downloadButton.currentState = .idle
                     }
@@ -261,11 +241,22 @@ extension PageDetailsViewController {
             guard let self = self else {
                 return
             }
+            self.downloadButton.isHidden = false
             if case let .success(isSaved) = result {
                 self.downloadButton.currentState = isSaved ? .downloaded : .idle
+                if isSaved {
+                    self.saveCourse()
+                }
             } else {
                 self.downloadButton.currentState = .idle
             }
         }
+    }
+
+    private func saveCourse() {
+        guard let course = courses.first else {
+            return
+        }
+        OfflineStorageManager.shared.save(course) { _ in }
     }
 }
