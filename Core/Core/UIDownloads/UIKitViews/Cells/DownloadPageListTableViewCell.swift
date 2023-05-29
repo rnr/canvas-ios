@@ -153,26 +153,6 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
                 guard let self = self else {
                     return
                 }
-                switch event {
-                case .statusChanged(object: let event):
-                    guard self.indexPath?.row == self.downloadButton.tag else {
-                        return
-                    }
-                    switch event.status {
-                    case .completed:
-                        self.downloadButton.currentState = .downloaded
-                    case .active, .preparing, .initialized:
-                        self.downloadButton.currentState = .downloading
-                    default:
-                        self.downloadButton.currentState = .idle
-                    }
-                case .progressChanged(object: let event):
-                    guard self.indexPath?.row == self.downloadButton.tag else {
-                        return
-                    }
-                    print(event.progress, "progress")
-                    self.downloadButton.progress = Float(event.progress)
-                }
             }
     }
 
