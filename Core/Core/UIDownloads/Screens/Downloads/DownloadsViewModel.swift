@@ -98,7 +98,6 @@ final class DownloadsViewModel: ObservableObject {
             guard let self = self else {
                 return
             }
-
             result.success { courses in
                 self.courseViewModels = courses.compactMap { courseEntity in
                     DownloadCourseViewModel(

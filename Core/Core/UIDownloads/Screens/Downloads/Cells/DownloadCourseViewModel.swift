@@ -19,6 +19,10 @@
 import Foundation
 
 final class DownloadCourseViewModel: Identifiable, Hashable {
+    var id: String {
+        courseId
+    }
+
     static func == (lhs: DownloadCourseViewModel, rhs: DownloadCourseViewModel) -> Bool {
         lhs.id == rhs.id
     }

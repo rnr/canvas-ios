@@ -30,7 +30,8 @@ final class DownloadsCourseDetailsViewModel: Identifiable, Hashable {
     let id: String = Foundation.UUID().uuidString
 
     enum ContentType {
-        case page([Page])
+        case pages([Page])
+        case modules([ModuleItem])
     }
     let contentType: ContentType
 
@@ -42,8 +43,10 @@ final class DownloadsCourseDetailsViewModel: Identifiable, Hashable {
 
     var title: String {
         switch contentType {
-        case .page:
+        case .pages:
             return "Pages"
+        case .modules:
+            return "Modules"
         }
     }
 

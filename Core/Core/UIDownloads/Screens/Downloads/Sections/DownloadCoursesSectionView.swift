@@ -23,23 +23,25 @@ struct DownloadCoursesSectionView: View {
     // MARK: - Properties -
 
     @ObservedObject var viewModel: DownloadsViewModel
-    @State private var isActiveLink = false
+    @State private var selection: DownloadCourseViewModel?
 
     // MARK: - Views -
 
     var body: some View {
         ForEach(viewModel.courseViewModels, id: \.self) { courseViewModel in
-            ZStack {
-                DownloadCourseCellView(courseViewModel: courseViewModel)
-                    .listRowInsets(EdgeInsets())
-                    .buttonStyle(PlainButtonStyle())
-                NavigationLink(
-                    destination: DownloadsCourseDetailView(courseViewModel: courseViewModel),
-                    isActive: $isActiveLink
-                ) { SwiftUI.EmptyView() }.hidden()
-            }.onTapGesture {
-                isActiveLink = true
-            }
+            DownloadCourseCellView(courseViewModel: courseViewModel)
+                .background(
+                    NavigationLink(
+                        destination: DownloadsCourseDetailView(courseViewModel: courseViewModel),
+                        tag: courseViewModel,
+                        selection: $selection
+                    ) { SwiftUI.EmptyView() }.hidden()
+                )
+                .listRowInsets(EdgeInsets())
+                .buttonStyle(PlainButtonStyle())
+                .onTapGesture {
+                    self.selection = courseViewModel
+                }
         }
         .onDelete { indexSet in
             viewModel.swipeDelete(indexSet: indexSet)

@@ -88,7 +88,7 @@ public class DownloadableViewController: UIViewController {
         downloadButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
     }
 
-    // MARK: - Intents -
+    // MARK: - Public Intents -
 
     public func isDownloaded() {
         guard let object = object else {
@@ -110,35 +110,47 @@ public class DownloadableViewController: UIViewController {
         }
     }
 
+    // MARK: - Private Intents -
+
     private func download() {
-        guard  let entry = try? object?.downloaderEntry() else {
+        guard  let object = object else {
             return
         }
-
-        downloadButton.currentState = .waiting
-        downloadsManager.addAndStart(entry: entry)
-
-        downloadsManager
-            .publisher
-            .sink { [weak self] event in
-                guard let self = self else {
-                    return
-                }
-                switch event {
-                case .statusChanged(object: let event):
-                    switch event.status {
-                    case .completed:
-                        self.downloadButton.currentState = .downloaded
-                    case .active, .preparing, .initialized:
-                        self.downloadButton.currentState = .downloading
-                    default:
-                        self.downloadButton.currentState = .idle
+        do {
+            try downloadsManager.addAndStart(object: object)
+            downloadButton.currentState = .waiting
+            downloadsManager
+                .publisher
+                .sink { [weak self] event in
+                    guard let self = self else {
+                        return
                     }
-                case .progressChanged(object: let event):
-                    print(event.progress, "progress")
-                    self.downloadButton.progress = Float(event.progress)
-                }
-            }.store(in: &cancellables)
+                    switch event {
+                    case .statusChanged(object: let event):
+                        switch event.status {
+                        case .completed:
+                            self.downloadButton.currentState = .downloaded
+                        case .active, .preparing, .initialized:
+                            self.downloadButton.currentState = .downloading
+                        case .removed:
+                            do {
+                                if try event.object.toOfflineModel().id == object.toOfflineModel().id {
+                                    self.downloadButton.currentState = .idle
+                                }
+                            } catch {
+                                self.showAlet(title: "Error", message: error.localizedDescription)
+                            }
+                        default:
+                            self.downloadButton.currentState = .idle
+                        }
+                    case .progressChanged(object: let event):
+                        print(event.progress, "progress")
+                        self.downloadButton.progress = Float(event.progress)
+                    }
+                }.store(in: &cancellables)
+        } catch {
+            showAlet(title: "Error", message: error.localizedDescription)
+        }
     }
 
     private func addOrUpdateCourse() {
@@ -152,10 +164,22 @@ public class DownloadableViewController: UIViewController {
         guard let object = object else {
             return
         }
-        OfflineStorageManager.shared.delete(object) { [weak self] result in
-            result.success {
-                self?.downloadButton.currentState = .idle
-            }
+        do {
+            try downloadsManager.delete(object: object)
+        } catch {
+            showAlet(title: "Error", message: error.localizedDescription)
         }
+    }
+}
+
+extension DownloadableViewController {
+    func showAlet(title: String, message: String) {
+        let alert = UIAlertController(
+            title: title,
+            message: message,
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
 }

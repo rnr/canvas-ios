@@ -23,7 +23,8 @@ final class DownloadsCourseDetailViewModel: ObservableObject {
 
     // MARK: - Injections -
 
-//    @Injected(\.storage) var storage: LocalStorage
+    private var storageManager: OfflineStorageManager = .shared
+    private var downloadsManager: OfflineDownloadsManager = .shared
 
     // MARK: - Properties -
 
@@ -53,25 +54,54 @@ final class DownloadsCourseDetailViewModel: ObservableObject {
     // MARK: - Intents -
 
     func fetch() {
-        OfflineStorageManager.shared.loadAll(of: Page.self) { [weak self] result in
+        storageManager.loadAll(of: OfflineDownloaderEntry.self) { [weak self] result in
             guard let self = self else {
                 return
             }
-            result.success { pages in
-                let pages = pages.filter { $0.contextID.contains(self.courseViewModel.courseId) }
-                guard !pages.isEmpty else {
-                    return
+            result.success { entries in
+                let pages: [Page] = entries.compactMap {
+                    guard let page = try? Page.fromOfflineModel($0.dataModel),
+                            page.contextID.digits == self.courseViewModel.courseId else {
+                        return nil
+                    }
+                    return page
                 }
-                self.detailViewModels.append(
-                    DownloadsCourseDetailsViewModel(
-                        course: self.courseViewModel.course,
-                        contentType: .page(Array(pages))
+                let modules: [ModuleItem] = entries.compactMap {
+                    guard let moduleItem = try? ModuleItem.fromOfflineModel($0.dataModel),
+                          moduleItem.courseID == self.courseViewModel.courseId else {
+                        return nil
+                    }
+                    return moduleItem
+                }
+                if !pages.isEmpty {
+                    self.detailViewModels.append(
+                        DownloadsCourseDetailsViewModel(
+                            course: self.courseViewModel.course,
+                            contentType: .pages(Array(pages))
+                        )
                     )
-                )
+                }
+                if !modules.isEmpty {
+                    self.detailViewModels.append(
+                        DownloadsCourseDetailsViewModel(
+                            course: self.courseViewModel.course,
+                            contentType: .modules(Array(modules))
+                        )
+                    )
+                }
             }
             DispatchQueue.main.async {
                 self.state = .loaded
             }
         }
+    }
+}
+
+extension String {
+    var digits: String {
+        components(
+            separatedBy: CharacterSet.decimalDigits.inverted
+        )
+        .joined()
     }
 }

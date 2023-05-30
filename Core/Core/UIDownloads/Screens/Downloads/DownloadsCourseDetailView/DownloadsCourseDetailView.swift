@@ -100,8 +100,10 @@ struct DownloadsCourseDetailView: View {
 
     private func destination(contentType: DownloadsCourseDetailsViewModel.ContentType) -> some View {
         switch contentType {
-        case .page(let pages):
+        case .pages(let pages):
             return DownloadsPagesView(pages: pages)
+        case .modules(let modules):
+            return DownloadsPagesView(pages: [])
         }
     }
 }

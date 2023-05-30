@@ -77,12 +77,8 @@ public class LTIViewController: DownloadableViewController, ErrorViewController,
         colors.refresh()
         courses?.refresh()
 
-        if let moduleItem = moduleItem {
-            DispatchQueue.main.async {
-                self.setupObject(moduleItem)
-                self.isDownloaded()
-            }
-        }
+        setupObject(moduleItem)
+        isDownloaded()
     }
 
     func updateNavBar() {
