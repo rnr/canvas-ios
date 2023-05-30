@@ -25,7 +25,12 @@ public class DownloadableViewController: UIViewController {
 
     // MARK: - Properties -
 
-    var cancellables = Set<AnyCancellable>()
+    private let downloadsManager = OfflineDownloadsManager.shared
+    private let storageManager = OfflineStorageManager.shared
+
+    private var cancellables = Set<AnyCancellable>()
+    private var course: Course?
+    private var object: OfflineDownloadTypeProtocol?
 
     public var downloadButton: DownloadButton = {
         let downloadButton = DownloadButton()
@@ -44,8 +49,30 @@ public class DownloadableViewController: UIViewController {
 
     // MARK: - Configuration -
 
+    public func setupObject(_ object: OfflineDownloadTypeProtocol?) {
+        self.object = object
+    }
+
+    public func setupCourse(_ course: Course?) {
+        self.course = course
+    }
+
     public func configure() {
         layout()
+        actions()
+    }
+
+    func actions() {
+        downloadButton.onTap = { [weak self] state in
+            switch state {
+            case .downloaded:
+                self?.delete()
+            case .idle:
+                self?.download()
+            default:
+                break
+            }
+        }
     }
 
     // MARK: - Layout -
@@ -59,5 +86,76 @@ public class DownloadableViewController: UIViewController {
         downloadButton.translatesAutoresizingMaskIntoConstraints = false
         downloadButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
         downloadButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
+    }
+
+    // MARK: - Intents -
+
+    public func isDownloaded() {
+        guard let object = object else {
+            return
+        }
+        downloadsManager.isDownloaded(object: object) { [weak self] result in
+            guard let self = self else {
+                return
+            }
+            self.downloadButton.isHidden = false
+            if case let .success(isSaved) = result {
+                self.downloadButton.currentState = isSaved ? .downloaded : .idle
+                if isSaved {
+                    self.addOrUpdateCourse()
+                }
+            } else {
+                self.downloadButton.currentState = .idle
+            }
+        }
+    }
+
+    private func download() {
+        guard  let entry = try? object?.downloaderEntry() else {
+            return
+        }
+
+        downloadButton.currentState = .waiting
+        downloadsManager.addAndStart(entry: entry)
+
+        downloadsManager
+            .publisher
+            .sink { [weak self] event in
+                guard let self = self else {
+                    return
+                }
+                switch event {
+                case .statusChanged(object: let event):
+                    switch event.status {
+                    case .completed:
+                        self.downloadButton.currentState = .downloaded
+                    case .active, .preparing, .initialized:
+                        self.downloadButton.currentState = .downloading
+                    default:
+                        self.downloadButton.currentState = .idle
+                    }
+                case .progressChanged(object: let event):
+                    print(event.progress, "progress")
+                    self.downloadButton.progress = Float(event.progress)
+                }
+            }.store(in: &cancellables)
+    }
+
+    private func addOrUpdateCourse() {
+        guard let course = course else {
+            return
+        }
+        storageManager.save(course) { _ in }
+    }
+
+    private func delete() {
+        guard let object = object else {
+            return
+        }
+        OfflineStorageManager.shared.delete(object) { [weak self] result in
+            result.success {
+                self?.downloadButton.currentState = .idle
+            }
+        }
     }
 }

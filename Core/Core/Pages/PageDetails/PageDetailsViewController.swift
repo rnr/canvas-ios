@@ -94,6 +94,7 @@ public class PageDetailsViewController: DownloadableViewController, ColoredNavVi
 
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        downloadButton.isHidden = true
         navigationController?.navigationBar.useContextColor(color)
     }
 
@@ -108,6 +109,7 @@ public class PageDetailsViewController: DownloadableViewController, ColoredNavVi
             let name = context.contextType == .course ? courses.first?.name : groups.first?.name,
             let color = context.contextType == .course ? courses.first?.color : groups.first?.color
         else { return }
+        setupCourse(courses.first)
         updateNavBar(subtitle: name, color: color)
     }
 
@@ -117,6 +119,7 @@ public class PageDetailsViewController: DownloadableViewController, ColoredNavVi
         optionsButton.accessibilityIdentifier = "PageDetails.options"
         navigationItem.rightBarButtonItem = canEdit ? optionsButton : nil
         webView.loadHTMLString(page.body, baseURL: page.htmlURL)
+        setupObject(page)
         isDownloaded()
     }
 
@@ -171,92 +174,5 @@ extension PageDetailsViewController: CoreWebViewLinkDelegate {
 
     public func finishedNavigation() {
         UIAccessibility.post(notification: .screenChanged, argument: titleSubtitleView)
-    }
-}
-
-// MARK: - Download -
-extension PageDetailsViewController {
-
-    func actions() {
-        downloadButton.onTap = { [weak self] state in
-            switch state {
-            case .downloaded:
-                self?.delete()
-            case .downloading:
-                print("downloaded")
-            case .idle:
-                self?.download()
-            default:
-                break
-            }
-        }
-    }
-
-    func download() {
-        if let entry = try? page?.downloaderEntry() {
-            OfflineDownloadsManager.shared.addAndStart(entry: entry)
-        }
-
-        OfflineDownloadsManager
-            .shared
-            .publisher
-            .sink { [weak self] event in
-                guard let self = self else {
-                    return
-                }
-                switch event {
-                case .statusChanged(object: let event):
-                    switch event.status {
-                    case .completed:
-                        self.downloadButton.currentState = .downloaded
-                    case .active, .preparing, .initialized:
-                        self.downloadButton.currentState = .downloading
-                        self.saveCourse()
-                    default:
-                        self.downloadButton.currentState = .idle
-                    }
-                case .progressChanged(object: let event):
-                    print(event.progress, "progress")
-                    self.downloadButton.progress = Float(event.progress)
-                }
-            }.store(in: &cancellables)
-    }
-
-    func delete() {
-        guard let page = page else {
-            return
-        }
-        OfflineStorageManager.shared.delete(page) { [weak self] result in
-            result.success {
-                self?.downloadButton.currentState = .idle
-            }
-        }
-    }
-
-    private func isDownloaded() {
-        guard let page = page else {
-            return
-        }
-        OfflineDownloadsManager.shared.isDownloaded(object: page) { [weak self] result in
-            guard let self = self else {
-                return
-            }
-            self.downloadButton.isHidden = false
-            if case let .success(isSaved) = result {
-                self.downloadButton.currentState = isSaved ? .downloaded : .idle
-                if isSaved {
-                    self.saveCourse()
-                }
-            } else {
-                self.downloadButton.currentState = .idle
-            }
-        }
-    }
-
-    private func saveCourse() {
-        guard let course = courses.first else {
-            return
-        }
-        OfflineStorageManager.shared.save(course) { _ in }
     }
 }

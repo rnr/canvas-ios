@@ -17,8 +17,9 @@
 //
 
 import Foundation
+import mobile_offline_downloader_ios
 
-public class LTIViewController: UIViewController, ErrorViewController, ColoredNavViewProtocol {
+public class LTIViewController: DownloadableViewController, ErrorViewController, ColoredNavViewProtocol {
     @IBOutlet weak var spinnerView: CircleProgressView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var openButton: UIButton!
@@ -28,6 +29,8 @@ public class LTIViewController: UIViewController, ErrorViewController, ColoredNa
     public var name: String?
     public var color: UIColor?
     public var titleSubtitleView: TitleSubtitleView = TitleSubtitleView.create()
+
+    public var moduleItem: ModuleItem?
 
     lazy var colors = env.subscribe(GetCustomColors()) { [weak self] in
         self?.updateNavBar()
@@ -49,6 +52,14 @@ public class LTIViewController: UIViewController, ErrorViewController, ColoredNa
         return controller
     }
 
+    public static func create(tools: LTITools, moduleItem: ModuleItem) -> Self {
+        let controller = loadFromStoryboard()
+        controller.tools = tools
+        controller.moduleItem = moduleItem
+        controller.title = moduleItem.title
+        return controller
+    }
+
     public override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .backgroundLightest
@@ -65,11 +76,19 @@ public class LTIViewController: UIViewController, ErrorViewController, ColoredNa
         }
         colors.refresh()
         courses?.refresh()
+
+        if let moduleItem = moduleItem {
+            DispatchQueue.main.async {
+                self.setupObject(moduleItem)
+                self.isDownloaded()
+            }
+        }
     }
 
     func updateNavBar() {
         let course = courses?.first
         updateNavBar(subtitle: course?.name, color: course?.color)
+        setupCourse(course)
     }
 
     @IBAction func openButtonPressed(_ sender: UIButton) {

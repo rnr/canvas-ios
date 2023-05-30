@@ -854,6 +854,8 @@
 		BA4B23E329D335560035D918 /* WaitingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA4B23CB29D335560035D918 /* WaitingView.swift */; };
 		BA4B23E429D335560035D918 /* ProgressButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA4B23CC29D335560035D918 /* ProgressButton.swift */; };
 		BA4B23E529D335560035D918 /* DownloadButton+TransitionAndAnimationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA4B23CD29D335560035D918 /* DownloadButton+TransitionAndAnimationExtension.swift */; };
+		BA5741912A25E100007634D2 /* ModuleItem+OfflineStorageDataProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5741902A25E100007634D2 /* ModuleItem+OfflineStorageDataProtocol.swift */; };
+		BA5741932A25EDB7007634D2 /* ModuleItem+OfflineDownloadHelperProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5741922A25EDB7007634D2 /* ModuleItem+OfflineDownloadHelperProtocol.swift */; };
 		BA5D83A629D481BE00150235 /* DownloadsCourseDetailsHeaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5D83A529D481BE00150235 /* DownloadsCourseDetailsHeaderViewModel.swift */; };
 		BA5D83A829D481E600150235 /* DownloadsCourseDetailsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5D83A729D481E600150235 /* DownloadsCourseDetailsHeaderView.swift */; };
 		BA5D83AD29D572AF00150235 /* DownloadsContentCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5D83AC29D572AF00150235 /* DownloadsContentCellView.swift */; };
@@ -2474,6 +2476,8 @@
 		BA4B23CB29D335560035D918 /* WaitingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaitingView.swift; sourceTree = "<group>"; };
 		BA4B23CC29D335560035D918 /* ProgressButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressButton.swift; sourceTree = "<group>"; };
 		BA4B23CD29D335560035D918 /* DownloadButton+TransitionAndAnimationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DownloadButton+TransitionAndAnimationExtension.swift"; sourceTree = "<group>"; };
+		BA5741902A25E100007634D2 /* ModuleItem+OfflineStorageDataProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModuleItem+OfflineStorageDataProtocol.swift"; sourceTree = "<group>"; };
+		BA5741922A25EDB7007634D2 /* ModuleItem+OfflineDownloadHelperProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModuleItem+OfflineDownloadHelperProtocol.swift"; sourceTree = "<group>"; };
 		BA5D83A529D481BE00150235 /* DownloadsCourseDetailsHeaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsCourseDetailsHeaderViewModel.swift; sourceTree = "<group>"; };
 		BA5D83A729D481E600150235 /* DownloadsCourseDetailsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsCourseDetailsHeaderView.swift; sourceTree = "<group>"; };
 		BA5D83AC29D572AF00150235 /* DownloadsContentCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsContentCellView.swift; sourceTree = "<group>"; };
@@ -3052,6 +3056,8 @@
 				060B7EA12A14BC2D0098D1D3 /* Page+OfflineStorageDataProtocol.swift */,
 				060B7EA32A14E5E40098D1D3 /* Page+OfflineDownloadHelperProtocol.swift */,
 				BA8C3F802A1D121D001FEDC1 /* Course+OfflineStorageDataProtocol.swift */,
+				BA5741902A25E100007634D2 /* ModuleItem+OfflineStorageDataProtocol.swift */,
+				BA5741922A25EDB7007634D2 /* ModuleItem+OfflineDownloadHelperProtocol.swift */,
 			);
 			path = DownloaderClient;
 			sourceTree = "<group>";
@@ -8201,6 +8207,7 @@
 				7DA2608023F722FA005D2121 /* PresenterPageViewLogger.swift in Sources */,
 				7DA2602523F722B3005D2121 /* LoggableCell.swift in Sources */,
 				D91BC851276B7B2D008371B0 /* AssignmentListView.swift in Sources */,
+				BA5741912A25E100007634D2 /* ModuleItem+OfflineStorageDataProtocol.swift in Sources */,
 				7DA2607023F722E9005D2121 /* CommunicationChannel.swift in Sources */,
 				CF7D4A872936528000463FBD /* InboxAssembly.swift in Sources */,
 				CF6F91CE289294E3009F147E /* APIAssignmentPickerListItem.swift in Sources */,
@@ -8840,6 +8847,7 @@
 				CF8D53642812D3340038B0B2 /* UISearchTextFieldExtensions.swift in Sources */,
 				CF5F603225DBD84700E7E0ED /* UINavigationControllerTheme.swift in Sources */,
 				CF60CC5626496EA500C1C173 /* K5ScheduleViewModel.swift in Sources */,
+				BA5741932A25EDB7007634D2 /* ModuleItem+OfflineDownloadHelperProtocol.swift in Sources */,
 				BA4B23DF29D335560035D918 /* DownloadingBarView.swift in Sources */,
 				7D630B7124A52C050039A45D /* GetFolders.swift in Sources */,
 				7DA25FF423F72260005D2121 /* ExperimentalFeaturesViewController.swift in Sources */,
