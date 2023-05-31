@@ -24,26 +24,14 @@ struct DownloaderView: View {
     // MARK: - Properties -
 
     @StateObject var viewModel: DownloaderViewModel = .init()
+    @Environment(\.viewController) var controller
     @State var isDisplayingAlert: Bool = false
     var didDeleteAll: (() -> Void)?
 
     // MARK: - Views -
 
     var body: some View {
-        if #available(iOS 15.0, *) {
-            content
-                .alert(
-                    Text("Are you sure you want to remove all downloaded content?"),
-                    isPresented: $isDisplayingAlert,
-                    actions: actions
-                )
-        } else {
-            content
-                .alert(
-                isPresented: $isDisplayingAlert,
-                content: alert
-            )
-        }
+        content
     }
 
     private var content: some View {
@@ -65,34 +53,20 @@ struct DownloaderView: View {
         }
     }
 
-    private func alert() -> Alert {
-        Alert(
-            title: Text("Are you sure you want to remove all downloaded content?"),
-            primaryButton: .destructive(
-                Text("Delete")
-            ) {
-                viewModel.deleteAll()
-                didDeleteAll?()
-            },
-            secondaryButton: .cancel()
-        )
-    }
-
-    @ViewBuilder
-    @available(iOS 15.0, *)
-    private func actions() -> some View {
-        Button("Delete", role: .destructive) {
-            viewModel.deleteAll()
-            didDeleteAll?()
-        }
-        Button("Cancel", role: .cancel) {
-            isDisplayingAlert = false
-        }
-    }
-
     private var deleteAllButton: some View {
         Button("Delete all") {
+            let cancelAction = AlertAction(NSLocalizedString("Cancel", comment: ""), style: .cancel) { _ in }
+            let deleteAction = AlertAction(NSLocalizedString("Delete", comment: ""), style: .destructive) { _ in
+                viewModel.deleteAll()
+                didDeleteAll?()
+            }
+            controller.value.showAlert(
+                title: NSLocalizedString("Are you sure you want to remove all downloading content?", comment: ""),
+                actions: [cancelAction, deleteAction],
+                style: .actionSheet
+            )
             isDisplayingAlert = true
         }
+        .foregroundColor(.white)
     }
 }

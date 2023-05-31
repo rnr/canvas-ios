@@ -35,7 +35,7 @@ struct DownloadsPagesView: View {
     @Environment(\.viewController) var controller
 
     // MARK: - Properties -
-    
+  
     @StateObject var viewModel: DownloadsPagesViewModel
     private let env = AppEnvironment.shared
 

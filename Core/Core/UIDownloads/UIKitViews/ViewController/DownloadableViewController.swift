@@ -21,12 +21,13 @@ import SwiftUI
 import Combine
 import  mobile_offline_downloader_ios
 
-public class DownloadableViewController: UIViewController {
+public class DownloadableViewController: UIViewController, ErrorViewController {
 
     // MARK: - Properties -
 
     private let downloadsManager = OfflineDownloadsManager.shared
     private let storageManager = OfflineStorageManager.shared
+    private let env = AppEnvironment.shared
 
     private var cancellables = Set<AnyCancellable>()
     private var course: Course?
@@ -140,7 +141,7 @@ public class DownloadableViewController: UIViewController {
                                     self.downloadButton.currentState = .idle
                                 }
                             } catch {
-                                self.showAlet(title: "Error", message: error.localizedDescription)
+                                showError(error)
                             }
                         default:
                             self.downloadButton.currentState = .idle
@@ -151,7 +152,7 @@ public class DownloadableViewController: UIViewController {
                     }
                 }.store(in: &cancellables)
         } catch {
-            showAlet(title: "Error", message: error.localizedDescription)
+            showError(error)
         }
     }
 
@@ -169,19 +170,7 @@ public class DownloadableViewController: UIViewController {
         do {
             try downloadsManager.delete(object: object)
         } catch {
-            showAlet(title: "Error", message: error.localizedDescription)
+            showError(error)
         }
-    }
-}
-
-extension DownloadableViewController {
-    func showAlet(title: String, message: String) {
-        let alert = UIAlertController(
-            title: title,
-            message: message,
-            preferredStyle: .alert
-        )
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        present(alert, animated: true, completion: nil)
     }
 }

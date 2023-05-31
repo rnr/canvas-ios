@@ -25,6 +25,7 @@ final class DownloadsViewModel: ObservableObject {
     // MARK: - Injections -
 
     private var storageManager: OfflineStorageManager = .shared
+    private var downloadsManager: OfflineDownloadsManager = .shared
 
     // MARK: - Content -
 
@@ -65,6 +66,37 @@ final class DownloadsViewModel: ObservableObject {
     func pauseResume() {}
 
     func deleteAll() {
+        let group = DispatchGroup()
+        courseViewModels.forEach { viewModel in
+            storageManager.delete(viewModel.course) { _ in }
+            group.enter()
+            storageManager.loadAll(of: OfflineDownloaderEntry.self) { [weak self] result in
+                guard let self = self else {
+                    group.leave()
+                    return
+                }
+                result.success { entries in
+                    let objects: [OfflineDownloadTypeProtocol] = entries.compactMap {
+                        if let page = try? Page.fromOfflineModel($0.dataModel),
+                              page.contextID.digits == viewModel.courseId {
+                            return page
+                        }
+                        if let moduleItem = try? ModuleItem.fromOfflineModel($0.dataModel),
+                              moduleItem.courseID == viewModel.courseId {
+                            return moduleItem
+                        }
+                        return nil
+                    }
+                    objects.forEach {
+                        try? self.downloadsManager.delete(object: $0)
+                    }
+                    group.leave()
+                }
+                result.failure { _ in
+                    group.leave()
+                }
+            }
+        }
         modules = []
         courseViewModels = []
         state = .loaded
@@ -80,10 +112,25 @@ final class DownloadsViewModel: ObservableObject {
         indexSet.forEach { index in
             let viewModel = courseViewModels.remove(at: index)
             storageManager.delete(viewModel.course) { _ in }
-            storageManager.loadAll(of: Page.self) { [weak self] result in
-                result.success { pages in
-                    let pages = pages.filter { $0.contextID.contains(viewModel.courseId) }
-                    self?.storageManager.delete(pages) { _ in }
+            storageManager.loadAll(of: OfflineDownloaderEntry.self) { [weak self] result in
+                guard let self = self else {
+                    return
+                }
+                result.success { entries in
+                    let objects: [OfflineDownloadTypeProtocol] = entries.compactMap {
+                        if let page = try? Page.fromOfflineModel($0.dataModel),
+                              page.contextID.digits == viewModel.courseId {
+                            return page
+                        }
+                        if let moduleItem = try? ModuleItem.fromOfflineModel($0.dataModel),
+                              moduleItem.courseID == viewModel.courseId {
+                            return moduleItem
+                        }
+                        return nil
+                    }
+                    objects.forEach {
+                        try? self.downloadsManager.delete(object: $0)
+                    }
                 }
             }
         }
