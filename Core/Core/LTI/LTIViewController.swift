@@ -19,7 +19,7 @@
 import Foundation
 import mobile_offline_downloader_ios
 
-public class LTIViewController: DownloadableViewController, ErrorViewController, ColoredNavViewProtocol {
+public class LTIViewController: DownloadableViewController, ColoredNavViewProtocol {
     @IBOutlet weak var spinnerView: CircleProgressView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var openButton: UIButton!

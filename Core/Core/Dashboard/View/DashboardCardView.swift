@@ -284,7 +284,7 @@ public struct DashboardCardView: View {
     }
 
     func showDownloads() {
-        let downloadsViewHostingController = UIHostingController(rootView: DownloadsView())
+        let downloadsViewHostingController = CoreHostingController(DownloadsView())
         env.router.show(
             downloadsViewHostingController,
             from: controller,

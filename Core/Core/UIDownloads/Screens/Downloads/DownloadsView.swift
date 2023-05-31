@@ -24,6 +24,7 @@ public struct DownloadsView: View {
     // MARK: - Injected -
 
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @Environment(\.viewController) var controller
 
     // MARK: - Properties -
 
@@ -37,21 +38,8 @@ public struct DownloadsView: View {
     // MARK: - Views -
 
     public var body: some View {
-        if #available(iOS 15.0, *) {
-            content
-                .alert(
-                    "Are you sure you want to remove all downloaded content?",
-                    isPresented: $isDisplayingAlert,
-                    actions: actions
-                )
-        } else {
-            content
-                .accentColor(Color(Brand.shared.linkColor))
-                .alert(
-                    isPresented: $isDisplayingAlert,
-                    content: alert
-                )
-        }
+        content
+            .accentColor(Color(Brand.shared.linkColor))
     }
 
     private var content: some View {
@@ -65,7 +53,7 @@ public struct DownloadsView: View {
                 VStack {
                     if viewModel.isEmpty {
                         VStack {
-                            Text("Test")
+                            Text("Visit a course to download content.")
                         }
                     } else {
                         list
@@ -112,40 +100,17 @@ public struct DownloadsView: View {
 
     private var deleteAllButton: some View {
         Button("Delete all") {
-            isDisplayingAlert = true
+            let cancelAction = AlertAction(NSLocalizedString("Cancel", comment: ""), style: .cancel) { _ in }
+            let deleteAction = AlertAction(NSLocalizedString("Delete", comment: ""), style: .destructive) { _ in
+                viewModel.deleteAll()
+            }
+            controller.value.showAlert(
+                title: NSLocalizedString("Are you sure you want to remove all downloaded content?", comment: ""),
+                actions: [cancelAction, deleteAction],
+                style: .actionSheet
+            )
         }
         .foregroundColor(.white)
-    }
-
-    @ViewBuilder
-    @available(iOS 15.0, *)
-    private func actions() -> some View {
-        Button("Delete", role: .destructive) {
-            viewModel.deleteAll()
-        }
-        Button("Cancel", role: .cancel) {
-            isDisplayingAlert = false
-        }
-    }
-
-    private func alert() -> Alert {
-        Alert(
-            title: Text("Are you sure you want to remove all downloaded content?"),
-            primaryButton: .destructive(
-                Text("Delete")
-            ) {
-                viewModel.deleteAll()
-            },
-            secondaryButton: .cancel()
-        )
-    }
-
-    private var closeButton: some View {
-        Button(action: {
-            presentationMode.wrappedValue.dismiss()
-        }, label: {
-            Text("Close")
-                .foregroundColor(Color(Brand.shared.linkColor))
-        })
+        .hidden(viewModel.isEmpty)
     }
 }
