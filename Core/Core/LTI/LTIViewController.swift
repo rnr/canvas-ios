@@ -78,7 +78,7 @@ public class LTIViewController: DownloadableViewController, ErrorViewController,
         courses?.refresh()
 
         setupObject(moduleItem)
-        isDownloaded()
+        isDownloaded{ _ in }
     }
 
     func updateNavBar() {

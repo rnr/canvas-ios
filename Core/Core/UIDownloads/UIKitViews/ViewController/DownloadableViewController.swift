@@ -90,7 +90,7 @@ public class DownloadableViewController: UIViewController {
 
     // MARK: - Public Intents -
 
-    public func isDownloaded() {
+    public func isDownloaded(completion: @escaping(Bool) -> Void) {
         guard let object = object else {
             return
         }
@@ -104,8 +104,10 @@ public class DownloadableViewController: UIViewController {
                 if isSaved {
                     self.addOrUpdateCourse()
                 }
+                completion(isSaved)
             } else {
                 self.downloadButton.currentState = .idle
+                completion(false)
             }
         }
     }
