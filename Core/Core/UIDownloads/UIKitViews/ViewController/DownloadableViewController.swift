@@ -32,6 +32,7 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
     private var cancellables = Set<AnyCancellable>()
     private var course: Course?
     private var object: OfflineDownloadTypeProtocol?
+    private var downloadsSubscriber: AnyCancellable?
 
     public var downloadButton: DownloadButton = {
         let downloadButton = DownloadButton()
@@ -52,6 +53,7 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
 
     public func setupObject(_ object: OfflineDownloadTypeProtocol?) {
         self.object = object
+        observeDownloadsEvents()
     }
 
     public func setupCourse(_ course: Course?) {
@@ -74,6 +76,39 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
                 break
             }
         }
+    }
+
+    func observeDownloadsEvents() {
+        downloadsSubscriber = downloadsManager
+            .publisher
+            .sink { [weak self] event in
+                guard let self = self else {
+                    return
+                }
+                switch event {
+                case .statusChanged(object: let event):
+                    switch event.status {
+                    case .completed:
+                        self.downloadButton.currentState = .downloaded
+                    case .active, .preparing, .initialized:
+                        self.downloadButton.currentState = .downloading
+                    case .removed:
+                        guard let object = object else { return }
+                        do {
+                            if try event.object.toOfflineModel().id == object.toOfflineModel().id {
+                                self.downloadButton.currentState = .idle
+                            }
+                        } catch {
+                            showError(error)
+                        }
+                    default:
+                        self.downloadButton.currentState = .idle
+                    }
+                case .progressChanged(object: let event):
+                    print(event.progress, "progress")
+                    self.downloadButton.progress = Float(event.progress)
+                }
+            }
     }
 
     // MARK: - Layout -
@@ -122,35 +157,7 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
         do {
             try downloadsManager.addAndStart(object: object)
             downloadButton.currentState = .waiting
-            downloadsManager
-                .publisher
-                .sink { [weak self] event in
-                    guard let self = self else {
-                        return
-                    }
-                    switch event {
-                    case .statusChanged(object: let event):
-                        switch event.status {
-                        case .completed:
-                            self.downloadButton.currentState = .downloaded
-                        case .active, .preparing, .initialized:
-                            self.downloadButton.currentState = .downloading
-                        case .removed:
-                            do {
-                                if try event.object.toOfflineModel().id == object.toOfflineModel().id {
-                                    self.downloadButton.currentState = .idle
-                                }
-                            } catch {
-                                showError(error)
-                            }
-                        default:
-                            self.downloadButton.currentState = .idle
-                        }
-                    case .progressChanged(object: let event):
-                        print(event.progress, "progress")
-                        self.downloadButton.progress = Float(event.progress)
-                    }
-                }.store(in: &cancellables)
+           
         } catch {
             showError(error)
         }
