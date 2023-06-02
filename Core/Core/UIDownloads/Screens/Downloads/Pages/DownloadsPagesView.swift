@@ -17,6 +17,7 @@
 //
 
 import SwiftUI
+import mobile_offline_downloader_ios
 
 final class DownloadsPagesViewModel: ObservableObject {
 
@@ -35,7 +36,7 @@ struct DownloadsPagesView: View {
     @Environment(\.viewController) var controller
 
     // MARK: - Properties -
-  
+
     @StateObject var viewModel: DownloadsPagesViewModel
     private let env = AppEnvironment.shared
 
@@ -92,13 +93,14 @@ struct DownloadsPagesView: View {
     }
 
     private func destination(page: Page) {
-        guard let htmlURL = page.htmlURL else {
-            return
+        OfflineDownloadsManager.shared.savedEntry(for: page) { result in
+            result.success { entry in
+                navigationController?.navigationBar.useGlobalNavStyle()
+                navigationController?.pushViewController(
+                    CoreHostingController(ContentViewerView(entry: entry)),
+                    animated: true
+                )
+            }
         }
-        guard  let pageDetailViewController = env.router.match(htmlURL) else {
-            return
-        }
-        self.navigationController?.navigationBar.useGlobalNavStyle()
-        navigationController?.pushViewController(pageDetailViewController, animated: true)
     }
 }

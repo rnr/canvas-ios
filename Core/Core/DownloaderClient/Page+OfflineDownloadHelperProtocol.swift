@@ -21,14 +21,14 @@ import mobile_offline_downloader_ios
 
 extension Page: OfflineDownloadTypeProtocol {
     public static func canDownload(entry: OfflineDownloaderEntry) -> Bool {
-        return entry.dataModel.type.lowercased().contains("page")
+        return entry.dataModel.type.lowercased().contains(OfflineContentType.page.rawValue)
     }
 
     public static func prepareForDownload(entry: OfflineDownloaderEntry) async throws {
         try await withCheckedThrowingContinuation({[weak entry] continuation in
             let env = AppEnvironment.shared
             var pages: Store<GetPage>?
-            if entry?.dataModel.type.lowercased().contains("page") == true {
+            if entry?.dataModel.type == OfflineContentType.page.rawValue {
                 if let dataModel = entry?.dataModel, let page = try? Page.fromOfflineModel(dataModel),
                    let context = Context(canvasContextID: page.contextID) {
 

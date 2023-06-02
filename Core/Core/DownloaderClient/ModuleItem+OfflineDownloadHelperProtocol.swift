@@ -21,7 +21,7 @@ import mobile_offline_downloader_ios
 
 extension ModuleItem: OfflineDownloadTypeProtocol {
     public static func canDownload(entry: OfflineDownloaderEntry) -> Bool {
-        return entry.dataModel.type.lowercased().contains("moduleitem")
+        return entry.dataModel.type == OfflineContentType.moduleitem.rawValue
     }
 
     public static func prepareForDownload(entry: OfflineDownloaderEntry) async throws {

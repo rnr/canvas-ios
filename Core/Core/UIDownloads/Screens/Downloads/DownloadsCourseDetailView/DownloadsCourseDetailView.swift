@@ -98,7 +98,9 @@ struct DownloadsCourseDetailView: View {
         }
     }
 
-    private func destination(contentType: DownloadsCourseDetailsViewModel.ContentType) -> some View {
+    private func destination(
+        contentType: DownloadsCourseDetailsViewModel.ContentType
+    ) -> some View {
         switch contentType {
         case .pages(let pages):
             return DownloadsPagesView(pages: pages)

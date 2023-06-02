@@ -22,7 +22,7 @@ import mobile_offline_downloader_ios
 extension Page: OfflineStorageDataProtocol {
     public static func fromOfflineModel(_ model: OfflineStorageDataModel) throws -> Page {
         let env = AppEnvironment.shared
-        if model.type.lowercased().contains("page") {
+        if model.type == OfflineContentType.page.rawValue {
             let data = model.json.data(using: .utf8)
             let dictionary = (try? JSONSerialization.jsonObject(with: data!) as? [String: Any]) ?? [:]
             let context = env.database.viewContext
@@ -92,7 +92,7 @@ extension Page: OfflineStorageDataProtocol {
            let jsonString = String(data: jsonData, encoding: .utf8) {
             return OfflineStorageDataModel(
                 id: id,
-                type: String(describing: type(of: self)),
+                type: OfflineContentType.page.rawValue,
                 json: jsonString
             )
         }

@@ -19,11 +19,17 @@
 import Foundation
 import mobile_offline_downloader_ios
 
+enum OfflineContentType: String {
+    case moduleitem
+    case page
+    case course
+}
+
 extension ModuleItem: OfflineStorageDataProtocol {
 
     public static func fromOfflineModel(_ model: OfflineStorageDataModel) throws -> ModuleItem {
         let env = AppEnvironment.shared
-        if model.type.lowercased().contains("moduleitem") {
+        if model.type == OfflineContentType.moduleitem.rawValue {
             let data = model.json.data(using: .utf8)
             let dictionary = (try? JSONSerialization.jsonObject(with: data!) as? [String: Any]) ?? [:]
             let context = env.database.viewContext
@@ -82,7 +88,7 @@ extension ModuleItem: OfflineStorageDataProtocol {
            let jsonString = String(data: jsonData, encoding: .utf8) {
             return OfflineStorageDataModel(
                 id: id,
-                type: String(describing: Swift.type(of: self)),
+                type: OfflineContentType.moduleitem.rawValue,
                 json: jsonString
             )
         }

@@ -157,7 +157,6 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
         do {
             try downloadsManager.addAndStart(object: object)
             downloadButton.currentState = .waiting
-           
         } catch {
             showError(error)
         }
