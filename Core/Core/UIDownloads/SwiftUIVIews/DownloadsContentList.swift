@@ -16,21 +16,26 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-import Foundation
+import SwiftUI
 
-final class DownloadsPagesCellViewModel: ObservableObject {
+struct DownloadsContentList<Content: View>: View {
+    private let builder: () -> Content
 
-    private let page: Page
-
-    var title: String {
-        page.title
+    init(@ViewBuilder _ builder: @escaping () -> Content) {
+        self.builder = builder
     }
 
-    var lastUpdated: Date? {
-        page.lastUpdated
-    }
-
-    init(page: Page) {
-        self.page = page
+    var body: some View {
+        List {
+            VStack(spacing: 0) {
+                builder()
+            }
+            .listRowInsets(EdgeInsets())
+            .listRowBackground(Color.clear)
+            .iOS15ListRowSeparator(.hidden)
+            .background(Color.backgroundLightest)
+        }
+        .listStyle(.plain)
+        .iOS16HideListScrollContentBackground()
     }
 }

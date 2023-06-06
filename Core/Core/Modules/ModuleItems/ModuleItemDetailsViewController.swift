@@ -146,7 +146,11 @@ public class ModuleItemDetailsViewController: UIViewController, ColoredNavViewPr
             return LTIViewController.create(tools: tools, moduleItem: item)
         default:
             guard let url = item.url else { return nil }
-            return env.router.match(url.appendingOrigin("module_item_details"))
+            let vc = env.router.match(url.appendingOrigin("module_item_details"))
+            if let pageVC = vc as? PageDetailsViewController {
+                pageVC.moduleItem = item
+            }
+            return vc
         }
     }
 

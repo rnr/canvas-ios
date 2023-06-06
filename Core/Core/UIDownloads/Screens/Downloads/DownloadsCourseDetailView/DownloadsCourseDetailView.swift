@@ -27,6 +27,7 @@ struct DownloadsCourseDetailView: View {
     @State var isActiveLink: Bool = false
 
     private let headerViewModel: DownloadsCourseDetailsHeaderViewModel
+    @State private var selection: DownloadsCourseDetailsViewModel?
 
     init(courseViewModel: DownloadCourseViewModel) {
         let model = DownloadsCourseDetailViewModel(courseViewModel: courseViewModel)
@@ -65,16 +66,17 @@ struct DownloadsCourseDetailView: View {
             List {
                 VStack(spacing: 0) {
                     ForEach(viewModel.detailViewModels, id: \.self) { detailViewModel in
-                        ZStack {
-                            DownloadsCourseDetailsCellView(detailViewModel: detailViewModel)
-                            NavigationLink(
-                                destination: destination(contentType: detailViewModel.contentType),
-                                isActive: $isActiveLink
-                            ) { SwiftUI.EmptyView() }.hidden()
-                        }.onTapGesture {
-                            isActiveLink = true
-                        }
-                        Divider()
+                        DownloadsCourseDetailsCellView(detailViewModel: detailViewModel)
+                            .background(
+                                NavigationLink(
+                                    destination: destination(contentType: detailViewModel.contentType),
+                                    tag: detailViewModel,
+                                    selection: $selection
+                                ) { SwiftUI.EmptyView() }.hidden()
+                            )
+                            .onTapGesture {
+                                selection = detailViewModel
+                            }
                     }
                 }
                 .listRowInsets(EdgeInsets())
@@ -98,14 +100,15 @@ struct DownloadsCourseDetailView: View {
         }
     }
 
+    @ViewBuilder
     private func destination(
         contentType: DownloadsCourseDetailsViewModel.ContentType
     ) -> some View {
         switch contentType {
         case .pages(let pages):
-            return DownloadsPagesView(pages: pages)
+            DownloadsPagesView(pages: pages)
         case .modules(let modules):
-            return DownloadsPagesView(pages: [])
+            DownloadsModules(items: modules)
         }
     }
 }

@@ -18,42 +18,41 @@
 
 import SwiftUI
 
-public struct DownloadsPagesCellView: View {
+public struct DownloadsModuleCellView: View {
 
     // MARK: - Properties -
 
-    let viewModel: DownloadsPagesCellViewModel
+    let viewModel: DownloadsModuleCellViewModel
 
     // MARK: - Views -
 
     public var body: some View {
         HStack(spacing: 15) {
-            Image(uiImage: .documentLine)
-                .frame(width: 20, height: 20)
+            viewModel.type.flatMap(image)
+            Text(viewModel.title)
+                .font(.semibold16)
                 .foregroundColor(.oxford)
-            VStack(alignment: .leading) {
-                Text(viewModel.title)
-                    .font(.semibold16)
-                    .foregroundColor(.oxford)
-                viewModel.lastUpdated.flatMap(dateText)
-            }
             Spacer()
             InstDisclosureIndicator()
         }
-        .padding(.vertical, 8)
+        .fixedSize(horizontal: false, vertical: true)
+        .frame(height: 60)
         .padding(.horizontal, 15)
         .contentShape(Rectangle())
     }
 
-    private func dateText(date: Date) -> some View {
-        Text(
-            DateFormatter.localizedString(
-                from: date,
-                dateStyle: .medium,
-                timeStyle: .short
-            )
-        )
-        .font(.regular14)
-        .foregroundColor(.oxford)
+    private func image(_ type: ModuleItemType) -> some View {
+        var uiImage = UIImage()
+        switch type {
+        case .externalTool:
+            uiImage = .ltiLine
+        case .page:
+            uiImage = .documentLine
+        default:
+            break
+        }
+        return Image(uiImage: uiImage)
+            .frame(width: 20, height: 20)
+            .foregroundColor(.oxford)
     }
 }

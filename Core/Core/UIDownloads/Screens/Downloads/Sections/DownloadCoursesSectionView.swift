@@ -40,7 +40,7 @@ struct DownloadCoursesSectionView: View {
                 .listRowInsets(EdgeInsets())
                 .buttonStyle(PlainButtonStyle())
                 .onTapGesture {
-                    self.selection = courseViewModel
+                    selection = courseViewModel
                 }
         }
         .onDelete { indexSet in

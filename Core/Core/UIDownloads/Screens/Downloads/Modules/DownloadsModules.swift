@@ -17,19 +17,18 @@
 //
 
 import SwiftUI
-import mobile_offline_downloader_ios
 
-final class DownloadsPagesViewModel: ObservableObject {
+final class DownloadsModulesViewModel: ObservableObject {
 
-    var pages: [Page]
+    var items: [ModuleItem]
 
-    init(pages: [Page]) {
-        self.pages = pages
+    init(items: [ModuleItem]) {
+        self.items = items
     }
 
 }
 
-struct DownloadsPagesView: View {
+struct DownloadsModules: View {
 
     // MARK: - Injected -
 
@@ -37,7 +36,7 @@ struct DownloadsPagesView: View {
 
     // MARK: - Properties -
 
-    @StateObject var viewModel: DownloadsPagesViewModel
+    @StateObject var viewModel: DownloadsModulesViewModel
     private let env = AppEnvironment.shared
 
     private var navigationController: UINavigationController? {
@@ -50,8 +49,8 @@ struct DownloadsPagesView: View {
         return navigationController
     }
 
-    init(pages: [Page]) {
-        let viewModel = DownloadsPagesViewModel(pages: pages)
+    init(items: [ModuleItem]) {
+        let viewModel = DownloadsModulesViewModel(items: items)
         self._viewModel = .init(wrappedValue: viewModel)
     }
 
@@ -64,7 +63,7 @@ struct DownloadsPagesView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    Text("Pages")
+                    Text("Modules")
                         .foregroundColor(.white)
                         .font(.semibold16)
                 }
@@ -73,26 +72,27 @@ struct DownloadsPagesView: View {
 
     private var content: some View {
         DownloadsContentList {
-            ForEach(viewModel.pages, id: \.self) { page in
-                DownloadsPageCellView(
-                    viewModel: DownloadsPageCellViewModel(page: page)
+            ForEach(viewModel.items, id: \.self) { item in
+                DownloadsModuleCellView(
+                    viewModel: DownloadsModuleCellViewModel(item: item)
                 ).onTapGesture {
-                    destination(page: page)
+                    destination(item: item)
                 }
                 Divider()
             }
         }
     }
 
-    private func destination(page: Page) {
-        OfflineDownloadsManager.shared.savedEntry(for: page) { result in
-            result.success { entry in
-                navigationController?.navigationBar.useGlobalNavStyle()
-                navigationController?.pushViewController(
-                    CoreHostingController(ContentViewerView(entry: entry)),
-                    animated: true
-                )
-            }
+    private func destination(item: ModuleItem) {
+        guard let htmlURL = item.htmlURL else {
+            return
         }
+        navigationController?.navigationBar.useGlobalNavStyle()
+        navigationController?.pushViewController(
+            CoreHostingController(SUWebView(
+                configurator: .init(requestType: .url(htmlURL))
+            )),
+            animated: true
+        )
     }
 }

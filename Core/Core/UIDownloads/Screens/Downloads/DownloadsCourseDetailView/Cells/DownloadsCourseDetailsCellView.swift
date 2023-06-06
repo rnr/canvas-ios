@@ -27,22 +27,24 @@ public struct DownloadsCourseDetailsCellView: View {
     // MARK: - Views -
 
     public var body: some View {
-        HStack(spacing: 12) {
-            Image(uiImage: .documentLine)
-                .frame(width: 20, height: 20)
-                .foregroundColor(Color(detailViewModel.courseColor))
-            VStack(alignment: .leading) {
-                Text(detailViewModel.title)
-                    .font(.semibold16)
-                    .foregroundColor(.oxford)
+        VStack(spacing: .zero) {
+            HStack(spacing: 12) {
+                Image(uiImage: .documentLine)
+                    .frame(width: 20, height: 20)
+                    .foregroundColor(Color(detailViewModel.courseColor))
+                VStack(alignment: .leading) {
+                    Text(detailViewModel.title)
+                        .font(.semibold16)
+                        .foregroundColor(.oxford)
+                }
+                Spacer()
+                InstDisclosureIndicator()
             }
-            Spacer()
-            InstDisclosureIndicator()
+            .padding(.horizontal, 16)
+            .fixedSize(horizontal: false, vertical: true)
+            .contentShape(Rectangle())
+            .frame(height: 54)
+            Divider()
         }
-        .padding(.vertical, 13)
-        .padding(.horizontal, 16)
-        .fixedSize(horizontal: false, vertical: true)
-        .contentShape(Rectangle())
-        .frame(height: 54)
     }
 }

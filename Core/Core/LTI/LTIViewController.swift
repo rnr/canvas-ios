@@ -78,7 +78,7 @@ public class LTIViewController: DownloadableViewController, ColoredNavViewProtoc
         courses?.refresh()
 
         setupObject(moduleItem)
-        isDownloaded{ _ in }
+        isDownloaded { _ in }
     }
 
     func updateNavBar() {

@@ -65,7 +65,7 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
         actions()
     }
 
-    func actions() {
+    public func actions() {
         downloadButton.onTap = { [weak self] state in
             switch state {
             case .downloaded:
@@ -78,7 +78,7 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
         }
     }
 
-    func observeDownloadsEvents() {
+    private func observeDownloadsEvents() {
         downloadsSubscriber = downloadsManager
             .publisher
             .sink { [weak self] event in

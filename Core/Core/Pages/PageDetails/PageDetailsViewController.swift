@@ -47,6 +47,7 @@ public class PageDetailsViewController: DownloadableViewController, ColoredNavVi
     var localPages: Store<LocalUseCase<Page>>?
 
     var page: Page? { localPages?.first }
+    var moduleItem: ModuleItem?
 
     var canEdit: Bool {
         app == .teacher ||
@@ -89,7 +90,6 @@ public class PageDetailsViewController: DownloadableViewController, ColoredNavVi
         }
         pages.refresh(force: true)
         NotificationCenter.default.post(moduleItem: .page(pageURL), completedRequirement: .view, courseID: context.id)
-        actions()
     }
 
     public override func viewWillAppear(_ animated: Bool) {
@@ -115,10 +115,14 @@ public class PageDetailsViewController: DownloadableViewController, ColoredNavVi
 
     func update() {
         guard let page = page else { return }
+        if let moduleItem = moduleItem {
+            setupObject(moduleItem)
+        } else {
+            setupObject(page)
+        }
         setupTitleViewInNavbar(title: page.title)
         optionsButton.accessibilityIdentifier = "PageDetails.options"
         navigationItem.rightBarButtonItem = canEdit ? optionsButton : nil
-        setupObject(page)
         isDownloaded {[weak self] isSaved in
             guard let self = self, let page = self.page else { return }
             if isSaved {
