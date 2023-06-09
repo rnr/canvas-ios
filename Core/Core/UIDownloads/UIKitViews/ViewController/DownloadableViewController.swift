@@ -33,6 +33,8 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
     private var course: Course?
     private var object: OfflineDownloadTypeProtocol?
     private var downloadsSubscriber: AnyCancellable?
+    private var routeURL: URL?
+    private var assetType: String?
 
     public var downloadButton: DownloadButton = {
         let downloadButton = DownloadButton()
@@ -50,6 +52,16 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
     }
 
     // MARK: - Configuration -
+
+    public func set(routeURL: URL, assetType: String) {
+        self.routeURL = routeURL
+        self.assetType = assetType
+        print(
+            self,
+            "routeURL: \(routeURL)",
+            "assetType: \(assetType)"
+        )
+    }
 
     public func setupObject(_ object: OfflineDownloadTypeProtocol?) {
         self.object = object
@@ -163,9 +175,10 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
     // MARK: - Private Intents -
 
     private func download() {
-        guard  let object = object else {
-            return
-        }
+        guard  let object = self.object,
+                let routeURL = self.routeURL,
+                let assetType = self.assetType
+        else { return }
         do {
             try downloadsManager.addAndStart(object: object)
             downloadButton.currentState = .waiting
