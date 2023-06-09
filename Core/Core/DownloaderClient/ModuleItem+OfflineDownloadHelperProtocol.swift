@@ -21,17 +21,69 @@ import mobile_offline_downloader_ios
 
 extension ModuleItem: OfflineDownloadTypeProtocol {
     public static func canDownload(entry: OfflineDownloaderEntry) -> Bool {
-        return entry.dataModel.type == OfflineContentType.moduleitem.rawValue
+        guard let item = try? fromOfflineModel(entry.dataModel) else { return false }
+        if case .externalTool = item.type {
+            return true
+        }
+        return false
     }
 
     public static func prepareForDownload(entry: OfflineDownloaderEntry) async throws {
-//        try await withCheckedThrowingContinuation { [weak entry] continuation in
-//
-//        }
+        let item = try fromOfflineModel(entry.dataModel)
+        if case let .externalTool(toolID, url) = item.type {
+            let tools = LTITools(
+                context: .course(item.courseID),
+                id: toolID,
+                url: url,
+                launchType: .module_item,
+                moduleID: item.moduleID,
+                moduleItemID: item.id
+            )
+
+            let url: URL = try await withCheckedThrowingContinuation { continuation in
+                tools.getSessionlessLaunch { response in
+                    guard let response = response else {
+                        continuation.resume(throwing: ModuleItemError.wrongSession)
+                        return
+                    }
+
+                    let url = response.url.appendingQueryItems(URLQueryItem(name: "platform", value: "mobile"))
+                    if response.name == "Google Apps" {
+                        continuation.resume(throwing: ModuleItemError.unsupported)
+                    } else {
+                        continuation.resume(returning: url)
+                    }
+                }
+            }
+
+            let downloader = OfflineLinkDownloader()
+            let contents = try await downloader.contents(urlString: url.absoluteString)
+            let extractor = try await OfflineHTMLDynamicsLinksExtractor(html: contents, baseURL: nil)
+            let links = try await extractor.links()
+            
+            print("links = \(links)")
+            print("ALARM[1]")
+        }
     }
 
     public func downloaderEntry() throws -> OfflineDownloaderEntry {
         let model = try self.toOfflineModel()
         return OfflineDownloaderEntry(dataModel: model, parts: [])
+    }
+}
+
+extension ModuleItem {
+    enum ModuleItemError: Error, LocalizedError {
+        case wrongSession
+        case unsupported
+        
+        var errorDescription: String? {
+            switch self {
+            case .wrongSession:
+                return "Can't get sessionless launch."
+            case .unsupported:
+                return "Unsupported type"
+            }
+        }
     }
 }
