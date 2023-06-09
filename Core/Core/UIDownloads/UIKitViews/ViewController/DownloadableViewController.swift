@@ -179,8 +179,10 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
                 let routeURL = self.routeURL,
                 let assetType = self.assetType
         else { return }
+        var components = URLComponents(url: routeURL, resolvingAgainstBaseURL: false)
+        components?.scheme = assetType
         do {
-            try downloadsManager.addAndStart(object: object)
+            try downloadsManager.addAndStart(object: object, categoryPath: components?.url?.absoluteString)
             downloadButton.currentState = .waiting
         } catch {
             showError(error)
