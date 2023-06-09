@@ -21,10 +21,12 @@ import mobile_offline_downloader_ios
 
 final class DownloadsPagesViewModel: ObservableObject {
 
-    var pages: [Page]
+    let courseDataModel: CourseStorageDataModel
+    let pages: [Page]
 
-    init(pages: [Page]) {
+    init(pages: [Page], courseDataModel: CourseStorageDataModel) {
         self.pages = pages
+        self.courseDataModel = courseDataModel
     }
 
 }
@@ -50,8 +52,11 @@ struct DownloadsPagesView: View {
         return navigationController
     }
 
-    init(pages: [Page]) {
-        let viewModel = DownloadsPagesViewModel(pages: pages)
+    init(pages: [Page], courseDataModel: CourseStorageDataModel) {
+        let viewModel = DownloadsPagesViewModel(
+            pages: pages,
+            courseDataModel: courseDataModel
+        )
         self._viewModel = .init(wrappedValue: viewModel)
     }
 
@@ -89,7 +94,12 @@ struct DownloadsPagesView: View {
             result.success { entry in
                 navigationController?.navigationBar.useGlobalNavStyle()
                 navigationController?.pushViewController(
-                    CoreHostingController(ContentViewerView(entry: entry)),
+                    CoreHostingController(
+                        ContentViewerView(
+                            entry: entry,
+                            courseDataModel: viewModel.courseDataModel
+                        )
+                    ),
                     animated: true
                 )
             }

@@ -20,10 +20,12 @@ import SwiftUI
 
 final class DownloadsModulesViewModel: ObservableObject {
 
-    var items: [ModuleItem]
+    let modules: [ModuleItem]
+    let courseDataModel: CourseStorageDataModel
 
-    init(items: [ModuleItem]) {
-        self.items = items
+    init(modules: [ModuleItem], courseDataModel: CourseStorageDataModel) {
+        self.modules = modules
+        self.courseDataModel = courseDataModel
     }
 
 }
@@ -49,8 +51,11 @@ struct DownloadsModules: View {
         return navigationController
     }
 
-    init(items: [ModuleItem]) {
-        let viewModel = DownloadsModulesViewModel(items: items)
+    init(modules: [ModuleItem], courseDataModel: CourseStorageDataModel) {
+        let viewModel = DownloadsModulesViewModel(
+            modules: modules,
+            courseDataModel: courseDataModel
+        )
         self._viewModel = .init(wrappedValue: viewModel)
     }
 
@@ -72,19 +77,19 @@ struct DownloadsModules: View {
 
     private var content: some View {
         DownloadsContentList {
-            ForEach(viewModel.items, id: \.self) { item in
+            ForEach(viewModel.modules, id: \.self) { module in
                 DownloadsModuleCellView(
-                    viewModel: DownloadsModuleCellViewModel(item: item)
+                    viewModel: DownloadsModuleCellViewModel(module: module)
                 ).onTapGesture {
-                    destination(item: item)
+                    destination(module: module)
                 }
                 Divider()
             }
         }
     }
 
-    private func destination(item: ModuleItem) {
-        guard let htmlURL = item.htmlURL else {
+    private func destination(module: ModuleItem) {
+        guard let htmlURL = module.htmlURL else {
             return
         }
         navigationController?.navigationBar.useGlobalNavStyle()

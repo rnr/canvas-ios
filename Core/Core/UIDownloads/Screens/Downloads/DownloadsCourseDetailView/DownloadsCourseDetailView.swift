@@ -106,9 +106,15 @@ struct DownloadsCourseDetailView: View {
     ) -> some View {
         switch contentType {
         case .pages(let pages):
-            DownloadsPagesView(pages: pages)
+            DownloadsPagesView(
+                pages: pages,
+                courseDataModel: viewModel.courseViewModel.courseDataModel
+            )
         case .modules(let modules):
-            DownloadsModules(items: modules)
+            DownloadsModules(
+                modules: modules,
+                courseDataModel: viewModel.courseViewModel.courseDataModel
+            )
         }
     }
 }

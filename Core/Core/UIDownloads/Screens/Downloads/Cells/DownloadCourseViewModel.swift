@@ -31,36 +31,40 @@ final class DownloadCourseViewModel: Identifiable, Hashable {
         hasher.combine(id)
     }
 
-    let course: Course
+    let courseDataModel: CourseStorageDataModel
+
+    var course: Course? {
+        courseDataModel.course
+    }
 
     var courseId: String {
-        course.id
+        course?.id ?? "-1"
     }
 
     var name: String {
-        course.name ?? ""
+        course?.name ?? ""
     }
 
     var courseCode: String {
-        course.courseCode ?? ""
+        course?.courseCode ?? ""
     }
 
     var termName: String {
-        course.termName ?? ""
+        course?.termName ?? ""
     }
 
     var imageURL: URL? {
-        guard let imageDownloadURL = course.imageDownloadURL else {
+        guard let imageDownloadURL = course?.imageDownloadURL else {
             return nil
         }
         return imageDownloadURL
     }
 
     var color: UIColor {
-        course.color
+        course?.color ?? .white
     }
 
-    init(course: Course) {
-        self.course = course
+    init(courseDataModel: CourseStorageDataModel) {
+        self.courseDataModel = courseDataModel
     }
 }

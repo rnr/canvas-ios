@@ -19,7 +19,7 @@
 import Foundation
 import mobile_offline_downloader_ios
 
-public class LTIViewController: DownloadableViewController, ColoredNavViewProtocol {
+public class LTIViewController: UIViewController, ColoredNavViewProtocol, ErrorViewController {
     @IBOutlet weak var spinnerView: CircleProgressView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var openButton: UIButton!
@@ -76,15 +76,11 @@ public class LTIViewController: DownloadableViewController, ColoredNavViewProtoc
         }
         colors.refresh()
         courses?.refresh()
-
-        setupObject(moduleItem)
-        isDownloaded { _ in }
     }
 
     func updateNavBar() {
         let course = courses?.first
         updateNavBar(subtitle: course?.name, color: course?.color)
-        setupCourse(course)
     }
 
     @IBAction func openButtonPressed(_ sender: UIButton) {

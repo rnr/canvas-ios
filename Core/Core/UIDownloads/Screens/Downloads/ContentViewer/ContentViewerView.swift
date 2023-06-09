@@ -12,8 +12,11 @@ public struct ContentViewerView: View {
 
     @StateObject var viewModel: ContentViewerViewModel
 
-    init(entry: OfflineDownloaderEntry) {
-        let model = ContentViewerViewModel(entry: entry)
+    init(entry: OfflineDownloaderEntry, courseDataModel: CourseStorageDataModel) {
+        let model = ContentViewerViewModel(
+            entry: entry,
+            courseDataModel: courseDataModel
+        )
         self._viewModel = .init(wrappedValue: model)
     }
 

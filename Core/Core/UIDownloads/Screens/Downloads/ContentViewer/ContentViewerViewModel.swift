@@ -6,6 +6,7 @@ public class ContentViewerViewModel: ObservableObject {
 
     private let downloadsManager = OfflineDownloadsManager.shared
     private let entry: OfflineDownloaderEntry
+    private let courseDataModel: CourseStorageDataModel
     private var deleteSubscriber: AnyCancellable?
 
     var viewDismissalModePublisher = PassthroughSubject<Bool, Never>()
@@ -15,8 +16,12 @@ public class ContentViewerViewModel: ObservableObject {
         }
     }
 
-    init(entry: OfflineDownloaderEntry) {
+    init(
+        entry: OfflineDownloaderEntry,
+        courseDataModel: CourseStorageDataModel
+    ) {
         self.entry = entry
+        self.courseDataModel = courseDataModel
     }
 
     var requestType: WebViewConfigurator.RequestType? {
@@ -44,9 +49,17 @@ public class ContentViewerViewModel: ObservableObject {
         deleteSubscriber = downloadsManager
             .publisher
             .sink { [weak self] event in
+                guard let self = self else {
+                    return
+                }
                 if case .statusChanged(object: let event) = event {
-                    if case .removed = event.status {
-                        self?.shouldDismissView = true
+                    if case .removed = event.status, let eventObjectId = try? event.object.toOfflineModel().id {
+                        OfflineStorageManager.shared.addOrUpdateCourse(
+                            course: self.courseDataModel.course,
+                            deleting: true,
+                            downloadedId: eventObjectId
+                        )
+                        self.shouldDismissView = true
                     }
                 }
             }

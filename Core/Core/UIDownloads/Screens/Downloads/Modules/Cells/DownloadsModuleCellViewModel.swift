@@ -20,17 +20,17 @@ import Foundation
 
 final class DownloadsModuleCellViewModel: ObservableObject {
 
-    private let item: ModuleItem
+    private let module: ModuleItem
 
     var title: String {
-        item.title
+        module.title
     }
 
     var type: ModuleItemType? {
-        item.type
+        module.type
     }
 
-    init(item: ModuleItem) {
-        self.item = item
+    init(module: ModuleItem) {
+        self.module = module
     }
 }

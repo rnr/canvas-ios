@@ -54,6 +54,7 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
     public func setupObject(_ object: OfflineDownloadTypeProtocol?) {
         self.object = object
         observeDownloadsEvents()
+        configure()
     }
 
     public func setupCourse(_ course: Course?) {
@@ -89,13 +90,22 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
                 case .statusChanged(object: let event):
                     switch event.status {
                     case .completed:
+                        do {
+                            let eventObjectId = try event.object.toOfflineModel().id
+                            self.addOrUpdateCourse(deleting: false, downloadedId: eventObjectId.digits)
+                        } catch {
+                            self.showError(error)
+                        }
                         self.downloadButton.currentState = .downloaded
                     case .active, .preparing, .initialized:
                         self.downloadButton.currentState = .downloading
                     case .removed:
                         guard let object = object else { return }
                         do {
-                            if try event.object.toOfflineModel().id == object.toOfflineModel().id {
+                            let eventObjectId = try event.object.toOfflineModel().id
+                            let objectId = try event.object.toOfflineModel().id
+                            if eventObjectId == objectId {
+                                self.addOrUpdateCourse(deleting: true, downloadedId: eventObjectId.digits)
                                 self.downloadButton.currentState = .idle
                             }
                         } catch {
@@ -118,10 +128,7 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
     }
 
     public func attachDownloadButton() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: downloadButton)
-        downloadButton.translatesAutoresizingMaskIntoConstraints = false
-        downloadButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        downloadButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        navigationItem.rightBarButtonItem = downloadBarButtonItem
     }
 
     // MARK: - Public Intents -
@@ -137,15 +144,20 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
             self.downloadButton.isHidden = false
             if case let .success(isSaved) = result {
                 self.downloadButton.currentState = isSaved ? .downloaded : .idle
-                if isSaved {
-                    self.addOrUpdateCourse()
-                }
                 completion(isSaved)
             } else {
                 self.downloadButton.currentState = .idle
                 completion(false)
             }
         }
+    }
+
+    public var downloadBarButtonItem: UIBarButtonItem {
+        let rightBarButtonItem = UIBarButtonItem(customView: downloadButton)
+        downloadButton.translatesAutoresizingMaskIntoConstraints = false
+        downloadButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        downloadButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        return rightBarButtonItem
     }
 
     // MARK: - Private Intents -
@@ -162,11 +174,15 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
         }
     }
 
-    private func addOrUpdateCourse() {
+    private func addOrUpdateCourse(deleting: Bool, downloadedId: String) {
         guard let course = course else {
             return
         }
-        storageManager.save(course) { _ in }
+        storageManager.addOrUpdateCourse(
+            course: course,
+            deleting: deleting,
+            downloadedId: downloadedId
+        )
     }
 
     private func delete() {

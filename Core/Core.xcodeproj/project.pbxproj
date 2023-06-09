@@ -871,6 +871,8 @@
 		BA5D83C429DB2C6900150235 /* ReachabilityProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5D83C329DB2C6900150235 /* ReachabilityProvider.swift */; };
 		BA8C3F812A1D121D001FEDC1 /* Course+OfflineStorageDataProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA8C3F802A1D121D001FEDC1 /* Course+OfflineStorageDataProtocol.swift */; };
 		BA9341332A2F80180004060D /* DownloadsContentList.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9341322A2F80180004060D /* DownloadsContentList.swift */; };
+		BA9341372A32189D0004060D /* DownloadCourse+OfflineStorageDataProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9341362A32189D0004060D /* DownloadCourse+OfflineStorageDataProtocol.swift */; };
+		BA9341392A32313E0004060D /* OfflineStorageManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9341382A32313E0004060D /* OfflineStorageManager+Extensions.swift */; };
 		BA9DDB5E2A29FA0100E446D3 /* SUWebViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9DDB5D2A29FA0100E446D3 /* SUWebViewRepresentable.swift */; };
 		BA9DDB602A29FA3100E446D3 /* SUToolbarWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9DDB5F2A29FA3100E446D3 /* SUToolbarWebView.swift */; };
 		BA9DDB622A29FB4E00E446D3 /* SUWebViewConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9DDB612A29FB4E00E446D3 /* SUWebViewConfigurator.swift */; };
@@ -2503,6 +2505,8 @@
 		BA5D83C329DB2C6900150235 /* ReachabilityProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachabilityProvider.swift; sourceTree = "<group>"; };
 		BA8C3F802A1D121D001FEDC1 /* Course+OfflineStorageDataProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Course+OfflineStorageDataProtocol.swift"; sourceTree = "<group>"; };
 		BA9341322A2F80180004060D /* DownloadsContentList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsContentList.swift; sourceTree = "<group>"; };
+		BA9341362A32189D0004060D /* DownloadCourse+OfflineStorageDataProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DownloadCourse+OfflineStorageDataProtocol.swift"; sourceTree = "<group>"; };
+		BA9341382A32313E0004060D /* OfflineStorageManager+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OfflineStorageManager+Extensions.swift"; sourceTree = "<group>"; };
 		BA9DDB5D2A29FA0100E446D3 /* SUWebViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SUWebViewRepresentable.swift; sourceTree = "<group>"; };
 		BA9DDB5F2A29FA3100E446D3 /* SUToolbarWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SUToolbarWebView.swift; sourceTree = "<group>"; };
 		BA9DDB612A29FB4E00E446D3 /* SUWebViewConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SUWebViewConfigurator.swift; sourceTree = "<group>"; };
@@ -3075,11 +3079,13 @@
 			isa = PBXGroup;
 			children = (
 				060B7E642A0C18160098D1D3 /* DownloaderClient.swift */,
+				BA9341382A32313E0004060D /* OfflineStorageManager+Extensions.swift */,
 				060B7EA12A14BC2D0098D1D3 /* Page+OfflineStorageDataProtocol.swift */,
 				060B7EA32A14E5E40098D1D3 /* Page+OfflineDownloadHelperProtocol.swift */,
 				BA8C3F802A1D121D001FEDC1 /* Course+OfflineStorageDataProtocol.swift */,
 				BA5741902A25E100007634D2 /* ModuleItem+OfflineStorageDataProtocol.swift */,
 				BA5741922A25EDB7007634D2 /* ModuleItem+OfflineDownloadHelperProtocol.swift */,
+				BA9341362A32189D0004060D /* DownloadCourse+OfflineStorageDataProtocol.swift */,
 			);
 			path = DownloaderClient;
 			sourceTree = "<group>";
@@ -8233,6 +8239,7 @@
 				D9B6493828F452D30035CE14 /* QuizDetailViewModelProtocol.swift in Sources */,
 				B1A7848F24411F19001A2B50 /* BackgroundVideoPlayer.swift in Sources */,
 				BA4B23DE29D335560035D918 /* DownloadableViewController.swift in Sources */,
+				BA9341392A32313E0004060D /* OfflineStorageManager+Extensions.swift in Sources */,
 				7DA2606823F722D9005D2121 /* TabVisibility.swift in Sources */,
 				7DA2609923F7233D005D2121 /* Scope.swift in Sources */,
 				7D0A28DD251952A2004FB3B6 /* RemoteImage.swift in Sources */,
@@ -8808,6 +8815,7 @@
 				3B4D893A2450A8FC004ED120 /* EditComposeRecipientsViewController.swift in Sources */,
 				CFB06FAC28C3FD5300DAC40B /* FileSubmissionItemsUploadStarter.swift in Sources */,
 				7D4C6F37243BE229003C1728 /* GetEnrollments.swift in Sources */,
+				BA9341372A32189D0004060D /* DownloadCourse+OfflineStorageDataProtocol.swift in Sources */,
 				7DCB2E9A247D9D740071F172 /* SubmissionSummary.swift in Sources */,
 				7DA260EC23F7235F005D2121 /* WrongAppLinkView.swift in Sources */,
 				CF326B352563D4D3005ABAAA /* HelpView.swift in Sources */,

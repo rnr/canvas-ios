@@ -23,6 +23,7 @@ enum OfflineContentType: String {
     case moduleitem
     case page
     case course
+    case downloadcourse
 }
 
 extension ModuleItem: OfflineStorageDataProtocol {
@@ -33,7 +34,7 @@ extension ModuleItem: OfflineStorageDataProtocol {
             let data = model.json.data(using: .utf8)
             let dictionary = (try? JSONSerialization.jsonObject(with: data!) as? [String: Any]) ?? [:]
             let context = env.database.viewContext
-            let predicate = NSPredicate(format: "%K == %@", #keyPath(Page.id), model.id)
+            let predicate = NSPredicate(format: "%K == %@", #keyPath(ModuleItem.id), model.id)
             let moduleItem: ModuleItem = context.fetch(predicate).first ?? context.insert()
 
             if let id = dictionary["id"] as? String {

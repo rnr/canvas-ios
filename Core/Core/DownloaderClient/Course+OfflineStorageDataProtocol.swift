@@ -26,7 +26,7 @@ extension Course: OfflineStorageDataProtocol {
             let data = model.json.data(using: .utf8)
             let dictionary = (try? JSONSerialization.jsonObject(with: data!) as? [String: Any]) ?? [:]
             let context = env.database.viewContext
-            let predicate = NSPredicate(format: "%K == %@", #keyPath(Page.id), model.id)
+            let predicate = NSPredicate(format: "%K == %@", #keyPath(Course.id), model.id)
             let course: Course = context.fetch(predicate).first ?? context.insert()
 
             if let accessRestrictedByDate = dictionary["accessRestrictedByDate"] as? Bool {

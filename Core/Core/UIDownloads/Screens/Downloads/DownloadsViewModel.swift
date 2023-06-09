@@ -68,7 +68,7 @@ final class DownloadsViewModel: ObservableObject {
     func deleteAll() {
         let group = DispatchGroup()
         courseViewModels.forEach { viewModel in
-            storageManager.delete(viewModel.course) { _ in }
+            storageManager.delete(viewModel.courseDataModel) { _ in }
             group.enter()
             storageManager.loadAll(of: OfflineDownloaderEntry.self) { [weak self] result in
                 guard let self = self else {
@@ -111,7 +111,7 @@ final class DownloadsViewModel: ObservableObject {
     func swipeDelete(indexSet: IndexSet) {
         indexSet.forEach { index in
             let viewModel = courseViewModels.remove(at: index)
-            storageManager.delete(viewModel.course) { _ in }
+            storageManager.delete(viewModel.courseDataModel) { _ in }
             storageManager.loadAll(of: OfflineDownloaderEntry.self) { [weak self] result in
                 guard let self = self else {
                     return
@@ -141,14 +141,17 @@ final class DownloadsViewModel: ObservableObject {
 
     func fetch() {
         state = .loading
-        storageManager.loadAll(of: Course.self) { [weak self] result in
+        storageManager.loadAll(of: CourseStorageDataModel.self) { [weak self] result in
             guard let self = self else {
                 return
             }
             result.success { courses in
-                self.courseViewModels = courses.compactMap { courseEntity in
-                    DownloadCourseViewModel(
-                        course: courseEntity
+                self.courseViewModels = courses.compactMap { courseDataModel in
+                    if courseDataModel.entriesIds.isEmpty {
+                        return nil
+                    }
+                    return DownloadCourseViewModel(
+                        courseDataModel: courseDataModel
                     )
                 }
             }

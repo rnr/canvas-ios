@@ -54,6 +54,7 @@ final class DownloadsCourseDetailViewModel: ObservableObject {
     // MARK: - Intents -
 
     func fetch() {
+        let course = courseViewModel.courseDataModel.course
         storageManager.loadAll(of: OfflineDownloaderEntry.self) { [weak self] result in
             guard let self = self else {
                 return
@@ -76,7 +77,7 @@ final class DownloadsCourseDetailViewModel: ObservableObject {
                 if !pages.isEmpty {
                     self.detailViewModels.append(
                         DownloadsCourseDetailsViewModel(
-                            course: self.courseViewModel.course,
+                            course: course,
                             contentType: .pages(Array(pages))
                         )
                     )
@@ -84,7 +85,7 @@ final class DownloadsCourseDetailViewModel: ObservableObject {
                 if !modules.isEmpty {
                     self.detailViewModels.append(
                         DownloadsCourseDetailsViewModel(
-                            course: self.courseViewModel.course,
+                            course: course,
                             contentType: .modules(Array(modules))
                         )
                     )
