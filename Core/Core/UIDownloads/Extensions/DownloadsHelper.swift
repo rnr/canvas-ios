@@ -28,14 +28,14 @@ final class DownloadsHelper {
     static func pages(courseId: String, entries: [OfflineDownloaderEntry]) -> [OfflineDownloaderEntry] {
         entries
             .filter {
-                $0.userInfo?.contains("Page:") == true
+                $0.userInfo?.lowercased().contains("page:") == true
             }
     }
 
     static func moduleItems(courseId: String, entries: [OfflineDownloaderEntry]) -> [OfflineDownloaderEntry] {
         entries
             .filter {
-                $0.userInfo?.contains("ModuleItem:") == true
+                $0.userInfo?.lowercased().contains("moduleitem:") == true
             }
     }
 }
