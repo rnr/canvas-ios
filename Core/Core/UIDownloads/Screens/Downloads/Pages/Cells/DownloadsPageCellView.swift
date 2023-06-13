@@ -22,7 +22,7 @@ public struct DownloadsPageCellView: View {
 
     // MARK: - Properties -
 
-    let viewModel: DownloadsPageCellViewModel
+    let viewModel: DownloadsModuleCellViewModel
 
     // MARK: - Views -
 

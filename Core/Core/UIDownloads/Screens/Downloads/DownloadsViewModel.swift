@@ -76,19 +76,9 @@ final class DownloadsViewModel: ObservableObject {
                     return
                 }
                 result.success { entries in
-                    let objects: [OfflineDownloadTypeProtocol] = entries.compactMap {
-                        if let page = try? Page.fromOfflineModel($0.dataModel),
-                              page.contextID.digits == viewModel.courseId {
-                            return page
-                        }
-                        if let moduleItem = try? ModuleItem.fromOfflineModel($0.dataModel),
-                              moduleItem.courseID == viewModel.courseId {
-                            return moduleItem
-                        }
-                        return nil
-                    }
-                    objects.forEach {
-                        try? self.downloadsManager.delete(object: $0)
+                    let items = DownloadsHelper.filter(courseId: viewModel.courseId, entries: entries)
+                    items.forEach {
+                        try? self.downloadsManager.delete(entry: $0)
                     }
                     group.leave()
                 }
@@ -117,19 +107,9 @@ final class DownloadsViewModel: ObservableObject {
                     return
                 }
                 result.success { entries in
-                    let objects: [OfflineDownloadTypeProtocol] = entries.compactMap {
-                        if let page = try? Page.fromOfflineModel($0.dataModel),
-                              page.contextID.digits == viewModel.courseId {
-                            return page
-                        }
-                        if let moduleItem = try? ModuleItem.fromOfflineModel($0.dataModel),
-                              moduleItem.courseID == viewModel.courseId {
-                            return moduleItem
-                        }
-                        return nil
-                    }
-                    objects.forEach {
-                        try? self.downloadsManager.delete(object: $0)
+                    let items = DownloadsHelper.filter(courseId: viewModel.courseId, entries: entries)
+                    items.forEach {
+                        try? self.downloadsManager.delete(entry: $0)
                     }
                 }
             }

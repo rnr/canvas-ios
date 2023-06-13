@@ -22,7 +22,7 @@ public struct DownloadsCourseDetailsCellView: View {
 
     // MARK: - Properties -
 
-    let detailViewModel: DownloadsCourseDetailsViewModel
+    let categoryViewModel: DownloadsCourseCategoryViewModel
 
     // MARK: - Views -
 
@@ -31,9 +31,9 @@ public struct DownloadsCourseDetailsCellView: View {
             HStack(spacing: 12) {
                 Image(uiImage: .documentLine)
                     .frame(width: 20, height: 20)
-                    .foregroundColor(Color(detailViewModel.courseColor))
+                    .foregroundColor(Color(categoryViewModel.courseColor))
                 VStack(alignment: .leading) {
-                    Text(detailViewModel.title)
+                    Text(categoryViewModel.title)
                         .font(.semibold16)
                         .foregroundColor(.oxford)
                 }

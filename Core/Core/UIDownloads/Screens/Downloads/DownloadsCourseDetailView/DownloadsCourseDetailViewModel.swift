@@ -39,7 +39,7 @@ final class DownloadsCourseDetailViewModel: ObservableObject {
     // MARK: - Content -
 
     let courseViewModel: DownloadCourseViewModel
-    var detailViewModels: [DownloadsCourseDetailsViewModel] = []
+    var categories: [DownloadsCourseCategoryViewModel] = []
 
     var title: String {
         courseViewModel.courseCode
@@ -60,33 +60,34 @@ final class DownloadsCourseDetailViewModel: ObservableObject {
                 return
             }
             result.success { entries in
-                let pages: [Page] = entries.compactMap {
-                    guard let page = try? Page.fromOfflineModel($0.dataModel),
-                            page.contextID.digits == self.courseViewModel.courseId else {
-                        return nil
-                    }
-                    return page
-                }
-                let modules: [ModuleItem] = entries.compactMap {
-                    guard let moduleItem = try? ModuleItem.fromOfflineModel($0.dataModel),
-                          moduleItem.courseID == self.courseViewModel.courseId else {
-                        return nil
-                    }
-                    return moduleItem
-                }
-                if !pages.isEmpty {
-                    self.detailViewModels.append(
-                        DownloadsCourseDetailsViewModel(
+                let courseEntries = DownloadsHelper.filter(
+                    courseId: self.courseViewModel.id,
+                    entries: entries
+                )
+                let pagesSection = DownloadsHelper.pages(
+                    courseId: self.courseViewModel.id,
+                    entries: courseEntries
+                )
+                let modulesSection = DownloadsHelper.moduleItems(
+                    courseId: self.courseViewModel.id,
+                    entries: courseEntries
+                )
+                if !pagesSection.isEmpty {
+                    self.categories.append(
+                        DownloadsCourseCategoryViewModel(
                             course: course,
-                            contentType: .pages(Array(pages))
+                            content: pagesSection,
+                            contentType: .pages
                         )
                     )
+
                 }
-                if !modules.isEmpty {
-                    self.detailViewModels.append(
-                        DownloadsCourseDetailsViewModel(
+                if !modulesSection.isEmpty {
+                    self.categories.append(
+                        DownloadsCourseCategoryViewModel(
                             course: course,
-                            contentType: .modules(Array(modules))
+                            content: modulesSection,
+                            contentType: .modules
                         )
                     )
                 }
@@ -95,14 +96,5 @@ final class DownloadsCourseDetailViewModel: ObservableObject {
                 self.state = .loaded
             }
         }
-    }
-}
-
-extension String {
-    var digits: String {
-        components(
-            separatedBy: CharacterSet.decimalDigits.inverted
-        )
-        .joined()
     }
 }

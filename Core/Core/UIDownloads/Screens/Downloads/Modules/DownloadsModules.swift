@@ -17,13 +17,14 @@
 //
 
 import SwiftUI
+import mobile_offline_downloader_ios
 
 final class DownloadsModulesViewModel: ObservableObject {
 
-    let modules: [ModuleItem]
+    let modules: [OfflineDownloaderEntry]
     let courseDataModel: CourseStorageDataModel
 
-    init(modules: [ModuleItem], courseDataModel: CourseStorageDataModel) {
+    init(modules: [OfflineDownloaderEntry], courseDataModel: CourseStorageDataModel) {
         self.modules = modules
         self.courseDataModel = courseDataModel
     }
@@ -51,7 +52,7 @@ struct DownloadsModules: View {
         return navigationController
     }
 
-    init(modules: [ModuleItem], courseDataModel: CourseStorageDataModel) {
+    init(modules: [OfflineDownloaderEntry], courseDataModel: CourseStorageDataModel) {
         let viewModel = DownloadsModulesViewModel(
             modules: modules,
             courseDataModel: courseDataModel
@@ -77,9 +78,9 @@ struct DownloadsModules: View {
 
     private var content: some View {
         DownloadsContentList {
-            ForEach(viewModel.modules, id: \.self) { module in
+            ForEach(viewModel.modules, id: \.dataModel.id) { module in
                 DownloadsModuleCellView(
-                    viewModel: DownloadsModuleCellViewModel(module: module)
+                    viewModel: DownloadsModuleCellViewModel(module: module.dataModel)
                 ).onTapGesture {
                     destination(module: module)
                 }
@@ -88,16 +89,16 @@ struct DownloadsModules: View {
         }
     }
 
-    private func destination(module: ModuleItem) {
-        guard let htmlURL = module.htmlURL else {
-            return
-        }
-        navigationController?.navigationBar.useGlobalNavStyle()
-        navigationController?.pushViewController(
-            CoreHostingController(SUWebView(
-                configurator: .init(requestType: .url(htmlURL))
-            )),
-            animated: true
-        )
+    private func destination(module: OfflineDownloaderEntry) {
+//        guard let htmlURL = module.htmlURL else {
+//            return
+//        }
+//        navigationController?.navigationBar.useGlobalNavStyle()
+//        navigationController?.pushViewController(
+//            CoreHostingController(SUWebView(
+//                configurator: .init(requestType: .url(htmlURL))
+//            )),
+//            animated: true
+//        )
     }
 }

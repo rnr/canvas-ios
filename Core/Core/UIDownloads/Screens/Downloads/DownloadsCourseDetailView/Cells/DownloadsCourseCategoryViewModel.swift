@@ -17,9 +17,10 @@
 //
 
 import Foundation
+import mobile_offline_downloader_ios
 
-final class DownloadsCourseDetailsViewModel: Identifiable, Hashable {
-    static func == (lhs: DownloadsCourseDetailsViewModel, rhs: DownloadsCourseDetailsViewModel) -> Bool {
+final class DownloadsCourseCategoryViewModel: Identifiable, Hashable {
+    static func == (lhs: DownloadsCourseCategoryViewModel, rhs: DownloadsCourseCategoryViewModel) -> Bool {
         lhs.id == rhs.id
     }
 
@@ -28,14 +29,14 @@ final class DownloadsCourseDetailsViewModel: Identifiable, Hashable {
     }
 
     let id: String = Foundation.UUID().uuidString
+    let content: [OfflineDownloaderEntry]
+    let contentType: ContentType
+    let course: Course
 
     enum ContentType {
-        case pages([Page])
-        case modules([ModuleItem])
+        case pages
+        case modules
     }
-    let contentType: ContentType
-
-    let course: Course
 
     var courseColor: UIColor {
         course.color
@@ -50,8 +51,9 @@ final class DownloadsCourseDetailsViewModel: Identifiable, Hashable {
         }
     }
 
-    init(course: Course, contentType: ContentType) {
+    init(course: Course, content: [OfflineDownloaderEntry], contentType: ContentType) {
         self.contentType = contentType
         self.course = course
+        self.content = content
     }
 }

@@ -17,20 +17,64 @@
 //
 
 import Foundation
+import SwiftUI
+import mobile_offline_downloader_ios
 
 final class DownloadsModuleCellViewModel: ObservableObject {
 
-    private let module: ModuleItem
+    private let module: OfflineStorageDataModel
 
     var title: String {
-        module.title
+        if let page = try? Page.fromOfflineModel(module) {
+            return page.title
+        }
+        if let moduleItem = try? ModuleItem.fromOfflineModel(module) {
+            return moduleItem.title
+        }
+        return ""
+    }
+
+    var uiImage: UIImage? {
+        if (try? Page.fromOfflineModel(module)) != nil {
+            return .documentLine
+        }
+        if let moduleItem = try? ModuleItem.fromOfflineModel(module) {
+            return image(moduleItem.type)
+        }
+        return nil
     }
 
     var type: ModuleItemType? {
-        module.type
+        if (try? Page.fromOfflineModel(module)) != nil {
+            return .page("")
+        }
+        if let moduleItem = try? ModuleItem.fromOfflineModel(module) {
+            return moduleItem.type
+        }
+        return nil
     }
 
-    init(module: ModuleItem) {
+    var lastUpdated: Date? {
+        if let page = try? Page.fromOfflineModel(module) {
+            return page.lastUpdated
+        }
+        return nil
+    }
+
+    init(module: OfflineStorageDataModel) {
         self.module = module
+    }
+
+    private func image(_ type: ModuleItemType?) -> UIImage? {
+        var uiImage = UIImage()
+        switch type {
+        case .externalTool:
+            uiImage = .ltiLine
+        case .page:
+            uiImage = .documentLine
+        default:
+            return nil
+        }
+        return uiImage
     }
 }

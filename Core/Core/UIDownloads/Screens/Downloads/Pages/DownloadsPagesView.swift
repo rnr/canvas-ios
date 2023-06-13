@@ -19,19 +19,19 @@
 import SwiftUI
 import mobile_offline_downloader_ios
 
-final class DownloadsPagesViewModel: ObservableObject {
+final class DownloadsContentViewModel: ObservableObject {
 
     let courseDataModel: CourseStorageDataModel
-    let pages: [Page]
+    let content: [OfflineDownloaderEntry]
 
-    init(pages: [Page], courseDataModel: CourseStorageDataModel) {
-        self.pages = pages
+    init(content: [OfflineDownloaderEntry], courseDataModel: CourseStorageDataModel) {
+        self.content = content
         self.courseDataModel = courseDataModel
     }
 
 }
 
-struct DownloadsPagesView: View {
+struct DownloadsContenView: View {
 
     // MARK: - Injected -
 
@@ -39,7 +39,8 @@ struct DownloadsPagesView: View {
 
     // MARK: - Properties -
 
-    @StateObject var viewModel: DownloadsPagesViewModel
+    @StateObject var viewModel: DownloadsContentViewModel
+    private let title: String
     private let env = AppEnvironment.shared
 
     private var navigationController: UINavigationController? {
@@ -52,12 +53,13 @@ struct DownloadsPagesView: View {
         return navigationController
     }
 
-    init(pages: [Page], courseDataModel: CourseStorageDataModel) {
-        let viewModel = DownloadsPagesViewModel(
-            pages: pages,
+    init(content: [OfflineDownloaderEntry], courseDataModel: CourseStorageDataModel, title: String) {
+        let viewModel = DownloadsContentViewModel(
+            content: content,
             courseDataModel: courseDataModel
         )
         self._viewModel = .init(wrappedValue: viewModel)
+        self.title = title
     }
 
     // MARK: - Views -
@@ -69,7 +71,7 @@ struct DownloadsPagesView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    Text("Pages")
+                    Text(title)
                         .foregroundColor(.white)
                         .font(.semibold16)
                 }
@@ -78,31 +80,27 @@ struct DownloadsPagesView: View {
 
     private var content: some View {
         DownloadsContentList {
-            ForEach(viewModel.pages, id: \.self) { page in
+            ForEach(viewModel.content, id: \.dataModel.id) { entry in
                 DownloadsPageCellView(
-                    viewModel: DownloadsPageCellViewModel(page: page)
+                    viewModel: DownloadsModuleCellViewModel(module: entry.dataModel)
                 ).onTapGesture {
-                    destination(page: page)
+                    destination(entry: entry)
                 }
                 Divider()
             }
         }
     }
 
-    private func destination(page: Page) {
-        OfflineDownloadsManager.shared.savedEntry(for: page) { result in
-            result.success { entry in
-                navigationController?.navigationBar.useGlobalNavStyle()
-                navigationController?.pushViewController(
-                    CoreHostingController(
-                        ContentViewerView(
-                            entry: entry,
-                            courseDataModel: viewModel.courseDataModel
-                        )
-                    ),
-                    animated: true
+    private func destination(entry: OfflineDownloaderEntry) {
+        navigationController?.navigationBar.useGlobalNavStyle()
+        navigationController?.pushViewController(
+            CoreHostingController(
+                ContentViewerView(
+                    entry: entry,
+                    courseDataModel: viewModel.courseDataModel
                 )
-            }
-        }
+            ),
+            animated: true
+        )
     }
 }

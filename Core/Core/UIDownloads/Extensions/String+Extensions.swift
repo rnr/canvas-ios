@@ -18,19 +18,11 @@
 
 import Foundation
 
-final class DownloadsPageCellViewModel: ObservableObject {
-
-    private let page: Page
-
-    var title: String {
-        page.title
-    }
-
-    var lastUpdated: Date? {
-        page.lastUpdated
-    }
-
-    init(page: Page) {
-        self.page = page
+extension String {
+    var digits: String {
+        components(
+            separatedBy: CharacterSet.decimalDigits.inverted
+        )
+        .joined()
     }
 }

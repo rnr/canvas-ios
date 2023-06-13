@@ -27,7 +27,7 @@ struct DownloadsCourseDetailView: View {
     @State var isActiveLink: Bool = false
 
     private let headerViewModel: DownloadsCourseDetailsHeaderViewModel
-    @State private var selection: DownloadsCourseDetailsViewModel?
+    @State private var selection: DownloadsCourseCategoryViewModel?
 
     init(courseViewModel: DownloadCourseViewModel) {
         let model = DownloadsCourseDetailViewModel(courseViewModel: courseViewModel)
@@ -65,17 +65,17 @@ struct DownloadsCourseDetailView: View {
             imageHeader(geometry: geometry)
             List {
                 VStack(spacing: 0) {
-                    ForEach(viewModel.detailViewModels, id: \.self) { detailViewModel in
-                        DownloadsCourseDetailsCellView(detailViewModel: detailViewModel)
+                    ForEach(viewModel.categories, id: \.self) { categoryViewModel in
+                        DownloadsCourseDetailsCellView(categoryViewModel: categoryViewModel)
                             .background(
                                 NavigationLink(
-                                    destination: destination(contentType: detailViewModel.contentType),
-                                    tag: detailViewModel,
+                                    destination: destination(sectionViewModel: categoryViewModel),
+                                    tag: categoryViewModel,
                                     selection: $selection
                                 ) { SwiftUI.EmptyView() }.hidden()
                             )
                             .onTapGesture {
-                                selection = detailViewModel
+                                selection = categoryViewModel
                             }
                     }
                 }
@@ -100,21 +100,13 @@ struct DownloadsCourseDetailView: View {
         }
     }
 
-    @ViewBuilder
     private func destination(
-        contentType: DownloadsCourseDetailsViewModel.ContentType
+        sectionViewModel: DownloadsCourseCategoryViewModel
     ) -> some View {
-        switch contentType {
-        case .pages(let pages):
-            DownloadsPagesView(
-                pages: pages,
-                courseDataModel: viewModel.courseViewModel.courseDataModel
-            )
-        case .modules(let modules):
-            DownloadsModules(
-                modules: modules,
-                courseDataModel: viewModel.courseViewModel.courseDataModel
-            )
-        }
+        DownloadsContenView(
+            content: sectionViewModel.content,
+            courseDataModel: viewModel.courseViewModel.courseDataModel,
+            title: sectionViewModel.title
+        )
     }
 }

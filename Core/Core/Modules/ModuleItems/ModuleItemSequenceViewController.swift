@@ -110,7 +110,7 @@ public class ModuleItemSequenceViewController: UIViewController {
             let url = url.url else {
             return
         }
-        downloadableViewController.set(routeURL: url, assetType: assetType.rawValue)
+        downloadableViewController.set(userInfo: url.absoluteString, assetType: assetType.rawValue)
     }
 
     func showSequenceButtons(prev: Bool, next: Bool) {
