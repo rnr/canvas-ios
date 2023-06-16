@@ -56,13 +56,15 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
                 }
             }
 
-            let downloader = OfflineLinkDownloader()
-            let contents = try await downloader.contents(urlString: url.absoluteString)
-            let extractor = try await OfflineHTMLDynamicsLinksExtractor(html: contents, baseURL: nil)
+            let extractor = await OfflineHTMLDynamicsLinksExtractor(url: url)
             let links = try await extractor.links()
-            
-            print("links = \(links)")
-            print("ALARM[1]")
+            let html = await extractor.html
+            if let latestURL = await extractor.latestRedirectURL {
+                let downloader = OfflineLinkDownloader()
+                downloader.additionCookies = await extractor.webConfiguration.websiteDataStore.httpCookieStore.allCookies()
+                let ltiContents = try await downloader.contents(urlString: latestURL.absoluteString)
+                entry.addHtmlPart(ltiContents, baseURL: nil)
+            }
         }
     }
 
