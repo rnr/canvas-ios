@@ -61,7 +61,7 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
             let html = await extractor.html
             if let latestURL = await extractor.latestRedirectURL {
                 let downloader = OfflineLinkDownloader()
-                downloader.additionCookies = await extractor.webConfiguration.websiteDataStore.httpCookieStore.allCookies()
+                downloader.additionCookies = await extractor.cookies()
                 let ltiContents = try await downloader.contents(urlString: latestURL.absoluteString)
                 entry.addHtmlPart(ltiContents, baseURL: nil)
             }
@@ -78,7 +78,7 @@ extension ModuleItem {
     enum ModuleItemError: Error, LocalizedError {
         case wrongSession
         case unsupported
-        
+
         var errorDescription: String? {
             switch self {
             case .wrongSession:

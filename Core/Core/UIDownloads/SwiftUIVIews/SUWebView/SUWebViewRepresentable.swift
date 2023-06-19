@@ -16,6 +16,11 @@ public struct SUWebViewRepresentable: UIViewRepresentable {
         )
         webView.webView.navigationDelegate = context.coordinator
         webView.webView.uiDelegate = context.coordinator
+        #if DEBUG
+        if #available(iOSApplicationExtension 16.4, *) {
+            webView.webView.isInspectable = true
+        }
+        #endif
         return webView
     }
 
