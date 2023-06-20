@@ -19,7 +19,7 @@
 import Foundation
 import mobile_offline_downloader_ios
 
-enum OfflineContentType: String {
+public enum OfflineContentType: String {
     case moduleitem
     case page
     case course

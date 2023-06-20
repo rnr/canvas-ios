@@ -23,10 +23,12 @@ extension OfflineStorageManager {
         loadAll(of: CourseStorageDataModel.self) { [weak self] result in
             result.success { courses in
                 if let courseStorageDataModel = courses.first(where: { $0.course.id == course.id }) {
-                    if deleting, let index = courseStorageDataModel.entriesIds.firstIndex(where: { $0 == downloadedId }) {
-                        courseStorageDataModel.entriesIds.remove(at: index)
+                    if deleting {
+                        courseStorageDataModel.entriesIds.removeAll(where: { $0 == downloadedId })
                     } else {
-                        courseStorageDataModel.entriesIds.append(downloadedId)
+                        if !courseStorageDataModel.entriesIds.contains(downloadedId) {
+                            courseStorageDataModel.entriesIds.append(downloadedId)
+                        }
                     }
                     print(courseStorageDataModel.entriesIds, "courseStorageDataModel.entriesIds")
                     self?.save(courseStorageDataModel) { _ in }
