@@ -829,6 +829,7 @@
 		B4F523B128E4732D001A16BC /* DeterminateBarProgressViewStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F523B028E4732D001A16BC /* DeterminateBarProgressViewStyle.swift */; };
 		BA101B832A20B0DD00AF7EDD /* NSManagedObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA101B822A20B0DD00AF7EDD /* NSManagedObject+Extensions.swift */; };
 		BA18C1C429DC426300090221 /* NotConnectionBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA18C1C329DC426300090221 /* NotConnectionBarView.swift */; };
+		BA1FBACE2A41C9020005E70A /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1FBACD2A41C9020005E70A /* Log.swift */; };
 		BA3076462A388BF200A7617B /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA3076452A388BF200A7617B /* String+Extensions.swift */; };
 		BA3076482A38910F00A7617B /* DownloadsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA3076472A38910F00A7617B /* DownloadsHelper.swift */; };
 		BA3D51E229D4465B0011A14A /* Injected.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA3D51DA29D4465A0011A14A /* Injected.swift */; };
@@ -883,6 +884,7 @@
 		BAA035DD2A2F6E7B006AA743 /* DownloadsModuleCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA035DC2A2F6E7B006AA743 /* DownloadsModuleCellViewModel.swift */; };
 		BAA035DF2A2F6ECE006AA743 /* DownloadsModuleCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA035DE2A2F6ECE006AA743 /* DownloadsModuleCellView.swift */; };
 		BAAEFC1F2A277F5E0083E8EC /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAAEFC1E2A277F5E0083E8EC /* UIViewController+Extensions.swift */; };
+		BACC5F2E2A40A0930002DC26 /* ModuleItemCell+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BACC5F2D2A40A0930002DC26 /* ModuleItemCell+Extensions.swift */; };
 		CEB57AE8286B32BB00F4BFC8 /* HelmNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB57AE7286B32BB00F4BFC8 /* HelmNavigationController.swift */; };
 		CEF0D1462837D571005867EF /* ContextCellBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF0D1442837D571005867EF /* ContextCellBackgroundView.swift */; };
 		CEF0D1472837D571005867EF /* ContextCellBackgroundView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEF0D1452837D571005867EF /* ContextCellBackgroundView.xib */; };
@@ -2465,6 +2467,7 @@
 		B4F523B028E4732D001A16BC /* DeterminateBarProgressViewStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeterminateBarProgressViewStyle.swift; sourceTree = "<group>"; };
 		BA101B822A20B0DD00AF7EDD /* NSManagedObject+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSManagedObject+Extensions.swift"; sourceTree = "<group>"; };
 		BA18C1C329DC426300090221 /* NotConnectionBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotConnectionBarView.swift; sourceTree = "<group>"; };
+		BA1FBACD2A41C9020005E70A /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		BA3076452A388BF200A7617B /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		BA3076472A38910F00A7617B /* DownloadsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsHelper.swift; sourceTree = "<group>"; };
 		BA3D51DA29D4465A0011A14A /* Injected.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Injected.swift; sourceTree = "<group>"; };
@@ -2518,6 +2521,7 @@
 		BAA035DC2A2F6E7B006AA743 /* DownloadsModuleCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsModuleCellViewModel.swift; sourceTree = "<group>"; };
 		BAA035DE2A2F6ECE006AA743 /* DownloadsModuleCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsModuleCellView.swift; sourceTree = "<group>"; };
 		BAAEFC1E2A277F5E0083E8EC /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
+		BACC5F2D2A40A0930002DC26 /* ModuleItemCell+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModuleItemCell+Extensions.swift"; sourceTree = "<group>"; };
 		CEB57AE7286B32BB00F4BFC8 /* HelmNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelmNavigationController.swift; sourceTree = "<group>"; };
 		CEF0D1442837D571005867EF /* ContextCellBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCellBackgroundView.swift; sourceTree = "<group>"; };
 		CEF0D1452837D571005867EF /* ContextCellBackgroundView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContextCellBackgroundView.xib; sourceTree = "<group>"; };
@@ -5032,6 +5036,7 @@
 				BAAEFC1E2A277F5E0083E8EC /* UIViewController+Extensions.swift */,
 				BA3076452A388BF200A7617B /* String+Extensions.swift */,
 				BA3076472A38910F00A7617B /* DownloadsHelper.swift */,
+				BA1FBACD2A41C9020005E70A /* Log.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -5172,6 +5177,7 @@
 			isa = PBXGroup;
 			children = (
 				BA4B23C429D335560035D918 /* DownloadPageListTableViewCell.swift */,
+				BACC5F2D2A40A0930002DC26 /* ModuleItemCell+Extensions.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -8295,6 +8301,7 @@
 				CF60CC4626458C0800C1C173 /* K5HomeroomMySubjectsView.swift in Sources */,
 				EB9BF7D5282E907B0025F6D0 /* UIWindowExtensions.swift in Sources */,
 				7DA25FF923F7226E005D2121 /* DocViewerAnnotationProvider.swift in Sources */,
+				BACC5F2E2A40A0930002DC26 /* ModuleItemCell+Extensions.swift in Sources */,
 				7DA2608623F7230F005D2121 /* ErrorViewController.swift in Sources */,
 				7D531D4C254C664900CBFCA6 /* ListSectionHeader.swift in Sources */,
 				BA4B23E129D335560035D918 /* UIView+Constrants.swift in Sources */,
@@ -8664,6 +8671,7 @@
 				BA5929AA2A29E81000C4540C /* SUWebView.swift in Sources */,
 				7DA2610E23FCD907005D2121 /* CircleRefreshControl.swift in Sources */,
 				7DA2609723F72338005D2121 /* RouteHandler.swift in Sources */,
+				BA1FBACE2A41C9020005E70A /* Log.swift in Sources */,
 				EBAF32F427AAC194000ACD32 /* APICommentLibraryResponse.swift in Sources */,
 				B16E05E22423DF83006B6ADB /* LoginQRCodeTutorialViewController.swift in Sources */,
 				CFEC7F3826B3F7F9008B9F77 /* K5ScheduleDayViewModel.swift in Sources */,

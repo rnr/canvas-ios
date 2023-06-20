@@ -16,26 +16,21 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-import SwiftUI
+import Foundation
 
-struct DownloadsContentCellView: View {
-    var action: (() -> Void)?
-
-    var body: some View {
-        Button {
-            action?()
-        } label: {
-            VStack {
-                HStack {
-                    Image(systemName: "cloud")
-                    Text("Downloaded")
-                        .font(.semibold17)
-                        .foregroundColor(Color(Brand.shared.linkColor))
-                        .frame(height: 30)
-                    Spacer()
-                }
-                Divider()
-            }.padding(.vertical)
-        }
-    }
+public func debugLog(
+    _ item: Any...,
+    filename: String = #file,
+    line: Int = #line,
+    funcname: String = #function
+) {
+#if DEBUG
+    print(
+        """
+        🕗 \(Date())
+        📄 \(filename.components(separatedBy: "/").last ?? "") \(line) \(funcname)
+        ℹ️ \(item)
+        """
+    )
+#endif
 }

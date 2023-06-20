@@ -23,13 +23,16 @@ import  mobile_offline_downloader_ios
 
 public class DownloadableViewController: UIViewController, ErrorViewController {
 
+    deinit {
+        print("☠️ Deinitialized -> \(String.init(describing: self))☠️")
+    }
+
     // MARK: - Properties -
 
     private let downloadsManager = OfflineDownloadsManager.shared
     private let storageManager = OfflineStorageManager.shared
     private let env = AppEnvironment.shared
 
-    private var cancellables = Set<AnyCancellable>()
     private var course: Course?
     private var object: OfflineDownloadTypeProtocol?
     private var downloadsSubscriber: AnyCancellable?
@@ -64,12 +67,18 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
     }
 
     public func setupObject(_ object: OfflineDownloadTypeProtocol?) {
+        if self.object != nil {
+            return
+        }
         self.object = object
         observeDownloadsEvents()
         configure()
     }
 
     public func setupCourse(_ course: Course?) {
+        if self.course != nil {
+            return
+        }
         self.course = course
     }
 
@@ -91,48 +100,6 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
         }
     }
 
-    private func observeDownloadsEvents() {
-        downloadsSubscriber = downloadsManager
-            .publisher
-            .sink { [weak self] event in
-                guard let self = self else {
-                    return
-                }
-                switch event {
-                case .statusChanged(object: let event):
-                    switch event.status {
-                    case .completed:
-                        do {
-                            let eventObjectId = try event.object.toOfflineModel().id
-                            self.addOrUpdateCourse(deleting: false, downloadedId: eventObjectId.digits)
-                        } catch {
-                            self.showError(error)
-                        }
-                        self.downloadButton.currentState = .downloaded
-                    case .active, .preparing, .initialized:
-                        self.downloadButton.currentState = .downloading
-                    case .removed:
-                        guard let object = object else { return }
-                        do {
-                            let eventObjectId = try event.object.toOfflineModel().id
-                            let objectId = try event.object.toOfflineModel().id
-                            if eventObjectId == objectId {
-                                self.addOrUpdateCourse(deleting: true, downloadedId: eventObjectId.digits)
-                                self.downloadButton.currentState = .idle
-                            }
-                        } catch {
-                            showError(error)
-                        }
-                    default:
-                        self.downloadButton.currentState = .idle
-                    }
-                case .progressChanged(object: let event):
-                    print(event.progress, "progress")
-                    self.downloadButton.progress = Float(event.progress)
-                }
-            }
-    }
-
     // MARK: - Layout -
 
     public func layout() {
@@ -144,6 +111,14 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
     }
 
     // MARK: - Public Intents -
+
+    public var downloadBarButtonItem: UIBarButtonItem {
+        let rightBarButtonItem = UIBarButtonItem(customView: downloadButton)
+        downloadButton.translatesAutoresizingMaskIntoConstraints = false
+        downloadButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        downloadButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        return rightBarButtonItem
+    }
 
     public func isDownloaded(completion: @escaping(Bool) -> Void) {
         guard let object = object else {
@@ -164,14 +139,6 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
         }
     }
 
-    public var downloadBarButtonItem: UIBarButtonItem {
-        let rightBarButtonItem = UIBarButtonItem(customView: downloadButton)
-        downloadButton.translatesAutoresizingMaskIntoConstraints = false
-        downloadButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        downloadButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        return rightBarButtonItem
-    }
-
     // MARK: - Private Intents -
 
     private func download() {
@@ -188,6 +155,92 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
                 userInfo: components?.url?.absoluteString
             )
             downloadButton.currentState = .waiting
+        } catch {
+            showError(error)
+        }
+    }
+
+    private func observeDownloadsEvents() {
+        downloadsSubscriber = downloadsManager
+            .publisher
+            .sink { [weak self] event in
+                switch event {
+                case .statusChanged(object: let event):
+                    self?.statusChanged(event)
+                case .progressChanged(object: let event):
+                    self?.progressChanged(event)
+                }
+            }
+
+        object.flatMap {
+            downloadsManager.eventObject(for: $0) { [weak self] result in
+                guard let self = self else {
+                    return
+                }
+                DispatchQueue.main.async {
+                    result.success { event in
+                        switch event.status {
+                        case .completed:
+                            self.downloadButton.currentState = .downloaded
+                        case .preparing, .initialized:
+                            self.downloadButton.currentState = .waiting
+                        case .active:
+                            self.downloadButton.currentState = .downloading
+                            self.downloadButton.progress = Float(event.progress)
+                        default:
+                            self.downloadButton.currentState = .idle
+                        }
+
+                    }
+                    self.downloadButton.isHidden = false
+                }
+            }
+        }
+    }
+
+    private func statusChanged(_ event: OfflineDownloadsManagerEventObject) {
+        guard let object = object else {
+            return
+        }
+        do {
+            let eventObjectId = try event.object.toOfflineModel().id
+            let objectId = try object.toOfflineModel().id
+            guard eventObjectId == objectId else {
+                return
+            }
+            switch event.status {
+            case .completed:
+                addOrUpdateCourse(deleting: false, downloadedId: eventObjectId)
+                downloadButton.currentState = .downloaded
+            case .initialized, .preparing:
+                downloadButton.currentState = .waiting
+            case .active:
+                downloadButton.currentState = .downloading
+            case .removed:
+                addOrUpdateCourse(deleting: true, downloadedId: eventObjectId)
+                downloadButton.currentState = .idle
+            default:
+                downloadButton.currentState = .idle
+            }
+        } catch {
+            showError(error)
+        }
+    }
+
+    private func progressChanged(_ event: OfflineDownloadsManagerEventObject) {
+        guard let object = object else {
+            return
+        }
+        do {
+            let eventObjectId = try event.object.toOfflineModel().id
+            let objectId = try object.toOfflineModel().id
+            guard eventObjectId == objectId else {
+                return
+            }
+            if event.progress == 0.0 {
+                return
+            }
+            downloadButton.progress = Float(event.progress)
         } catch {
             showError(error)
         }

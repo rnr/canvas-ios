@@ -18,10 +18,12 @@
 
 import Foundation
 import UIKit
+import Combine
 
 class ModuleItemCell: UITableViewCell {
     static let IndentMultiplier: CGFloat = 10
 
+    @IBOutlet weak var hStackView: UIStackView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var dueLabel: UILabel!
     @IBOutlet weak var iconView: UIImageView!
@@ -30,8 +32,11 @@ class ModuleItemCell: UITableViewCell {
     @IBOutlet weak var completedStatusView: UIImageView!
 
     let env = AppEnvironment.shared
+    var item: ModuleItem?
+    var cancellable: AnyCancellable?
 
     func update(_ item: ModuleItem, indexPath: IndexPath, color: UIColor?) {
+        self.item = item
         backgroundColor = .backgroundLightest
         selectedBackgroundView = ContextCellBackgroundView.create(color: color)
         isUserInteractionEnabled = env.app == .teacher || !item.isLocked
@@ -78,5 +83,6 @@ class ModuleItemCell: UITableViewCell {
             ].compactMap { $0 }.joined(separator: ", ")
         }
         accessibilityIdentifier = "ModuleList.\(indexPath.section).\(indexPath.row)"
+        isDownloaded(item)
     }
 }

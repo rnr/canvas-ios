@@ -118,31 +118,6 @@ public class PageDetailsViewController: DownloadableViewController, ColoredNavVi
         setupTitleViewInNavbar(title: page.title)
         optionsButton.accessibilityIdentifier = "PageDetails.options"
         navigationItem.rightBarButtonItem = canEdit ? optionsButton : nil
-        isDownloaded {[weak self] isSaved in
-            guard let self = self, let page = self.page else { return }
-            if isSaved {
-                OfflineDownloadsManager.shared.savedEntry(for: page) {[weak self] result in
-                    guard let self = self, let page = self.page else { return }
-                    switch result {
-                    case .success(let entry):
-                        let value = OfflineDownloadsManager.shared.savedValue(for: entry, pageIndex: 0)
-                        switch value {
-                        case let .html(indexURL: indexURL, folderURL: folderUrl):
-                            if #available(iOSApplicationExtension 16.4, *) {
-                                self.webView.isInspectable = true
-                            } 
-                            self.webView.loadFileURL(indexURL, allowingReadAccessTo: folderUrl)
-                        default:
-                            self.webView.loadHTMLString(page.body, baseURL: page.htmlURL)
-                        }
-                    default:
-                        self.webView.loadHTMLString(page.body, baseURL: page.htmlURL)
-                    }
-                }
-            } else {
-                self.webView.loadHTMLString(page.body, baseURL: page.htmlURL)
-            }
-        }
     }
 
     private func updatePages() {

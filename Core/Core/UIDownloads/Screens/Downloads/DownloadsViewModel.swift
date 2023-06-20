@@ -80,16 +80,22 @@ final class DownloadsViewModel: ObservableObject {
                     items.forEach {
                         try? self.downloadsManager.delete(entry: $0)
                     }
-                    group.leave()
                 }
-                result.failure { _ in
-                    group.leave()
+                group.leave()
+            }
+        }
+        group.notify(queue: .main) {
+            self.storageManager.deleteAll { [weak self] _ in
+                guard let self = self else {
+                    return
+                }
+                DispatchQueue.main.async {
+                    self.modules = []
+                    self.courseViewModels = []
+                    self.state = .loaded
                 }
             }
         }
-        modules = []
-        courseViewModels = []
-        state = .loaded
     }
 
     func swipeDeleteDownloading(indexSet: IndexSet) {
@@ -110,6 +116,7 @@ final class DownloadsViewModel: ObservableObject {
                     let items = DownloadsHelper.filter(courseId: viewModel.courseId, entries: entries)
                     items.forEach {
                         try? self.downloadsManager.delete(entry: $0)
+                        self.storageManager.delete($0) {_ in}
                     }
                 }
             }

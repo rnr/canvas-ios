@@ -90,15 +90,15 @@ struct DownloadsModules: View {
     }
 
     private func destination(module: OfflineDownloaderEntry) {
-//        guard let htmlURL = module.htmlURL else {
-//            return
-//        }
-//        navigationController?.navigationBar.useGlobalNavStyle()
-//        navigationController?.pushViewController(
-//            CoreHostingController(SUWebView(
-//                configurator: .init(requestType: .url(htmlURL))
-//            )),
-//            animated: true
-//        )
+        navigationController?.navigationBar.useGlobalNavStyle()
+        navigationController?.pushViewController(
+            CoreHostingController(
+                ContentViewerView(
+                    entry: module,
+                    courseDataModel: viewModel.courseDataModel
+                )
+            ),
+            animated: true
+        )
     }
 }

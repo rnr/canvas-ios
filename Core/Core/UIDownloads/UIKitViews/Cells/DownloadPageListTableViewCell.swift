@@ -24,14 +24,14 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
 
     // MARK: - Injected -
 
-    let storageManager = OfflineStorageManager.shared
+    private let storageManager = OfflineStorageManager.shared
+    private let downloadsManager = OfflineDownloadsManager.shared
 
     // MARK: - Properties -
 
     var page: Page?
     var course: Course?
-    var indexPath: IndexPath?
-    private var offlineCancellable: AnyCancellable?
+    private var cancellable: AnyCancellable?
 
     private var accessIconView: AccessIconView = .init(frame: .zero)
 
@@ -50,12 +50,19 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
         return dateLabel
     }()
 
-    private var downloadButton: DownloadButton = {
-        let downloadButton = DownloadButton()
-        downloadButton.mainTintColor = Brand.shared.linkColor
-        downloadButton.currentState = .idle
-        downloadButton.isHidden = true
-        return downloadButton
+    private var savedImage: UIImageView = {
+        let savedImage = UIImageView()
+        savedImage.isHidden = true
+        savedImage.image = .init(systemName: "cloud")
+        savedImage.contentMode = .scaleAspectFit
+        return savedImage
+    }()
+
+    private var activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView()
+        activityIndicator.isHidden = true
+        activityIndicator.color = .lightGray
+        return activityIndicator
     }()
 
     // MARK: - Init -
@@ -69,12 +76,19 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    public override func prepareForReuse() {
+        super.prepareForReuse()
+        savedImage.isHidden = true
+        activityIndicator.stopAnimating()
+        activityIndicator.isHidden = true
+    }
+
     // MARK: - Configuration -
 
     private func configure() {
         backgroundColor = .backgroundLightest
         accessoryType = .disclosureIndicator
-        [titleLabel, dateLabel, downloadButton, accessIconView].forEach {
+        [titleLabel, dateLabel, savedImage, activityIndicator, accessIconView].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview($0)
         }
@@ -94,47 +108,32 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
 
         titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8).isActive = true
         titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 60).isActive = true
-        titleLabel.trailingAnchor.constraint(equalTo: downloadButton.leadingAnchor, constant: -15).isActive = true
+        titleLabel.trailingAnchor.constraint(equalTo: savedImage.leadingAnchor, constant: -15).isActive = true
 
         dateLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor).isActive = true
         dateLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8).isActive = true
         dateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 60).isActive = true
-        dateLabel.trailingAnchor.constraint(equalTo: downloadButton.leadingAnchor, constant: -15).isActive = true
+        dateLabel.trailingAnchor.constraint(equalTo: savedImage.leadingAnchor, constant: -15).isActive = true
 
-        downloadButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        downloadButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        downloadButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
-        downloadButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15).isActive = true
+        savedImage.widthAnchor.constraint(equalToConstant: 25).isActive = true
+        savedImage.heightAnchor.constraint(equalToConstant: 25).isActive = true
+        savedImage.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+        savedImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15).isActive = true
+        activityIndicator.widthAnchor.constraint(equalToConstant: 25).isActive = true
+        activityIndicator.heightAnchor.constraint(equalToConstant: 25).isActive = true
+        activityIndicator.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+        activityIndicator.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15).isActive = true
     }
 
     // MARK: - Action -
 
-    private func actions() {
-//        downloadButton.onTap = { [weak self] state in
-//            guard let self = self, let course = self.course, let page = self.page else {
-//                return
-//            }
-//
-//            switch state {
-//            case .downloaded:
-//                self.delete(page)
-//            case .downloading:
-//                print("downloaded")
-//            case .idle:
-//                self.download(page, for: course)
-//            default:
-//                break
-//            }
-//        }
-    }
+    private func actions() {}
 
     // MARK: - Intent -
 
     func update(_ page: Page?, course: Course?, indexPath: IndexPath, color: UIColor?) {
         self.page = page
         self.course = course
-        self.indexPath = indexPath
-        downloadButton.tag = indexPath.row
         selectedBackgroundView = ContextCellBackgroundView.create(color: color)
         titleLabel.accessibilityIdentifier = "PageList.\(indexPath.row)"
         accessIconView.icon = UIImage.documentLine
@@ -145,35 +144,57 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
         dateLabel.setText(dateText, style: .textCellSupportingText)
         titleLabel.setText(page?.title, style: .textCellTitle)
         titleLabel.lineBreakMode = .byTruncatingTail
+        page.flatMap(isDownloaded)
+    }
 
-        offlineCancellable = OfflineDownloadsManager
-            .shared
+    private func isDownloaded(page: Page) {
+        OfflineDownloadsManager.shared.eventObject(for: page) { [weak self] result in
+            guard let self = self else {
+                return
+            }
+            result.success { event in
+                self.statusChanged(event, page: page)
+            }
+
+            result.failure { _ in
+                self.activityIndicator.isHidden = true
+                self.activityIndicator.stopAnimating()
+            }
+        }
+        cancellable = downloadsManager
             .publisher
             .sink { [weak self] event in
-                guard let self = self else {
-                    return
+                switch event {
+                case .statusChanged(object: let event):
+                    self?.statusChanged(event, page: page)
+                default:
+                    break
                 }
             }
     }
 
-    private func delete(_ page: Page) {
-        storageManager.delete(page) { [weak self] result in
-            result.success {
-                self?.downloadButton.currentState = .idle
-            }
+    private func statusChanged(_ event: OfflineDownloadsManagerEventObject, page: Page) {
+        guard let object = self.page, object == page else {
+            return
         }
-    }
-
-    private func isDownloaded(page: Page) {
-        OfflineDownloadsManager.shared.isDownloaded(object: page) { [weak self, weak page] result in
-            guard let self = self, self.page == page else {
+        do {
+            let eventObjectId = try event.object.toOfflineModel().id
+            let objectId = try object.toOfflineModel().id
+            guard eventObjectId == objectId else {
                 return
             }
-            if case let .success(isSaved) = result {
-                self.downloadButton.currentState = isSaved ? .downloaded : .idle
-            } else {
-                self.downloadButton.currentState = .idle
+            savedImage.isHidden = event.status != .completed
+            switch event.status {
+            case .initialized, .preparing, .active:
+                self.activityIndicator.isHidden = false
+                self.activityIndicator.startAnimating()
+            default:
+                activityIndicator.isHidden = true
+                activityIndicator.stopAnimating()
             }
+        } catch {
+            activityIndicator.isHidden = true
+            savedImage.isHidden = true
         }
     }
 }
