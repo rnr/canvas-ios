@@ -57,7 +57,7 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
             }
 
             let extractor = await OfflineHTMLDynamicsLinksExtractor(url: url)
-            _ = try await extractor.links()
+            try await extractor.fetch()
             if let latestURL = await extractor.latestRedirectURL {
                 let downloader = OfflineLinkDownloader()
                 let cookieString = await extractor.cookies().cookieString
