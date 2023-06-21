@@ -172,6 +172,7 @@ open class Router {
                 var analyticsViewController: UIViewController?
 
                 if let view = route.factory(url, params, userInfo) {
+                    print(String(describing: type(of: view)), "ROUTER OPEN CONTROLLER")
                     analyticsViewController = view
                     show(view, from: from, options: options, analyticsRoute: nil)
                 }

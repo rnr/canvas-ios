@@ -51,6 +51,7 @@ public class CoreHostingController<Content: View>: UIHostingController<CoreHosti
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.useStyle(navigationBarStyle)
+        UIScrollView.appearance().contentInset = .init(top: 0, left: 0, bottom: 60, right: 0)
     }
 }
 

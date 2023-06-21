@@ -17,8 +17,9 @@
 //
 
 import UIKit
+import mobile_offline_downloader_ios
 
-public class PageDetailsViewController: DownloadableViewController, ColoredNavViewProtocol, ErrorViewController {
+public class PageDetailsViewController: DownloadableViewController, ColoredNavViewProtocol {
     lazy var optionsButton = UIBarButtonItem(image: .moreLine, style: .plain, target: self, action: #selector(showOptions))
     @IBOutlet weak var webViewContainer: UIView!
     let webView = CoreWebView(pullToRefresh: .disabled)
@@ -92,6 +93,7 @@ public class PageDetailsViewController: DownloadableViewController, ColoredNavVi
 
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        downloadButton.isHidden = true
         navigationController?.navigationBar.useContextColor(color)
     }
 
@@ -106,15 +108,16 @@ public class PageDetailsViewController: DownloadableViewController, ColoredNavVi
             let name = context.contextType == .course ? courses.first?.name : groups.first?.name,
             let color = context.contextType == .course ? courses.first?.color : groups.first?.color
         else { return }
+        setupCourse(courses.first)
         updateNavBar(subtitle: name, color: color)
     }
 
     func update() {
         guard let page = page else { return }
+        setupObject(page)
         setupTitleViewInNavbar(title: page.title)
         optionsButton.accessibilityIdentifier = "PageDetails.options"
         navigationItem.rightBarButtonItem = canEdit ? optionsButton : nil
-        webView.loadHTMLString(page.body, baseURL: page.htmlURL)
     }
 
     private func updatePages() {

@@ -58,7 +58,9 @@ public struct DashboardCardView: View {
             RefreshableScrollView {
                 VStack(spacing: 0) {
                     fileUploadNotificationCards()
-                    DownloadsContentView(action: {})
+                    DownloadsContentCellView {
+                        showDownloads()
+                    }
                     list(CGSize(width: geometry.size.width - 32, height: geometry.size.height))
                 }
                 .padding(.horizontal, verticalSpacing)
@@ -279,5 +281,14 @@ public struct DashboardCardView: View {
 
     func showAllCourses() {
         env.router.route(to: "/courses", from: controller)
+    }
+
+    func showDownloads() {
+        let downloadsViewHostingController = CoreHostingController(DownloadsView())
+        env.router.show(
+            downloadsViewHostingController,
+            from: controller,
+            options: .push
+        )
     }
 }

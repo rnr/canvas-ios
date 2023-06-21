@@ -2,9 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:/Users/eyatsenko/Documents/XCode/rnr-canvas-ios/MobileOfflineDownloader">
-   </FileRef>
-   <FileRef
       location = "group:CanvasCore/CanvasCore.xcodeproj">
    </FileRef>
    <FileRef

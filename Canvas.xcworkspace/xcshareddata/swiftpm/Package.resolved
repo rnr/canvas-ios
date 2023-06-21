@@ -19,6 +19,15 @@
       }
     },
     {
+      "identity" : "combinereachability",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/istvan-kreisz/CombineReachability.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "ba1cb2adeb111ee3ce475404ca1cdfb322505281"
+      }
+    },
+    {
       "identity" : "firebase-ios-sdk",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/firebase-ios-sdk.git",
@@ -118,12 +127,21 @@
       }
     },
     {
+      "identity" : "reachability.swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ashleymills/Reachability.swift",
+      "state" : {
+        "revision" : "c01bbdf2d633cf049ae1ed1a68a2020a8bda32e2",
+        "version" : "5.1.0"
+      }
+    },
+    {
       "identity" : "realm-core",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/realm/realm-core.git",
       "state" : {
-        "revision" : "dd91f5f967c4ae89c37e24ab2a0315c31106648f",
-        "version" : "13.6.0"
+        "revision" : "72226e2fd84f3a3a8ab3cffc2890c7951f1351d5",
+        "version" : "13.10.1"
       }
     },
     {
@@ -131,8 +149,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/realm/realm-swift.git",
       "state" : {
-        "revision" : "8ac6fe1aa5d0fb0100062d80863416a4d70de8ca",
-        "version" : "10.37.0"
+        "revision" : "08ee98e7f52a5fb11b10b7430e6f84adbb7433a4",
+        "version" : "10.39.1"
       }
     },
     {
@@ -151,6 +169,15 @@
       "state" : {
         "revision" : "9483a5d459b45c3ffd059f7b55f9638e268632fd",
         "version" : "1.5.0"
+      }
+    },
+    {
+      "identity" : "swiftsoup",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/scinfu/SwiftSoup.git",
+      "state" : {
+        "revision" : "0e96a20ffd37a515c5c963952d4335c89bed50a6",
+        "version" : "2.6.0"
       }
     }
   ],

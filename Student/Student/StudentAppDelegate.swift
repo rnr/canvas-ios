@@ -79,8 +79,12 @@ class StudentAppDelegate: UIResponder, UIApplicationDelegate, AppEnvironmentDele
             window?.makeKeyAndVisible()
             Analytics.shared.logScreenView(route: "/login", viewController: window?.rootViewController)
         }
-
+        setupOffline()
         return true
+    }
+
+    func setupOffline() {
+        DownloaderClient.setup()
     }
 
     func setup(session: LoginSession) {
