@@ -22,11 +22,9 @@ import mobile_offline_downloader_ios
 final class CourseStorageDataModel {
 
     var course: Course
-    var entriesIds: [String]
 
-    init(course: Course, entriesIds: [String] = []) {
+    init(course: Course) {
         self.course = course
-        self.entriesIds = entriesIds
     }
 }
 
@@ -40,10 +38,6 @@ extension CourseStorageDataModel: OfflineStorageDataProtocol {
             let predicate = NSPredicate(format: "%K == %@", #keyPath(Course.id), model.id)
             let course: Course = context.fetch(predicate).first ?? context.insert()
             let downloadCourse = CourseStorageDataModel(course: course)
-
-            if let entriesIds = dictionary["entriesIds"] as? [String] {
-                downloadCourse.entriesIds = entriesIds
-            }
 
             if let jsonString = dictionary["course"] as? String,
                 let data = jsonString.data(using: String.Encoding.utf8),
@@ -134,8 +128,7 @@ extension CourseStorageDataModel: OfflineStorageDataProtocol {
             return OfflineStorageDataModel(id: "", type: "", json: "")
         }
         let dictionary: [String: Any] = [
-            "course": courseJSON,
-            "entriesIds": entriesIds
+            "course": courseJSON
         ]
         if let jsonData = try? JSONSerialization.data(withJSONObject: dictionary),
            let jsonString = String(data: jsonData, encoding: .utf8) {

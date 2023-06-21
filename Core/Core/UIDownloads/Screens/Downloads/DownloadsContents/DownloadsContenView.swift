@@ -19,23 +19,12 @@
 import SwiftUI
 import mobile_offline_downloader_ios
 
-final class DownloadsContentViewModel: ObservableObject {
-
-    let courseDataModel: CourseStorageDataModel
-    let content: [OfflineDownloaderEntry]
-
-    init(content: [OfflineDownloaderEntry], courseDataModel: CourseStorageDataModel) {
-        self.content = content
-        self.courseDataModel = courseDataModel
-    }
-
-}
-
 struct DownloadsContenView: View {
 
     // MARK: - Injected -
 
     @Environment(\.viewController) var controller
+    @Environment(\.presentationMode) private var presentationMode
 
     // MARK: - Properties -
 
@@ -53,10 +42,18 @@ struct DownloadsContenView: View {
         return navigationController
     }
 
-    init(content: [OfflineDownloaderEntry], courseDataModel: CourseStorageDataModel, title: String) {
+    init(
+        content: [OfflineDownloaderEntry],
+        courseDataModel: CourseStorageDataModel,
+        title: String,
+        onDeleted: ((OfflineDownloaderEntry) -> Void)? = nil,
+        onDeletedAll: (() -> Void)? = nil
+    ) {
         let viewModel = DownloadsContentViewModel(
             content: content,
-            courseDataModel: courseDataModel
+            courseDataModel: courseDataModel,
+            onDeleted: onDeleted,
+            onDeletedAll: onDeletedAll
         )
         self._viewModel = .init(wrappedValue: viewModel)
         self.title = title
@@ -75,20 +72,44 @@ struct DownloadsContenView: View {
                         .foregroundColor(.white)
                         .font(.semibold16)
                 }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    deleteAllButton
+                }
             }
     }
 
     private var content: some View {
         DownloadsContentList {
             ForEach(viewModel.content, id: \.dataModel.id) { entry in
-                DownloadsPageCellView(
-                    viewModel: DownloadsModuleCellViewModel(module: entry.dataModel)
-                ).onTapGesture {
-                    destination(entry: entry)
+                VStack(spacing: 0) {
+                    DownloadsPageCellView(
+                        viewModel: DownloadsModuleCellViewModel(module: entry.dataModel)
+                    ).onTapGesture {
+                        destination(entry: entry)
+                    }
+                    Divider()
                 }
-                Divider()
+            }
+            .onDelete { indexSet in
+                viewModel.swipeDelete(indexSet: indexSet)
             }
         }
+    }
+
+    private var deleteAllButton: some View {
+        Button("Delete all") {
+            let cancelAction = AlertAction(NSLocalizedString("Cancel", comment: ""), style: .cancel) { _ in }
+            let deleteAction = AlertAction(NSLocalizedString("Delete", comment: ""), style: .destructive) { _ in
+                viewModel.deleteAll()
+                presentationMode.wrappedValue.dismiss()
+            }
+            navigationController?.showAlert(
+                title: NSLocalizedString("Are you sure you want to remove content?", comment: ""),
+                actions: [cancelAction, deleteAction],
+                style: .actionSheet
+            )
+        }
+        .foregroundColor(.white)
     }
 
     private func destination(entry: OfflineDownloaderEntry) {

@@ -30,12 +30,14 @@ final class DownloadsViewModel: ObservableObject {
     // MARK: - Content -
 
     private(set) var courseViewModels: [DownloadCourseViewModel] = []
+    private(set) var categories: [String: [DownloadsCourseCategoryViewModel]] = [:]
     private var cancellables: [AnyCancellable] = []
 
     enum State {
         case none // init
         case loading
         case loaded
+        case updated
     }
 
     @Published var state: State = .none {
@@ -66,34 +68,23 @@ final class DownloadsViewModel: ObservableObject {
     func pauseResume() {}
 
     func deleteAll() {
-        let group = DispatchGroup()
         courseViewModels.forEach { viewModel in
             storageManager.delete(viewModel.courseDataModel) { _ in }
-            group.enter()
-            storageManager.loadAll(of: OfflineDownloaderEntry.self) { [weak self] result in
-                guard let self = self else {
-                    group.leave()
-                    return
-                }
-                result.success { entries in
-                    let items = DownloadsHelper.filter(courseId: viewModel.courseId, entries: entries)
-                    items.forEach {
-                        try? self.downloadsManager.delete(entry: $0)
-                    }
-                }
-                group.leave()
+            let models = categories.removeValue(forKey: viewModel.courseId)
+            models
+                .flatMap { $0.flatMap { $0.content } }?
+                .forEach {
+                try? self.downloadsManager.delete(entry: $0)
             }
         }
-        group.notify(queue: .main) {
-            self.storageManager.deleteAll { [weak self] _ in
-                guard let self = self else {
-                    return
-                }
-                DispatchQueue.main.async {
-                    self.modules = []
-                    self.courseViewModels = []
-                    self.state = .loaded
-                }
+       storageManager.deleteAll { [weak self] _ in
+            guard let self = self else {
+                return
+            }
+            DispatchQueue.main.async {
+                self.modules = []
+                self.courseViewModels = []
+                self.state = .updated
             }
         }
     }
@@ -108,23 +99,16 @@ final class DownloadsViewModel: ObservableObject {
         indexSet.forEach { index in
             let viewModel = courseViewModels.remove(at: index)
             storageManager.delete(viewModel.courseDataModel) { _ in }
-            storageManager.loadAll(of: OfflineDownloaderEntry.self) { [weak self] result in
-                guard let self = self else {
-                    return
-                }
-                result.success { entries in
-                    let items = DownloadsHelper.filter(courseId: viewModel.courseId, entries: entries)
-                    items.forEach {
-                        try? self.downloadsManager.delete(entry: $0)
-                        self.storageManager.delete($0) {_ in}
-                    }
-                }
+            let models = categories.removeValue(forKey: viewModel.courseId)
+            models
+                .flatMap { $0.flatMap { $0.content } }?
+                .forEach {
+                try? downloadsManager.delete(entry: $0)
+                storageManager.delete($0) {_ in}
             }
         }
         state = .loaded
     }
-
-    // MARK: - Private methods -
 
     func fetch() {
         state = .loading
@@ -133,16 +117,85 @@ final class DownloadsViewModel: ObservableObject {
                 return
             }
             result.success { courses in
-                self.courseViewModels = courses.compactMap { courseDataModel in
-                    if courseDataModel.entriesIds.isEmpty {
-                        return nil
+                let dispatchGroup = DispatchGroup()
+                courses.forEach { courseStorageDataModel in
+                    dispatchGroup.enter()
+                    self.fetchEntries(courseDataModel: courseStorageDataModel) {
+                        dispatchGroup.leave()
                     }
-                    return DownloadCourseViewModel(
-                        courseDataModel: courseDataModel
+                }
+                dispatchGroup.notify(queue: .main) {
+                    self.state = .loaded
+                }
+            }
+            result.failure { _ in
+                self.state = .loaded
+            }
+        }
+    }
+
+    func categories(courseId: String) -> [DownloadsCourseCategoryViewModel] {
+        categories[courseId] ?? []
+    }
+
+    func delete(courseViewModel: DownloadCourseViewModel) {
+        categories.removeValue(forKey: courseViewModel.courseId)
+        courseViewModels.removeAll(where: {$0.courseId == courseViewModel.courseId})
+        setIsEmpty()
+    }
+
+    // MARK: - Private methods -
+
+    private func fetchEntries(courseDataModel: CourseStorageDataModel, completion: @escaping () -> Void) {
+        storageManager.loadAll(of: OfflineDownloaderEntry.self) { [weak self] result in
+            guard let self = self else {
+                return
+            }
+            result.success { entries in
+                let courseEntries = DownloadsHelper.filter(
+                    courseId: courseDataModel.course.id,
+                    entries: entries
+                )
+                let pagesSection = DownloadsHelper.pages(
+                    courseId: courseDataModel.course.id,
+                    entries: courseEntries
+                )
+                let modulesSection = DownloadsHelper.moduleItems(
+                    courseId: courseDataModel.course.id,
+                    entries: courseEntries
+                )
+                var categories: [DownloadsCourseCategoryViewModel] = []
+                if !pagesSection.isEmpty {
+                    categories.append(
+                        DownloadsCourseCategoryViewModel(
+                            course: courseDataModel.course,
+                            content: pagesSection,
+                            contentType: .pages
+                        )
+                    )
+                }
+                if !modulesSection.isEmpty {
+                    categories.append(
+                        DownloadsCourseCategoryViewModel(
+                            course: courseDataModel.course,
+                            content: modulesSection,
+                            contentType: .modules
+                        )
+                    )
+                }
+
+                if !categories.isEmpty {
+                    self.categories[courseDataModel.course.id] = categories
+                    self.courseViewModels.append(
+                        DownloadCourseViewModel(
+                            courseDataModel: courseDataModel
+                        )
                     )
                 }
             }
-            self.state = .loaded
+            DispatchQueue.main.async {
+                completion()
+            }
         }
     }
 

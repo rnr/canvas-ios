@@ -29,7 +29,7 @@ final class DownloadsCourseCategoryViewModel: Identifiable, Hashable {
     }
 
     let id: String = Foundation.UUID().uuidString
-    let content: [OfflineDownloaderEntry]
+    var content: [OfflineDownloaderEntry]
     let contentType: ContentType
     let course: Course
 

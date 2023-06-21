@@ -210,14 +210,13 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
             }
             switch event.status {
             case .completed:
-                addOrUpdateCourse(deleting: false, downloadedId: eventObjectId)
+                addOrUpdateCourse()
                 downloadButton.currentState = .downloaded
             case .initialized, .preparing:
                 downloadButton.currentState = .waiting
             case .active:
                 downloadButton.currentState = .downloading
             case .removed:
-                addOrUpdateCourse(deleting: true, downloadedId: eventObjectId)
                 downloadButton.currentState = .idle
             default:
                 downloadButton.currentState = .idle
@@ -246,15 +245,14 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
         }
     }
 
-    private func addOrUpdateCourse(deleting: Bool, downloadedId: String) {
+    private func addOrUpdateCourse() {
         guard let course = course else {
             return
         }
-        storageManager.addOrUpdateCourse(
-            course: course,
-            deleting: deleting,
-            downloadedId: downloadedId
+        let courseStorageDataModel = CourseStorageDataModel(
+            course: course
         )
+        storageManager.save(courseStorageDataModel) { _ in}
     }
 
     private func delete() {
