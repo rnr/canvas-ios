@@ -17,12 +17,13 @@
 //
 import Combine
 import SwiftUI
+import mobile_offline_downloader_ios
 
 struct DownloadingCellView: View {
 
     // MARK: - Properties -
 
-    let module: DownloadingModule
+    @ObservedObject var module: DownloadsModuleCellViewModel
 
     // MARK: - Views -
 
@@ -48,20 +49,20 @@ struct DownloadingCellView: View {
     private var content: some View {
         HStack {
             VStack(alignment: .leading, spacing: 3) {
-                Text(module.shortName)
+                Text(module.title)
                     .font(.semibold18)
                     .foregroundColor(.textDarkest)
                     .fixedSize(horizontal: false, vertical: true)
                     .lineLimit(2)
                 HStack(alignment: .center, spacing: 2) {
-                    ProgressView(value: 1)
+                    ProgressView(value: module.progress)
                         .progressViewStyle(LinearProgressViewStyle(tint: Color(Brand.shared.linkColor)))
                         .frame(height: 5)
-                    Spacer()
-                    Text("100%")
-                        .font(.caption.monospacedDigit())
-                        .foregroundColor(.secondary)
-                        .frame(width: 40)
+//                    Spacer()
+//                    Text("\(module.progress * 100)%")
+//                        .font(.caption.monospacedDigit())
+//                        .foregroundColor(.secondary)
+//                        .frame(width: 40)
                     Spacer()
                 }
             }

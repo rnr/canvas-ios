@@ -12,10 +12,15 @@ public struct ContentViewerView: View {
 
     @StateObject var viewModel: ContentViewerViewModel
 
-    init(entry: OfflineDownloaderEntry, courseDataModel: CourseStorageDataModel) {
+    init(
+        entry: OfflineDownloaderEntry,
+        courseDataModel: CourseStorageDataModel,
+        onDeleted: ((OfflineDownloaderEntry) -> Void)? = nil
+    ) {
         let model = ContentViewerViewModel(
             entry: entry,
-            courseDataModel: courseDataModel
+            courseDataModel: courseDataModel,
+            onDeleted: onDeleted
         )
         self._viewModel = .init(wrappedValue: model)
     }

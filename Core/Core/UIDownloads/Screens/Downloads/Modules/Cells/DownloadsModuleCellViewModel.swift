@@ -16,13 +16,26 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-import Foundation
+import Combine
 import SwiftUI
 import mobile_offline_downloader_ios
 
 final class DownloadsModuleCellViewModel: ObservableObject {
 
+    // MARK: - Injected -
+
+    private let downloadsManager = OfflineDownloadsManager.shared
+
+    // MARK: - Properties -
+
     private let module: OfflineStorageDataModel
+    private var downloadsSubscriber: AnyCancellable?
+
+    @Published var progress: Double = 0.0
+
+    var moduleId: String {
+        module.id
+    }
 
     var title: String {
         if let page = try? Page.fromOfflineModel(module) {
@@ -63,6 +76,7 @@ final class DownloadsModuleCellViewModel: ObservableObject {
 
     init(module: OfflineStorageDataModel) {
         self.module = module
+        observeDownloadsEvents()
     }
 
     private func image(_ type: ModuleItemType?) -> UIImage? {
@@ -76,5 +90,32 @@ final class DownloadsModuleCellViewModel: ObservableObject {
             return nil
         }
         return uiImage
+    }
+
+    private func observeDownloadsEvents() {
+        downloadsSubscriber = downloadsManager
+            .publisher
+            .sink { [weak self] event in
+                switch event {
+                case .statusChanged:
+                    break
+                case .progressChanged(object: let event):
+                    self?.progressChanged(event)
+                }
+            }
+    }
+
+    private func progressChanged(_ event: OfflineDownloadsManagerEventObject) {
+        do {
+            let eventObjectId = try event.object.toOfflineModel().id
+            let objectId = module.id
+            guard eventObjectId == objectId else {
+                return
+            }
+            if event.progress == 0.0 {
+                return
+            }
+            progress = event.progress
+        } catch {}
     }
 }

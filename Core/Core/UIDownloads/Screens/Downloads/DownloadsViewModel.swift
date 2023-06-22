@@ -22,14 +22,18 @@ import mobile_offline_downloader_ios
 
 final class DownloadsViewModel: ObservableObject {
 
-    // MARK: - Injections -
+    // MARK: - Injected -
 
     private var storageManager: OfflineStorageManager = .shared
     private var downloadsManager: OfflineDownloadsManager = .shared
 
     // MARK: - Content -
 
-    private(set) var courseViewModels: [DownloadCourseViewModel] = []
+    private(set) var courseViewModels: [DownloadCourseViewModel] = [] {
+        didSet {
+            setIsEmpty()
+        }
+    }
     private(set) var categories: [String: [DownloadsCourseCategoryViewModel]] = [:]
     private var cancellables: [AnyCancellable] = []
 
@@ -52,7 +56,7 @@ final class DownloadsViewModel: ObservableObject {
         }
     }
 
-    @Published var modules: [DownloadingModule] = [] {
+    @Published var modules: [DownloadsModuleCellViewModel] = [] {
         didSet {
             setIsEmpty()
         }
@@ -61,6 +65,7 @@ final class DownloadsViewModel: ObservableObject {
 
     init() {
         fetch()
+        observeDownloadsEvents()
     }
 
     // MARK: - Intents -
@@ -107,11 +112,12 @@ final class DownloadsViewModel: ObservableObject {
                 storageManager.delete($0) {_ in}
             }
         }
-        state = .loaded
+        state = .updated
     }
 
     func fetch() {
         state = .loading
+        modules = downloadsManager.activeEntries.map { .init(module: $0.dataModel) }
         storageManager.loadAll(of: CourseStorageDataModel.self) { [weak self] result in
             guard let self = self else {
                 return
@@ -141,49 +147,24 @@ final class DownloadsViewModel: ObservableObject {
     func delete(courseViewModel: DownloadCourseViewModel) {
         categories.removeValue(forKey: courseViewModel.courseId)
         courseViewModels.removeAll(where: {$0.courseId == courseViewModel.courseId})
-        setIsEmpty()
+        state = .updated
     }
 
     // MARK: - Private methods -
 
-    private func fetchEntries(courseDataModel: CourseStorageDataModel, completion: @escaping () -> Void) {
+    private func fetchEntries(
+        courseDataModel: CourseStorageDataModel,
+        completion: @escaping () -> Void
+    ) {
         storageManager.loadAll(of: OfflineDownloaderEntry.self) { [weak self] result in
             guard let self = self else {
                 return
             }
             result.success { entries in
-                let courseEntries = DownloadsHelper.filter(
-                    courseId: courseDataModel.course.id,
-                    entries: entries
+                let categories = DownloadsHelper.categories(
+                    from: entries,
+                    courseDataModel: courseDataModel
                 )
-                let pagesSection = DownloadsHelper.pages(
-                    courseId: courseDataModel.course.id,
-                    entries: courseEntries
-                )
-                let modulesSection = DownloadsHelper.moduleItems(
-                    courseId: courseDataModel.course.id,
-                    entries: courseEntries
-                )
-                var categories: [DownloadsCourseCategoryViewModel] = []
-                if !pagesSection.isEmpty {
-                    categories.append(
-                        DownloadsCourseCategoryViewModel(
-                            course: courseDataModel.course,
-                            content: pagesSection,
-                            contentType: .pages
-                        )
-                    )
-                }
-                if !modulesSection.isEmpty {
-                    categories.append(
-                        DownloadsCourseCategoryViewModel(
-                            course: courseDataModel.course,
-                            content: modulesSection,
-                            contentType: .modules
-                        )
-                    )
-                }
-
                 if !categories.isEmpty {
                     self.categories[courseDataModel.course.id] = categories
                     self.courseViewModels.append(
@@ -199,9 +180,101 @@ final class DownloadsViewModel: ObservableObject {
         }
     }
 
+    private func observeDownloadsEvents() {
+        downloadsManager
+            .publisher
+            .sink { [weak self] event in
+                switch event {
+                case .statusChanged(object: let event):
+                    self?.statusChanged(event)
+                case .progressChanged:
+                    break
+                }
+            }
+            .store(in: &cancellables)
+    }
+
+    private func statusChanged(_ event: OfflineDownloadsManagerEventObject) {
+        do {
+            switch event.status {
+            case .completed:
+                let object = event.object
+                let model = try object.toOfflineModel()
+                modules.removeAll(where: { $0.moduleId == model.id })
+                if let object = event.object as? OfflineDownloadTypeProtocol {
+                    addCompletedEntry(object: object)
+                }
+            default:
+                break
+            }
+        } catch {}
+    }
+
+    private func addCompletedEntry(object: OfflineDownloadTypeProtocol) {
+        downloadsManager.savedEntry(for: object) { [weak self] result in
+            guard let self = self else {
+                return
+            }
+            result.success { entry in
+                guard let userInfo = entry.userInfo,
+                    let courseId = DownloadsHelper.getCourseId(userInfo: userInfo) else {
+                    return
+                }
+
+                if self.categories.contains(where: { $0.key == courseId }) {
+                    let pageSection = DownloadsHelper.pages(
+                        courseId: courseId,
+                        entries: [entry]
+                    ).first
+                    let moduleSection = DownloadsHelper.moduleItems(
+                        courseId: courseId,
+                        entries: [entry]
+                    ).first
+
+                    pageSection.flatMap {
+                        self.categories[courseId]?
+                            .first(where: {$0.contentType == .pages})?
+                            .content
+                            .append($0)
+                    }
+                    moduleSection.flatMap {
+                        self.categories[courseId]?
+                            .first(where: { $0.contentType == .modules})?
+                            .content
+                            .append($0)
+                    }
+                    self.state = .updated
+                } else {
+                    self.storageManager.loadAll(
+                        of: CourseStorageDataModel.self
+                    ) { result in
+                        result.success { courseDataModels in
+                            guard let courseDataModel = courseDataModels.first(
+                                where: { $0.course.id == courseId }
+                            ) else {
+                                return
+                            }
+                            let categories = DownloadsHelper.categories(
+                                from: [entry],
+                                courseDataModel: courseDataModel
+                            )
+                            self.categories[courseDataModel.course.id] = categories
+                            self.courseViewModels.append(
+                                DownloadCourseViewModel(
+                                    courseDataModel: courseDataModel
+                                )
+                            )
+                            self.state = .updated
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private func setIsEmpty() {
         switch state {
-        case .loaded:
+        case .loaded, .updated:
             if !isConnected && courseViewModels.isEmpty {
                 isEmpty = true
             } else {

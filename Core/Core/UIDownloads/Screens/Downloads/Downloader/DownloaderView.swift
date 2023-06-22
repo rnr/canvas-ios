@@ -23,10 +23,17 @@ struct DownloaderView: View {
 
     // MARK: - Properties -
 
-    @StateObject var viewModel: DownloaderViewModel = .init()
+    @StateObject var viewModel: DownloaderViewModel
     @Environment(\.viewController) var controller
     @State var isDisplayingAlert: Bool = false
     var didDeleteAll: (() -> Void)?
+
+    init(
+        modules: [DownloadsModuleCellViewModel]
+    ) {
+        let viewModel: DownloaderViewModel = .init(modules: modules)
+        self._viewModel = .init(wrappedValue: viewModel)
+    }
 
     // MARK: - Views -
 

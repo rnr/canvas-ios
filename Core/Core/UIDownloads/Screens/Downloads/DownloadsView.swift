@@ -76,7 +76,12 @@ public struct DownloadsView: View {
     private var list: some View {
         List {
             if !viewModel.modules.isEmpty {
-                LinkDownloadingHeader(destination: DownloaderView(), title: "Downloading")
+                LinkDownloadingHeader(
+                    destination: DownloaderView(
+                        modules: viewModel.modules
+                    ),
+                    title: "Downloading"
+                )
                 modules
             }
             Header(title: "Courses")
@@ -87,7 +92,7 @@ public struct DownloadsView: View {
     }
 
     private var modules: some View {
-        DownloadDownloadingSectionView(viewModel: viewModel)
+        DownloadProgressSectionView(viewModel: viewModel)
             .listRowInsets(EdgeInsets())
             .iOS15ListRowSeparator(.hidden)
     }

@@ -18,7 +18,7 @@
 
 import SwiftUI
 
-struct DownloadsContentCellView: View {
+struct DownloadedContentCellView: View {
     var action: (() -> Void)?
 
     var body: some View {

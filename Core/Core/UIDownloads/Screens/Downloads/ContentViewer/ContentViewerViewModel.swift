@@ -16,12 +16,16 @@ public class ContentViewerViewModel: ObservableObject {
         }
     }
 
+    var onDeleted: ((OfflineDownloaderEntry) -> Void)?
+
     init(
         entry: OfflineDownloaderEntry,
-        courseDataModel: CourseStorageDataModel
+        courseDataModel: CourseStorageDataModel,
+        onDeleted: ((OfflineDownloaderEntry) -> Void)? = nil
     ) {
         self.entry = entry
         self.courseDataModel = courseDataModel
+        self.onDeleted = onDeleted
     }
 
     var requestType: WebViewConfigurator.RequestType? {
@@ -53,9 +57,10 @@ public class ContentViewerViewModel: ObservableObject {
                     return
                 }
                 if case .statusChanged(object: let event) = event {
-                    if case .removed = event.status, let eventObjectId = try? event.object.toOfflineModel().id {
-
+                    if case .removed = event.status,
+                        let eventObjectId = try? event.object.toOfflineModel().id {
                         self.shouldDismissView = true
+                        onDeleted?(entry)
                     }
                 }
             }

@@ -23,8 +23,16 @@ final class CourseStorageDataModel {
 
     var course: Course
 
+    var id: String {
+        course.id
+    }
+
     init(course: Course) {
         self.course = course
+    }
+
+    static func configureId(id: String) -> String {
+        "\(id)_download_course"
     }
 }
 
@@ -133,7 +141,7 @@ extension CourseStorageDataModel: OfflineStorageDataProtocol {
         if let jsonData = try? JSONSerialization.data(withJSONObject: dictionary),
            let jsonString = String(data: jsonData, encoding: .utf8) {
             return OfflineStorageDataModel(
-                id: "\(course.id)_download_course",
+                id: CourseStorageDataModel.configureId(id: course.id),
                 type: OfflineContentType.downloadcourse.rawValue,
                 json: jsonString
             )
