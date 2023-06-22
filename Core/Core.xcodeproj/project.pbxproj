@@ -842,7 +842,7 @@
 		BA4B23D029D335560035D918 /* DownloadsCourseDetailsCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA4B23AF29D335560035D918 /* DownloadsCourseDetailsCellView.swift */; };
 		BA4B23D129D335560035D918 /* DownloadsCourseDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA4B23B029D335560035D918 /* DownloadsCourseDetailView.swift */; };
 		BA4B23D329D335560035D918 /* DownloadsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA4B23B529D335560035D918 /* DownloadsView.swift */; };
-		BA4B23D429D335560035D918 /* DownloadDownloadingSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA4B23B729D335560035D918 /* DownloadDownloadingSectionView.swift */; };
+		BA4B23D429D335560035D918 /* DownloadProgressSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA4B23B729D335560035D918 /* DownloadProgressSectionView.swift */; };
 		BA4B23D529D335560035D918 /* DownloadCoursesSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA4B23B829D335560035D918 /* DownloadCoursesSectionView.swift */; };
 		BA4B23D629D335560035D918 /* DownloaderContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA4B23BA29D335560035D918 /* DownloaderContentView.swift */; };
 		BA4B23D729D335560035D918 /* DownloaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA4B23BB29D335560035D918 /* DownloaderViewModel.swift */; };
@@ -863,9 +863,9 @@
 		BA5929AA2A29E81000C4540C /* SUWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5929A92A29E81000C4540C /* SUWebView.swift */; };
 		BA5D83A629D481BE00150235 /* DownloadsCourseDetailsHeaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5D83A529D481BE00150235 /* DownloadsCourseDetailsHeaderViewModel.swift */; };
 		BA5D83A829D481E600150235 /* DownloadsCourseDetailsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5D83A729D481E600150235 /* DownloadsCourseDetailsHeaderView.swift */; };
-		BA5D83AD29D572AF00150235 /* DownloadsContentCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5D83AC29D572AF00150235 /* DownloadsContentCellView.swift */; };
+		BA5D83AD29D572AF00150235 /* DownloadedContentCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5D83AC29D572AF00150235 /* DownloadedContentCellView.swift */; };
 		BA5D83B029D5A26400150235 /* DownloadsContenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5D83AF29D5A26400150235 /* DownloadsContenView.swift */; };
-		BA5D83B429D5CF5C00150235 /* DownloadsPageCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5D83B329D5CF5C00150235 /* DownloadsPageCellView.swift */; };
+		BA5D83B429D5CF5C00150235 /* DownloadsContentCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5D83B329D5CF5C00150235 /* DownloadsContentCellView.swift */; };
 		BA5D83B829DAC7BD00150235 /* DownloadsCourseCategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5D83B729DAC7BD00150235 /* DownloadsCourseCategoryViewModel.swift */; };
 		BA5D83BA29DAC7E300150235 /* DownloadCourseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5D83B929DAC7E300150235 /* DownloadCourseViewModel.swift */; };
 		BA5D83BC29DAC8A800150235 /* DownloadingModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5D83BB29DAC8A800150235 /* DownloadingModule.swift */; };
@@ -2480,7 +2480,7 @@
 		BA4B23AF29D335560035D918 /* DownloadsCourseDetailsCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadsCourseDetailsCellView.swift; sourceTree = "<group>"; };
 		BA4B23B029D335560035D918 /* DownloadsCourseDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadsCourseDetailView.swift; sourceTree = "<group>"; };
 		BA4B23B529D335560035D918 /* DownloadsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadsView.swift; sourceTree = "<group>"; };
-		BA4B23B729D335560035D918 /* DownloadDownloadingSectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadDownloadingSectionView.swift; sourceTree = "<group>"; };
+		BA4B23B729D335560035D918 /* DownloadProgressSectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadProgressSectionView.swift; sourceTree = "<group>"; };
 		BA4B23B829D335560035D918 /* DownloadCoursesSectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadCoursesSectionView.swift; sourceTree = "<group>"; };
 		BA4B23BA29D335560035D918 /* DownloaderContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloaderContentView.swift; sourceTree = "<group>"; };
 		BA4B23BB29D335560035D918 /* DownloaderViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloaderViewModel.swift; sourceTree = "<group>"; };
@@ -2501,9 +2501,9 @@
 		BA5929A92A29E81000C4540C /* SUWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SUWebView.swift; sourceTree = "<group>"; };
 		BA5D83A529D481BE00150235 /* DownloadsCourseDetailsHeaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsCourseDetailsHeaderViewModel.swift; sourceTree = "<group>"; };
 		BA5D83A729D481E600150235 /* DownloadsCourseDetailsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsCourseDetailsHeaderView.swift; sourceTree = "<group>"; };
-		BA5D83AC29D572AF00150235 /* DownloadsContentCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsContentCellView.swift; sourceTree = "<group>"; };
+		BA5D83AC29D572AF00150235 /* DownloadedContentCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadedContentCellView.swift; sourceTree = "<group>"; };
 		BA5D83AF29D5A26400150235 /* DownloadsContenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsContenView.swift; sourceTree = "<group>"; };
-		BA5D83B329D5CF5C00150235 /* DownloadsPageCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsPageCellView.swift; sourceTree = "<group>"; };
+		BA5D83B329D5CF5C00150235 /* DownloadsContentCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsContentCellView.swift; sourceTree = "<group>"; };
 		BA5D83B729DAC7BD00150235 /* DownloadsCourseCategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsCourseCategoryViewModel.swift; sourceTree = "<group>"; };
 		BA5D83B929DAC7E300150235 /* DownloadCourseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadCourseViewModel.swift; sourceTree = "<group>"; };
 		BA5D83BB29DAC8A800150235 /* DownloadingModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadingModule.swift; sourceTree = "<group>"; };
@@ -5054,7 +5054,7 @@
 		BA4B23AB29D335560035D918 /* SwiftUIVIews */ = {
 			isa = PBXGroup;
 			children = (
-				BA5D83AC29D572AF00150235 /* DownloadsContentCellView.swift */,
+				BA5D83AC29D572AF00150235 /* DownloadedContentCellView.swift */,
 				BA4B23AC29D335560035D918 /* Header.swift */,
 				BA4B23AD29D335560035D918 /* LinkDownloadingHeader.swift */,
 				BA5D83BD29DADE9200150235 /* LoadingView.swift */,
@@ -5088,8 +5088,8 @@
 			children = (
 				BA4B23B529D335560035D918 /* DownloadsView.swift */,
 				BA4B23BD29D335560035D918 /* DownloadsViewModel.swift */,
-				BAA035D82A2F6BC8006AA743 /* Modules */,
 				BA4B23B629D335560035D918 /* Sections */,
+				BAA035D82A2F6BC8006AA743 /* Modules */,
 				BA4B23AE29D335560035D918 /* DownloadsCourseDetailView */,
 				BA5D83B129D5A26E00150235 /* DownloadsContents */,
 				BAA035D12A2A1D62006AA743 /* ContentViewer */,
@@ -5102,7 +5102,7 @@
 		BA4B23B629D335560035D918 /* Sections */ = {
 			isa = PBXGroup;
 			children = (
-				BA4B23B729D335560035D918 /* DownloadDownloadingSectionView.swift */,
+				BA4B23B729D335560035D918 /* DownloadProgressSectionView.swift */,
 				BA4B23B829D335560035D918 /* DownloadCoursesSectionView.swift */,
 			);
 			path = Sections;
@@ -5202,7 +5202,7 @@
 		BA5D83B229D5CF4F00150235 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				BA5D83B329D5CF5C00150235 /* DownloadsPageCellView.swift */,
+				BA5D83B329D5CF5C00150235 /* DownloadsContentCellView.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -8263,7 +8263,7 @@
 				7DA2607D23F722FA005D2121 /* PageViewEventViewControllerLoggingProtocol.swift in Sources */,
 				7DCA31F82540835300458651 /* WebView.swift in Sources */,
 				7D7F71E42420147800D6F9CB /* ConferenceDetailsViewController.swift in Sources */,
-				BA5D83B429D5CF5C00150235 /* DownloadsPageCellView.swift in Sources */,
+				BA5D83B429D5CF5C00150235 /* DownloadsContentCellView.swift in Sources */,
 				7DA25F9923F72136005D2121 /* APIAccount.swift in Sources */,
 				7D7086872568755300647D37 /* DashboardCardView.swift in Sources */,
 				7D159CED242E556F00A77A15 /* ModuleSectionHeaderView.swift in Sources */,
@@ -8385,7 +8385,7 @@
 				7DA25FA923F72136005D2121 /* APIDiscussion.swift in Sources */,
 				7DA25FDC23F72148005D2121 /* MDMManager.swift in Sources */,
 				7DA260B323F72352005D2121 /* GetFrontPage.swift in Sources */,
-				BA4B23D429D335560035D918 /* DownloadDownloadingSectionView.swift in Sources */,
+				BA4B23D429D335560035D918 /* DownloadProgressSectionView.swift in Sources */,
 				CF3E760D2885AE6F00276703 /* LocalNotifications.swift in Sources */,
 				7DA25FE623F721DE005D2121 /* AddMessage.swift in Sources */,
 				CFF64FE527DB5A8700653573 /* StudentViewCellViewModel.swift in Sources */,
@@ -8819,7 +8819,7 @@
 				CFAD79D826AEC02A0000A90D /* K5ScheduleEntryViewModel.swift in Sources */,
 				E8AC2D3724AE3A650053AA8A /* GetObservedStudents.swift in Sources */,
 				B17F27652459EDF100CD47A1 /* MasteryPathViewController.swift in Sources */,
-				BA5D83AD29D572AF00150235 /* DownloadsContentCellView.swift in Sources */,
+				BA5D83AD29D572AF00150235 /* DownloadedContentCellView.swift in Sources */,
 				7DA25FEB23F721DE005D2121 /* ConversationMessage.swift in Sources */,
 				7DA2604D23F722D9005D2121 /* Group.swift in Sources */,
 				3B4D893A2450A8FC004ED120 /* EditComposeRecipientsViewController.swift in Sources */,

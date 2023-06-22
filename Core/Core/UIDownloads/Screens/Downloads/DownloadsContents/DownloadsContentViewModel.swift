@@ -54,11 +54,15 @@ final class DownloadsContentViewModel: ObservableObject {
 
     func swipeDelete(indexSet: IndexSet) {
         indexSet.forEach { index in
-            let entry = content.remove(at: index)
-            try? downloadsManager.delete(entry: entry)
-            storageManager.delete(entry) { _ in}
-            onDeleted?(entry)
+            let entry = content[index]
+            delete(entry: entry)
         }
     }
 
+    func delete(entry: OfflineDownloaderEntry) {
+        content.removeAll(where: {$0.dataModel.id  == entry.dataModel.id})
+        try? downloadsManager.delete(entry: entry)
+        storageManager.delete(entry) { _ in}
+        onDeleted?(entry)
+    }
 }

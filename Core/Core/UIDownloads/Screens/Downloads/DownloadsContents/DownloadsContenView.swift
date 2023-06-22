@@ -82,7 +82,7 @@ struct DownloadsContenView: View {
         DownloadsContentList {
             ForEach(viewModel.content, id: \.dataModel.id) { entry in
                 VStack(spacing: 0) {
-                    DownloadsPageCellView(
+                    DownloadsContentCellView(
                         viewModel: DownloadsModuleCellViewModel(module: entry.dataModel)
                     ).onTapGesture {
                         destination(entry: entry)
@@ -118,7 +118,8 @@ struct DownloadsContenView: View {
             CoreHostingController(
                 ContentViewerView(
                     entry: entry,
-                    courseDataModel: viewModel.courseDataModel
+                    courseDataModel: viewModel.courseDataModel,
+                    onDeleted: viewModel.delete
                 )
             ),
             animated: true

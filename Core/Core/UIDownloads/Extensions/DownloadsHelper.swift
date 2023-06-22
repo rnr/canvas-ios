@@ -38,4 +38,52 @@ final class DownloadsHelper {
                 $0.userInfo?.lowercased().contains("moduleitem:") == true
             }
     }
+
+    static func getCourseId(userInfo: String) -> String? {
+        if let url = URL(string: userInfo),
+           let index = url.pathComponents.firstIndex(of: "courses"),
+           url.pathComponents.indices.contains(index + 1) {
+            return url.pathComponents[index + 1]
+        }
+        return nil
+    }
+
+    static func categories(
+        from entries: [OfflineDownloaderEntry],
+        courseDataModel: CourseStorageDataModel
+    ) -> [DownloadsCourseCategoryViewModel] {
+        var categories: [DownloadsCourseCategoryViewModel] = []
+
+        let courseEntries = DownloadsHelper.filter(
+            courseId: courseDataModel.course.id,
+            entries: entries
+        )
+        let pagesSection = DownloadsHelper.pages(
+            courseId: courseDataModel.course.id,
+            entries: courseEntries
+        )
+        let modulesSection = DownloadsHelper.moduleItems(
+            courseId: courseDataModel.course.id,
+            entries: courseEntries
+        )
+        if !pagesSection.isEmpty {
+            categories.append(
+                DownloadsCourseCategoryViewModel(
+                    course: courseDataModel.course,
+                    content: pagesSection,
+                    contentType: .pages
+                )
+            )
+        }
+        if !modulesSection.isEmpty {
+            categories.append(
+                DownloadsCourseCategoryViewModel(
+                    course: courseDataModel.course,
+                    content: modulesSection,
+                    contentType: .modules
+                )
+            )
+        }
+        return categories
+    }
 }

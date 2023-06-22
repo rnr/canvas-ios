@@ -18,7 +18,7 @@
 
 import SwiftUI
 
-public struct DownloadsPageCellView: View {
+public struct DownloadsContentCellView: View {
 
     // MARK: - Properties -
 

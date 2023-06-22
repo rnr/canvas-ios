@@ -18,7 +18,7 @@
 
 import SwiftUI
 
-struct DownloadDownloadingSectionView: View {
+struct DownloadProgressSectionView: View {
 
     // MARK: - Properties -
 
@@ -27,7 +27,7 @@ struct DownloadDownloadingSectionView: View {
     var body: some View {
         ForEach(
             Array(viewModel.modules.prefix(3).enumerated()),
-            id: \.element.id
+            id: \.offset
         ) { _, module in
             DownloadingCellView(module: module)
         }
@@ -45,7 +45,9 @@ struct DownloadDownloadingSectionView: View {
             Spacer()
             if viewModel.modules.count > 3 {
                 NavigationLink(
-                    destination: DownloaderView { viewModel.fetch() }
+                    destination: DownloaderView(
+                        modules: viewModel.modules
+                    )
                 ) {
                     Text("See all")
                         .font(.system(size: 14, weight: .regular))

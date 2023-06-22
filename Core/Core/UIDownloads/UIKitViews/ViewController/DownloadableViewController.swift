@@ -154,6 +154,7 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
                 object: object,
                 userInfo: components?.url?.absoluteString
             )
+            addOrUpdateCourse()
             downloadButton.currentState = .waiting
         } catch {
             showError(error)
@@ -210,7 +211,6 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
             }
             switch event.status {
             case .completed:
-                addOrUpdateCourse()
                 downloadButton.currentState = .downloaded
             case .initialized, .preparing:
                 downloadButton.currentState = .waiting
@@ -252,7 +252,14 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
         let courseStorageDataModel = CourseStorageDataModel(
             course: course
         )
-        storageManager.save(courseStorageDataModel) { _ in}
+        storageManager.save(courseStorageDataModel) { result in
+            result.success {
+                print("success")
+            }
+            result.failure { _ in
+                print("failure")
+            }
+        }
     }
 
     private func delete() {

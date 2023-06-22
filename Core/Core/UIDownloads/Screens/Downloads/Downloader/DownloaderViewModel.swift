@@ -25,11 +25,11 @@ final class DownloaderViewModel: ObservableObject {
 
     // MARK: - Properties -
 
-    @Published var modules: [DownloadingModule] = []
+    @Published var modules: [DownloadsModuleCellViewModel] = []
     private var cancellables: [AnyCancellable] = []
 
-    init() {
-        fetch()
+    init(modules: [DownloadsModuleCellViewModel]) {
+        self.modules = modules
     }
 
     // MARK: - Intents -
@@ -44,13 +44,5 @@ final class DownloaderViewModel: ObservableObject {
         indexSet.forEach { index in
             modules.remove(at: index)
         }
-    }
-
-    // MARK: - Private methods -
-
-    func fetch() {
-        modules.append(DownloadingModule(shortName: "Demo downloading"))
-        modules.append(DownloadingModule(shortName: "Demo downloading1"))
-        modules.append(DownloadingModule(shortName: "Demo downloading2"))
     }
 }
