@@ -49,7 +49,7 @@ public struct DownloadsView: View {
             switch viewModel.state {
             case .none, .loading:
                 LoadingView()
-            case .loaded:
+            case .loaded, .updated:
                 VStack {
                     if viewModel.isEmpty {
                         VStack {

@@ -21,6 +21,10 @@ import RealmSwift
 
 struct DownloadsCourseDetailView: View {
 
+    // MARK: - Injected -
+
+    @Environment(\.presentationMode) private var presentationMode
+
     // MARK: - Properties -
 
     @StateObject var viewModel: DownloadsCourseDetailViewModel
@@ -29,10 +33,20 @@ struct DownloadsCourseDetailView: View {
     private let headerViewModel: DownloadsCourseDetailsHeaderViewModel
     @State private var selection: DownloadsCourseCategoryViewModel?
 
-    init(courseViewModel: DownloadCourseViewModel) {
-        let model = DownloadsCourseDetailViewModel(courseViewModel: courseViewModel)
+    init(
+        courseViewModel: DownloadCourseViewModel,
+        categories: [DownloadsCourseCategoryViewModel],
+        onDeletedAll: (() -> Void)? = nil
+    ) {
+        let model = DownloadsCourseDetailViewModel(
+            courseViewModel: courseViewModel,
+            categories: categories,
+            onDeletedAll: onDeletedAll
+        )
         self._viewModel = .init(wrappedValue: model)
-        self.headerViewModel = DownloadsCourseDetailsHeaderViewModel(courseViewModel: courseViewModel)
+        self.headerViewModel = DownloadsCourseDetailsHeaderViewModel(
+            courseViewModel: courseViewModel
+        )
     }
 
     // MARK: - Views -
@@ -41,11 +55,15 @@ struct DownloadsCourseDetailView: View {
         GeometryReader { geometry in
             VStack(spacing: 0) {
                 switch viewModel.state {
-                case .loaded:
+                case .loaded, .updated:
                     content(geometry: geometry)
+                        .onAppear {
+                            if viewModel.categories.isEmpty {
+                                presentationMode.wrappedValue.dismiss()
+                            }
+                        }
                 case .loading, .none:
                     LoadingView()
-                        .onAppear { viewModel.fetch() }
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
@@ -106,7 +124,13 @@ struct DownloadsCourseDetailView: View {
         DownloadsContenView(
             content: sectionViewModel.content,
             courseDataModel: viewModel.courseViewModel.courseDataModel,
-            title: sectionViewModel.title
+            title: sectionViewModel.title,
+            onDeleted: { entry in
+                viewModel.delete(entry: entry, from: sectionViewModel)
+            },
+            onDeletedAll: {
+                viewModel.delete(sectionViewModel: sectionViewModel)
+            }
         )
     }
 }

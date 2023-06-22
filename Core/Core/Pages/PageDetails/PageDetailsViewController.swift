@@ -118,6 +118,7 @@ public class PageDetailsViewController: DownloadableViewController, ColoredNavVi
         setupTitleViewInNavbar(title: page.title)
         optionsButton.accessibilityIdentifier = "PageDetails.options"
         navigationItem.rightBarButtonItem = canEdit ? optionsButton : nil
+        webView.loadHTMLString(page.body, baseURL: page.htmlURL)
     }
 
     private func updatePages() {

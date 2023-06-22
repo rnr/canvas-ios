@@ -32,7 +32,13 @@ struct DownloadCoursesSectionView: View {
             DownloadCourseCellView(courseViewModel: courseViewModel)
                 .background(
                     NavigationLink(
-                        destination: DownloadsCourseDetailView(courseViewModel: courseViewModel),
+                        destination: DownloadsCourseDetailView(
+                            courseViewModel: courseViewModel,
+                            categories: viewModel.categories(courseId: courseViewModel.courseId),
+                            onDeletedAll: {
+                                viewModel.delete(courseViewModel: courseViewModel)
+                            }
+                        ),
                         tag: courseViewModel,
                         selection: $selection
                     ) { SwiftUI.EmptyView() }.hidden()

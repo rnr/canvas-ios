@@ -54,11 +54,7 @@ public class ContentViewerViewModel: ObservableObject {
                 }
                 if case .statusChanged(object: let event) = event {
                     if case .removed = event.status, let eventObjectId = try? event.object.toOfflineModel().id {
-                        OfflineStorageManager.shared.addOrUpdateCourse(
-                            course: self.courseDataModel.course,
-                            deleting: true,
-                            downloadedId: eventObjectId
-                        )
+
                         self.shouldDismissView = true
                     }
                 }
