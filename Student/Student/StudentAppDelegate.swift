@@ -17,6 +17,7 @@
 //
 
 import AVKit
+import AWSSNS
 import CanvasCore
 import Core
 import Firebase
@@ -80,11 +81,19 @@ class StudentAppDelegate: UIResponder, UIApplicationDelegate, AppEnvironmentDele
             Analytics.shared.logScreenView(route: "/login", viewController: window?.rootViewController)
         }
         setupOffline()
+        setupAWS()
         return true
     }
 
     func setupOffline() {
         DownloaderClient.setup()
+    }
+    func setupAWS() {
+        guard let accessKey = Secret.awsAccessKey.string, let secretKey = Secret.awsSecretKey.string else { return }
+        let credProvider = AWSStaticCredentialsProvider(accessKey: accessKey, secretKey: secretKey)
+        if let awsConfiguration = AWSServiceConfiguration(region: .USEast1, credentialsProvider: credProvider) {
+            AWSSNS.register(with: awsConfiguration, forKey: "mySNS")
+        }
     }
 
     func setup(session: LoginSession) {
@@ -425,7 +434,8 @@ extension StudentAppDelegate: LoginDelegate, NativeLoginManagerDelegate {
         LoginSession.remove(session)
         guard environment.currentSession == session else { return }
         PageViewEventController.instance.userDidChange()
-        NotificationManager.shared.unsubscribeFromPushChannel()
+//        NotificationManager.shared.unsubscribeFromPushChannel()
+        NotificationManager.shared.unsubscribeFromUserSNSTopic()
         UIApplication.shared.applicationIconBadgeNumber = 0
         environment.userDidLogout(session: session)
         CoreWebView.stopCookieKeepAlive()

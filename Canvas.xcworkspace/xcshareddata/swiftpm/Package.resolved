@@ -10,6 +10,15 @@
       }
     },
     {
+      "identity" : "aws-sdk-ios-spm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/aws-amplify/aws-sdk-ios-spm",
+      "state" : {
+        "revision" : "89ed8d45202f01010f65f076ea6f733d2ffaa1cb",
+        "version" : "2.33.0"
+      }
+    },
+    {
       "identity" : "boringssl-swiftpm",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/boringssl-SwiftPM.git",
@@ -140,8 +149,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/realm/realm-core.git",
       "state" : {
-        "revision" : "72226e2fd84f3a3a8ab3cffc2890c7951f1351d5",
-        "version" : "13.10.1"
+        "revision" : "36b2df44453ba5e830369c76ab0683799a287605",
+        "version" : "13.13.0"
       }
     },
     {
@@ -149,8 +158,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/realm/realm-swift.git",
       "state" : {
-        "revision" : "08ee98e7f52a5fb11b10b7430e6f84adbb7433a4",
-        "version" : "10.39.1"
+        "revision" : "9ce8cf2c6cc1a7539e9feb1b5b85da6d20219ff5",
+        "version" : "10.40.0"
       }
     },
     {
