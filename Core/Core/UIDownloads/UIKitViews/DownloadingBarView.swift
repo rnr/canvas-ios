@@ -17,10 +17,15 @@
 //
 
 import UIKit
+import Combine
+import mobile_offline_downloader_ios
 
 public class DownloadingBarView: UIView {
 
+    private var downloadsManager: OfflineDownloadsManager = .shared
+
     public var onTap: (() -> Void)?
+    private var cancellables: [AnyCancellable] = []
 
     private let titleLabel: UILabel = {
         let titleLabel = UILabel()
@@ -32,7 +37,7 @@ public class DownloadingBarView: UIView {
     private let subtitleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.font = .systemFont(ofSize: 17, weight: .medium)
-        titleLabel.text = "Demo page 2.0"
+        titleLabel.text = ""
         return titleLabel
     }()
 
@@ -43,6 +48,7 @@ public class DownloadingBarView: UIView {
     }
 
     public func attach(tabBar: UITabBar, in superview: UIView) {
+        isHidden = true
         backgroundColor = .tertiarySystemGroupedBackground
 
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
@@ -57,6 +63,7 @@ public class DownloadingBarView: UIView {
 
         attachProgressView()
         attachLabels()
+        observeDownloadsEvents()
     }
 
     private func attachProgressView() {
@@ -68,7 +75,7 @@ public class DownloadingBarView: UIView {
         progressView.widthAnchor.constraint(equalToConstant: 35).isActive = true
         progressView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 15).isActive = true
 
-        progressView.progress = 0.8
+        progressView.progress = 0.01
         progressView.mainTintColor = Brand.shared.linkColor
     }
 
@@ -89,5 +96,47 @@ public class DownloadingBarView: UIView {
     @objc
     private func handleTap(_ sender: UITapGestureRecognizer? = nil) {
         onTap?()
+    }
+
+    private func observeDownloadsEvents() {
+        update()
+        downloadsManager
+            .publisher
+            .sink { [weak self] event in
+                switch event {
+                case .statusChanged(let event):
+                    self?.update(event)
+                case .progressChanged(let event):
+                    self?.progressChanged(event)
+                }
+            }
+            .store(in: &cancellables)
+    }
+
+    private func update(_ event: OfflineDownloadsManagerEventObject? = nil) {
+        isHidden = downloadsManager.activeEntries.isEmpty
+        if let entry = downloadsManager.activeEntries.first {
+            if let page = try? Page.fromOfflineModel(entry.dataModel) {
+                subtitleLabel.text = page.title
+            }
+            if let moduleItem = try? ModuleItem.fromOfflineModel(entry.dataModel) {
+                subtitleLabel.text = moduleItem.title
+            }
+        }
+    }
+
+    private func progressChanged(_ event: OfflineDownloadsManagerEventObject) {
+        do {
+            let eventObjectId = try event.object.toOfflineModel().id
+            let objectId = downloadsManager.activeEntries.first?.dataModel.id
+            guard eventObjectId == objectId else {
+                return
+            }
+            if event.progress == 0.0 {
+                progressView.progress = 0.01
+                return
+            }
+            progressView.progress = Float(event.progress)
+        } catch {}
     }
 }

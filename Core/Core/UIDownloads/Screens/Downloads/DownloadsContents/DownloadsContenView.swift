@@ -83,7 +83,7 @@ struct DownloadsContenView: View {
             ForEach(viewModel.content, id: \.dataModel.id) { entry in
                 VStack(spacing: 0) {
                     DownloadsContentCellView(
-                        viewModel: DownloadsModuleCellViewModel(module: entry.dataModel)
+                        viewModel: DownloadsModuleCellViewModel(entry: entry)
                     ).onTapGesture {
                         destination(entry: entry)
                     }

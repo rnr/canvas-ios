@@ -168,7 +168,6 @@ class StudentTabBarController: UITabBarController {
         downloadingBarView.onTap = { [weak self] in
             self?.showDownloadingView()
         }
-        downloadingBarView.isHidden = true
     }
 
     private func attachConnectionBarView() {

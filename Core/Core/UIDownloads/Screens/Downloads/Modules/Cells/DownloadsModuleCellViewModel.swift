@@ -28,55 +28,79 @@ final class DownloadsModuleCellViewModel: ObservableObject {
 
     // MARK: - Properties -
 
-    private let module: OfflineStorageDataModel
+    private let entry: OfflineDownloaderEntry
     private var downloadsSubscriber: AnyCancellable?
 
     @Published var progress: Double = 0.0
+    @Published var downloaderStatus: OfflineDownloaderStatus = .initialized
+
+    init(entry: OfflineDownloaderEntry) {
+        self.entry = entry
+        observeDownloadsEvents()
+    }
+
+    var dataModel: OfflineStorageDataModel {
+        entry.dataModel
+    }
 
     var moduleId: String {
-        module.id
+        entry.dataModel.id
+    }
+
+    var item: OfflineDownloadTypeProtocol? {
+        if let page = try? Page.fromOfflineModel(dataModel) {
+            return page
+        }
+        if let moduleItem = try? ModuleItem.fromOfflineModel(dataModel) {
+            return moduleItem
+        }
+        return nil
     }
 
     var title: String {
-        if let page = try? Page.fromOfflineModel(module) {
+        if let page = try? Page.fromOfflineModel(dataModel) {
             return page.title
         }
-        if let moduleItem = try? ModuleItem.fromOfflineModel(module) {
+        if let moduleItem = try? ModuleItem.fromOfflineModel(dataModel) {
             return moduleItem.title
         }
         return ""
     }
 
     var uiImage: UIImage? {
-        if (try? Page.fromOfflineModel(module)) != nil {
+        if (try? Page.fromOfflineModel(dataModel)) != nil {
             return .documentLine
         }
-        if let moduleItem = try? ModuleItem.fromOfflineModel(module) {
+        if let moduleItem = try? ModuleItem.fromOfflineModel(dataModel) {
             return image(moduleItem.type)
         }
         return nil
     }
 
     var type: ModuleItemType? {
-        if (try? Page.fromOfflineModel(module)) != nil {
+        if (try? Page.fromOfflineModel(dataModel)) != nil {
             return .page("")
         }
-        if let moduleItem = try? ModuleItem.fromOfflineModel(module) {
+        if let moduleItem = try? ModuleItem.fromOfflineModel(dataModel) {
             return moduleItem.type
         }
         return nil
     }
 
     var lastUpdated: Date? {
-        if let page = try? Page.fromOfflineModel(module) {
+        if let page = try? Page.fromOfflineModel(dataModel) {
             return page.lastUpdated
         }
         return nil
     }
 
-    init(module: OfflineStorageDataModel) {
-        self.module = module
-        observeDownloadsEvents()
+    func pauseResume() {
+//        switch entry.status {
+//        case .initialized, .active, .preparing:
+//            downloadsManager.pause(entry: entry)
+//        default:
+//            downloadsManager.resume(entry: entry)
+//        }
     }
 
     private func image(_ type: ModuleItemType?) -> UIImage? {
@@ -97,18 +121,33 @@ final class DownloadsModuleCellViewModel: ObservableObject {
             .publisher
             .sink { [weak self] event in
                 switch event {
-                case .statusChanged:
-                    break
+                case .statusChanged(object: let event):
+                    self?.downloaderStatus = event.status
                 case .progressChanged(object: let event):
                     self?.progressChanged(event)
                 }
             }
+        item.flatMap {
+            downloadsManager.eventObject(for: $0) { [weak self] result in
+                result.success { event in
+                    guard let self = self else {
+                        return
+                    }
+                    let eventObjectId = try? event.object.toOfflineModel().id
+                    let objectId = self.dataModel.id
+                    guard eventObjectId == objectId else {
+                        return
+                    }
+                    self.downloaderStatus = event.status
+                }
+            }
+        }
     }
 
     private func progressChanged(_ event: OfflineDownloadsManagerEventObject) {
         do {
             let eventObjectId = try event.object.toOfflineModel().id
-            let objectId = module.id
+            let objectId = dataModel.id
             guard eventObjectId == objectId else {
                 return
             }

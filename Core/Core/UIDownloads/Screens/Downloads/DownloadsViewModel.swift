@@ -117,7 +117,7 @@ final class DownloadsViewModel: ObservableObject {
 
     func fetch() {
         state = .loading
-        modules = downloadsManager.activeEntries.map { .init(module: $0.dataModel) }
+        modules = downloadsManager.activeEntries.map { .init(entry: $0) }
         storageManager.loadAll(of: CourseStorageDataModel.self) { [weak self] result in
             guard let self = self else {
                 return

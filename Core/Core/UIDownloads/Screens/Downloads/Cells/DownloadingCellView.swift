@@ -23,7 +23,8 @@ struct DownloadingCellView: View {
 
     // MARK: - Properties -
 
-    @ObservedObject var module: DownloadsModuleCellViewModel
+    @ObservedObject var viewModel: DownloadsModuleCellViewModel
+    @State private var paused: Bool = false
 
     // MARK: - Views -
 
@@ -49,31 +50,38 @@ struct DownloadingCellView: View {
     private var content: some View {
         HStack {
             VStack(alignment: .leading, spacing: 3) {
-                Text(module.title)
+                Text(viewModel.title)
                     .font(.semibold18)
                     .foregroundColor(.textDarkest)
                     .fixedSize(horizontal: false, vertical: true)
                     .lineLimit(2)
                 HStack(alignment: .center, spacing: 2) {
-                    ProgressView(value: module.progress)
-                        .progressViewStyle(LinearProgressViewStyle(tint: Color(Brand.shared.linkColor)))
+                    ProgressView(value: viewModel.progress)
+                        .progressViewStyle(
+                            LinearProgressViewStyle(
+                                tint: Color(Brand.shared.linkColor)
+                            )
+                        )
                         .frame(height: 5)
-//                    Spacer()
-//                    Text("\(module.progress * 100)%")
-//                        .font(.caption.monospacedDigit())
-//                        .foregroundColor(.secondary)
-//                        .frame(width: 40)
+                    Spacer()
+                    Text("\(Int(round(viewModel.progress * 100))) %")
+                        .font(.caption.monospacedDigit())
+                        .foregroundColor(.secondary)
+                        .frame(width: 40)
                     Spacer()
                 }
             }
             Button {
-                print("tap")
+                paused.toggle()
+                viewModel.pauseResume()
             } label: {
-                Image(systemName: "stop.circle")
+                Image(systemName: paused ? "play.circle" : "stop.circle")
                     .resizable()
                     .frame(width: 25, height: 25)
                     .foregroundColor(Color(Brand.shared.linkColor))
-            }.padding(.trailing, 5)
-        }.padding(.all, 10)
+            }
+            .padding(.trailing, 5)
+        }
+        .padding(.all, 10)
     }
 }
