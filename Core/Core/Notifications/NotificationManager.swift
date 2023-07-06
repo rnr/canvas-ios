@@ -186,7 +186,11 @@ extension NotificationManager {
                     print("!!! Create platform endpoint error: " + error.localizedDescription)
                 } else if let endpointArn = response.result?.endpointArn {
                     if let requestTopic = AWSSNSCreateTopicInput() {
-                        requestTopic.name = "icanvas_mobile_user_\(session.userID)"
+                        let baseUrlTopic = session.baseURL.absoluteString
+                            .replacingOccurrences(of: "https://", with: "")
+                            .replacingOccurrences(of: "http://", with: "")
+                            .replacingOccurrences(of: ".", with: "_")
+                        requestTopic.name = "icanvas_mobile_\(baseUrlTopic)_\(session.userID)"
                         sns.createTopic(requestTopic).continueWith(executor: AWSExecutor.mainThread()) { response in
                             if let error = response.error {
                                 print("!!! Create topic error: " + error.localizedDescription)
