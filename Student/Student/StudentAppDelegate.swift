@@ -17,6 +17,7 @@
 //
 
 import AVKit
+import AWSLambda
 import AWSSNS
 import CanvasCore
 import Core
@@ -93,6 +94,7 @@ class StudentAppDelegate: UIResponder, UIApplicationDelegate, AppEnvironmentDele
         let credProvider = AWSStaticCredentialsProvider(accessKey: accessKey, secretKey: secretKey)
         if let awsConfiguration = AWSServiceConfiguration(region: .USEast1, credentialsProvider: credProvider) {
             AWSSNS.register(with: awsConfiguration, forKey: "mySNS")
+            AWSLambda.register(with: awsConfiguration, forKey: "myLambda")
         }
     }
 

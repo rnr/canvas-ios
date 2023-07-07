@@ -16,7 +16,6 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-import AWSSNS
 import Foundation
 import UserNotifications
 
@@ -98,6 +97,9 @@ extension NotificationManager {
         remoteSession = session
         guard let token = newToken, let session = session else { return }
 //        createPushChannel(token: token, session: session)
+        checkIfHaveCreateEmailChannelForPush(session: session)
+        // ToDo: delete for release - next line for dev
+//        unsubscribeFromEmailChannel(email: "email_channel@to_delete.com")
         subscribeToUserSNSTopic(deviceToken: token, session: session)
     }
 
@@ -167,68 +169,6 @@ extension NotificationManager {
         else { return original }
         components.host = baseURL.host
         return components.url ?? original
-    }
-
-    func subscribeToUserSNSTopic(deviceToken token: Data, session: LoginSession) {
-        let sns = AWSSNS(forKey: "mySNS")
-        if let requestApp = AWSSNSCreatePlatformEndpointInput(),
-            var appARN = Secret.appArnTemplate.string {
-            requestApp.token = token.hexString
-            #if DEBUG
-            appARN = appARN.replacingOccurrences(of: "{SCHEME}", with: "APNS_SANDBOX")
-            #else
-            appARN = appARN.replacingOccurrences(of: "{SCHEME}", with: "APNS")
-            #endif
-            requestApp.platformApplicationArn = appARN
-            let sns = AWSSNS(forKey: "mySNS")
-            sns.createPlatformEndpoint(requestApp).continueWith(executor: AWSExecutor.mainThread()) { response in
-                if let error = response.error {
-                    print("!!! Create platform endpoint error: " + error.localizedDescription)
-                } else if let endpointArn = response.result?.endpointArn {
-                    if let requestTopic = AWSSNSCreateTopicInput() {
-                        let baseUrlTopic = session.baseURL.absoluteString
-                            .replacingOccurrences(of: "https://", with: "")
-                            .replacingOccurrences(of: "http://", with: "")
-                            .replacingOccurrences(of: ".", with: "_")
-                        requestTopic.name = "icanvas_mobile_\(baseUrlTopic)_\(session.userID)"
-                        sns.createTopic(requestTopic).continueWith(executor: AWSExecutor.mainThread()) { response in
-                            if let error = response.error {
-                                print("!!! Create topic error: " + error.localizedDescription)
-                            } else if let topicARN = response.result?.topicArn {
-                                if let requestSubscribe = AWSSNSSubscribeInput() {
-                                    requestSubscribe.endpoint = endpointArn
-                                    requestSubscribe.protocols = "application"
-                                    requestSubscribe.topicArn = topicARN
-                                    sns.subscribe(requestSubscribe).continueWith(executor: AWSExecutor.mainThread()) { response in
-                                        if let error = response.error {
-                                            print("!!! Topic subscription error: " + error.localizedDescription)
-                                        } else if let subscriptionArn = response.result?.subscriptionArn {
-                                            self.subscriptionArn = subscriptionArn
-                                            print("!!! Successful subscription to arn: \(subscriptionArn)")
-                                        }
-                                        return nil
-                                    }
-                                }
-                            }
-                            return nil
-                        }
-                    }
-                }
-                return nil
-            }
-        }
-    }
-
-    public func unsubscribeFromUserSNSTopic() {
-        let sns = AWSSNS(forKey: "mySNS")
-        if let unsubscribeRequest = AWSSNSUnsubscribeInput(),
-            let subscrArn = subscriptionArn,
-            !subscrArn.isEmpty {
-            unsubscribeRequest.subscriptionArn = subscrArn
-            sns.unsubscribe(unsubscribeRequest)
-            print("!!! Sent unsubscribe SNS request for arn: \(subscrArn)")
-            subscriptionArn = ""
-        }
     }
 }
 

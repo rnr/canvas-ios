@@ -132,6 +132,7 @@
 		9767F2A42383C741006633CA /* ActivityStreamViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9767F2A22383C741006633CA /* ActivityStreamViewController.storyboard */; };
 		97BA196423C82808009AB8AC /* RubricViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97BA196323C82808009AB8AC /* RubricViewControllerTests.swift */; };
 		9F61B52C205985A5009C0B13 /* StudentAppDelegate+Helm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F61B52B205985A5009C0B13 /* StudentAppDelegate+Helm.swift */; };
+		A55444372A570E23004DF245 /* AWSLambda in Frameworks */ = {isa = PBXBuildFile; productRef = A55444362A570E23004DF245 /* AWSLambda */; };
 		A5F7B9072A4997830004426A /* AWSCore in Frameworks */ = {isa = PBXBuildFile; productRef = A5F7B9062A4997830004426A /* AWSCore */; };
 		A5F7B9092A4997830004426A /* AWSSNS in Frameworks */ = {isa = PBXBuildFile; productRef = A5F7B9082A4997830004426A /* AWSSNS */; };
 		B11028BA23CFC92A00FFAB7E /* SubmissionCommentsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B11028B923CFC92A00FFAB7E /* SubmissionCommentsViewControllerTests.swift */; };
@@ -826,6 +827,7 @@
 				B49725D0290C04D50067B91E /* Heap in Frameworks */,
 				61F438E31DD4E60B00552D14 /* AVFoundation.framework in Frameworks */,
 				7DBF920222690E9400710D0F /* CanvasCore.framework in Frameworks */,
+				A55444372A570E23004DF245 /* AWSLambda in Frameworks */,
 				7D1D7E05213743D300F7CCFE /* Core.framework in Frameworks */,
 				2C67B0CC1E01F06800DDD191 /* CoreMedia.framework in Frameworks */,
 				2C67B0C81E01F05F00DDD191 /* CoreTelephony.framework in Frameworks */,
@@ -2041,6 +2043,7 @@
 				B49725CF290C04D50067B91E /* Heap */,
 				A5F7B9062A4997830004426A /* AWSCore */,
 				A5F7B9082A4997830004426A /* AWSSNS */,
+				A55444362A570E23004DF245 /* AWSLambda */,
 			);
 			productName = Canvas;
 			productReference = 492704731CF4AF7100C631C6 /* Student.app */;
@@ -3885,6 +3888,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		A55444362A570E23004DF245 /* AWSLambda */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A5F7B9052A4997830004426A /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSLambda;
+		};
 		A5F7B9062A4997830004426A /* AWSCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = A5F7B9052A4997830004426A /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;

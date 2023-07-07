@@ -714,6 +714,7 @@
 		9FE84DDC214FE5C500B95A68 /* GetGroupsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE84DDB214FE5C500B95A68 /* GetGroupsTests.swift */; };
 		9FE84DE2215037A000B95A68 /* GetContextTabsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE84DE1215037A000B95A68 /* GetContextTabsTest.swift */; };
 		9FEBF1D823CE1E18001C824B /* CreateConversationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEBF1D723CE1E18001C824B /* CreateConversationTests.swift */; };
+		A596B5632A5823E100DFFBD0 /* NotificationManager+CustomPushes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A596B5622A5823E100DFFBD0 /* NotificationManager+CustomPushes.swift */; };
 		B102EEB4243B7989002E04F0 /* ModuleItemDetailsViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B102EEB3243B7989002E04F0 /* ModuleItemDetailsViewController.storyboard */; };
 		B102EEB6243B862C002E04F0 /* ModuleItemSequenceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B102EEB5243B862C002E04F0 /* ModuleItemSequenceViewController.swift */; };
 		B109249423CE81C400796903 /* RoleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B109249323CE81C400796903 /* RoleTests.swift */; };
@@ -2290,6 +2291,7 @@
 		9FE84DDD2150281300B95A68 /* GetContextTabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetContextTabs.swift; sourceTree = "<group>"; };
 		9FE84DE1215037A000B95A68 /* GetContextTabsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetContextTabsTest.swift; sourceTree = "<group>"; };
 		9FEBF1D723CE1E18001C824B /* CreateConversationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateConversationTests.swift; sourceTree = "<group>"; };
+		A596B5622A5823E100DFFBD0 /* NotificationManager+CustomPushes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationManager+CustomPushes.swift"; sourceTree = "<group>"; };
 		B102EEB3243B7989002E04F0 /* ModuleItemDetailsViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ModuleItemDetailsViewController.storyboard; sourceTree = "<group>"; };
 		B102EEB5243B862C002E04F0 /* ModuleItemSequenceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModuleItemSequenceViewController.swift; sourceTree = "<group>"; };
 		B109248B23CD2BC400796903 /* Role.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Role.swift; sourceTree = "<group>"; };
@@ -4912,6 +4914,7 @@
 				CF3E760C2885AE6F00276703 /* LocalNotifications.swift */,
 				7D9E80CD233D2701003C608B /* NotificationCategory.swift */,
 				B1911CE821C8460000F42F91 /* NotificationManager.swift */,
+				A596B5622A5823E100DFFBD0 /* NotificationManager+CustomPushes.swift */,
 			);
 			path = Notifications;
 			sourceTree = "<group>";
@@ -8330,6 +8333,7 @@
 				7DA260D223F72359005D2121 /* CoreWebViewController.swift in Sources */,
 				7DA2602A23F722C2005D2121 /* LoginNavigationController.swift in Sources */,
 				7DA260C423F72352005D2121 /* UploadMedia.swift in Sources */,
+				A596B5632A5823E100DFFBD0 /* NotificationManager+CustomPushes.swift in Sources */,
 				7DA25F9423F7212C005D2121 /* ActAsUserViewController.swift in Sources */,
 				CF60CC4A26458ED800C1C173 /* TopBarView.swift in Sources */,
 				7DA2603B23F722D9005D2121 /* CalendarEvent.swift in Sources */,
