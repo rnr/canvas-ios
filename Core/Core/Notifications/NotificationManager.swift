@@ -37,6 +37,7 @@ public class NotificationManager {
     public var remoteToken: Data?
     public var remoteSession: LoginSession?
     public var subscriptionArn: String?
+    public var emailAsPushChannelID: String?
 
     public static var shared = NotificationManager(
         notificationCenter: UNUserNotificationCenter.current(),
@@ -97,9 +98,7 @@ extension NotificationManager {
         remoteSession = session
         guard let token = newToken, let session = session else { return }
 //        createPushChannel(token: token, session: session)
-        checkIfHaveCreateEmailChannelForPush(session: session)
-        // ToDo: delete for release - next line for dev
-//        unsubscribeFromEmailChannel(email: "email_channel@to_delete.com")
+        checkIfShouldCreateEmailChannelForPush(session: session)
         subscribeToUserSNSTopic(deviceToken: token, session: session)
     }
 

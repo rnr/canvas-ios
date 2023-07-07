@@ -95,10 +95,12 @@ public class ProfileSettingsViewController: UIViewController, PageViewEventViewC
     }
 
     func reloadData() {
-        var channelTypes: [CommunicationChannelType: [CommunicationChannel]] = [:]
-        for channel in channels {
-            channelTypes[channel.type] = channelTypes[channel.type] ?? []
-            channelTypes[channel.type]?.append(channel)
+        var channelTypes: [CommunicationChannelType: [GeneratedCommunicationChannel]] = [:]
+        for channel in channels where channel.type != .push {
+            let isOverrided: Bool = channel.id == NotificationManager.shared.emailAsPushChannelID
+            let generatedChannel = GeneratedCommunicationChannel(type: isOverrided ? .push : channel.type, id: channel.id)
+            channelTypes[generatedChannel.type] = channelTypes[generatedChannel.type] ?? []
+            channelTypes[generatedChannel.type]?.append(generatedChannel)
         }
 
         channelTypeRows = channelTypes.values.map({ channels -> Row in
@@ -376,4 +378,9 @@ private enum LandingPage: String {
             ? [ .dashboard, .todo, .inbox ]
             : [ .dashboard, .calendar, .todo, .notifications, .inbox ]
     }()
+}
+
+struct GeneratedCommunicationChannel {
+    var type: CommunicationChannelType
+    var id: String
 }

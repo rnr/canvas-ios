@@ -22,12 +22,15 @@ import Foundation
 
 // MARK: Push Notifications
 extension NotificationManager {
-    func checkIfHaveCreateEmailChannelForPush(session: LoginSession) {
+    func checkIfShouldCreateEmailChannelForPush(session: LoginSession) {
         let api = API(session)
         api.makeRequest(GetCommunicationChannelsRequest()) { [weak self] response, _, error in
             if error == nil {
                 // check if we have needed channel already
-                if response?.first(where: { $0.id.value.contains("@yanelena.com") }) == nil {
+                // ToDo: change to prod domain for release
+                if let generatedPushChannel = response?.first(where: { $0.address.contains("@yanelena.com") }) {
+                    self?.emailAsPushChannelID = generatedPushChannel.id.value
+                } else {
                     let pushChannel = response?.first(where: { $0.type == .push })
                     // need to create email channel
                     self?.createUserEmailChannel(session: session, completion: { [weak self] success, channelID in
@@ -47,6 +50,7 @@ extension NotificationManager {
 
     func copyChannelSettings(from pushChannelID: String, to emailChannelID: String, session: LoginSession) {
         let api = API(session)
+        emailAsPushChannelID = emailChannelID
         api.makeRequest(GetNotificationPreferencesRequest(channelID: pushChannelID)) { response, _, error in
             let allowedTypes = [
                 "all_submissions",
@@ -165,14 +169,6 @@ extension NotificationManager {
             sns.unsubscribe(unsubscribeRequest)
             print("!!! Sent unsubscribe SNS request for arn: \(subscrArn)")
             subscriptionArn = ""
-        }
-    }
-
-    public func unsubscribeFromEmailChannel(email: String) {
-        guard let session = remoteSession else { return }
-        API(session).makeRequest(DeleteEmailChannelRequest(email: email)) { _, _, error in
-            guard let error = error else { return }
-            self.logger.error(error.localizedDescription)
         }
     }
 }

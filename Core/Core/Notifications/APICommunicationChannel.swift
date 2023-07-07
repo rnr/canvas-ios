@@ -124,15 +124,3 @@ struct DeletePushChannelRequest: APIRequestable {
         body = Body(push_token: pushToken.map { String(format: "%02X", $0) } .joined())
     }
 }
-
-// https://digitalcampus.instructure.com/doc/api/communication_channels.html#method.communication_channels.destroy
-struct DeleteEmailChannelRequest: APIRequestable {
-    typealias Response = APINoContent
-
-    var method: APIMethod { .delete }
-    var path = "users/self/communication_channels/email/"
-
-    init(email: String) {
-        path += email
-    }
-}
