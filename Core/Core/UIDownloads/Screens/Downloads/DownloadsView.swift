@@ -70,6 +70,8 @@ public struct DownloadsView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 deleteAllButton
             }
+        }.onAppear {
+            hideDownloadingBarView()
         }
     }
 
@@ -117,5 +119,14 @@ public struct DownloadsView: View {
         }
         .foregroundColor(.white)
         .hidden(viewModel.isEmpty)
+    }
+
+    private func hideDownloadingBarView() {
+        guard let downloadingBarView = controller.value.tabBarController?.view.subviews.first(
+            where: { $0 is DownloadingBarView }) as? DownloadingBarView
+        else {
+            return
+        }
+        downloadingBarView.hidden()
     }
 }

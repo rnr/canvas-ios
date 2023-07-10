@@ -42,9 +42,27 @@ public class DownloadingBarView: UIView {
     }()
 
     private let progressView = CustomCircleProgressView(frame: .zero)
+    var mustBeHidden: Bool = false
 
     public convenience init() {
         self.init(frame: .zero)
+    }
+
+
+    func hidden() {
+        if downloadsManager.activeEntries.isEmpty {
+            return
+        }
+        mustBeHidden = true
+        isHidden = true
+    }
+
+    func show() {
+        if downloadsManager.activeEntries.isEmpty {
+            return
+        }
+        mustBeHidden = false
+        isHidden = false
     }
 
     public func attach(tabBar: UITabBar, in superview: UIView) {
@@ -115,6 +133,7 @@ public class DownloadingBarView: UIView {
 
     private func update(_ event: OfflineDownloadsManagerEventObject? = nil) {
         isHidden = downloadsManager.activeEntries.isEmpty
+        if mustBeHidden { isHidden = true }
         if let entry = downloadsManager.activeEntries.first {
             if let page = try? Page.fromOfflineModel(entry.dataModel) {
                 subtitleLabel.text = page.title

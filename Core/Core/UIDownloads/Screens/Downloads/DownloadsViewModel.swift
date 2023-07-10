@@ -34,6 +34,11 @@ final class DownloadsViewModel: ObservableObject {
             setIsEmpty()
         }
     }
+    @Published var modules: [DownloadsModuleCellViewModel] = [] {
+        didSet {
+            setIsEmpty()
+        }
+    }
     private(set) var categories: [String: [DownloadsCourseCategoryViewModel]] = [:]
     private var cancellables: [AnyCancellable] = []
 
@@ -56,11 +61,6 @@ final class DownloadsViewModel: ObservableObject {
         }
     }
 
-    @Published var modules: [DownloadsModuleCellViewModel] = [] {
-        didSet {
-            setIsEmpty()
-        }
-    }
     @Published var isEmpty: Bool = false
 
     init() {
