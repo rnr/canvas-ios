@@ -79,7 +79,7 @@ public struct DashboardCardView: View {
                     controller.value.showThemeSelectorAlert()
                 }
             }
-            showDownloadingBarView()
+            showDownloadingBarView() 
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             fileUploadNotificationCardViewModel.sceneDidBecomeActive.send()
