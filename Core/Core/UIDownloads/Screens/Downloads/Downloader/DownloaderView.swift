@@ -51,7 +51,7 @@ struct DownloaderView: View {
         .toolbar {
             ToolbarItem(placement: .principal) {
                 Text("Downloading")
-                    .foregroundColor(.textDarkest)
+                    .foregroundColor(.white)
                     .font(.semibold16)
             }
             ToolbarItem(placement: .navigationBarTrailing) {

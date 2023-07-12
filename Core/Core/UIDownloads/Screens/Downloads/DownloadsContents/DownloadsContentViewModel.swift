@@ -17,6 +17,7 @@
 //
 
 import mobile_offline_downloader_ios
+import SwiftUI
 
 final class DownloadsContentViewModel: ObservableObject {
 
@@ -31,6 +32,10 @@ final class DownloadsContentViewModel: ObservableObject {
     let courseDataModel: CourseStorageDataModel
     var onDeleted: ((OfflineDownloaderEntry) -> Void)?
     var onDeletedAll: (() -> Void)?
+
+    var color: UIColor {
+        UIColor(hexString: courseDataModel.course.courseColor) ?? .oxford
+    }
 
     init(
         content: [OfflineDownloaderEntry],

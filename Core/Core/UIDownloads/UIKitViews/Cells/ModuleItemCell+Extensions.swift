@@ -77,7 +77,7 @@ extension ModuleItemCell {
 
     func addSavedImage() {
         if !hStackView.arrangedSubviews.contains(where: { $0.tag == 888 }) {
-            let imageView = UIImageView(image: .init(systemName: "cloud"))
+            let imageView = UIImageView(image: .init(systemName: "checkmark.icloud"))
             imageView.tag = 888
             hStackView.addArrangedSubview(imageView)
             imageView.translatesAutoresizingMaskIntoConstraints = false
