@@ -247,7 +247,7 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
     }
 
     private func addOrUpdateCourse() {
-        guard var course = course else {
+        guard let course = course else {
             return
         }
 
