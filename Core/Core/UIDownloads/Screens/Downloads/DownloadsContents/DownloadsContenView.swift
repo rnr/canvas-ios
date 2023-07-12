@@ -63,9 +63,6 @@ struct DownloadsContenView: View {
 
     var body: some View {
         content
-            .onAppear {
-                navigationController?.navigationBar.useGlobalNavStyle()
-            }
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text(title)
@@ -83,7 +80,8 @@ struct DownloadsContenView: View {
             ForEach(viewModel.content, id: \.dataModel.id) { entry in
                 VStack(spacing: 0) {
                     DownloadsContentCellView(
-                        viewModel: DownloadsModuleCellViewModel(entry: entry)
+                        viewModel: DownloadsModuleCellViewModel(entry: entry),
+                        color: Color(viewModel.color)
                     ).onTapGesture {
                         destination(entry: entry)
                     }
@@ -113,7 +111,6 @@ struct DownloadsContenView: View {
     }
 
     private func destination(entry: OfflineDownloaderEntry) {
-        navigationController?.navigationBar.useGlobalNavStyle()
         navigationController?.pushViewController(
             CoreHostingController(
                 ContentViewerView(

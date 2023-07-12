@@ -30,6 +30,17 @@ public struct DownloadsView: View {
 
     @StateObject var viewModel: DownloadsViewModel = .init()
     @State var isDisplayingAlert: Bool = false
+    private let env = AppEnvironment.shared
+
+    private var navigationController: UINavigationController? {
+        guard let topViewController = env.topViewController as? UITabBarController,
+              let helmSplitViewController = topViewController.viewControllers?.first as? UISplitViewController,
+              let navigationController = helmSplitViewController.viewControllers.first as? UINavigationController
+             else {
+            return nil
+        }
+        return navigationController
+    }
 
     var isSheet: Bool = false
 
@@ -40,6 +51,10 @@ public struct DownloadsView: View {
     public var body: some View {
         content
             .accentColor(Color(Brand.shared.linkColor))
+            .onAppear {
+                navigationController?.navigationBar.useGlobalNavStyle()
+                hideDownloadingBarView()
+            }
     }
 
     private var content: some View {
@@ -70,8 +85,6 @@ public struct DownloadsView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 deleteAllButton
             }
-        }.onAppear {
-            hideDownloadingBarView()
         }
     }
 

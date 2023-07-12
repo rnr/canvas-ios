@@ -885,6 +885,7 @@
 		BAA035DF2A2F6ECE006AA743 /* DownloadsModuleCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA035DE2A2F6ECE006AA743 /* DownloadsModuleCellView.swift */; };
 		BAAEFC1F2A277F5E0083E8EC /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAAEFC1E2A277F5E0083E8EC /* UIViewController+Extensions.swift */; };
 		BACC5F2E2A40A0930002DC26 /* ModuleItemCell+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BACC5F2D2A40A0930002DC26 /* ModuleItemCell+Extensions.swift */; };
+		BAF659272A5EDC5100C767DC /* ImageDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF659262A5EDC5100C767DC /* ImageDownloader.swift */; };
 		CEB57AE8286B32BB00F4BFC8 /* HelmNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB57AE7286B32BB00F4BFC8 /* HelmNavigationController.swift */; };
 		CEF0D1462837D571005867EF /* ContextCellBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF0D1442837D571005867EF /* ContextCellBackgroundView.swift */; };
 		CEF0D1472837D571005867EF /* ContextCellBackgroundView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEF0D1452837D571005867EF /* ContextCellBackgroundView.xib */; };
@@ -2522,6 +2523,7 @@
 		BAA035DE2A2F6ECE006AA743 /* DownloadsModuleCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsModuleCellView.swift; sourceTree = "<group>"; };
 		BAAEFC1E2A277F5E0083E8EC /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
 		BACC5F2D2A40A0930002DC26 /* ModuleItemCell+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModuleItemCell+Extensions.swift"; sourceTree = "<group>"; };
+		BAF659262A5EDC5100C767DC /* ImageDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDownloader.swift; sourceTree = "<group>"; };
 		CEB57AE7286B32BB00F4BFC8 /* HelmNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelmNavigationController.swift; sourceTree = "<group>"; };
 		CEF0D1442837D571005867EF /* ContextCellBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCellBackgroundView.swift; sourceTree = "<group>"; };
 		CEF0D1452837D571005867EF /* ContextCellBackgroundView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContextCellBackgroundView.xib; sourceTree = "<group>"; };
@@ -3091,6 +3093,7 @@
 				BA5741902A25E100007634D2 /* ModuleItem+OfflineStorageDataProtocol.swift */,
 				BA5741922A25EDB7007634D2 /* ModuleItem+OfflineDownloadHelperProtocol.swift */,
 				BA9341362A32189D0004060D /* DownloadCourse+OfflineStorageDataProtocol.swift */,
+				BAF659262A5EDC5100C767DC /* ImageDownloader.swift */,
 			);
 			path = DownloaderClient;
 			sourceTree = "<group>";
@@ -8667,6 +8670,7 @@
 				7DA25FE423F721DA005D2121 /* PermissionName.swift in Sources */,
 				7DA260A223F7234C005D2121 /* UITestHelpers.swift in Sources */,
 				7DA2601823F7227A005D2121 /* UITabBarExtensions.swift in Sources */,
+				BAF659272A5EDC5100C767DC /* ImageDownloader.swift in Sources */,
 				BA5929AA2A29E81000C4540C /* SUWebView.swift in Sources */,
 				7DA2610E23FCD907005D2121 /* CircleRefreshControl.swift in Sources */,
 				7DA2609723F72338005D2121 /* RouteHandler.swift in Sources */,

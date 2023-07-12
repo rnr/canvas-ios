@@ -61,7 +61,11 @@ final class DownloadCourseViewModel: Identifiable, Hashable {
     }
 
     var color: UIColor {
-        course?.color ?? .white
+        UIColor(hexString: course?.courseColor) ?? .ash
+    }
+
+    var textColor: UIColor {
+        UIColor(hexString: course?.courseColor) ?? .textDarkest
     }
 
     init(courseDataModel: CourseStorageDataModel) {

@@ -23,14 +23,15 @@ public struct DownloadsContentCellView: View {
     // MARK: - Properties -
 
     let viewModel: DownloadsModuleCellViewModel
+    var color: Color = .oxford
 
     // MARK: - Views -
 
     public var body: some View {
         HStack(spacing: 15) {
-            Image(uiImage: .documentLine)
+            Image(uiImage: viewModel.uiImage ?? .documentLine)
                 .frame(width: 20, height: 20)
-                .foregroundColor(.oxford)
+                .foregroundColor(color)
             VStack(alignment: .leading) {
                 Text(viewModel.title)
                     .font(.semibold16)

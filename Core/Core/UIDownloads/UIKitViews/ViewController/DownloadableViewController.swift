@@ -19,7 +19,7 @@
 import UIKit
 import SwiftUI
 import Combine
-import  mobile_offline_downloader_ios
+import mobile_offline_downloader_ios
 
 public class DownloadableViewController: UIViewController, ErrorViewController {
 
@@ -31,6 +31,7 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
 
     private let downloadsManager = OfflineDownloadsManager.shared
     private let storageManager = OfflineStorageManager.shared
+    private let imageDownloader = ImageDownloader()
     private let env = AppEnvironment.shared
 
     private var course: Course?
@@ -246,12 +247,21 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
     }
 
     private func addOrUpdateCourse() {
-        guard let course = course else {
+        guard var course = course else {
             return
         }
+
         let courseStorageDataModel = CourseStorageDataModel(
             course: course
         )
+        if let imageDownloadURL = course.imageDownloadURL {
+            imageDownloader.downloadImage(from: imageDownloadURL)
+        }
+
+        if course.courseColor == nil {
+            course.courseColor = course.contextColor?.color.hexString
+        }
+
         storageManager.save(courseStorageDataModel) { result in
             result.success {
                 print("success")

@@ -39,7 +39,7 @@ final class DownloadsCourseCategoryViewModel: Identifiable, Hashable {
     }
 
     var courseColor: UIColor {
-        course.color
+        UIColor(hexString: course.courseColor) ?? course.color
     }
 
     var title: String {

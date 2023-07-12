@@ -48,8 +48,7 @@ public class DownloadingBarView: UIView {
         self.init(frame: .zero)
     }
 
-
-    func hidden() {
+    public func hidden() {
         if downloadsManager.activeEntries.isEmpty {
             return
         }
@@ -57,7 +56,7 @@ public class DownloadingBarView: UIView {
         isHidden = true
     }
 
-    func show() {
+    public func show() {
         if downloadsManager.activeEntries.isEmpty {
             return
         }
@@ -77,6 +76,25 @@ public class DownloadingBarView: UIView {
         leftAnchor.constraint(equalTo: superview.leftAnchor).isActive = true
         rightAnchor.constraint(equalTo: superview.rightAnchor).isActive = true
         bottomAnchor.constraint(equalTo: tabBar.topAnchor).isActive = true
+        heightAnchor.constraint(equalToConstant: 50).isActive = true
+
+        attachProgressView()
+        attachLabels()
+        observeDownloadsEvents()
+    }
+
+    public func attach(in superview: UIView) {
+        isHidden = true
+        backgroundColor = .tertiarySystemGroupedBackground
+
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        addGestureRecognizer(tap)
+
+        superview.addSubview(self)
+        translatesAutoresizingMaskIntoConstraints = false
+        leftAnchor.constraint(equalTo: superview.leftAnchor).isActive = true
+        rightAnchor.constraint(equalTo: superview.rightAnchor).isActive = true
+        bottomAnchor.constraint(equalTo: superview.bottomAnchor).isActive = true
         heightAnchor.constraint(equalToConstant: 50).isActive = true
 
         attachProgressView()

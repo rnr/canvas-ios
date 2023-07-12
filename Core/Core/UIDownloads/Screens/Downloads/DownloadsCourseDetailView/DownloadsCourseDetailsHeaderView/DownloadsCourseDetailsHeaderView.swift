@@ -36,10 +36,7 @@ struct DownloadsCourseDetailsHeaderView: View {
         ZStack {
             Color(viewModel.courseColor.darkenToEnsureContrast(against: .white))
                 .frame(width: width, height: viewModel.height)
-            if let url = viewModel.imageURL {
-                RemoteImage(url, width: width, height: viewModel.height)
-                    .opacity(viewModel.imageOpacity)
-            }
+            image
             VStack(spacing: 3) {
                 Text(viewModel.courseName)
                     .font(.semibold23)
@@ -56,5 +53,22 @@ struct DownloadsCourseDetailsHeaderView: View {
         .frame(height: viewModel.height)
         .clipped()
         .offset(x: 0, y: viewModel.verticalOffset)
+    }
+
+    @ViewBuilder
+    private var image: some View {
+        if let imageDownloadURL = viewModel.imageURL,
+           let image = ImageDownloader().loadImage(fileName: imageDownloadURL.lastPathComponent) {
+            Image(uiImage: image.withRenderingMode(.alwaysOriginal))
+                .resizable().scaledToFill()
+                .frame(width: width, height: viewModel.height)
+                .opacity(viewModel.imageOpacity)
+                .clipped()
+        } else {
+            if let url = viewModel.imageURL {
+                RemoteImage(url, width: width, height: viewModel.height)
+                    .opacity(viewModel.imageOpacity)
+            }
+        }
     }
 }
