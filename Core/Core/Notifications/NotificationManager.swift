@@ -36,7 +36,16 @@ public class NotificationManager {
     public let logger: LoggerProtocol
     public var remoteToken: Data?
     public var remoteSession: LoginSession?
-    public var subscriptionArn: String?
+
+    private let subscriptArnKey: String = "icanvas.mobile.2u.subscriptArnKey"
+    public var subscriptionArn: String? {
+        get {
+            UserDefaults.standard.string(forKey: subscriptArnKey)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: subscriptArnKey)
+        }
+    }
     public var emailAsPushChannelID: String?
 
     public static var shared = NotificationManager(

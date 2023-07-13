@@ -114,7 +114,7 @@ extension NotificationManager {
     }
 
     func subscribeToUserSNSTopic(deviceToken token: Data, session: LoginSession) {
-//        let sns = AWSSNS(forKey: "mySNS")
+        guard subscriptionArn == nil || subscriptionArn?.isEmpty == true else { return }
         if let requestApp = AWSSNSCreatePlatformEndpointInput(),
             var appARN = Secret.appArnTemplate.string {
             requestApp.token = token.hexString
@@ -161,6 +161,7 @@ extension NotificationManager {
     }
 
     public func unsubscribeFromUserSNSTopic() {
+        guard remoteToken != nil, remoteSession != nil else { return }
         let sns = AWSSNS(forKey: "mySNS")
         if let unsubscribeRequest = AWSSNSUnsubscribeInput(),
             let subscrArn = subscriptionArn,
