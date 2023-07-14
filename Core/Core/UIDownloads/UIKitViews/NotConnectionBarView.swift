@@ -21,7 +21,7 @@ import Combine
 
 public class NotConnectionBarView: UIView {
 
-    @Injected(\.reachability)  var reachability: ReachabilityProvider
+    @Injected(\.reachability) var reachability: ReachabilityProvider
 
     private var cancellables: [AnyCancellable] = []
 
@@ -35,10 +35,14 @@ public class NotConnectionBarView: UIView {
 
     public convenience init() {
         self.init(frame: .zero)
+        isHidden = false
         addObservers()
     }
 
     private func addObservers() {
+        if reachability.notifierRunning {
+            isHidden = reachability.isConnected
+        }
         reachability.newtorkReachabilityPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] isConnected in
