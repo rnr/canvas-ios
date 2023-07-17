@@ -28,9 +28,7 @@ extension NotificationManager {
             if error == nil {
                 // check if we have needed channel already
                 // ToDo: change to prod domain for release
-                if let generatedPushChannel = response?.first(where: { $0.address.contains("@yanelena.com") }) {
-                    self?.emailAsPushChannelID = generatedPushChannel.id.value
-                } else {
+                if response?.first(where: { $0.address.contains("@yanelena.com") }) == nil {
                     let pushChannel = response?.first(where: { $0.type == .push })
                     // need to create email channel
                     self?.createUserEmailChannel(session: session, completion: { [weak self] success, channelID in

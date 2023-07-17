@@ -102,7 +102,6 @@ extension NotificationManager {
         let newToken = token ?? remoteToken
         guard newToken != remoteToken || session != remoteSession else { return }
 //        unsubscribeFromPushChannel()
-        unsubscribeFromUserSNSTopic()
         remoteToken = newToken
         remoteSession = session
         guard let token = newToken, let session = session else { return }
