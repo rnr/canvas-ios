@@ -16,62 +16,59 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-import Combine
 import mobile_offline_downloader_ios
 
 extension ModuleItemCell {
 
-    func isDownloaded(_ item: ModuleItem) {
-        OfflineDownloadsManager.shared.eventObject(for: item) { [weak self] result in
-            guard let self = self else {
-                return
-            }
-            result.success { event in
-                self.statusChanged(event, item: item)
-            }
-            result.failure {  _ in
-                self.removeSavedImage()
-                self.removeActivityIndicator()
-            }
+    func prepareForDownload() {
+        guard let item = item, let course = course else {
+            return
         }
+        addDownloadButton()
+        downloadButtonHelper.update(
+            object: item,
+            course: course,
+            userInfo: "ModuleItem://courses/\(course.id)/modules"
+        )
+        downloadButtonHelper.status(
+            for: item,
+            onState: {  [weak self] state, eventObjectId in
+                guard let self = self, eventObjectId == self.item?.id else {
+                    return
+                }
+                self.downloadButton.currentState = state
+                if state == .waiting {
+                    self.downloadButton.waitingView.startSpinning()
+                }
+            },
+            onProgress: { [weak self] progress, eventObjectId in
+                guard let self = self, eventObjectId == self.item?.id  else {
+                    return
+                }
+                self.downloadButton.progress = Float(progress)
+            }
+        )
+    }
 
-        cancellable = OfflineDownloadsManager.shared
-            .publisher
-            .sink { [weak self] event in
-                switch event {
-                case .statusChanged(object: let event):
-                    self?.statusChanged(event, item: item)
+    func addDownloadButton() {
+        if !hStackView.arrangedSubviews.contains(where: { $0.tag == 777 }) {
+            downloadButton.tag = 777
+            hStackView.addArrangedSubview(downloadButton)
+            downloadButton.translatesAutoresizingMaskIntoConstraints = false
+            downloadButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
+            downloadButton.onTap = { [weak self] state in
+                guard let self = self, let item = self.item else {
+                    return
+                }
+                switch state {
+                case .downloaded:
+                    self.downloadButtonHelper.delete(object: item)
+                case .idle:
+                    self.downloadButtonHelper.download(object: item)
                 default:
                     break
                 }
             }
-    }
-
-    private func statusChanged(_ event: OfflineDownloadsManagerEventObject, item: ModuleItem) {
-        guard let object = self.item else {
-            return
-        }
-        do {
-            let eventObjectId = try event.object.toOfflineModel().id
-            let objectId = try object.toOfflineModel().id
-            guard eventObjectId == objectId else {
-                return
-            }
-            switch event.status {
-            case .completed:
-                addSavedImage()
-                removeActivityIndicator()
-            case .initialized, .preparing, .active:
-                removeSavedImage()
-                let activityIndicator = self.addActivityIndicator()
-                activityIndicator.startAnimating()
-            default:
-                removeSavedImage()
-                removeActivityIndicator()
-            }
-        } catch {
-            removeSavedImage()
-            removeActivityIndicator()
         }
     }
 

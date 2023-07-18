@@ -56,6 +56,8 @@ public class ModuleListViewController: UIViewController, ColoredNavViewProtocol,
         }
     }
 
+    private var downloadStatusProvider = DownloadStatusProvider()
+
     public static func create(courseID: String, moduleID: String? = nil) -> ModuleListViewController {
         let controller = loadFromStoryboard()
         controller.courseID = courseID
@@ -109,6 +111,16 @@ public class ModuleListViewController: UIViewController, ColoredNavViewProtocol,
     }
 
     func update() {
+        if let course = courses.first {
+            downloadStatusProvider.update(
+                objects: modules.flatMap { $0.items },
+                course: course,
+                userInfo: "ModuleItem://courses/\(course.id)/modules"
+            )
+            downloadStatusProvider.onUpdate = { [weak self] in
+                self?.tableView.reloadData()
+            }
+        }
         let pending = modules.pending || tabs.pending || courses.pending
         spinnerView.isHidden = !pending || refreshControl.isRefreshing
         emptyView.isHidden = modules.pending || !modules.isEmpty || modules.error != nil || isPageDisabled
@@ -241,7 +253,26 @@ extension ModuleListViewController: UITableViewDataSource {
         default:
             let cell: ModuleItemCell = tableView.dequeue(for: indexPath)
             if let item = item {
-                cell.update(item, indexPath: indexPath, color: color)
+                cell.update(
+                    item,
+                    course: courses.first,
+                    status: downloadStatusProvider.status(id: item.id),
+                    indexPath: indexPath,
+                    color: color
+                )
+                cell.downloadButton.onTap = { [weak self] state in
+                    guard let self = self else {
+                        return
+                    }
+                    switch state {
+                    case .downloaded:
+                        self.downloadStatusProvider.delete(object: item)
+                    case .idle:
+                        self.downloadStatusProvider.download(object: item)
+                    default:
+                        break
+                    }
+                }
             }
             return cell
         }

@@ -886,6 +886,7 @@
 		BAAEFC1F2A277F5E0083E8EC /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAAEFC1E2A277F5E0083E8EC /* UIViewController+Extensions.swift */; };
 		BACC5F2E2A40A0930002DC26 /* ModuleItemCell+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BACC5F2D2A40A0930002DC26 /* ModuleItemCell+Extensions.swift */; };
 		BAF659272A5EDC5100C767DC /* ImageDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF659262A5EDC5100C767DC /* ImageDownloader.swift */; };
+		BAF6592C2A657FC300C767DC /* DownloadStatusProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF6592B2A657FC300C767DC /* DownloadStatusProvider.swift */; };
 		CEB57AE8286B32BB00F4BFC8 /* HelmNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB57AE7286B32BB00F4BFC8 /* HelmNavigationController.swift */; };
 		CEF0D1462837D571005867EF /* ContextCellBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF0D1442837D571005867EF /* ContextCellBackgroundView.swift */; };
 		CEF0D1472837D571005867EF /* ContextCellBackgroundView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEF0D1452837D571005867EF /* ContextCellBackgroundView.xib */; };
@@ -2524,6 +2525,7 @@
 		BAAEFC1E2A277F5E0083E8EC /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
 		BACC5F2D2A40A0930002DC26 /* ModuleItemCell+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModuleItemCell+Extensions.swift"; sourceTree = "<group>"; };
 		BAF659262A5EDC5100C767DC /* ImageDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDownloader.swift; sourceTree = "<group>"; };
+		BAF6592B2A657FC300C767DC /* DownloadStatusProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadStatusProvider.swift; sourceTree = "<group>"; };
 		CEB57AE7286B32BB00F4BFC8 /* HelmNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelmNavigationController.swift; sourceTree = "<group>"; };
 		CEF0D1442837D571005867EF /* ContextCellBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCellBackgroundView.swift; sourceTree = "<group>"; };
 		CEF0D1452837D571005867EF /* ContextCellBackgroundView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContextCellBackgroundView.xib; sourceTree = "<group>"; };
@@ -3094,6 +3096,7 @@
 				BA5741922A25EDB7007634D2 /* ModuleItem+OfflineDownloadHelperProtocol.swift */,
 				BA9341362A32189D0004060D /* DownloadCourse+OfflineStorageDataProtocol.swift */,
 				BAF659262A5EDC5100C767DC /* ImageDownloader.swift */,
+				BAF6592B2A657FC300C767DC /* DownloadStatusProvider.swift */,
 			);
 			path = DownloaderClient;
 			sourceTree = "<group>";
@@ -8331,6 +8334,7 @@
 				7DFD5F7D23FF158700D988E0 /* CalendarViewController.swift in Sources */,
 				7DA25FEE23F721DE005D2121 /* GetConversations.swift in Sources */,
 				7DA260D223F72359005D2121 /* CoreWebViewController.swift in Sources */,
+				BAF6592C2A657FC300C767DC /* DownloadStatusProvider.swift in Sources */,
 				7DA2602A23F722C2005D2121 /* LoginNavigationController.swift in Sources */,
 				7DA260C423F72352005D2121 /* UploadMedia.swift in Sources */,
 				7DA25F9423F7212C005D2121 /* ActAsUserViewController.swift in Sources */,

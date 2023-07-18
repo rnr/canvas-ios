@@ -37,19 +37,11 @@ public final class DownloadButton: UIView {
             downloadingButton.progress = progress
         }
     }
-    public var animationDuration  = 0.3
+
     public var currentState: State = .idle {
         didSet {
             // MARK: - Current State Changed
-            let delay: TimeInterval = 0
-
-            animationQueue.async { [self] in
-                animationDispatchGroup.enter()
-                DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-                    self.transition(from: oldValue, to: self.currentState)
-                }
-                animationDispatchGroup.wait()
-            }
+            transition(from: oldValue, to: currentState)
             onState?(currentState)
         }
     }
@@ -65,8 +57,6 @@ public final class DownloadButton: UIView {
     // MARK: - CallBacks -
 
     public var onTap: ((State) -> Void)?
-    let animationDispatchGroup = DispatchGroup()
-    let animationQueue = DispatchQueue(label: "MUDownloadButtonAnimationQueue")
 
     // MARK: - Inits -
 

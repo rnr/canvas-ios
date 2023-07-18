@@ -58,6 +58,8 @@ public class PageListViewController: UIViewController, ColoredNavViewProtocol {
         return controller
     }
 
+    private var downloadStatusProvider = DownloadStatusProvider()
+
     public override func viewDidLoad() {
         super.viewDidLoad()
         setupTitleViewInNavbar(title: NSLocalizedString("Pages", bundle: .core, comment: ""))
@@ -119,6 +121,16 @@ public class PageListViewController: UIViewController, ColoredNavViewProtocol {
     }
 
     func update() {
+        if let course = course.first {
+            downloadStatusProvider.update(
+                objects: pages.all,
+                course: course,
+                userInfo: "Page://courses/\(course.id)/modules"
+            )
+            downloadStatusProvider.onUpdate = { [weak self] in
+                self?.tableView.reloadData()
+            }
+        }
         let isLoading = !frontPage.requested || frontPage.pending || !pages.requested || pages.pending
         loadingView.isHidden = pages.error != nil || !isLoading || refreshControl.isRefreshing
         emptyView.isHidden = pages.error != nil || isLoading || !frontPage.isEmpty || !pages.isEmpty
@@ -188,7 +200,27 @@ extension PageListViewController: UITableViewDataSource, UITableViewDelegate {
             return LoadingCell(style: .default, reuseIdentifier: nil)
         }
         let cell: DownloadPageListTableViewCell = tableView.dequeue(for: indexPath)
-        cell.update(pages[indexPath.row], course: course.first, indexPath: indexPath, color: color)
+        let page = pages[indexPath.row]
+        cell.update(
+            page: page,
+            course: course.first,
+            status: downloadStatusProvider.status(index: indexPath.row),
+            indexPath: indexPath,
+            color: color
+        )
+        cell.downloadButton.onTap = { [weak self] state in
+            guard let self = self, let page = page else {
+                return
+            }
+            switch state {
+            case .downloaded:
+                self.downloadStatusProvider.delete(object: page)
+            case .idle:
+                self.downloadStatusProvider.download(object: page)
+            default:
+                break
+            }
+        }
         return cell
     }
 
