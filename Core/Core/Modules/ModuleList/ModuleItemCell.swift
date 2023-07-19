@@ -36,14 +36,7 @@ class ModuleItemCell: UITableViewCell {
     var item: ModuleItem?
     let downloadButtonHelper = DownloadButtonHelper()
 
-    var downloadButton: DownloadButton = {
-        let downloadButton = DownloadButton()
-        downloadButton.mainTintColor = .systemBlue
-        downloadButton.currentState = .idle
-        return downloadButton
-    }()
-
-    func update(_ item: ModuleItem, course: Course?, status: DownloadStatusProvider.DownloadStatus?, indexPath: IndexPath, color: UIColor?) {
+    func update(_ item: ModuleItem, course: Course?, indexPath: IndexPath, color: UIColor?) {
         self.course = course
         self.item = item
         backgroundColor = .backgroundLightest
@@ -92,24 +85,6 @@ class ModuleItemCell: UITableViewCell {
             ].compactMap { $0 }.joined(separator: ", ")
         }
         accessibilityIdentifier = "ModuleList.\(indexPath.section).\(indexPath.row)"
-
-        //prepareForDownload()
-        addDownloadButton()
-        if let status = status, item.id == status.id {
-            switch status.status {
-            case .active:
-                downloadButton.currentState = .downloading
-                downloadButton.progress = Float(status.progress)
-            case .initialized, .preparing:
-                downloadButton.currentState = .waiting
-                downloadButton.waitingView.startSpinning()
-            case .completed:
-                downloadButton.currentState = .downloaded
-            default:
-                downloadButton.currentState = .idle
-            }
-        } else {
-            downloadButton.currentState = .idle
-        }
+        prepareForDownload()
     }
 }

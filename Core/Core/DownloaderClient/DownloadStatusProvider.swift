@@ -43,8 +43,7 @@ final class DownloadButtonHelper {
 
     func status(
         for object: OfflineDownloadTypeProtocol,
-        onState: @escaping ((DownloadButton.State, String) -> Void),
-        onProgress: @escaping ((Double, String) -> Void)
+        onState: @escaping ((DownloadButton.State, Double, String) -> Void)
     ) {
         downloadsManager.eventObject(for: object) { [weak self] result in
             guard let self = self else {
@@ -53,12 +52,11 @@ final class DownloadButtonHelper {
             result.success { event in
                 self.statusChanged(
                     event: event,
-                    onState: onState,
-                    onProgress: onProgress
+                    onState: onState
                 )
             }
             result.failure {  _ in
-                onState(.idle, "")
+                onState(.idle, 0.0, "")
             }
         }
 
@@ -69,14 +67,12 @@ final class DownloadButtonHelper {
                 case .statusChanged(object: let event):
                     self?.statusChanged(
                         event: event,
-                        onState: onState,
-                        onProgress: onProgress
+                        onState: onState
                     )
                 case .progressChanged(object: let event):
                     self?.statusChanged(
                         event: event,
-                        onState: onState,
-                        onProgress: onProgress
+                        onState: onState
                     )
                 }
             }
@@ -84,8 +80,7 @@ final class DownloadButtonHelper {
 
     private func statusChanged(
         event: OfflineDownloadsManagerEventObject,
-        onState: @escaping ((DownloadButton.State, String) -> Void),
-        onProgress: @escaping ((Double, String) -> Void)
+        onState: @escaping ((DownloadButton.State, Double, String) -> Void)
     ) {
         guard let object = self.object else {
             return
@@ -98,185 +93,19 @@ final class DownloadButtonHelper {
             }
             switch event.status {
             case .initialized, .preparing:
-                onState(.waiting, eventObjectId)
+                onState(.waiting, event.progress, eventObjectId)
             case .active:
-                onState(.downloading, eventObjectId)
-                onProgress(event.progress, eventObjectId)
+                onState(.downloading, event.progress, eventObjectId)
             case .completed:
-                onState(.downloaded, eventObjectId)
+                onState(.downloaded, event.progress, eventObjectId)
             case .removed:
-                onState(.idle, eventObjectId)
+                onState(.idle, event.progress, eventObjectId)
             default:
-                onState(.idle, eventObjectId)
+                onState(.idle, event.progress, eventObjectId)
             }
         } catch {
-            onState(.idle, "")
+            onState(.idle, event.progress, "")
         }
-    }
-
-    func download(object: OfflineDownloadTypeProtocol) {
-        do {
-            guard let userInfo = self.userInfo else {
-                return
-            }
-            try downloadsManager.addAndStart(
-                object: object,
-                userInfo: userInfo
-            )
-            addOrUpdateCourse()
-        } catch {
-            debugLog(error.localizedDescription)
-        }
-    }
-
-    func delete(object: OfflineDownloadTypeProtocol) {
-        do {
-            try downloadsManager.delete(object: object)
-        } catch {
-            debugLog(error.localizedDescription)
-        }
-    }
-
-    private func addOrUpdateCourse() {
-        guard let course = course else {
-            return
-        }
-
-        let courseStorageDataModel = CourseStorageDataModel(
-            course: course
-        )
-        if let imageDownloadURL = course.imageDownloadURL {
-            imageDownloader.downloadImage(from: imageDownloadURL)
-        }
-
-        if course.courseColor == nil {
-            course.courseColor = course.contextColor?.color.hexString
-        }
-
-        storageManager.save(courseStorageDataModel) { result in
-            result.success {
-                print("success")
-            }
-            result.failure { _ in
-                print("failure")
-            }
-        }
-    }
-}
-
-final class DownloadStatusProvider {
-
-    class DownloadStatus {
-        var id: String {
-            let id = try? object.toOfflineModel().id
-            return id ?? ""
-        }
-
-        let object: OfflineDownloadTypeProtocol
-        var status: OfflineDownloaderStatus?
-        var progress: Double = 0.0
-
-        init(
-            object: OfflineDownloadTypeProtocol,
-            status: OfflineDownloaderStatus? = nil,
-            progress: Double = 0.0
-        ) {
-            self.object = object
-            self.status = status
-            self.progress = progress
-        }
-    }
-
-    private let downloadsManager = OfflineDownloadsManager.shared
-    private let storageManager = OfflineStorageManager.shared
-    private let imageDownloader = ImageDownloader()
-
-    private var objects: [DownloadStatus] = []
-    private var course: Course?
-    private var userInfo: String?
-    private var cancellable: AnyCancellable?
-
-    var onUpdate: (() -> Void)?
-
-    init() {
-        observe()
-    }
-
-    func update(
-        objects: [OfflineDownloadTypeProtocol],
-        course: Course?,
-        userInfo: String?
-    ) {
-
-        objects.forEach { object in
-            let id = try? object.toOfflineModel().id
-            if !self.objects.contains(where: {$0.id == id}) {
-                self.objects.append(DownloadStatus(object: object))
-            }
-        }
-        self.course = course
-        self.userInfo = userInfo
-        getStatus()
-    }
-
-    func status(index: Int) -> DownloadStatus? {
-        if objects.indices.contains(index) {
-            return objects[index]
-        }
-        return nil
-    }
-
-    func status(id: String) -> DownloadStatus? {
-        objects.first(where: {$0.id == id})
-    }
-
-    func getStatus() {
-        let group = DispatchGroup()
-        objects.forEach { object in
-            group.enter()
-            downloadsManager.eventObject(for: object.object) { result in
-                result.success { event in
-                    if object.status == nil {
-                        object.status = event.status
-                    }
-                }
-                result.failure { error in
-                    debugLog(error.localizedDescription)
-                }
-                group.leave()
-            }
-        }
-        group.notify(queue: .main) {
-            self.onUpdate?()
-        }
-    }
-
-    func observe() {
-        cancellable = OfflineDownloadsManager.shared
-            .publisher
-            .sink { [weak self] event in
-                switch event {
-                case .statusChanged(object: let event):
-                    self?.statusChanged(event: event)
-                case .progressChanged(object: let event):
-                    self?.statusChanged(event: event)
-                }
-            }
-    }
-
-    private func statusChanged(event: OfflineDownloadsManagerEventObject) {
-        do {
-            let eventObjectId = try event.object.toOfflineModel().id
-            guard let object = objects.first(where: {$0.id == eventObjectId}) else {
-                return
-            }
-            object.status = event.status
-            if event.progress == 0.0 {
-                return
-            }
-            object.progress = event.progress
-            onUpdate?()
-        } catch {}
     }
 
     func download(object: OfflineDownloadTypeProtocol) {

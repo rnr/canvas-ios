@@ -49,13 +49,6 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
     }()
 
     var downloadButtonHelper = DownloadButtonHelper()
-    var downloadButton: DownloadButton = {
-        let downloadButton = DownloadButton()
-        downloadButton.mainTintColor = .systemBlue
-        downloadButton.currentState = .idle
-        return downloadButton
-    }()
-
     var page: Page?
     var course: Course?
 
@@ -75,7 +68,7 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
     private func configure() {
         backgroundColor = .backgroundLightest
         accessoryType = .disclosureIndicator
-        [titleLabel, dateLabel, downloadButton, accessIconView].forEach {
+        [titleLabel, dateLabel, accessIconView].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview($0)
         }
@@ -95,17 +88,12 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
 
         titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8).isActive = true
         titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 60).isActive = true
-        titleLabel.trailingAnchor.constraint(equalTo: downloadButton.leadingAnchor, constant: -15).isActive = true
+        titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -60).isActive = true
 
         dateLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor).isActive = true
         dateLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8).isActive = true
         dateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 60).isActive = true
-        dateLabel.trailingAnchor.constraint(equalTo: downloadButton.leadingAnchor, constant: -15).isActive = true
-
-        downloadButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        downloadButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        downloadButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
-        downloadButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15).isActive = true
+        dateLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -60).isActive = true
     }
 
     // MARK: - Action -
@@ -114,10 +102,9 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
 
     // MARK: - Intent -
 
-    func update(page: Page?, course: Course?, status: DownloadStatusProvider.DownloadStatus?, indexPath: IndexPath, color: UIColor?) {
+    func update(page: Page?, course: Course?, indexPath: IndexPath, color: UIColor?) {
         self.page = page
         self.course = course
-
         selectedBackgroundView = ContextCellBackgroundView.create(color: color)
         titleLabel.accessibilityIdentifier = "PageList.\(indexPath.row)"
         accessIconView.icon = UIImage.documentLine
@@ -128,50 +115,31 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
         dateLabel.setText(dateText, style: .textCellSupportingText)
         titleLabel.setText(page?.title, style: .textCellTitle)
         titleLabel.lineBreakMode = .byTruncatingTail
-        //prepareForDownload()
-        if let status = status, page?.id == status.id {
-            switch status.status {
-            case .active:
-                downloadButton.currentState = .downloading
-                downloadButton.progress = Float(status.progress)
-            case .initialized, .preparing:
-                downloadButton.currentState = .waiting
-                downloadButton.waitingView.startSpinning()
-            case .completed:
-                downloadButton.currentState = .downloaded
-            default:
-                downloadButton.currentState = .idle
-            }
-        } else {
-            downloadButton.currentState = .idle
-        }
+        prepareForDownload()
     }
 
     func prepareForDownload() {
         guard let page = page, let course = course else {
             return
         }
+        let downloadButton = addDownloadButton()
         downloadButtonHelper.update(
             object: page,
             course: course,
-            userInfo: "ModuleItem://courses/\(course.id)/modules"
+            userInfo: "Page://courses/\(course.id)/pages"
         )
         downloadButtonHelper.status(
             for: page,
-            onState: {  [weak self] state, eventObjectId in
+            onState: { [weak self] state, progress, eventObjectId in
                 guard let self = self, eventObjectId == self.page?.id else {
                     return
                 }
-                self.downloadButton.currentState = state
+               debugLog(downloadButton.progress, "downloadButton.progress")
+               downloadButton.progress = Float(progress)
+               downloadButton.currentState = state
                 if state == .waiting {
-                    self.downloadButton.waitingView.startSpinning()
+                    downloadButton.waitingView.startSpinning()
                 }
-            },
-            onProgress: { [weak self] progress, eventObjectId in
-                guard let self = self, eventObjectId == self.page?.id  else {
-                    return
-                }
-                self.downloadButton.progress = Float(progress)
             }
         )
         downloadButton.onTap = { [weak self] state in
@@ -187,5 +155,27 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
                 break
             }
         }
+    }
+
+    func addDownloadButton() -> DownloadButton {
+        removeDownloadButton()
+        let downloadButton: DownloadButton = .init(frame: .zero)
+        downloadButton.mainTintColor = .systemBlue
+        downloadButton.currentState = .idle
+        contentView.addSubview(downloadButton)
+        downloadButton.translatesAutoresizingMaskIntoConstraints = false
+        downloadButton.widthAnchor.constraint(equalToConstant: 35).isActive = true
+        downloadButton.heightAnchor.constraint(equalToConstant: 35).isActive = true
+        downloadButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+        downloadButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15).isActive = true
+        return downloadButton
+    }
+
+    func removeDownloadButton() {
+        downloadButton()?.removeFromSuperview()
+    }
+
+    func downloadButton() -> DownloadButton? {
+        contentView.subviews.first(where: { $0 is DownloadButton }) as? DownloadButton
     }
 }

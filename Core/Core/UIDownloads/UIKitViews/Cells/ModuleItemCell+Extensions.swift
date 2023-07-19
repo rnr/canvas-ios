@@ -24,7 +24,7 @@ extension ModuleItemCell {
         guard let item = item, let course = course else {
             return
         }
-        addDownloadButton()
+        let downloadButton = addDownloadButton()
         downloadButtonHelper.update(
             object: item,
             course: course,
@@ -32,44 +32,50 @@ extension ModuleItemCell {
         )
         downloadButtonHelper.status(
             for: item,
-            onState: {  [weak self] state, eventObjectId in
+            onState: {  [weak self] state, progress, eventObjectId in
                 guard let self = self, eventObjectId == self.item?.id else {
                     return
                 }
-                self.downloadButton.currentState = state
+               downloadButton.progress = Float(progress)
+               debugLog(downloadButton.progress, "downloadButton.progress")
+               downloadButton.currentState = state
                 if state == .waiting {
-                    self.downloadButton.waitingView.startSpinning()
+                    downloadButton.waitingView.startSpinning()
                 }
-            },
-            onProgress: { [weak self] progress, eventObjectId in
-                guard let self = self, eventObjectId == self.item?.id  else {
-                    return
-                }
-                self.downloadButton.progress = Float(progress)
             }
         )
-    }
-
-    func addDownloadButton() {
-        if !hStackView.arrangedSubviews.contains(where: { $0.tag == 777 }) {
-            downloadButton.tag = 777
-            hStackView.addArrangedSubview(downloadButton)
-            downloadButton.translatesAutoresizingMaskIntoConstraints = false
-            downloadButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
-            downloadButton.onTap = { [weak self] state in
-                guard let self = self, let item = self.item else {
-                    return
-                }
-                switch state {
-                case .downloaded:
-                    self.downloadButtonHelper.delete(object: item)
-                case .idle:
-                    self.downloadButtonHelper.download(object: item)
-                default:
-                    break
-                }
+        downloadButton.onTap = { [weak self] state in
+            guard let self = self, let item = self.item else {
+                return
+            }
+            switch state {
+            case .downloaded:
+                self.downloadButtonHelper.delete(object: item)
+            case .idle:
+                self.downloadButtonHelper.download(object: item)
+            default:
+                break
             }
         }
+    }
+
+    func addDownloadButton() -> DownloadButton {
+        removeDownloadButton()
+        let downloadButton: DownloadButton = .init(frame: .zero)
+        downloadButton.mainTintColor = .systemBlue
+        downloadButton.currentState = .idle
+        hStackView.addArrangedSubview(downloadButton)
+        downloadButton.translatesAutoresizingMaskIntoConstraints = false
+        downloadButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        return downloadButton
+    }
+
+    func removeDownloadButton() {
+        downloadButton()?.removeFromSuperview()
+    }
+
+    func downloadButton() -> DownloadButton? {
+        hStackView.arrangedSubviews.first(where: { $0 is DownloadButton }) as? DownloadButton
     }
 
     func addSavedImage() {
