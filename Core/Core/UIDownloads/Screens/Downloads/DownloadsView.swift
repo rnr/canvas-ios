@@ -68,7 +68,13 @@ public struct DownloadsView: View {
                 VStack {
                     if viewModel.isEmpty {
                         VStack {
+                            Image.pandaBlocks
+                            Text("No Courses")
+                                .font(.semibold17)
+                                .foregroundColor(.textDarkest)
                             Text("Visit a course to download content.")
+                                .font(.regular16)
+                                .foregroundColor(.textDarkest)
                         }
                     } else {
                         list

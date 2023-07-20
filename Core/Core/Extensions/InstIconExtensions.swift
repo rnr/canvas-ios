@@ -467,4 +467,6 @@ public extension Image {
     static var share: Image { Image("share", bundle: .core) }
     static var todoTab: Image { Image("todoTab", bundle: .core) }
     static var todoTabActive: Image { Image("todoTabActive", bundle: .core) }
+
+    static var pandaBlocks: Image { Image("PandaBlocks", bundle: .core) }
 }

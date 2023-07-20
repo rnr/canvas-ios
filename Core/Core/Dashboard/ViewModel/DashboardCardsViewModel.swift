@@ -26,7 +26,7 @@ class DashboardCardsViewModel: ObservableObject {
         case data(T)
         case error(String)
     }
-
+    @Injected(\.reachability) var reachability: ReachabilityProvider
     @Published public private(set) var state = ViewModelState<[DashboardCard]>.loading
     @Published public private(set) var shouldShowSettingsButton = false
     private let env = AppEnvironment.shared
@@ -75,7 +75,9 @@ class DashboardCardsViewModel: ObservableObject {
         guard cards.requested, !cards.pending, !courseSectionStatus.isUpdatePending, courses.requested, !courses.pending, !courses.hasNextPage else { return }
 
         guard cards.state != .error else {
-            state = .error(NSLocalizedString("Something went wrong", comment: ""))
+            state = .error(NSLocalizedString(
+                reachability.isConnected ? "Something went wrong" : "", comment: "")
+            )
             return
         }
 

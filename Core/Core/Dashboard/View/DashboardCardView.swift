@@ -58,8 +58,10 @@ public struct DashboardCardView: View {
             RefreshableScrollView {
                 VStack(spacing: 0) {
                     fileUploadNotificationCards()
-                    DownloadedContentCellView {
-                        showDownloads()
+                    if !cards.reachability.isConnected {
+                        DownloadedContentCellView {
+                            showDownloads()
+                        }
                     }
                     list(CGSize(width: geometry.size.width - 32, height: geometry.size.height))
                 }
@@ -79,7 +81,7 @@ public struct DashboardCardView: View {
                     controller.value.showThemeSelectorAlert()
                 }
             }
-            showDownloadingBarView() 
+            showDownloadingBarView()
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             fileUploadNotificationCardViewModel.sceneDidBecomeActive.send()
