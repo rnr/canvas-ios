@@ -123,10 +123,11 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
             return
         }
         let downloadButton = addDownloadButton()
+        let userInfo = page.htmlURL?.changeScheme("Page")?.absoluteString ?? "Page://site.com/courses/\(course.id)/modules"
         downloadButtonHelper.update(
             object: page,
             course: course,
-            userInfo: "Page://courses/\(course.id)/pages"
+            userInfo: userInfo
         )
         downloadButtonHelper.status(
             for: page,

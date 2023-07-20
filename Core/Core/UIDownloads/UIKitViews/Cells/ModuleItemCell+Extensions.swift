@@ -25,10 +25,11 @@ extension ModuleItemCell {
             return
         }
         let downloadButton = addDownloadButton()
+        let userInfo = item.htmlURL?.changeScheme("ModuleItem")?.absoluteString ?? "ModuleItem://site.com/courses/\(course.id)/modules"
         downloadButtonHelper.update(
             object: item,
             course: course,
-            userInfo: "ModuleItem://courses/\(course.id)/modules"
+            userInfo: userInfo
         )
         downloadButtonHelper.status(
             for: item,

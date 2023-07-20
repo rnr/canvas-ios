@@ -19,7 +19,7 @@
 import SwiftUI
 import mobile_offline_downloader_ios
 
-struct DownloadsContenView: View {
+struct DownloadsContentView: View {
 
     // MARK: - Injected -
 
@@ -88,10 +88,20 @@ struct DownloadsContenView: View {
                     Divider()
                 }
             }
-            .onDelete { indexSet in
-                viewModel.swipeDelete(indexSet: indexSet)
-            }
+            .onDelete(perform: onDelete)
         }
+    }
+
+    private func onDelete(indexSet: IndexSet) {
+        let cancelAction = AlertAction(NSLocalizedString("Cancel", comment: ""), style: .cancel) { _ in }
+        let deleteAction = AlertAction(NSLocalizedString("Delete", comment: ""), style: .destructive) { _ in
+            viewModel.swipeDelete(indexSet: indexSet)
+        }
+        navigationController?.showAlert(
+            title: NSLocalizedString("Are you sure you want to remove content?", comment: ""),
+            actions: [cancelAction, deleteAction],
+            style: .actionSheet
+        )
     }
 
     private var deleteAllButton: some View {

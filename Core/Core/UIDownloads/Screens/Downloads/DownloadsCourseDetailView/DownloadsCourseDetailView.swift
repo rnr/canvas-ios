@@ -136,7 +136,7 @@ struct DownloadsCourseDetailView: View {
     private func destination(
         sectionViewModel: DownloadsCourseCategoryViewModel
     ) -> some View {
-        DownloadsContenView(
+        DownloadsContentView(
             content: sectionViewModel.content,
             courseDataModel: viewModel.courseViewModel.courseDataModel,
             title: sectionViewModel.title,
