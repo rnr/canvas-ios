@@ -17,6 +17,8 @@
 //
 
 import AVKit
+import AWSLambda
+import AWSSNS
 import CanvasCore
 import Core
 import Firebase
@@ -25,6 +27,7 @@ import PSPDFKit
 import UIKit
 import UserNotifications
 
+// TEST commit
 @UIApplicationMain
 class StudentAppDelegate: UIResponder, UIApplicationDelegate, AppEnvironmentDelegate {
     lazy var window: UIWindow? = ActAsUserWindow(frame: UIScreen.main.bounds, loginDelegate: self)
@@ -78,8 +81,21 @@ class StudentAppDelegate: UIResponder, UIApplicationDelegate, AppEnvironmentDele
             window?.makeKeyAndVisible()
             Analytics.shared.logScreenView(route: "/login", viewController: window?.rootViewController)
         }
-
+        setupOffline()
+        setupAWS()
         return true
+    }
+
+    func setupOffline() {
+        DownloaderClient.setup()
+    }
+    func setupAWS() {
+        guard let accessKey = Secret.awsAccessKey.string, let secretKey = Secret.awsSecretKey.string else { return }
+        let credProvider = AWSStaticCredentialsProvider(accessKey: accessKey, secretKey: secretKey)
+        if let awsConfiguration = AWSServiceConfiguration(region: .USEast1, credentialsProvider: credProvider) {
+            AWSSNS.register(with: awsConfiguration, forKey: "mySNS")
+            AWSLambda.register(with: awsConfiguration, forKey: "myLambda")
+        }
     }
 
     func setup(session: LoginSession) {
@@ -311,7 +327,7 @@ extension StudentAppDelegate {
     func setupPageViewLogging() {
         class BackgroundAppHelper: AppBackgroundHelperProtocol {
 
-            let queue = DispatchQueue(label: "com.instructure.icanvas.app-background-helper", attributes: .concurrent)
+            let queue = DispatchQueue(label: "com.instructure.icanvas.2u.app-background-helper", attributes: .concurrent)
             var tasks: [String: UIBackgroundTaskIdentifier] = [:]
 
             func startBackgroundTask(taskName: String) {
@@ -418,7 +434,8 @@ extension StudentAppDelegate: LoginDelegate, NativeLoginManagerDelegate {
         LoginSession.remove(session)
         guard environment.currentSession == session else { return }
         PageViewEventController.instance.userDidChange()
-        NotificationManager.shared.unsubscribeFromPushChannel()
+//        NotificationManager.shared.unsubscribeFromPushChannel()
+        NotificationManager.shared.unsubscribeFromUserSNSTopic()
         UIApplication.shared.applicationIconBadgeNumber = 0
         environment.userDidLogout(session: session)
         CoreWebView.stopCookieKeepAlive()

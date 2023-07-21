@@ -19,7 +19,7 @@
 import Foundation
 import UIKit
 
-public class ModuleItemDetailsViewController: UIViewController, ColoredNavViewProtocol, ErrorViewController {
+public class ModuleItemDetailsViewController: DownloadableViewController, ColoredNavViewProtocol {
     let env = AppEnvironment.shared
     var courseID: String!
     var moduleID: String!
@@ -124,9 +124,23 @@ public class ModuleItemDetailsViewController: UIViewController, ColoredNavViewPr
             title = NSLocalizedString("Module Item", bundle: .core, comment: "")
         }
         setupTitleViewInNavbar(title: title)
+        
+        setupObject(item)
+        setupCourse(course.first)
+        addDownloadBarButtonItem()
+    }
+
+    private func addDownloadBarButtonItem() {
+        navigationItem.rightBarButtonItems = []
         if item?.completionRequirementType == .must_mark_done {
-            navigationItem.rightBarButtonItems = []
             navigationItem.rightBarButtonItems?.append(optionsButton)
+        }
+        switch item?.type {
+        case .externalTool, .page:
+            navigationItem.rightBarButtonItems?.append(downloadBarButtonItem)
+            downloadButton.isHidden = false
+        default:
+            break
         }
     }
 
@@ -144,7 +158,7 @@ public class ModuleItemDetailsViewController: UIViewController, ColoredNavViewPr
                 moduleID: moduleID,
                 moduleItemID: itemID
             )
-            return LTIViewController.create(tools: tools, name: item.title)
+            return LTIViewController.create(tools: tools, moduleItem: item)
         default:
             guard let url = item.url else { return nil }
             return env.router.match(url.appendingOrigin("module_item_details"))

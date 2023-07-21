@@ -90,6 +90,8 @@ public class PageListViewController: ScreenViewTrackableViewController, ColoredN
             course.refresh()
         }
         NotificationCenter.default.addObserver(self, selector: #selector(pageCreated), name: Notification.Name("page-created"), object: nil)
+
+        tableView.registerCell(DownloadPageListTableViewCell.self)
     }
 
     public override func viewWillAppear(_ animated: Bool) {
@@ -182,8 +184,8 @@ extension PageListViewController: UITableViewDataSource, UITableViewDelegate {
         if pages.hasNextPage, indexPath.row == pages.count {
             return LoadingCell(style: .default, reuseIdentifier: nil)
         }
-        let cell: PageListCell = tableView.dequeue(for: indexPath)
-        cell.update(pages[indexPath.row], indexPath: indexPath, color: color)
+        let cell: DownloadPageListTableViewCell = tableView.dequeue(for: indexPath)
+        cell.update(pages[indexPath.row], course: course.first, indexPath: indexPath, color: color)
         return cell
     }
 

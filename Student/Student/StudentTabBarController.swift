@@ -23,6 +23,9 @@ import Core
 class StudentTabBarController: UITabBarController {
     private var previousSelectedIndex = 0
 
+    lazy var downloadingBarView = DownloadingBarView()
+    lazy var connectionBarView = NotConnectionBarView()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         delegate = self
@@ -42,6 +45,9 @@ class StudentTabBarController: UITabBarController {
         tabBar.useGlobalNavStyle()
         NotificationCenter.default.addObserver(self, selector: #selector(checkForPolicyChanges), name: UIApplication.didBecomeActiveNotification, object: nil)
         reportScreenView(for: selectedIndex, viewController: viewControllers![selectedIndex])
+
+        attachDownloadingBarView()
+        attachConnectionBarView()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -166,6 +172,22 @@ class StudentTabBarController: UITabBarController {
         LoginUsePolicy.checkAcceptablePolicy(from: self, cancelled: {
             AppEnvironment.shared.loginDelegate?.changeUser()
         })
+
+    private func attachDownloadingBarView() {
+        downloadingBarView.attach(tabBar: tabBar, in: view)
+        downloadingBarView.onTap = { [weak self] in
+            self?.showDownloadingView()
+        }
+        downloadingBarView.isHidden = true
+    }
+
+    private func attachConnectionBarView() {
+        connectionBarView.attach(tabBar: tabBar, in: view)
+    }
+
+    private func showDownloadingView() {
+        let vc = CoreHostingController(DownloadsView())
+        present(vc, animated: true)
     }
 }
 

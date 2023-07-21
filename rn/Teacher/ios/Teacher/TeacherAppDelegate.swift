@@ -331,7 +331,8 @@ extension TeacherAppDelegate: LoginDelegate, NativeLoginManagerDelegate {
         LoginSession.remove(session)
         guard environment.currentSession == session else { return }
         PageViewEventController.instance.userDidChange()
-        NotificationManager.shared.unsubscribeFromPushChannel()
+//        NotificationManager.shared.unsubscribeFromPushChannel()
+        NotificationManager.shared.unsubscribeFromUserSNSTopic()
         UIApplication.shared.applicationIconBadgeNumber = 0
         environment.userDidLogout(session: session)
         CoreWebView.stopCookieKeepAlive()

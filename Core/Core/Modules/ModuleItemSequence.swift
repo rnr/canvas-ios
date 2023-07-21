@@ -57,3 +57,8 @@ public class ModuleItemSequenceNode: NSManagedObject {
         return node
     }
 }
+
+
+extension ModuleItemSequence {
+    
+}

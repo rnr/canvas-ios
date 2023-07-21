@@ -31,8 +31,8 @@
 	</array>
 	<key>keychain-access-groups</key>
 	<array>
-		<string>$(AppIdentifierPrefix)com.instructure.shared-credentials</string>
-		<string>$(AppIdentifierPrefix)com.instructure.ios.teacher</string>
+		<string>$(AppIdentifierPrefix)com.instructure.shared-credentials.2u</string>
+		<string>$(AppIdentifierPrefix)com.instructure.ios.teacher.2u</string>
 	</array>
 </dict>
 </plist>

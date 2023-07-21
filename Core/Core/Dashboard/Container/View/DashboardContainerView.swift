@@ -68,6 +68,9 @@ public struct DashboardContainerView: View, ScreenViewTrackable {
                 VStack(spacing: 0) {
                     DashboardOfflineSyncProgressCardView(viewModel: offlineSyncCardViewModel)
                     fileUploadNotificationCards()
+                    DownloadedContentCellView {
+                        showDownloads()
+                    }
                     list(CGSize(width: geometry.size.width - 32, height: geometry.size.height))
                 }
                 .animation(.default, value: offlineSyncCardViewModel.isVisible)
@@ -343,5 +346,14 @@ public struct DashboardContainerView: View, ScreenViewTrackable {
 
     func showAllCourses() {
         env.router.route(to: "/courses", from: controller)
+    }
+
+    func showDownloads() {
+        let downloadsViewHostingController = CoreHostingController(DownloadsView())
+        env.router.show(
+            downloadsViewHostingController,
+            from: controller,
+            options: .push
+        )
     }
 }
