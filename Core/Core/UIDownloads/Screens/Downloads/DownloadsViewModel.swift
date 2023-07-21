@@ -34,7 +34,7 @@ final class DownloadsViewModel: ObservableObject {
             setIsEmpty()
         }
     }
-    @Published var modules: [DownloadsModuleCellViewModel] = [] {
+    var modules: [DownloadsModuleCellViewModel] = [] {
         didSet {
             setIsEmpty()
         }
@@ -96,8 +96,10 @@ final class DownloadsViewModel: ObservableObject {
 
     func swipeDeleteDownloading(indexSet: IndexSet) {
         indexSet.forEach { index in
-            modules.remove(at: index)
+            let viewModel = modules.remove(at: index)
+            try? downloadsManager.delete(entry: viewModel.entry)
         }
+        state = .updated
     }
 
     func swipeDelete(indexSet: IndexSet) {
@@ -117,7 +119,7 @@ final class DownloadsViewModel: ObservableObject {
 
     func fetch() {
         state = .loading
-        modules = downloadsManager.activeEntries.map { .init(entry: $0) }
+        configureModules()
         storageManager.loadAll(of: CourseStorageDataModel.self) { [weak self] result in
             guard let self = self else {
                 return
@@ -151,6 +153,15 @@ final class DownloadsViewModel: ObservableObject {
     }
 
     // MARK: - Private methods -
+
+    private func configureModules() {
+        modules = (
+            downloadsManager.activeEntries
+            + downloadsManager.waitingEntries
+            + downloadsManager.failedEntries
+        )
+        .map { .init(entry: $0) }
+    }
 
     private func fetchEntries(
         courseDataModel: CourseStorageDataModel,

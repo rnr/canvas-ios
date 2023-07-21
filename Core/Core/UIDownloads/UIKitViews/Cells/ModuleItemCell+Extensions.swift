@@ -52,10 +52,10 @@ extension ModuleItemCell {
             switch state {
             case .downloaded:
                 self.downloadButtonHelper.delete(object: item)
+            case .downloading, .waiting:
+                self.downloadButtonHelper.pause(object: item)
             case .idle:
                 self.downloadButtonHelper.download(object: item)
-            default:
-                break
             }
         }
     }

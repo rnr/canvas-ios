@@ -28,7 +28,7 @@ final class DownloadsModuleCellViewModel: ObservableObject {
 
     // MARK: - Properties -
 
-    private let entry: OfflineDownloaderEntry
+    let entry: OfflineDownloaderEntry
     private var downloadsSubscriber: AnyCancellable?
 
     @Published var progress: Double = 0.0
@@ -95,12 +95,13 @@ final class DownloadsModuleCellViewModel: ObservableObject {
     }
 
     func pauseResume() {
-//        switch entry.status {
-//        case .initialized, .active, .preparing:
-//            downloadsManager.pause(entry: entry)
-//        default:
-//            downloadsManager.resume(entry: entry)
-//        }
+        switch entry.status {
+        case .initialized, .active, .preparing:
+            downloadsManager.pause(entry: entry)
+        default:
+            downloadsManager.resume(entry: entry)
+        }
+        downloaderStatus = entry.status
     }
 
     private func image(_ type: ModuleItemType?) -> UIImage? {
@@ -155,6 +156,7 @@ final class DownloadsModuleCellViewModel: ObservableObject {
                 return
             }
             progress = event.progress
+            downloaderStatus = event.status
         } catch {}
     }
 }

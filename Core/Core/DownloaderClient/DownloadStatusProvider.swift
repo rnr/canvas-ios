@@ -98,8 +98,6 @@ final class DownloadButtonHelper {
                 onState(.downloading, event.progress, eventObjectId)
             case .completed:
                 onState(.downloaded, event.progress, eventObjectId)
-            case .removed:
-                onState(.idle, event.progress, eventObjectId)
             default:
                 onState(.idle, event.progress, eventObjectId)
             }
@@ -126,6 +124,14 @@ final class DownloadButtonHelper {
     func delete(object: OfflineDownloadTypeProtocol) {
         do {
             try downloadsManager.delete(object: object)
+        } catch {
+            debugLog(error.localizedDescription)
+        }
+    }
+
+    func pause(object: OfflineDownloadTypeProtocol) {
+        do {
+            try downloadsManager.pause(object: object)
         } catch {
             debugLog(error.localizedDescription)
         }

@@ -93,10 +93,10 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
             switch state {
             case .downloaded:
                 self?.delete()
+            case .waiting, .downloading:
+                self?.pause()
             case .idle:
                 self?.download()
-            default:
-                break
             }
         }
     }
@@ -269,6 +269,17 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
             result.failure { _ in
                 print("failure")
             }
+        }
+    }
+
+    private func pause() {
+        guard let object = object else {
+            return
+        }
+        do {
+            try downloadsManager.pause(object: object)
+        } catch {
+            showError(error)
         }
     }
 
