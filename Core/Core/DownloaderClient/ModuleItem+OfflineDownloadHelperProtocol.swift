@@ -25,46 +25,72 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
         if case .externalTool = item.type {
             return true
         }
+        if case .page = item.type {
+            return true
+        }
         return false
     }
 
     public static func prepareForDownload(entry: OfflineDownloaderEntry) async throws {
         let item = try fromOfflineModel(entry.dataModel)
         if case let .externalTool(toolID, url) = item.type {
-            let tools = LTITools(
-                context: .course(item.courseID),
-                id: toolID,
-                url: url,
-                launchType: .module_item,
-                moduleID: item.moduleID,
-                moduleItemID: item.id
-            )
+            try await prepareLTI(entry: entry, toolID: toolID, url: url)
+        } else if case let .page(url) = item.type {
+            let context = Context(.course, id: item.courseID)
+            try await withCheckedThrowingContinuation({[weak entry] continuation in
+                var pages: Store<GetPage>?
 
-            let url: URL = try await withCheckedThrowingContinuation { continuation in
-                tools.getSessionlessLaunch { response in
-                    guard let response = response else {
-                        continuation.resume(throwing: ModuleItemError.wrongSession)
-                        return
-                    }
+                pages = AppEnvironment.shared.subscribe(GetPage(context: context, url: url)) {}
 
-                    let url = response.url.appendingQueryItems(URLQueryItem(name: "platform", value: "mobile"))
-                    if response.name == "Google Apps" {
-                        continuation.resume(throwing: ModuleItemError.unsupported)
-                    } else {
-                        continuation.resume(returning: url)
+                pages?.refresh(force: true, callback: {[entry] page in
+                    DispatchQueue.main.async {
+                        if let body = page?.body {
+                            let fullHTML = CoreWebView().html(for: body)
+                            entry?.parts.removeAll()
+                            entry?.addHtmlPart(fullHTML, baseURL: page?.html_url.absoluteString)
+                        }
+                        continuation.resume()
                     }
+                })
+            })
+        }
+    }
+
+    static func prepareLTI(entry: OfflineDownloaderEntry, toolID: String, url: URL) async throws {
+        let item = try fromOfflineModel(entry.dataModel)
+        let tools = LTITools(
+            context: .course(item.courseID),
+            id: toolID,
+            url: url,
+            launchType: .module_item,
+            moduleID: item.moduleID,
+            moduleItemID: item.id
+        )
+
+        let url: URL = try await withCheckedThrowingContinuation { continuation in
+            tools.getSessionlessLaunch { response in
+                guard let response = response else {
+                    continuation.resume(throwing: ModuleItemError.wrongSession)
+                    return
+                }
+
+                let url = response.url.appendingQueryItems(URLQueryItem(name: "platform", value: "mobile"))
+                if response.name == "Google Apps" {
+                    continuation.resume(throwing: ModuleItemError.unsupported)
+                } else {
+                    continuation.resume(returning: url)
                 }
             }
+        }
 
-            let extractor = await OfflineHTMLDynamicsLinksExtractor(url: url)
-            try await extractor.fetch()
-            if let latestURL = await extractor.latestRedirectURL {
-                let downloader = OfflineLinkDownloader()
-                let cookieString = await extractor.cookies().cookieString
-                downloader.additionCookies = cookieString
-                let ltiContents = try await downloader.contents(urlString: latestURL.absoluteString)
-                entry.addHtmlPart(ltiContents, baseURL: latestURL.absoluteString, cookieString: cookieString)
-            }
+        let extractor = await OfflineHTMLDynamicsLinksExtractor(url: url)
+        try await extractor.fetch()
+        if let latestURL = await extractor.latestRedirectURL {
+            let downloader = OfflineLinkDownloader()
+            let cookieString = await extractor.cookies().cookieString
+            downloader.additionCookies = cookieString
+            let ltiContents = try await downloader.contents(urlString: latestURL.absoluteString)
+            entry.addHtmlPart(ltiContents, baseURL: latestURL.absoluteString, cookieString: cookieString)
         }
     }
 
