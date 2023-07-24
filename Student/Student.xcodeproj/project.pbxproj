@@ -159,6 +159,9 @@
 		9767F2A42383C741006633CA /* ActivityStreamViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9767F2A22383C741006633CA /* ActivityStreamViewController.storyboard */; };
 		97BA196423C82808009AB8AC /* RubricViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97BA196323C82808009AB8AC /* RubricViewControllerTests.swift */; };
 		9F61B52C205985A5009C0B13 /* StudentAppDelegate+Helm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F61B52B205985A5009C0B13 /* StudentAppDelegate+Helm.swift */; };
+		A54760882A6AE1D8001BF6CE /* AWSCore in Frameworks */ = {isa = PBXBuildFile; productRef = A54760872A6AE1D8001BF6CE /* AWSCore */; };
+		A547608A2A6AE1D8001BF6CE /* AWSLambda in Frameworks */ = {isa = PBXBuildFile; productRef = A54760892A6AE1D8001BF6CE /* AWSLambda */; };
+		A547608C2A6AE1D8001BF6CE /* AWSSNS in Frameworks */ = {isa = PBXBuildFile; productRef = A547608B2A6AE1D8001BF6CE /* AWSSNS */; };
 		A5D96B242A6ACF840097070D /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = A5D96B232A6ACF840097070D /* main.jsbundle */; };
 		B11028BA23CFC92A00FFAB7E /* SubmissionCommentsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B11028B923CFC92A00FFAB7E /* SubmissionCommentsViewControllerTests.swift */; };
 		B175D62223A969F600F8E696 /* IPadAssignmentsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B175D62123A969F600F8E696 /* IPadAssignmentsTests.swift */; };
@@ -848,8 +851,11 @@
 				61F438E31DD4E60B00552D14 /* AVFoundation.framework in Frameworks */,
 				7DBF920222690E9400710D0F /* CanvasCore.framework in Frameworks */,
 				7D1D7E05213743D300F7CCFE /* Core.framework in Frameworks */,
+				A547608C2A6AE1D8001BF6CE /* AWSSNS in Frameworks */,
 				2C67B0CC1E01F06800DDD191 /* CoreMedia.framework in Frameworks */,
+				A547608A2A6AE1D8001BF6CE /* AWSLambda in Frameworks */,
 				2C67B0C81E01F05F00DDD191 /* CoreTelephony.framework in Frameworks */,
+				A54760882A6AE1D8001BF6CE /* AWSCore in Frameworks */,
 				2C67B0CA1E01F06300DDD191 /* CoreText.framework in Frameworks */,
 				2C67B0CE1E01F07200DDD191 /* CoreVideo.framework in Frameworks */,
 				49A04E7D1CF653050051E1E7 /* libc++.tbd in Frameworks */,
@@ -2060,6 +2066,7 @@
 				492704B71CF4B6D700C631C6 /* Embed Frameworks */,
 				B0C8BDFA0291149E97BCF90D /* [CP] Embed Pods Frameworks */,
 				3B6DCCB51FB502CE005EE8D2 /* Embed Foundation Extensions */,
+				A54760822A6ADE46001BF6CE /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -2070,6 +2077,9 @@
 			name = Student;
 			packageProductDependencies = (
 				B49725CF290C04D50067B91E /* Heap */,
+				A54760872A6AE1D8001BF6CE /* AWSCore */,
+				A54760892A6AE1D8001BF6CE /* AWSLambda */,
+				A547608B2A6AE1D8001BF6CE /* AWSSNS */,
 			);
 			productName = Canvas;
 			productReference = 492704731CF4AF7100C631C6 /* Student.app */;
@@ -2304,6 +2314,7 @@
 			packageReferences = (
 				CF09E69D283FB861000C72D0 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				B49725CE290C04D50067B91E /* XCRemoteSwiftPackageReference "heap-ios-sdk" */,
+				A54760862A6AE1D8001BF6CE /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */,
 			);
 			productRefGroup = 492704741CF4AF7100C631C6 /* Products */;
 			projectDirPath = "";
@@ -2639,6 +2650,24 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
+		};
+		A54760822A6ADE46001BF6CE /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${PROJECT_DIR}/../scripts/checkAWSKeys.sh\n";
 		};
 		B0C8BDFA0291149E97BCF90D /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3880,6 +3909,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		A54760862A6AE1D8001BF6CE /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/aws-amplify/aws-sdk-ios-spm";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 2.33.0;
+			};
+		};
 		B49725CE290C04D50067B91E /* XCRemoteSwiftPackageReference "heap-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/heap/heap-ios-sdk.git";
@@ -3899,6 +3936,21 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		A54760872A6AE1D8001BF6CE /* AWSCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A54760862A6AE1D8001BF6CE /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSCore;
+		};
+		A54760892A6AE1D8001BF6CE /* AWSLambda */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A54760862A6AE1D8001BF6CE /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSLambda;
+		};
+		A547608B2A6AE1D8001BF6CE /* AWSSNS */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A54760862A6AE1D8001BF6CE /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
+			productName = AWSSNS;
+		};
 		B49725CF290C04D50067B91E /* Heap */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = B49725CE290C04D50067B91E /* XCRemoteSwiftPackageReference "heap-ios-sdk" */;

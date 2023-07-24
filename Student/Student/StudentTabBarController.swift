@@ -172,6 +172,7 @@ class StudentTabBarController: UITabBarController {
         LoginUsePolicy.checkAcceptablePolicy(from: self, cancelled: {
             AppEnvironment.shared.loginDelegate?.changeUser()
         })
+    }
 
     private func attachDownloadingBarView() {
         downloadingBarView.attach(tabBar: tabBar, in: view)

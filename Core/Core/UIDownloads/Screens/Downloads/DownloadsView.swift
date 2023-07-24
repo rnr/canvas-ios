@@ -94,13 +94,13 @@ public struct DownloadsView: View {
     private var modules: some View {
         DownloadProgressSectionView(viewModel: viewModel)
             .listRowInsets(EdgeInsets())
-            .iOS15ListRowSeparator(.hidden)
+            .listRowSeparator(.hidden)
     }
 
     private var courses: some View {
         DownloadCoursesSectionView(viewModel: viewModel)
             .listRowInsets(EdgeInsets())
-            .iOS15ListRowSeparator(.hidden)
+            .listRowSeparator(.hidden)
     }
 
     private var deleteAllButton: some View {

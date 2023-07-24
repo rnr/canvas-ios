@@ -99,7 +99,7 @@ struct DownloadsCourseDetailView: View {
                 }
                 .listRowInsets(EdgeInsets())
                 .listRowBackground(Color.clear)
-                .iOS15ListRowSeparator(.hidden)
+                .listRowSeparator(.hidden)
                 .background(Color.backgroundLightest)
                 .padding(.top, headerViewModel.shouldShowHeader(for: geometry.size.height) ? headerViewModel.height : 0)
                 .transformAnchorPreference(key: ViewBoundsKey.self, value: .bounds) { preferences, bounds in

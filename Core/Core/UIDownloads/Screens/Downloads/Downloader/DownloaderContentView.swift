@@ -27,7 +27,7 @@ struct DownloaderContentView: View {
     var body: some View {
         List {
             Header(title: "Downloading")
-                .iOS15ListRowSeparator(.hidden)
+                .listRowSeparator(.hidden)
             ForEach(
                 Array(viewModel.modules.enumerated()),
                 id: \.offset
@@ -39,7 +39,7 @@ struct DownloaderContentView: View {
             }.onDelete { indexSet in
                 onDelete(indexSet)
             }
-            .iOS15ListRowSeparator(.hidden)
+            .listRowSeparator(.hidden)
         }
         .listStyle(.inset)
         .background(Color.backgroundLightest.ignoresSafeArea())
