@@ -36,24 +36,28 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
         if case let .externalTool(toolID, url) = item.type {
             try await prepareLTI(entry: entry, toolID: toolID, url: url)
         } else if case let .page(url) = item.type {
-            let context = Context(.course, id: item.courseID)
-            try await withCheckedThrowingContinuation({[weak entry] continuation in
-                var pages: Store<GetPage>?
-
-                pages = AppEnvironment.shared.subscribe(GetPage(context: context, url: url)) {}
-
-                pages?.refresh(force: true, callback: {[entry] page in
-                    DispatchQueue.main.async {
-                        if let body = page?.body {
-                            let fullHTML = CoreWebView().html(for: body)
-                            entry?.parts.removeAll()
-                            entry?.addHtmlPart(fullHTML, baseURL: page?.html_url.absoluteString)
-                        }
-                        continuation.resume()
-                    }
-                })
-            })
+            try await preparePage(entry: entry, url: url, courseID: item.courseID)
         }
+    }
+
+    static func preparePage(entry: OfflineDownloaderEntry, url: String, courseID: String) async throws {
+        let context = Context(.course, id: courseID)
+        try await withCheckedThrowingContinuation({[weak entry] continuation in
+            var pages: Store<GetPage>?
+
+            pages = AppEnvironment.shared.subscribe(GetPage(context: context, url: url)) {}
+
+            pages?.refresh(force: true, callback: {[entry] page in
+                DispatchQueue.main.async {
+                    if let body = page?.body {
+                        let fullHTML = CoreWebView().html(for: body)
+                        entry?.parts.removeAll()
+                        entry?.addHtmlPart(fullHTML, baseURL: page?.html_url.absoluteString)
+                    }
+                    continuation.resume()
+                }
+            })
+        })
     }
 
     static func prepareLTI(entry: OfflineDownloaderEntry, toolID: String, url: URL) async throws {
