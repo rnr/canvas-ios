@@ -138,7 +138,7 @@
     {
       "identity" : "mobile-offline-downloader-ios",
       "kind" : "remoteSourceControl",
-      "location" : "git@github.com:2uinc/mobile-offline-downloader-ios.git",
+      "location" : "https://github.com/2uinc/mobile-offline-downloader-ios.git",
       "state" : {
         "branch" : "develop",
         "revision" : "77e00356d4f61ec4bc1192635d699999ce0adeca"

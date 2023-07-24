@@ -25,6 +25,12 @@ packages:
   PSPDFKit:
     url: https://github.com/PSPDFKit/PSPDFKit-SP
     exactVersion: 12.3.0
+  CombineReachability:
+    url: https://github.com/istvan-kreisz/CombineReachability.git
+    branch: master
+  mobile-offline-downloader-ios:
+    url: https://github.com/2uinc/mobile-offline-downloader-ios.git
+    branch: develop
 projectReferences:
   TestsFoundation:
     path: ../TestsFoundation/TestsFoundation.xcodeproj
@@ -39,6 +45,8 @@ targets:
       - package: CombineExt
       - package: Lottie
       - package: PSPDFKit
+      - package: CombineReachability
+      - package: mobile-offline-downloader-ios
     preBuildScripts:
       - path: ../scripts/swiftLint.sh
         name: SwiftLint
