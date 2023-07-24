@@ -29,7 +29,7 @@ struct DownloaderContentView: View {
             Header(title: "Downloading")
                 .iOS15ListRowSeparator(.hidden)
             ForEach(
-                Array(viewModel.modules.enumerated()),
+                Array(viewModel.downloadingModules.enumerated()),
                 id: \.offset
             ) { _, viewModel in
                 DownloadingCellView(viewModel: viewModel)

@@ -96,10 +96,10 @@ public struct DownloadsView: View {
 
     private var list: some View {
         List {
-            if !viewModel.modules.isEmpty {
+            if !viewModel.downloadingModules.isEmpty {
                 LinkDownloadingHeader(
                     destination: DownloaderView(
-                        modules: viewModel.modules
+                        downloadingModules: viewModel.downloadingModules
                     ),
                     title: "Downloading"
                 )

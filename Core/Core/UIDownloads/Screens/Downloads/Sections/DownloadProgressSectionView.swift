@@ -26,7 +26,7 @@ struct DownloadProgressSectionView: View {
 
     var body: some View {
         ForEach(
-            Array(viewModel.modules.prefix(3).enumerated()),
+            Array(viewModel.downloadingModules.prefix(3).enumerated()),
             id: \.offset
         ) { _, viewModel in
             DownloadingCellView(viewModel: viewModel)
@@ -43,10 +43,13 @@ struct DownloadProgressSectionView: View {
             Text("Downloading")
                 .font(.system(size: 14, weight: .bold))
             Spacer()
-            if viewModel.modules.count > 3 {
+            if viewModel.downloadingModules.count > 3 {
                 NavigationLink(
                     destination: DownloaderView(
-                        modules: viewModel.modules
+                        downloadingModules: viewModel.downloadingModules,
+                        didDeleteAll: {
+                            viewModel.configureDownloadingModules()
+                        }
                     )
                 ) {
                     Text("See all")

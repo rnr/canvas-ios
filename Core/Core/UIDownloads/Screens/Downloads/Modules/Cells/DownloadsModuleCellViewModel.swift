@@ -123,7 +123,7 @@ final class DownloadsModuleCellViewModel: ObservableObject {
             .sink { [weak self] event in
                 switch event {
                 case .statusChanged(object: let event):
-                    self?.downloaderStatus = event.status
+                    self?.statusChanged(event)
                 case .progressChanged(object: let event):
                     self?.progressChanged(event)
                 }
@@ -131,18 +131,23 @@ final class DownloadsModuleCellViewModel: ObservableObject {
         item.flatMap {
             downloadsManager.eventObject(for: $0) { [weak self] result in
                 result.success { event in
-                    guard let self = self else {
-                        return
-                    }
-                    let eventObjectId = try? event.object.toOfflineModel().id
-                    let objectId = self.dataModel.id
-                    guard eventObjectId == objectId else {
-                        return
-                    }
-                    self.downloaderStatus = event.status
+                    self?.statusChanged(event)
                 }
             }
         }
+    }
+
+    private func statusChanged(_ event: OfflineDownloadsManagerEventObject) {
+        let eventObjectId = try? event.object.toOfflineModel().id
+        let objectId = self.dataModel.id
+        guard eventObjectId == objectId else {
+            return
+        }
+        downloaderStatus = event.status
+        if event.status != .active {
+            progress = 0.0
+        }
+
     }
 
     private func progressChanged(_ event: OfflineDownloadsManagerEventObject) {
@@ -155,8 +160,12 @@ final class DownloadsModuleCellViewModel: ObservableObject {
             if event.progress == 0.0 {
                 return
             }
-            progress = event.progress
             downloaderStatus = event.status
+            if event.status != .active {
+                progress = 0.0
+            } else {
+                progress = event.progress
+            }
         } catch {}
     }
 }
