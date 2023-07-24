@@ -34,6 +34,11 @@ final class DownloadsViewModel: ObservableObject {
             setIsEmpty()
         }
     }
+    @Published var modules: [DownloadsModuleCellViewModel] = [] {
+        didSet {
+            setIsEmpty()
+        }
+    }
     private(set) var categories: [String: [DownloadsCourseCategoryViewModel]] = [:]
     private var cancellables: [AnyCancellable] = []
 
@@ -56,11 +61,6 @@ final class DownloadsViewModel: ObservableObject {
         }
     }
 
-    @Published var modules: [DownloadsModuleCellViewModel] = [] {
-        didSet {
-            setIsEmpty()
-        }
-    }
     @Published var isEmpty: Bool = false
 
     init() {
@@ -117,7 +117,7 @@ final class DownloadsViewModel: ObservableObject {
 
     func fetch() {
         state = .loading
-        modules = downloadsManager.activeEntries.map { .init(module: $0.dataModel) }
+        modules = downloadsManager.activeEntries.map { .init(entry: $0) }
         storageManager.loadAll(of: CourseStorageDataModel.self) { [weak self] result in
             guard let self = self else {
                 return

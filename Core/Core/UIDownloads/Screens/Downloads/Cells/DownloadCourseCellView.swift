@@ -47,19 +47,47 @@ struct DownloadCourseCellView: View {
 
     private var content: some View {
         VStack(alignment: .leading, spacing: 3) {
-            Text(courseViewModel.name)
-                .font(.semibold18)
-                .foregroundColor(.textDarkest)
-                .lineLimit(2)
-                .multilineTextAlignment(.leading)
-            Text(courseViewModel.courseCode)
-                .font(.semibold12)
-                .foregroundColor(.textDark)
-                .lineLimit(2)
-                .multilineTextAlignment(.leading)
-
+            ZStack {
+                Color(courseViewModel.color).frame(height: 80)
+                image
+            }
+            VStack(alignment: .leading, spacing: 3) {
+                Text(courseViewModel.name)
+                    .font(.semibold18)
+                    .foregroundColor(Color(courseViewModel.textColor))
+                    .lineLimit(2)
+                    .multilineTextAlignment(.leading)
+                Text(courseViewModel.courseCode)
+                    .font(.semibold12)
+                    .foregroundColor(.textDark)
+                    .lineLimit(2)
+                    .multilineTextAlignment(.leading)
+            }
+            .padding(.all, 10)
+            .padding(.bottom, 20)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.all, 10)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+    }
+
+    @ViewBuilder
+    private var image: some View {
+        if let imageDownloadURL = courseViewModel.course?.imageDownloadURL,
+           let image = ImageDownloader().loadImage(fileName: imageDownloadURL.lastPathComponent) {
+            GeometryReader { reader  in
+                Image(uiImage: image.withRenderingMode(.alwaysOriginal))
+                    .resizable().scaledToFill()
+                    .frame(width: reader.size.width, height: 80)
+                    .opacity(0.4)
+                    .clipped()
+            }
+        } else {
+            courseViewModel.course?.imageDownloadURL.map { url in
+                GeometryReader { reader in
+                    RemoteImage(url, width: reader.size.width, height: 80)
+                }
+            }?
+            .opacity(0.4)
+            .clipped()
+        }
     }
 }

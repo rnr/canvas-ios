@@ -27,8 +27,8 @@ struct DownloadedContentCellView: View {
         } label: {
             VStack {
                 HStack {
-                    Image(systemName: "cloud")
-                    Text("Downloaded")
+                    Image(systemName: "checkmark.icloud")
+                    Text("Downloads")
                         .font(.semibold17)
                         .foregroundColor(Color(Brand.shared.linkColor))
                         .frame(height: 30)

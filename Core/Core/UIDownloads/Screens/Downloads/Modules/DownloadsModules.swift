@@ -78,23 +78,23 @@ struct DownloadsModules: View {
 
     private var content: some View {
         DownloadsContentList {
-            ForEach(viewModel.modules, id: \.dataModel.id) { module in
+            ForEach(viewModel.modules, id: \.dataModel.id) { entry in
                 DownloadsModuleCellView(
-                    viewModel: DownloadsModuleCellViewModel(module: module.dataModel)
+                    viewModel: DownloadsModuleCellViewModel(entry: entry)
                 ).onTapGesture {
-                    destination(module: module)
+                    destination(entry: entry)
                 }
                 Divider()
             }
         }
     }
 
-    private func destination(module: OfflineDownloaderEntry) {
+    private func destination(entry: OfflineDownloaderEntry) {
         navigationController?.navigationBar.useGlobalNavStyle()
         navigationController?.pushViewController(
             CoreHostingController(
                 ContentViewerView(
-                    entry: module,
+                    entry: entry,
                     courseDataModel: viewModel.courseDataModel
                 )
             ),

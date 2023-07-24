@@ -90,6 +90,7 @@ public struct DashboardContainerView: View, ScreenViewTrackable {
                     controller.value.showThemeSelectorAlert()
                 }
             }
+            showDownloadingBarView() 
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             fileUploadNotificationCardViewModel.sceneDidBecomeActive.send()
@@ -355,5 +356,14 @@ public struct DashboardContainerView: View, ScreenViewTrackable {
             from: controller,
             options: .push
         )
+    }
+
+    private func showDownloadingBarView() {
+        guard let downloadingBarView = controller.value.tabBarController?.view.subviews.first(
+            where: { $0 is DownloadingBarView }) as? DownloadingBarView
+        else {
+            return
+        }
+        downloadingBarView.show()
     }
 }

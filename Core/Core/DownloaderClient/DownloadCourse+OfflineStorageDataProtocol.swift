@@ -23,7 +23,7 @@ final class CourseStorageDataModel {
 
     var course: Course
 
-    var id: String {
+    var courseId: String {
         course.id
     }
 

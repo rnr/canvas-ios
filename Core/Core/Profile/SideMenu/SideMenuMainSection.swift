@@ -80,7 +80,7 @@ struct SideMenuMainSection: View {
                 Button {
                     showDownloads()
                 } label: {
-                    SideMenuItem(id: "downloaded", image: Image(systemName: "cloud"), title: Text("Downloaded", bundle: .core))
+                    SideMenuItem(id: "downloads", image: Image(systemName: "checkmark.icloud"), title: Text("Downloads", bundle: .core))
                 }
                 .buttonStyle(ContextButton(contextColor: Brand.shared.primary))
 

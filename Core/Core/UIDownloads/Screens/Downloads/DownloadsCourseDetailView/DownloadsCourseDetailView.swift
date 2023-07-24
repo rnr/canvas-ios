@@ -24,6 +24,7 @@ struct DownloadsCourseDetailView: View {
     // MARK: - Injected -
 
     @Environment(\.presentationMode) private var presentationMode
+    @Environment(\.viewController) var controller
 
     // MARK: - Properties -
 
@@ -32,6 +33,17 @@ struct DownloadsCourseDetailView: View {
 
     private let headerViewModel: DownloadsCourseDetailsHeaderViewModel
     @State private var selection: DownloadsCourseCategoryViewModel?
+    private let env = AppEnvironment.shared
+
+    private var navigationController: UINavigationController? {
+        guard let topViewController = env.topViewController as? UITabBarController,
+              let helmSplitViewController = topViewController.viewControllers?.first as? UISplitViewController,
+              let navigationController = helmSplitViewController.viewControllers.first as? UINavigationController
+             else {
+            return nil
+        }
+        return navigationController
+    }
 
     init(
         courseViewModel: DownloadCourseViewModel,
@@ -76,6 +88,9 @@ struct DownloadsCourseDetailView: View {
             }
         }
         .onPreferenceChange(ViewBoundsKey.self, perform: headerViewModel.scrollPositionChanged)
+        .onAppear {
+            navigationController?.navigationBar.useContextColor(viewModel.courseViewModel.color)
+        }
     }
 
     private func content(geometry: GeometryProxy) -> some View {

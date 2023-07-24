@@ -28,8 +28,8 @@ struct DownloadProgressSectionView: View {
         ForEach(
             Array(viewModel.modules.prefix(3).enumerated()),
             id: \.offset
-        ) { _, module in
-            DownloadingCellView(module: module)
+        ) { _, viewModel in
+            DownloadingCellView(viewModel: viewModel)
         }
         .onDelete { indexSet in
             viewModel.swipeDeleteDownloading(indexSet: indexSet)

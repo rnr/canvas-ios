@@ -63,7 +63,7 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
                 let cookieString = await extractor.cookies().cookieString
                 downloader.additionCookies = cookieString
                 let ltiContents = try await downloader.contents(urlString: latestURL.absoluteString)
-                entry.addHtmlPart(ltiContents, baseURL: nil, cookieString: cookieString)
+                entry.addHtmlPart(ltiContents, baseURL: latestURL.absoluteString, cookieString: cookieString)
             }
         }
     }

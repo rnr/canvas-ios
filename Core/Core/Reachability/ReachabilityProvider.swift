@@ -30,14 +30,24 @@ public final class ReachabilityProvider: ObservableObject {
             .dropFirst()
             .eraseToAnyPublisher()
     }
-
+    private(set) var notifierRunning: Bool = false
     private var cancellables: Set<AnyCancellable> = Set<AnyCancellable>()
 
     init() {
-        configure()
+        start()
+        addObservers()
     }
 
-    func configure() {
+    func start() {
+        do {
+            try reachability?.startNotifier()
+            notifierRunning = true
+        } catch {
+            print("Unable to start notifier")
+        }
+    }
+
+    func addObservers() {
         do {
             try reachability?.startNotifier()
         } catch {
@@ -50,4 +60,6 @@ public final class ReachabilityProvider: ObservableObject {
             }
             .store(in: &cancellables)
     }
+
+
 }

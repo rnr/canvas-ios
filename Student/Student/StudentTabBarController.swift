@@ -179,7 +179,6 @@ class StudentTabBarController: UITabBarController {
         downloadingBarView.onTap = { [weak self] in
             self?.showDownloadingView()
         }
-        downloadingBarView.isHidden = true
     }
 
     private func attachConnectionBarView() {
@@ -187,9 +186,13 @@ class StudentTabBarController: UITabBarController {
     }
 
     private func showDownloadingView() {
-        let vc = CoreHostingController(DownloadsView())
-        present(vc, animated: true)
+        let downloadsViewController = CoreHostingController(DownloadsView())
+        ((viewControllers?[selectedIndex] as? HelmSplitViewController)?
+            .viewControllers
+            .first as? UINavigationController)?
+            .pushViewController(downloadsViewController, animated: true)
     }
+
 }
 
 extension StudentTabBarController: UITabBarControllerDelegate {
@@ -199,7 +202,14 @@ extension StudentTabBarController: UITabBarControllerDelegate {
         if let index = viewControllers?.firstIndex(of: viewController), selectedViewController != viewController {
             reportScreenView(for: index, viewController: viewController)
         }
-
         return true
+    }
+
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        if selectedIndex == 0 {
+            downloadingBarView.show()
+        } else {
+            downloadingBarView.hidden()
+        }
     }
 }
