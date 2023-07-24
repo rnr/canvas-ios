@@ -49,6 +49,8 @@ final class DownloadsViewModel: ObservableObject {
         case updated
     }
 
+    @Published var error: String = ""
+
     @Published var state: State = .none {
         didSet {
             setIsEmpty()
@@ -73,47 +75,60 @@ final class DownloadsViewModel: ObservableObject {
     func pauseResume() {}
 
     func deleteAll() {
-        courseViewModels.forEach { viewModel in
-            storageManager.delete(viewModel.courseDataModel) { _ in }
-            let models = categories.removeValue(forKey: viewModel.courseId)
-            models
-                .flatMap { $0.flatMap { $0.content } }?
-                .forEach {
-                try? self.downloadsManager.delete(entry: $0)
+        do {
+            try courseViewModels.forEach { viewModel in
+                storageManager.delete(viewModel.courseDataModel) { _ in }
+                let models = categories.removeValue(forKey: viewModel.courseId)
+                try models
+                    .flatMap { $0.flatMap { $0.content } }?
+                    .forEach {
+                    try self.downloadsManager.delete(entry: $0)
+                }
             }
+           storageManager.deleteAll { [weak self] _ in
+                guard let self = self else {
+                    return
+                }
+                DispatchQueue.main.async {
+                    self.courseViewModels = []
+                    self.state = .updated
+                }
+            }
+        } catch {
+            self.error = error.localizedDescription
         }
-       storageManager.deleteAll { [weak self] _ in
-            guard let self = self else {
-                return
-            }
-            DispatchQueue.main.async {
-                self.courseViewModels = []
-                self.state = .updated
-            }
-        }
+
     }
 
     func swipeDeleteDownloading(indexSet: IndexSet) {
-        indexSet.forEach { index in
-            let viewModel = downloadingModules.remove(at: index)
-            try? downloadsManager.delete(entry: viewModel.entry)
+        do {
+            try indexSet.forEach { index in
+                let viewModel = downloadingModules[index]
+                try downloadsManager.delete(entry: viewModel.entry)
+                downloadingModules.remove(at: index)
+            }
+            state = .updated
+        } catch {
+            self.error = error.localizedDescription
         }
-        state = .updated
     }
 
     func swipeDelete(indexSet: IndexSet) {
-        indexSet.forEach { index in
-            let viewModel = courseViewModels.remove(at: index)
-            storageManager.delete(viewModel.courseDataModel) { _ in }
-            let models = categories.removeValue(forKey: viewModel.courseId)
-            models
-                .flatMap { $0.flatMap { $0.content } }?
-                .forEach {
-                try? downloadsManager.delete(entry: $0)
-                storageManager.delete($0) {_ in}
+        do {
+            try indexSet.forEach { index in
+                let viewModel = courseViewModels.remove(at: index)
+                storageManager.delete(viewModel.courseDataModel) { _ in }
+                let models = categories.removeValue(forKey: viewModel.courseId)
+                try models
+                    .flatMap { $0.flatMap { $0.content } }?
+                    .forEach {
+                    try downloadsManager.delete(entry: $0)
+                }
             }
+            state = .updated
+        } catch {
+            self.error = error.localizedDescription
         }
-        state = .updated
     }
 
     func fetch() {

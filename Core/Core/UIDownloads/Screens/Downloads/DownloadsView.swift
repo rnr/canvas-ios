@@ -55,6 +55,15 @@ public struct DownloadsView: View {
                 navigationController?.navigationBar.useGlobalNavStyle()
                 hideDownloadingBarView()
             }
+            .onChange(of: viewModel.error) { newValue in
+                if newValue.isEmpty { return }
+                navigationController?.showAlert(
+                    title: NSLocalizedString(newValue, comment: ""),
+                    actions: [AlertAction(NSLocalizedString("Cancel", comment: ""), style: .cancel) { _ in }],
+                    style: .actionSheet
+                )
+                viewModel.error = ""
+            }
     }
 
     private var content: some View {
