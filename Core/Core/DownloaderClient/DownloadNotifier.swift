@@ -38,7 +38,7 @@ final class DownloadNotifier {
                     notifyAboutDownloadCompletion(success: success)
                 }
             }
-            .store(in: &self.cancellables)
+            .store(in: &cancellables)
     }
 
     private func notifyAboutDownloadCompletion(success: Bool) {

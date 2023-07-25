@@ -103,7 +103,6 @@ final class DownloadsModuleCellViewModel: ObservableObject {
         default:
             downloadsManager.resume(entry: entry)
         }
-        downloaderStatus = entry.status
     }
 
     private func image(_ type: ModuleItemType?) -> UIImage? {
@@ -168,6 +167,8 @@ final class DownloadsModuleCellViewModel: ObservableObject {
             } else {
                 progress = event.progress
             }
-        } catch {}
+        } catch {
+            debugLog(error.localizedDescription)
+        }
     }
 }
