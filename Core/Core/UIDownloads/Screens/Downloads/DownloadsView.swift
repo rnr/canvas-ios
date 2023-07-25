@@ -78,12 +78,14 @@ public struct DownloadsView: View {
                     if viewModel.isEmpty {
                         VStack {
                             Image.pandaBlocks
-                            Text("No Courses")
-                                .font(.semibold17)
+                            Text("No Downloads")
+                                .font(.semibold18)
                                 .foregroundColor(.textDarkest)
-                            Text("Visit a course to download content.")
+                                .padding(.vertical, 20)
+                            Text("To download content, open a content type and press save. Downloaded modules will appear here")
                                 .font(.regular16)
                                 .foregroundColor(.textDarkest)
+                                .multilineTextAlignment(.center)
                         }
                     } else {
                         list
