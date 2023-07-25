@@ -122,6 +122,7 @@ class NotificationCategoriesViewController: UIViewController, ErrorViewControlle
             "invitation": (0, NSLocalizedString("Invitation", bundle: .core, comment: ""), courseActivities),
             "student_appointment_signups": (3, NSLocalizedString("Student Appointment Signups", bundle: .core, comment: ""), scheduling),
             "submission_comment": (0, NSLocalizedString("Submission Comment", bundle: .core, comment: ""), courseActivities),
+            "discussion_mention": (1, NSLocalizedString("Discussion Mention", bundle: .core, comment: ""), discussions),
         ]
 
         if channelType == .push {
