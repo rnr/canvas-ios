@@ -4,22 +4,7 @@ import UIKit
 extension DownloadButton {
 
     func transition(from currentState: State, to nextState: State) {
-        switch (currentState, nextState) {
-        case (.idle, .waiting):
-            handleTransitionFromIdleToWaiting()
-        case (.idle, .downloading):
-            handleTransitionFromIdleToDownloading()
-        case (.waiting, .idle):
-            handleTransitionFromWaitingToIdle()
-        case (.waiting, .downloading):
-            handleTransitionFromWaitingToDownloading()
-        case (.downloading, .downloaded):
-            handleTransitionFromDownloadingToDownloaded()
-        case (.downloading, .idle):
-            handleTransitionFromDownloadingToIdle()
-        default:
-            self.handleUnknownTransition(state: nextState)
-        }
+        handleUnknownTransition(state: nextState)
         resetOtherViews(currentState: nextState)
     }
 
@@ -65,6 +50,8 @@ extension DownloadButton {
             self.downloadingButton.alpha = 1
         case .downloaded:
             self.downloadedButton.alpha = 1
+        case .retry:
+            self.retryButton.alpha = 1
         }
     }
 
@@ -82,6 +69,9 @@ extension DownloadButton {
         }
         if currentState != .downloaded {
             self.downloadedButton.alpha = 0
+        }
+        if currentState != .retry {
+            self.retryButton.alpha = 0
         }
     }
 }

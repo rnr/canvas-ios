@@ -38,35 +38,4 @@ struct DownloadProgressSectionView: View {
 
     // MARK: - Views -
 
-    private var headerModules: some View {
-        HStack {
-            Text("Downloading")
-                .font(.system(size: 14, weight: .bold))
-            Spacer()
-            if viewModel.downloadingModules.count > 3 {
-                NavigationLink(
-                    destination: DownloaderView(
-                        downloadingModules: viewModel.downloadingModules,
-                        didDeleteAll: {
-                            viewModel.configureDownloadingModules()
-                        }
-                    )
-                ) {
-                    Text("See all")
-                        .font(.system(size: 14, weight: .regular))
-                }
-            } else {
-                Button(
-                    action: {
-                        viewModel.pauseResume()
-                    },
-                    label: {
-                        Text("Button")
-                            .font(.system(size: 14, weight: .regular))
-                    }
-                )
-            }
-        }
-    }
-
 }

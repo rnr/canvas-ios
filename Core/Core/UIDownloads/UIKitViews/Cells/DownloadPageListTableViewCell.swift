@@ -48,7 +48,7 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
         return dateLabel
     }()
 
-    var downloadButtonHelper = DownloadButtonHelper()
+    var downloadButtonHelper = DownloadStatusProvider()
     var page: Page?
     var course: Course?
 
@@ -123,6 +123,11 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
             return
         }
         let downloadButton = addDownloadButton()
+        let canDonwload = downloadButtonHelper.canDownload(object: page)
+        downloadButton.isHidden = !canDonwload
+        guard canDonwload else {
+            return
+        }
         let userInfo = page.htmlURL?.changeScheme("Page")?.absoluteString ?? "Page://site.com/courses/\(course.id)/modules"
         downloadButtonHelper.update(
             object: page,
@@ -165,8 +170,8 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
         downloadButton.currentState = .idle
         contentView.addSubview(downloadButton)
         downloadButton.translatesAutoresizingMaskIntoConstraints = false
-        downloadButton.widthAnchor.constraint(equalToConstant: 35).isActive = true
-        downloadButton.heightAnchor.constraint(equalToConstant: 35).isActive = true
+        downloadButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        downloadButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
         downloadButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
         downloadButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15).isActive = true
         return downloadButton

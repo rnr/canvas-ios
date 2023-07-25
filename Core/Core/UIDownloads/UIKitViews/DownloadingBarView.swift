@@ -23,6 +23,7 @@ import mobile_offline_downloader_ios
 public class DownloadingBarView: UIView {
 
     private var downloadsManager: OfflineDownloadsManager = .shared
+    private let downloadNotifier = DownloadNotifier()
 
     public var onTap: (() -> Void)?
     private var cancellables: [AnyCancellable] = []

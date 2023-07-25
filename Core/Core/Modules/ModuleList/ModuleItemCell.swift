@@ -34,7 +34,7 @@ class ModuleItemCell: UITableViewCell {
     let env = AppEnvironment.shared
     var course: Course?
     var item: ModuleItem?
-    let downloadButtonHelper = DownloadButtonHelper()
+    let downloadButtonHelper = DownloadStatusProvider()
 
     func update(_ item: ModuleItem, course: Course?, indexPath: IndexPath, color: UIColor?) {
         self.course = course

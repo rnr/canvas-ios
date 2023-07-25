@@ -20,7 +20,7 @@ import Foundation
 import Combine
 import mobile_offline_downloader_ios
 
-final class DownloadButtonHelper {
+final class DownloadStatusProvider {
 
     private let downloadsManager = OfflineDownloadsManager.shared
     private let storageManager = OfflineStorageManager.shared
@@ -98,6 +98,8 @@ final class DownloadButtonHelper {
                 onState(.downloading, event.progress, eventObjectId)
             case .completed:
                 onState(.downloaded, event.progress, eventObjectId)
+            case .failed, .paused:
+                onState(.retry, event.progress, eventObjectId)
             default:
                 onState(.idle, event.progress, eventObjectId)
             }
@@ -135,6 +137,10 @@ final class DownloadButtonHelper {
         } catch {
             debugLog(error.localizedDescription)
         }
+    }
+
+    func canDownload(object: OfflineDownloadTypeProtocol) -> Bool {
+        downloadsManager.canDownload(object: object)
     }
 
     private func addOrUpdateCourse() {

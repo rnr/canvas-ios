@@ -34,7 +34,7 @@ final class DownloadsViewModel: ObservableObject {
             setIsEmpty()
         }
     }
-    var downloadingModules: [DownloadsModuleCellViewModel] = [] {
+    @Published var downloadingModules: [DownloadsModuleCellViewModel] = [] {
         didSet {
             setIsEmpty()
         }
@@ -160,6 +160,7 @@ final class DownloadsViewModel: ObservableObject {
         downloadingModules = (
             downloadsManager.activeEntries
             + downloadsManager.waitingEntries
+            + downloadsManager.pausedEntries
             + downloadsManager.failedEntries
         )
         .map { .init(entry: $0) }
@@ -187,7 +188,7 @@ final class DownloadsViewModel: ObservableObject {
             }
             result.success { entries in
                 let categories = DownloadsHelper.categories(
-                    from: entries,
+                    from: entries.filter { $0.status == .completed },
                     courseDataModel: courseDataModel
                 )
                 if !categories.isEmpty {
@@ -220,18 +221,24 @@ final class DownloadsViewModel: ObservableObject {
     }
 
     private func statusChanged(_ event: OfflineDownloadsManagerEventObject) {
-        do {
-            switch event.status {
-            case .completed:
-                let object = event.object
-                let model = try object.toOfflineModel()
-                downloadingModules.removeAll(where: { $0.moduleId == model.id })
-                if let object = event.object as? OfflineDownloadTypeProtocol {
-                    addCompletedEntry(object: object)
-                }
-            default:
-                break
+        switch event.status {
+        case .removed:
+            deleteDownloading(event)
+        case .completed:
+            deleteDownloading(event)
+            if let object = event.object as? OfflineDownloadTypeProtocol {
+                addCompletedEntry(object: object)
             }
+        default:
+            break
+        }
+    }
+
+    private func deleteDownloading(_ event: OfflineDownloadsManagerEventObject) {
+        do {
+            let object = event.object
+            let model = try object.toOfflineModel()
+            downloadingModules.removeAll(where: { $0.moduleId == model.id })
         } catch {}
     }
 

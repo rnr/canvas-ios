@@ -85,11 +85,14 @@ struct DownloadingCellView: View {
         switch viewModel.downloaderStatus {
         case .initialized, .preparing, .active:
             imageSystemName = "stop.circle"
+        case .paused, .failed:
+            imageSystemName = "arrow.clockwise.circle"
         default:
             imageSystemName = "play.circle"
         }
         return Image(systemName: imageSystemName)
             .resizable()
+            .aspectRatio(contentMode: .fit)
             .frame(width: 25, height: 25)
             .foregroundColor(Color(Brand.shared.linkColor))
     }

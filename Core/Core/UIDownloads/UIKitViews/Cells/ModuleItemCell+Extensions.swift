@@ -25,6 +25,11 @@ extension ModuleItemCell {
             return
         }
         let downloadButton = addDownloadButton()
+        let canDonwload = downloadButtonHelper.canDownload(object: item)
+        downloadButton.isHidden = !canDonwload
+        guard canDonwload else {
+            return
+        }
         let userInfo = item.htmlURL?.changeScheme("ModuleItem")?.absoluteString ?? "ModuleItem://site.com/courses/\(course.id)/modules"
         downloadButtonHelper.update(
             object: item,
@@ -54,13 +59,13 @@ extension ModuleItemCell {
                 self.downloadButtonHelper.delete(object: item)
             case .downloading, .waiting:
                 self.downloadButtonHelper.pause(object: item)
-            case .idle:
+            case .idle, .retry:
                 self.downloadButtonHelper.download(object: item)
             }
         }
     }
 
-    func addDownloadButton() -> DownloadButton {
+    private func addDownloadButton() -> DownloadButton {
         removeDownloadButton()
         let downloadButton: DownloadButton = .init(frame: .zero)
         downloadButton.mainTintColor = .systemBlue
@@ -71,15 +76,15 @@ extension ModuleItemCell {
         return downloadButton
     }
 
-    func removeDownloadButton() {
+    private func removeDownloadButton() {
         downloadButton()?.removeFromSuperview()
     }
 
-    func downloadButton() -> DownloadButton? {
+    private func downloadButton() -> DownloadButton? {
         hStackView.arrangedSubviews.first(where: { $0 is DownloadButton }) as? DownloadButton
     }
 
-    func addSavedImage() {
+    private func addSavedImage() {
         if !hStackView.arrangedSubviews.contains(where: { $0.tag == 888 }) {
             let imageView = UIImageView(image: .init(systemName: "checkmark.icloud"))
             imageView.tag = 888
@@ -89,13 +94,13 @@ extension ModuleItemCell {
         }
     }
 
-    func removeSavedImage() {
+    private func removeSavedImage() {
         if let imageView = hStackView.arrangedSubviews.first(where: { $0.tag == 888 }) {
             imageView.removeFromSuperview()
         }
     }
 
-    func addActivityIndicator() -> UIActivityIndicatorView {
+    private func addActivityIndicator() -> UIActivityIndicatorView {
         if let activityIndicator = hStackView.arrangedSubviews.first(where: { $0.tag == 555 }) as? UIActivityIndicatorView {
             return activityIndicator
         } else {
@@ -109,7 +114,7 @@ extension ModuleItemCell {
         }
     }
 
-    func removeActivityIndicator() {
+    private func removeActivityIndicator() {
         if let activityIndicator = hStackView.arrangedSubviews.first(where: { $0.tag == 555 }) {
             activityIndicator.removeFromSuperview()
         }

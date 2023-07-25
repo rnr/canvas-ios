@@ -98,6 +98,8 @@ final class DownloadsModuleCellViewModel: ObservableObject {
         switch entry.status {
         case .initialized, .active, .preparing:
             downloadsManager.pause(entry: entry)
+        case .paused, .failed:
+            downloadsManager.resume(entry: entry)
         default:
             downloadsManager.resume(entry: entry)
         }

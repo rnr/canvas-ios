@@ -106,15 +106,20 @@ public struct DownloadsView: View {
     private var list: some View {
         List {
             if !viewModel.downloadingModules.isEmpty {
-                LinkDownloadingHeader(
-                    destination: DownloaderView(
-                        downloadingModules: viewModel.downloadingModules
-                    ),
-                    title: "Downloading"
-                )
+                if viewModel.downloadingModules.count > 3 {
+                    LinkDownloadingHeader(
+                        destination: DownloaderView(
+                            downloadingModules: viewModel.downloadingModules
+                        ),
+                        title: "Downloading"
+                    )
+                } else {
+                    Header(title: "Downloading")
+                }
                 modules
             }
             Header(title: "Courses")
+                .hidden(viewModel.courseViewModels.isEmpty )
             courses
         }
         .listStyle(.inset)

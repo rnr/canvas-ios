@@ -95,7 +95,7 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
                 self?.delete()
             case .waiting, .downloading:
                 self?.pause()
-            case .idle:
+            case .idle, .retry:
                 self?.download()
             }
         }
@@ -189,6 +189,8 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
                         case .active:
                             self.downloadButton.currentState = .downloading
                             self.downloadButton.progress = Float(event.progress)
+                        case .failed, .paused:
+                            self.downloadButton.currentState = .retry
                         default:
                             self.downloadButton.currentState = .idle
                         }
