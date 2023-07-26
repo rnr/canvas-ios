@@ -139,6 +139,14 @@ final class DownloadStatusProvider {
         }
     }
 
+    func resume(object: OfflineDownloadTypeProtocol) {
+        do {
+            try downloadsManager.resume(object: object)
+        } catch {
+            debugLog(error.localizedDescription)
+        }
+    }
+
     func canDownload(object: OfflineDownloadTypeProtocol) -> Bool {
         downloadsManager.canDownload(object: object)
     }

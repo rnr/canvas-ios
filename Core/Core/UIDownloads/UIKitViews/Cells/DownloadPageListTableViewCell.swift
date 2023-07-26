@@ -155,10 +155,12 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
             switch state {
             case .downloaded:
                 self.downloadButtonHelper.delete(object: page)
+            case .downloading, .waiting:
+                self.downloadButtonHelper.pause(object: page)
+            case .retry:
+                self.downloadButtonHelper.resume(object: page)
             case .idle:
                 self.downloadButtonHelper.download(object: page)
-            default:
-                break
             }
         }
     }

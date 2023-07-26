@@ -82,7 +82,6 @@ public class ModuleItemSequenceViewController: UIViewController {
         }
         spinnerView.isHidden = true
         if embed, let viewController = currentViewController() {
-            setRouteDownloadableViewController(viewController)
             setCurrentPage(viewController)
         }
         showSequenceButtons(prev: sequence?.prev != nil, next: sequence?.next != nil)
@@ -105,15 +104,11 @@ public class ModuleItemSequenceViewController: UIViewController {
         }
     }
 
-    private func setRouteDownloadableViewController(_ viewController: UIViewController) {
-        guard let downloadableViewController = viewController as? DownloadableViewController,
-            let url = url.url else {
-            return
-        }
-        downloadableViewController.set(userInfo: url.absoluteString, assetType: assetType.rawValue)
-    }
-
     func showSequenceButtons(prev: Bool, next: Bool) {
+        buttonsContainer.isHidden = true
+        buttonsHeightConstraint.constant = 0
+        view.layoutIfNeeded()
+        return
         let show = prev || next
         self.buttonsContainer.isHidden = show == false
         self.buttonsHeightConstraint.constant = show ? 56 : 0

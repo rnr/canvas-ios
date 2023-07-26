@@ -202,8 +202,17 @@ extension PageListViewController: UITableViewDataSource, UITableViewDelegate {
     }
 
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let page = (indexPath.section == 0 && !frontPage.isEmpty) ? frontPage.first : pages[indexPath.row]
-        guard let url = page?.htmlURL else { return }
+        guard let page = (indexPath.section == 0 && !frontPage.isEmpty) ? frontPage.first : pages[indexPath.row] else {
+            return
+        }
+        guard let url = page.htmlURL else { return }
+        guard let course = course.first else { return }
+        DownloadableItemProvider.shared.set(
+            userInfo: url.absoluteString,
+            assetType: "Page",
+            object: page,
+            course: course
+        )
         env.router.route(to: url, from: self, options: .detail)
     }
 
