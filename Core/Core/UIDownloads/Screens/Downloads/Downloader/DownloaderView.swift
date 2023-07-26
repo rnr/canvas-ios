@@ -21,18 +21,34 @@ import SwiftUI
 
 struct DownloaderView: View {
 
+    // MARK: - Injected -
+
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+
     // MARK: - Properties -
 
     @StateObject var viewModel: DownloaderViewModel
-    @Environment(\.viewController) var controller
     @State var isDisplayingAlert: Bool = false
     var didDeleteAll: (() -> Void)?
 
+    private let env = AppEnvironment.shared
+    private var navigationController: UINavigationController? {
+        guard let topViewController = env.topViewController as? UITabBarController,
+              let helmSplitViewController = topViewController.viewControllers?.first as? UISplitViewController,
+              let navigationController = helmSplitViewController.viewControllers.first as? UINavigationController
+             else {
+            return nil
+        }
+        return navigationController
+    }
+
     init(
-        modules: [DownloadsModuleCellViewModel]
+        downloadingModules: [DownloadsModuleCellViewModel],
+        didDeleteAll: (() -> Void)? = nil
     ) {
-        let viewModel: DownloaderViewModel = .init(modules: modules)
+        let viewModel: DownloaderViewModel = .init(downloadingModules: downloadingModules)
         self._viewModel = .init(wrappedValue: viewModel)
+        self.didDeleteAll = didDeleteAll
     }
 
     // MARK: - Views -
@@ -58,6 +74,15 @@ struct DownloaderView: View {
                 deleteAllButton
             }
         }
+        .onChange(of: viewModel.error) { newValue in
+            if newValue.isEmpty { return }
+            navigationController?.showAlert(
+                title: NSLocalizedString(newValue, comment: ""),
+                actions: [AlertAction(NSLocalizedString("Cancel", comment: ""), style: .cancel) { _ in }],
+                style: .actionSheet
+            )
+            viewModel.error = ""
+        }
     }
 
     private var deleteAllButton: some View {
@@ -65,14 +90,15 @@ struct DownloaderView: View {
             let cancelAction = AlertAction(NSLocalizedString("Cancel", comment: ""), style: .cancel) { _ in }
             let deleteAction = AlertAction(NSLocalizedString("Delete", comment: ""), style: .destructive) { _ in
                 viewModel.deleteAll()
+                guard viewModel.error.isEmpty else { return }
                 didDeleteAll?()
+                presentationMode.wrappedValue.dismiss()
             }
-            controller.value.showAlert(
+            navigationController?.showAlert(
                 title: NSLocalizedString("Are you sure you want to remove all downloading content?", comment: ""),
                 actions: [cancelAction, deleteAction],
                 style: .actionSheet
             )
-            isDisplayingAlert = true
         }
         .foregroundColor(.white)
     }

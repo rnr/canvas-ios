@@ -24,7 +24,6 @@ struct DownloadingCellView: View {
     // MARK: - Properties -
 
     @ObservedObject var viewModel: DownloadsModuleCellViewModel
-    @State private var paused: Bool = false
 
     // MARK: - Views -
 
@@ -72,16 +71,30 @@ struct DownloadingCellView: View {
                 }
             }
             Button {
-                paused.toggle()
                 viewModel.pauseResume()
             } label: {
-                Image(systemName: paused ? "play.circle" : "stop.circle")
-                    .resizable()
-                    .frame(width: 25, height: 25)
-                    .foregroundColor(Color(Brand.shared.linkColor))
+                buttonImage
             }
             .padding(.trailing, 5)
         }
         .padding(.all, 10)
     }
+
+    private var buttonImage: some View {
+        var imageSystemName = ""
+        switch viewModel.downloaderStatus {
+        case .initialized, .preparing, .active:
+            imageSystemName = "stop.circle"
+        case .paused, .failed:
+            imageSystemName = "arrow.clockwise.circle"
+        default:
+            imageSystemName = "play.circle"
+        }
+        return Image(systemName: imageSystemName)
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 25, height: 25)
+            .foregroundColor(Color(Brand.shared.linkColor))
+    }
+
 }

@@ -34,7 +34,7 @@ final class DownloadsViewModel: ObservableObject {
             setIsEmpty()
         }
     }
-    @Published var modules: [DownloadsModuleCellViewModel] = [] {
+    @Published var downloadingModules: [DownloadsModuleCellViewModel] = [] {
         didSet {
             setIsEmpty()
         }
@@ -48,6 +48,8 @@ final class DownloadsViewModel: ObservableObject {
         case loaded
         case updated
     }
+
+    @Published var error: String = ""
 
     @Published var state: State = .none {
         didSet {
@@ -73,51 +75,65 @@ final class DownloadsViewModel: ObservableObject {
     func pauseResume() {}
 
     func deleteAll() {
-        courseViewModels.forEach { viewModel in
-            storageManager.delete(viewModel.courseDataModel) { _ in }
-            let models = categories.removeValue(forKey: viewModel.courseId)
-            models
-                .flatMap { $0.flatMap { $0.content } }?
-                .forEach {
-                try? self.downloadsManager.delete(entry: $0)
+        do {
+            try courseViewModels.forEach { viewModel in
+                storageManager.delete(viewModel.courseDataModel) { _ in }
+                let models = categories.removeValue(forKey: viewModel.courseId)
+                try models
+                    .flatMap { $0.flatMap { $0.content } }?
+                    .forEach {
+                    try self.downloadsManager.delete(entry: $0)
+                }
             }
+           storageManager.deleteAll { [weak self] _ in
+                guard let self = self else {
+                    return
+                }
+                DispatchQueue.main.async {
+                    self.courseViewModels = []
+                    self.state = .updated
+                }
+            }
+        } catch {
+            self.error = error.localizedDescription
         }
-       storageManager.deleteAll { [weak self] _ in
-            guard let self = self else {
-                return
-            }
-            DispatchQueue.main.async {
-                self.modules = []
-                self.courseViewModels = []
-                self.state = .updated
-            }
-        }
+
     }
 
     func swipeDeleteDownloading(indexSet: IndexSet) {
-        indexSet.forEach { index in
-            modules.remove(at: index)
+        do {
+            try indexSet.forEach { index in
+                let viewModel = downloadingModules[index]
+                try downloadsManager.delete(entry: viewModel.entry)
+                downloadingModules.remove(at: index)
+            }
+            state = .updated
+        } catch {
+            self.error = error.localizedDescription
         }
     }
 
     func swipeDelete(indexSet: IndexSet) {
-        indexSet.forEach { index in
-            let viewModel = courseViewModels.remove(at: index)
-            storageManager.delete(viewModel.courseDataModel) { _ in }
-            let models = categories.removeValue(forKey: viewModel.courseId)
-            models
-                .flatMap { $0.flatMap { $0.content } }?
-                .forEach {
-                try? downloadsManager.delete(entry: $0)
-                storageManager.delete($0) {_ in}
+        do {
+            try indexSet.forEach { index in
+                let viewModel = courseViewModels.remove(at: index)
+                storageManager.delete(viewModel.courseDataModel) { _ in }
+                let models = categories.removeValue(forKey: viewModel.courseId)
+                try models
+                    .flatMap { $0.flatMap { $0.content } }?
+                    .forEach {
+                    try downloadsManager.delete(entry: $0)
+                }
             }
+            state = .updated
+        } catch {
+            self.error = error.localizedDescription
         }
-        state = .updated
     }
 
     func fetch() {
         state = .loading
-        modules = downloadsManager.activeEntries.map { .init(entry: $0) }
+        configureDownloadingModules()
         storageManager.loadAll(of: CourseStorageDataModel.self) { [weak self] result in
             guard let self = self else {
                 return
@@ -138,6 +154,16 @@ final class DownloadsViewModel: ObservableObject {
                 self.state = .loaded
             }
         }
+    }
+
+    func configureDownloadingModules() {
+        downloadingModules = (
+            downloadsManager.activeEntries
+            + downloadsManager.waitingEntries
+            + downloadsManager.pausedEntries
+            + downloadsManager.failedEntries
+        )
+        .map { .init(entry: $0) }
     }
 
     func categories(courseId: String) -> [DownloadsCourseCategoryViewModel] {
@@ -162,7 +188,7 @@ final class DownloadsViewModel: ObservableObject {
             }
             result.success { entries in
                 let categories = DownloadsHelper.categories(
-                    from: entries,
+                    from: entries.filter { $0.status == .completed },
                     courseDataModel: courseDataModel
                 )
                 if !categories.isEmpty {
@@ -195,18 +221,24 @@ final class DownloadsViewModel: ObservableObject {
     }
 
     private func statusChanged(_ event: OfflineDownloadsManagerEventObject) {
-        do {
-            switch event.status {
-            case .completed:
-                let object = event.object
-                let model = try object.toOfflineModel()
-                modules.removeAll(where: { $0.moduleId == model.id })
-                if let object = event.object as? OfflineDownloadTypeProtocol {
-                    addCompletedEntry(object: object)
-                }
-            default:
-                break
+        switch event.status {
+        case .removed:
+            deleteDownloading(event)
+        case .completed:
+            deleteDownloading(event)
+            if let object = event.object as? OfflineDownloadTypeProtocol {
+                addCompletedEntry(object: object)
             }
+        default:
+            break
+        }
+    }
+
+    private func deleteDownloading(_ event: OfflineDownloadsManagerEventObject) {
+        do {
+            let object = event.object
+            let model = try object.toOfflineModel()
+            downloadingModules.removeAll(where: { $0.moduleId == model.id })
         } catch {}
     }
 
@@ -278,7 +310,7 @@ final class DownloadsViewModel: ObservableObject {
             if !isConnected && courseViewModels.isEmpty {
                 isEmpty = true
             } else {
-                isEmpty = modules.isEmpty && courseViewModels.isEmpty
+                isEmpty = downloadingModules.isEmpty && courseViewModels.isEmpty
             }
         default:
             break

@@ -124,9 +124,6 @@ public class ModuleItemDetailsViewController: DownloadableViewController, Colore
             title = NSLocalizedString("Module Item", bundle: .core, comment: "")
         }
         setupTitleViewInNavbar(title: title)
-        
-        setupObject(item)
-        setupCourse(course.first)
         addDownloadBarButtonItem()
     }
 

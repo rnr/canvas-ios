@@ -8,6 +8,7 @@ public final class DownloadButton: UIView {
     public enum State {
         case idle
         case waiting
+        case retry
         case downloading
         case downloaded
     }
@@ -20,6 +21,7 @@ public final class DownloadButton: UIView {
             waitingView.strokeColor = mainTintColor
             downloadingButton.mainTintColor = mainTintColor
             downloadedButton.tintColor = mainTintColor
+            retryButton.tintColor = mainTintColor
         }
     }
     public var idleButtonImage: UIImage = UIImage(systemName: "arrow.down.circle")! {
@@ -32,24 +34,22 @@ public final class DownloadButton: UIView {
             self.idleButton.setImage(idleButtonImage, for: .normal)
         }
     }
+    public var retryButtonImage: UIImage = UIImage(systemName: "arrow.clockwise.circle")! {
+        didSet {
+            self.idleButton.setImage(idleButtonImage, for: .normal)
+        }
+    }
+
     public var progress: Float = 0 {
         didSet {
             downloadingButton.progress = progress
         }
     }
-    public var animationDuration  = 0.3
+
     public var currentState: State = .idle {
         didSet {
             // MARK: - Current State Changed
-            let delay: TimeInterval = 0
-
-            animationQueue.async { [self] in
-                animationDispatchGroup.enter()
-                DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-                    self.transition(from: oldValue, to: self.currentState)
-                }
-                animationDispatchGroup.wait()
-            }
+            transition(from: oldValue, to: currentState)
             onState?(currentState)
         }
     }
@@ -59,14 +59,13 @@ public final class DownloadButton: UIView {
 
     let idleButton: RoundButton = RoundButton()
     let waitingView: WaitingView = WaitingView()
+    let retryButton: RoundButton = RoundButton()
     let downloadingButton: ProgressButton = ProgressButton()
     let downloadedButton: RoundButton = RoundButton()
 
     // MARK: - CallBacks -
 
     public var onTap: ((State) -> Void)?
-    let animationDispatchGroup = DispatchGroup()
-    let animationQueue = DispatchQueue(label: "MUDownloadButtonAnimationQueue")
 
     // MARK: - Inits -
 
@@ -106,6 +105,12 @@ public final class DownloadButton: UIView {
         downloadedButton.image = downloadedButtonImage
         downloadedButton.tintColor = mainTintColor
         downloadedButton.addTarget(self, action: #selector(currentButtonTapped), for: .touchUpInside)
+
+        addSubview(retryButton)
+        setRetryButtonConstraints()
+        retryButton.image = retryButtonImage
+        retryButton.tintColor = mainTintColor
+        retryButton.addTarget(self, action: #selector(currentButtonTapped), for: .touchUpInside)
     }
 
     // MARK: - Setup Constraitns -
@@ -115,7 +120,7 @@ public final class DownloadButton: UIView {
     }
 
     private func setWaitingButtonConstraints() {
-        waitingView.pinToSuperview(constant: 2)
+        waitingView.pinToSuperview(constant: 0)
     }
 
     private func setDownloadingButtonConstraints() {
@@ -124,6 +129,10 @@ public final class DownloadButton: UIView {
 
     private func setDownloadedButtonConstraints() {
         downloadedButton.pinToSuperview()
+    }
+
+    private func setRetryButtonConstraints() {
+        retryButton.pinToSuperview()
     }
 
     // MARK: - Actions -

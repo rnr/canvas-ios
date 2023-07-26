@@ -121,7 +121,10 @@ public class PageListViewController: ScreenViewTrackableViewController, ColoredN
         emptyView.isHidden = pages.error != nil || isLoading || !frontPage.isEmpty || !pages.isEmpty
         errorView.isHidden = pages.error == nil
         let selected = tableView.indexPathForSelectedRow
-        tableView.reloadData()
+        debugLog(isLoading, "isLoading")
+        if isLoading {
+            tableView.reloadData()
+        }
         tableView.selectRow(at: selected, animated: false, scrollPosition: .none) // preserve prior selection
 
         if !selectedFirstPage, !isLoading, let url = frontPage.first?.htmlURL ?? pages.first?.htmlURL {
@@ -185,13 +188,28 @@ extension PageListViewController: UITableViewDataSource, UITableViewDelegate {
             return LoadingCell(style: .default, reuseIdentifier: nil)
         }
         let cell: DownloadPageListTableViewCell = tableView.dequeue(for: indexPath)
-        cell.update(pages[indexPath.row], course: course.first, indexPath: indexPath, color: color)
+        let page = pages[indexPath.row]
+        cell.update(
+            page: page,
+            course: course.first,
+            indexPath: indexPath,
+            color: color
+        )
         return cell
     }
 
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let page = (indexPath.section == 0 && !frontPage.isEmpty) ? frontPage.first : pages[indexPath.row]
-        guard let url = page?.htmlURL else { return }
+        guard let page = (indexPath.section == 0 && !frontPage.isEmpty) ? frontPage.first : pages[indexPath.row] else {
+            return
+        }
+        guard let url = page.htmlURL else { return }
+        guard let course = course.first else { return }
+        DownloadableItemProvider.shared.set(
+            userInfo: url.absoluteString,
+            assetType: "Page",
+            object: page,
+            course: course
+        )
         env.router.route(to: url, from: self, options: .detail)
     }
 

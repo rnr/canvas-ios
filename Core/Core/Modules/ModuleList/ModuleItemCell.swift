@@ -32,10 +32,12 @@ class ModuleItemCell: UITableViewCell {
     @IBOutlet weak var completedStatusView: UIImageView!
 
     let env = AppEnvironment.shared
+    var course: Course?
     var item: ModuleItem?
-    var cancellable: AnyCancellable?
+    let downloadButtonHelper = DownloadStatusProvider()
 
-    func update(_ item: ModuleItem, indexPath: IndexPath, color: UIColor?) {
+    func update(_ item: ModuleItem, course: Course?, indexPath: IndexPath, color: UIColor?) {
+        self.course = course
         self.item = item
         backgroundColor = .backgroundLightest
         selectedBackgroundView = ContextCellBackgroundView.create(color: color)
@@ -87,6 +89,6 @@ class ModuleItemCell: UITableViewCell {
         accessibilityIdentifier = "ModuleList.\(indexPath.section).\(indexPath.row)"
         nameLabel.accessibilityIdentifier = "ModuleList.\(indexPath.section).\(indexPath.row).nameLabel"
         dueLabel.accessibilityIdentifier = "ModuleList.\(indexPath.section).\(indexPath.row).dueLabel"
-        isDownloaded(item)
+        prepareForDownload()
     }
 }

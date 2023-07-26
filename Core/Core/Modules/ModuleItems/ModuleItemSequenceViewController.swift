@@ -89,7 +89,6 @@ public class ModuleItemSequenceViewController: UIViewController {
         }
         spinnerView.isHidden = true
         if embed, let viewController = currentViewController() {
-            setRouteDownloadableViewController(viewController)
             setCurrentPage(viewController)
         }
         showSequenceButtons(prev: sequence?.prev != nil, next: sequence?.next != nil)
@@ -112,14 +111,6 @@ public class ModuleItemSequenceViewController: UIViewController {
         }
     }
 
-    private func setRouteDownloadableViewController(_ viewController: UIViewController) {
-        guard let downloadableViewController = viewController as? DownloadableViewController,
-            let url = url.url else {
-            return
-        }
-        downloadableViewController.set(userInfo: url.absoluteString, assetType: assetType.rawValue)
-    }
-
     func showSequenceButtons(prev: Bool, next: Bool) {
         let show = prev || next
         self.buttonsContainer.isHidden = show == false
@@ -131,6 +122,9 @@ public class ModuleItemSequenceViewController: UIViewController {
 
     func show(item: ModuleItemSequenceNode, direction: PagesViewController.Direction? = nil) {
         let details = ModuleItemDetailsViewController.create(courseID: courseID, moduleID: item.moduleID, itemID: item.id)
+        details.item.flatMap {
+            DownloadableItemProvider.shared.update(object: $0)
+        }
         setCurrentPage(details, direction: direction)
         store = env.subscribe(GetModuleItemSequence(courseID: courseID, assetType: .moduleItem, assetID: item.id)) { [weak self] in
             self?.update(embed: false)

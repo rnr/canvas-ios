@@ -20,6 +20,10 @@ import SwiftUI
 
 struct DownloadCoursesSectionView: View {
 
+    // MARK: - Injected -
+
+    @Environment(\.viewController) var controller
+
     // MARK: - Properties -
 
     @ObservedObject var viewModel: DownloadsViewModel
@@ -49,8 +53,19 @@ struct DownloadCoursesSectionView: View {
                     selection = courseViewModel
                 }
         }
-        .onDelete { indexSet in
+        .onDelete(perform: onDelete)
+    }
+
+    private func onDelete(indexSet: IndexSet) {
+        let cancelAction = AlertAction(NSLocalizedString("Cancel", comment: ""), style: .cancel) { _ in }
+        let deleteAction = AlertAction(NSLocalizedString("Delete", comment: ""), style: .destructive) { _ in
             viewModel.swipeDelete(indexSet: indexSet)
         }
+        controller.value.showAlert(
+            title: NSLocalizedString("Are you sure you want to remove downloaded course?", comment: ""),
+            actions: [cancelAction, deleteAction],
+            style: .actionSheet
+        )
     }
+
 }

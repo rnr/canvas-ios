@@ -18,18 +18,24 @@
 
 import Combine
 import SwiftUI
+import mobile_offline_downloader_ios
 
 final class DownloaderViewModel: ObservableObject {
 
     // MARK: - Injections -
 
+    private var storageManager: OfflineStorageManager = .shared
+    private var downloadsManager: OfflineDownloadsManager = .shared
+
     // MARK: - Properties -
 
-    @Published var modules: [DownloadsModuleCellViewModel] = []
+    @Published var downloadingModules: [DownloadsModuleCellViewModel] = []
+    @Published var error: String = ""
     private var cancellables: [AnyCancellable] = []
 
-    init(modules: [DownloadsModuleCellViewModel]) {
-        self.modules = modules
+    init(downloadingModules: [DownloadsModuleCellViewModel]) {
+        self.downloadingModules = downloadingModules
+        observeDownloadsEvents()
     }
 
     // MARK: - Intents -
@@ -37,12 +43,52 @@ final class DownloaderViewModel: ObservableObject {
     func pauseResume() {}
 
     func deleteAll() {
-        modules = []
+        do {
+            try downloadsManager.deleteDownloadingEntries()
+            downloadingModules = []
+        } catch {
+            self.error = error.localizedDescription
+        }
     }
 
     func delete(indexSet: IndexSet) {
-        indexSet.forEach { index in
-            modules.remove(at: index)
+        do {
+            try indexSet.forEach { index in
+                let model = downloadingModules[index]
+                try downloadsManager.delete(entry: model.entry)
+                downloadingModules.remove(at: index)
+            }
+        } catch {
+            self.error = error.localizedDescription
+        }
+    }
+
+    private func observeDownloadsEvents() {
+        downloadsManager
+            .publisher
+            .sink { [weak self] event in
+                switch event {
+                case .statusChanged(object: let event):
+                    self?.statusChanged(event)
+                case .progressChanged:
+                    break
+                }
+            }
+            .store(in: &cancellables)
+    }
+
+    private func statusChanged(_ event: OfflineDownloadsManagerEventObject) {
+        do {
+            switch event.status {
+            case .completed, .removed:
+                let object = event.object
+                let model = try object.toOfflineModel()
+                downloadingModules.removeAll(where: { $0.moduleId == model.id })
+            default:
+                break
+            }
+        } catch {
+            self.error = error.localizedDescription
         }
     }
 }

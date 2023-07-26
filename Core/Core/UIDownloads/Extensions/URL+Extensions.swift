@@ -16,26 +16,12 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-import SwiftUI
+import Foundation
 
-struct DownloadProgressSectionView: View {
-
-    // MARK: - Properties -
-
-    @ObservedObject var viewModel: DownloadsViewModel
-
-    var body: some View {
-        ForEach(
-            Array(viewModel.downloadingModules.prefix(3).enumerated()),
-            id: \.offset
-        ) { _, viewModel in
-            DownloadingCellView(viewModel: viewModel)
-        }
-        .onDelete { indexSet in
-            viewModel.swipeDeleteDownloading(indexSet: indexSet)
-        }
+extension URL {
+    func changeScheme(_ value: String) -> URL? {
+        let components = NSURLComponents.init(url: self, resolvingAgainstBaseURL: true)
+        components?.scheme = value
+        return components?.url
     }
-
-    // MARK: - Views -
-
 }

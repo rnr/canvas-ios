@@ -68,8 +68,10 @@ public struct DashboardContainerView: View, ScreenViewTrackable {
                 VStack(spacing: 0) {
                     DashboardOfflineSyncProgressCardView(viewModel: offlineSyncCardViewModel)
                     fileUploadNotificationCards()
-                    DownloadedContentCellView {
-                        showDownloads()
+                    if !cards.reachability.isConnected {
+                        DownloadedContentCellView {
+                            showDownloads()
+                        }
                     }
                     list(CGSize(width: geometry.size.width - 32, height: geometry.size.height))
                 }
@@ -90,7 +92,7 @@ public struct DashboardContainerView: View, ScreenViewTrackable {
                     controller.value.showThemeSelectorAlert()
                 }
             }
-            showDownloadingBarView() 
+            showDownloadingBarView()
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             fileUploadNotificationCardViewModel.sceneDidBecomeActive.send()

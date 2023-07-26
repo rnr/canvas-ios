@@ -244,7 +244,12 @@ extension ModuleListViewController: UITableViewDataSource {
         default:
             let cell: ModuleItemCell = tableView.dequeue(for: indexPath)
             if let item = item {
-                cell.update(item, indexPath: indexPath, color: color)
+                cell.update(
+                    item,
+                    course: courses.first,
+                    indexPath: indexPath,
+                    color: color
+                )
             }
             return cell
         }
@@ -265,6 +270,15 @@ extension ModuleListViewController: UITableViewDelegate {
             tableView.deselectRow(at: indexPath, animated: true)
             return
         }
+        guard let coursesId = courses.first else {
+            return
+        }
+        DownloadableItemProvider.shared.set(
+            userInfo: htmlURL.absoluteString,
+            assetType: "ModuleItem",
+            object: item,
+            course: coursesId
+        )
         env.router.route(to: htmlURL, from: self, options: .detail)
     }
 

@@ -55,6 +55,15 @@ public struct DownloadsView: View {
                 navigationController?.navigationBar.useGlobalNavStyle()
                 hideDownloadingBarView()
             }
+            .onChange(of: viewModel.error) { newValue in
+                if newValue.isEmpty { return }
+                navigationController?.showAlert(
+                    title: NSLocalizedString(newValue, comment: ""),
+                    actions: [AlertAction(NSLocalizedString("Cancel", comment: ""), style: .cancel) { _ in }],
+                    style: .actionSheet
+                )
+                viewModel.error = ""
+            }
     }
 
     private var content: some View {
@@ -68,7 +77,15 @@ public struct DownloadsView: View {
                 VStack {
                     if viewModel.isEmpty {
                         VStack {
-                            Text("Visit a course to download content.")
+                            Image.pandaBlocks
+                            Text("No Downloads")
+                                .font(.semibold18)
+                                .foregroundColor(.textDarkest)
+                                .padding(.vertical, 20)
+                            Text("To download content, open a content type and press save. Downloaded modules will appear here")
+                                .font(.regular16)
+                                .foregroundColor(.textDarkest)
+                                .multilineTextAlignment(.center)
                         }
                     } else {
                         list
@@ -90,16 +107,21 @@ public struct DownloadsView: View {
 
     private var list: some View {
         List {
-            if !viewModel.modules.isEmpty {
-                LinkDownloadingHeader(
-                    destination: DownloaderView(
-                        modules: viewModel.modules
-                    ),
-                    title: "Downloading"
-                )
+            if !viewModel.downloadingModules.isEmpty {
+                if viewModel.downloadingModules.count > 3 {
+                    LinkDownloadingHeader(
+                        destination: DownloaderView(
+                            downloadingModules: viewModel.downloadingModules
+                        ),
+                        title: "Downloading"
+                    )
+                } else {
+                    Header(title: "Downloading")
+                }
                 modules
             }
             Header(title: "Courses")
+                .hidden(viewModel.courseViewModels.isEmpty )
             courses
         }
         .listStyle(.inset)
