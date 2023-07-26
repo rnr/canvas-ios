@@ -105,10 +105,6 @@ public class ModuleItemSequenceViewController: UIViewController {
     }
 
     func showSequenceButtons(prev: Bool, next: Bool) {
-        buttonsContainer.isHidden = true
-        buttonsHeightConstraint.constant = 0
-        view.layoutIfNeeded()
-        return
         let show = prev || next
         self.buttonsContainer.isHidden = show == false
         self.buttonsHeightConstraint.constant = show ? 56 : 0
@@ -119,6 +115,9 @@ public class ModuleItemSequenceViewController: UIViewController {
 
     func show(item: ModuleItemSequenceNode, direction: PagesViewController.Direction? = nil) {
         let details = ModuleItemDetailsViewController.create(courseID: courseID, moduleID: item.moduleID, itemID: item.id)
+        details.item.flatMap {
+            DownloadableItemProvider.shared.update(object: $0)
+        }
         setCurrentPage(details, direction: direction)
         store = env.subscribe(GetModuleItemSequence(courseID: courseID, assetType: .moduleItem, assetID: item.id)) { [weak self] in
             self?.update(embed: false)
