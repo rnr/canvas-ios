@@ -87,6 +87,8 @@ final class DownloaderViewModel: ObservableObject {
             default:
                 break
             }
-        } catch {}
+        } catch {
+            self.error = error.localizedDescription
+        }
     }
 }
