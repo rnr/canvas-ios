@@ -113,7 +113,7 @@ final class DownloadStatusProvider {
             guard let userInfo = self.userInfo else {
                 return
             }
-            try downloadsManager.addAndStart(
+            try downloadsManager.start(
                 object: object,
                 userInfo: userInfo
             )

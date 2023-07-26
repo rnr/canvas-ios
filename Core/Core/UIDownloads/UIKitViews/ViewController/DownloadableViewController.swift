@@ -151,7 +151,7 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
         var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
         components?.scheme = assetType
         do {
-            try downloadsManager.addAndStart(
+            try downloadsManager.start(
                 object: object,
                 userInfo: components?.url?.absoluteString
             )
