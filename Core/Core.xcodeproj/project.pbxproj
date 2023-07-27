@@ -1039,6 +1039,8 @@
 		A4E3A7D718F91CDF06170915 /* MessageListStateUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF2DE564B9DEF83671BB4FE /* MessageListStateUpdater.swift */; };
 		A4F54E00F32E74C6BDA3090B /* QuizListViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CA3953E307CAF39AF2668A96 /* QuizListViewController.storyboard */; };
 		A52DD3FE31F0D22A7653EA69 /* RichContentEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059C04AF01A45E8B17C56177 /* RichContentEditorViewController.swift */; };
+		A56E37992A72CC4200DADE4D /* DownloadableItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56E37982A72CC4200DADE4D /* DownloadableItems.swift */; };
+		A56E379B2A72CC9C00DADE4D /* LoadingDarkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56E379A2A72CC9C00DADE4D /* LoadingDarkView.swift */; };
 		A5959DA96F69FA53D44D345B /* ComposeViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85D0E3FC18C36A8077C654DD /* ComposeViewController.storyboard */; };
 		A595C76ACB992B4367498A96 /* FileSubmissionErrorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216A59538283224E9F555B27 /* FileSubmissionErrorsTests.swift */; };
 		A5CEB0CE792C299DA75F6D44 /* PreviewStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B251845DF66CF32D328FF75 /* PreviewStore.swift */; };
@@ -2879,6 +2881,8 @@
 		A54CFDBD18BCE51A7498A22B /* CourseSyncFilesInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseSyncFilesInteractor.swift; sourceTree = "<group>"; };
 		A54E2246CD24105513606843 /* Avatar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Avatar.swift; sourceTree = "<group>"; };
 		A56C8EAEDD96E8716CB5A484 /* FileUploadProgressObserversCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUploadProgressObserversCacheTests.swift; sourceTree = "<group>"; };
+		A56E37982A72CC4200DADE4D /* DownloadableItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadableItems.swift; sourceTree = "<group>"; };
+		A56E379A2A72CC9C00DADE4D /* LoadingDarkView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingDarkView.swift; sourceTree = "<group>"; };
 		A571497F76E9694BCC7A70D8 /* DynamicLabelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicLabelTests.swift; sourceTree = "<group>"; };
 		A59435E04AD83E555BDE51AE /* NSManagedObjectContextExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSManagedObjectContextExtensions.swift; sourceTree = "<group>"; };
 		A61580548942CC239D28BAC5 /* PeopleListViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleListViewControllerTests.swift; sourceTree = "<group>"; };
@@ -4298,6 +4302,7 @@
 				27FC30509CC00DF3E6229F92 /* DownloadsContentList.swift */,
 				8196708ECB053F5ADC17AD30 /* Header.swift */,
 				3073B9B49F3E39CFF5C387D8 /* LinkDownloadingHeader.swift */,
+				A56E379A2A72CC9C00DADE4D /* LoadingDarkView.swift */,
 				5922DB6FE9E7AD1C538264D5 /* LoadingView.swift */,
 			);
 			path = SwiftUIVIews;
@@ -7830,6 +7835,7 @@
 			isa = PBXGroup;
 			children = (
 				64B773073DD5C2E8E229A44F /* Course+OfflineStorageDataProtocol.swift */,
+				A56E37982A72CC4200DADE4D /* DownloadableItems.swift */,
 				D22F83BE88844C96C6C84393 /* DownloadCourse+OfflineStorageDataProtocol.swift */,
 				41CEBEB1B584C5D5A0697189 /* DownloaderClient.swift */,
 				DD0233A387AC8841832F8C8C /* DownloadNotifier.swift */,
@@ -9785,6 +9791,7 @@
 				0BD5283A1765FC9A3B6EF691 /* APIModule.swift in Sources */,
 				98577CCF8152D2C5CB6894B6 /* APINotificationPreferences.swift in Sources */,
 				9A3D2BC027784ABC68F1246B /* APIOAuth.swift in Sources */,
+				A56E379B2A72CC9C00DADE4D /* LoadingDarkView.swift in Sources */,
 				13E406DACBE072D53AA6EE5F /* APIObserverAlert.swift in Sources */,
 				DBA228F5A56DC03910F6F754 /* APIPage.swift in Sources */,
 				6024AB348B8B8441BCE09561 /* APIPairingCode.swift in Sources */,
@@ -10470,6 +10477,7 @@
 				CE6959005B017590E1CEB228 /* NotificationCard.swift in Sources */,
 				91D72098BA3A55B7838DFB82 /* NotificationCategoriesViewController.swift in Sources */,
 				9FE7C7393686D50248CF963E /* NotificationCategory.swift in Sources */,
+				A56E37992A72CC4200DADE4D /* DownloadableItems.swift in Sources */,
 				3D43762BA37F032AF34969B5 /* NotificationCenterExtensions.swift in Sources */,
 				AA09F423875746A8447591E8 /* NotificationChannelsViewController.swift in Sources */,
 				B10D952C3F9137053F07DC19 /* NotificationManager+CustomPushes.swift in Sources */,
