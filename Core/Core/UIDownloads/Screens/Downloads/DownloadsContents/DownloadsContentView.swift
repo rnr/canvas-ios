@@ -19,7 +19,7 @@
 import SwiftUI
 import mobile_offline_downloader_ios
 
-struct DownloadsContentView: View {
+struct DownloadsContentView: View, Navigatable {
 
     // MARK: - Injected -
 
@@ -30,17 +30,6 @@ struct DownloadsContentView: View {
 
     @StateObject var viewModel: DownloadsContentViewModel
     private let title: String
-    private let env = AppEnvironment.shared
-
-    private var navigationController: UINavigationController? {
-        guard let topViewController = env.topViewController as? UITabBarController,
-              let helmSplitViewController = topViewController.viewControllers?.first as? UISplitViewController,
-              let navigationController = helmSplitViewController.viewControllers.first as? UINavigationController
-             else {
-            return nil
-        }
-        return navigationController
-    }
 
     init(
         content: [OfflineDownloaderEntry],

@@ -187,10 +187,13 @@ class StudentTabBarController: UITabBarController {
 
     private func showDownloadingView() {
         let downloadsViewController = CoreHostingController(DownloadsView())
-        ((viewControllers?[selectedIndex] as? HelmSplitViewController)?
-            .viewControllers
-            .first as? UINavigationController)?
-            .pushViewController(downloadsViewController, animated: true)
+        selectedViewController.flatMap {
+            AppEnvironment.shared.router.show(
+                downloadsViewController,
+                from: $0,
+                options: .push
+            )
+        }
     }
 
 }

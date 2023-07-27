@@ -48,7 +48,7 @@
     {
       "identity" : "combinereachability",
       "kind" : "remoteSourceControl",
-      "location" : "git@github.com:istvan-kreisz/CombineReachability.git",
+      "location" : "https://github.com/istvan-kreisz/CombineReachability.git",
       "state" : {
         "branch" : "master",
         "revision" : "ba1cb2adeb111ee3ce475404ca1cdfb322505281"

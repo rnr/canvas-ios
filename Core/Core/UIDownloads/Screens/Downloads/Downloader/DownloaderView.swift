@@ -19,7 +19,7 @@
 import Combine
 import SwiftUI
 
-struct DownloaderView: View {
+struct DownloaderView: View, Navigatable {
 
     // MARK: - Injected -
 
@@ -30,17 +30,6 @@ struct DownloaderView: View {
     @StateObject var viewModel: DownloaderViewModel
     @State var isDisplayingAlert: Bool = false
     var didDeleteAll: (() -> Void)?
-
-    private let env = AppEnvironment.shared
-    private var navigationController: UINavigationController? {
-        guard let topViewController = env.topViewController as? UITabBarController,
-              let helmSplitViewController = topViewController.viewControllers?.first as? UISplitViewController,
-              let navigationController = helmSplitViewController.viewControllers.first as? UINavigationController
-             else {
-            return nil
-        }
-        return navigationController
-    }
 
     init(
         downloadingModules: [DownloadsModuleCellViewModel],

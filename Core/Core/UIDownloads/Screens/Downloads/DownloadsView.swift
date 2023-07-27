@@ -19,7 +19,7 @@
 import Combine
 import SwiftUI
 
-public struct DownloadsView: View {
+public struct DownloadsView: View, Navigatable {
 
     // MARK: - Injected -
 
@@ -30,17 +30,6 @@ public struct DownloadsView: View {
 
     @StateObject var viewModel: DownloadsViewModel = .init()
     @State var isDisplayingAlert: Bool = false
-    private let env = AppEnvironment.shared
-
-    private var navigationController: UINavigationController? {
-        guard let topViewController = env.topViewController as? UITabBarController,
-              let helmSplitViewController = topViewController.viewControllers?.first as? UISplitViewController,
-              let navigationController = helmSplitViewController.viewControllers.first as? UINavigationController
-             else {
-            return nil
-        }
-        return navigationController
-    }
 
     var isSheet: Bool = false
 

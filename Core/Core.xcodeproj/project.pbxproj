@@ -202,6 +202,7 @@
 		20C94560D71046D1C6F6024F /* ConversationParticipantNames.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D6DE194D8A93685ABAF470 /* ConversationParticipantNames.swift */; };
 		20CE8D80B87E6A29C843E479 /* TestIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2AC6B9141E2495B728B49F /* TestIdentifier.swift */; };
 		20FA5E9929B314BE8A0D1F4B /* QuizAttribute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C38C131C29124279EFED949 /* QuizAttribute.swift */; };
+		2120911605A44A441D0B9D7F /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1AB309D023E0DB42BA27DC6 /* URL+Extensions.swift */; };
 		2125CC8971DC97F01C6C0A78 /* CoreDatePickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886BAEE04736A54ECA573A63 /* CoreDatePickerTests.swift */; };
 		21330652E5CA813B51E9C668 /* LoginWebViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B32483F46D3D8B32F2CC5623 /* LoginWebViewControllerTests.swift */; };
 		21354F51FA64555B2CAEB6C6 /* DownloadsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397BB4FD50CBA7A41DEB8531 /* DownloadsHelper.swift */; };
@@ -289,6 +290,7 @@
 		2E9861D7075106AAF1F729CB /* UploadAvatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB600674AEF3720F589F1C80 /* UploadAvatar.swift */; };
 		2E992A9181D106596A664A6E /* DynamicTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DAE15712364C96C63887E1B /* DynamicTextField.swift */; };
 		2EB96778BEE79B0B1269CCB8 /* AttachmentPreviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC2F76C7A20619345E0A107 /* AttachmentPreviewViewModel.swift */; };
+		2EC5747C1F5EFC6491274A16 /* DownloadsContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28E1B1157DFA43CC36FB84C /* DownloadsContentView.swift */; };
 		2F093F76FAA1DE34E8ACD569 /* QuizPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B66520942A43112340CC5D1 /* QuizPreviewView.swift */; };
 		2F3CD8D526AA18B23A3ACCDA /* GradeStatisticGraphView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA2889B8BEE880336D3F926B /* GradeStatisticGraphView.xib */; };
 		2F8B91FB76AB5017BB85B446 /* AboutAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433B4EC409018F8656FF61D6 /* AboutAssembly.swift */; };
@@ -828,6 +830,7 @@
 		7F41FEE0D3C344372DBA4E06 /* PageListViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E62C721CCB9860DB64036765 /* PageListViewController.storyboard */; };
 		7F7AA9C7343A3978ED3080C6 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18D6CECA93926E3D68A30A0 /* NotificationManager.swift */; };
 		7FE7AC928593722F3A439399 /* AboutInfoEntryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A495E4836C157AD8DB6BCDAB /* AboutInfoEntryTests.swift */; };
+		800BAF11E8802B9C86E7D6BD /* DownloadStatusProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818246A10578CF636B3A6122 /* DownloadStatusProvider.swift */; };
 		801614E5CEBEC183906F19D0 /* QuizSubmissionBreakdownViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1B675856D130EA18C329EC /* QuizSubmissionBreakdownViewModelTests.swift */; };
 		8033E0A8E50579FA9B95D0B3 /* K5SubjectViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2AACFCF7807BA84FAA8BB9D /* K5SubjectViewModel.swift */; };
 		803FA1EA0999A4201084C000 /* LTIViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805EE53C6A3B009C7E3161D8 /* LTIViewControllerTests.swift */; };
@@ -1035,10 +1038,6 @@
 		A48DAFAB210B4BBC4EE2E75D /* CourseListInteractorLiveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9073C1C0ABBA0A173295180 /* CourseListInteractorLiveTests.swift */; };
 		A4E3A7D718F91CDF06170915 /* MessageListStateUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF2DE564B9DEF83671BB4FE /* MessageListStateUpdater.swift */; };
 		A4F54E00F32E74C6BDA3090B /* QuizListViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CA3953E307CAF39AF2668A96 /* QuizListViewController.storyboard */; };
-		A51F39A92A71B21300FBF7C8 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51F39A82A71B21300FBF7C8 /* URL+Extensions.swift */; };
-		A51F39AB2A71B23300FBF7C8 /* DownloadsContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51F39AA2A71B23300FBF7C8 /* DownloadsContentView.swift */; };
-		A51F39AD2A71B25900FBF7C8 /* DownloadNotifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51F39AC2A71B25900FBF7C8 /* DownloadNotifier.swift */; };
-		A51F39AF2A71B26900FBF7C8 /* DownloadStatusProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51F39AE2A71B26900FBF7C8 /* DownloadStatusProvider.swift */; };
 		A52DD3FE31F0D22A7653EA69 /* RichContentEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059C04AF01A45E8B17C56177 /* RichContentEditorViewController.swift */; };
 		A5959DA96F69FA53D44D345B /* ComposeViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85D0E3FC18C36A8077C654DD /* ComposeViewController.storyboard */; };
 		A595C76ACB992B4367498A96 /* FileSubmissionErrorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216A59538283224E9F555B27 /* FileSubmissionErrorsTests.swift */; };
@@ -1174,6 +1173,7 @@
 		BA1F043A2663F97E531277BB /* QuizPreviewInteractorLive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64FDA1A0D32BC10484A7BAA5 /* QuizPreviewInteractorLive.swift */; };
 		BA31567BBCDD9D3D4C10C408 /* PageListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F8E88E51C265BD7A6ADED7 /* PageListViewController.swift */; };
 		BA3E36262C43A9629722478C /* APIHelpLinks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E43BF3E8EDABCB6408820 /* APIHelpLinks.swift */; };
+		BA526D942A72C853003D570D /* Navigatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA526D932A72C853003D570D /* Navigatable.swift */; };
 		BA5419F816E27C21071C3207 /* UITestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB895C3AEEA85C6EFC4D563 /* UITestHelpers.swift */; };
 		BA5E98F4FC647FD448488431 /* RichContentEditor.js in Resources */ = {isa = PBXBuildFile; fileRef = 7CD06BD85946FE58878B9134 /* RichContentEditor.js */; };
 		BA812AAEDDC344B2F1273FF4 /* APICommentLibraryRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38294A8FA8F588332BF0C2E0 /* APICommentLibraryRequest.swift */; };
@@ -1607,6 +1607,7 @@
 		FD06BDB347DB8EBB8D08350E /* APIConference.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5606C2158AEEDA3F5D8C94A /* APIConference.swift */; };
 		FD0DB46E5A5EC4BAECB3ECB6 /* UploadAvatarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C72CA7693A90E9118256E989 /* UploadAvatarTests.swift */; };
 		FD28E6A8126405609FEB577A /* UITableViewExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2C75CD3DDAA8C690D74E8A /* UITableViewExtensionsTests.swift */; };
+		FD4C02179D0495B721E9E645 /* DownloadNotifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0233A387AC8841832F8C8C /* DownloadNotifier.swift */; };
 		FD5E8190EA05EF791D75AB92 /* GroupedSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 556952AE47002A8C910BF51B /* GroupedSectionHeaderView.swift */; };
 		FD8E0C4E8821F4F31D3C3962 /* FileListViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A428BBF27D3A0637022B49F2 /* FileListViewControllerTests.swift */; };
 		FDCA081AE7D3E63F553D9C54 /* GetAssignmentGroupsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37252AB2AA957CDFC3046993 /* GetAssignmentGroupsTests.swift */; };
@@ -2623,6 +2624,7 @@
 		80D06DE3203CB3C4793FE4CD /* ModuleItemSequenceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModuleItemSequenceViewController.swift; sourceTree = "<group>"; };
 		80EBE0CB9E7A86354735E332 /* es-ES */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-ES"; path = "es-ES.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		8133B84109D3E4BEC42DF9B1 /* TermsOfServiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfServiceViewController.swift; sourceTree = "<group>"; };
+		818246A10578CF636B3A6122 /* DownloadStatusProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadStatusProvider.swift; sourceTree = "<group>"; };
 		8183091E229194EF9BE15BA2 /* GetSubmissionCommentsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetSubmissionCommentsTests.swift; sourceTree = "<group>"; };
 		818D7827E4142B8C54C5D3CD /* APIPermissionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIPermissionsTests.swift; sourceTree = "<group>"; };
 		818E4C909B8ED2748641A2B9 /* GetPagesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetPagesTests.swift; sourceTree = "<group>"; };
@@ -2853,6 +2855,7 @@
 		A22BD8F31591B30BBAD5CC09 /* FilterHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterHeaderView.swift; sourceTree = "<group>"; };
 		A23D3ACDB06C1A7CC643BAAB /* ScannerViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerViewControllerTests.swift; sourceTree = "<group>"; };
 		A2707A2560BB20A9D4C18E72 /* QuizTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizTests.swift; sourceTree = "<group>"; };
+		A28E1B1157DFA43CC36FB84C /* DownloadsContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsContentView.swift; sourceTree = "<group>"; };
 		A2BF01404113FB190130FEF2 /* APIListTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIListTests.swift; sourceTree = "<group>"; };
 		A352C359FEF9F433F0479815 /* AppStoreReviewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreReviewTests.swift; sourceTree = "<group>"; };
 		A39C7A23AEDFA7CAA2A6DDEB /* APIRequestableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRequestableTests.swift; sourceTree = "<group>"; };
@@ -2872,10 +2875,6 @@
 		A4EE905F8704D81DC37F88CA /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A508EB535365B3A1355EB1FC /* StudentViewCellViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentViewCellViewModelTests.swift; sourceTree = "<group>"; };
 		A51E25F3BA93FD66FEB9B520 /* CourseSyncSelectorViewModelItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseSyncSelectorViewModelItem.swift; sourceTree = "<group>"; };
-		A51F39A82A71B21300FBF7C8 /* URL+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
-		A51F39AA2A71B23300FBF7C8 /* DownloadsContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadsContentView.swift; sourceTree = "<group>"; };
-		A51F39AC2A71B25900FBF7C8 /* DownloadNotifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadNotifier.swift; sourceTree = "<group>"; };
-		A51F39AE2A71B26900FBF7C8 /* DownloadStatusProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadStatusProvider.swift; sourceTree = "<group>"; };
 		A521299CB8FC225619DE6BB0 /* UITableViewHeaderFooterViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewHeaderFooterViewExtensions.swift; sourceTree = "<group>"; };
 		A54CFDBD18BCE51A7498A22B /* CourseSyncFilesInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseSyncFilesInteractor.swift; sourceTree = "<group>"; };
 		A54E2246CD24105513606843 /* Avatar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Avatar.swift; sourceTree = "<group>"; };
@@ -3014,6 +3013,7 @@
 		B9F59BA311FE64B3ACC60351 /* en-AU */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-AU"; path = "en-AU.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		BA1AB994171E07385A3C840D /* CourseSyncSelectorViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseSyncSelectorViewModelTests.swift; sourceTree = "<group>"; };
 		BA392AE7CE716F9D5DF3E4FE /* SideMenuSubHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuSubHeaderView.swift; sourceTree = "<group>"; };
+		BA526D932A72C853003D570D /* Navigatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Navigatable.swift; sourceTree = "<group>"; };
 		BA98A219C0118BC1617B8616 /* EmptyView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EmptyView.xib; sourceTree = "<group>"; };
 		BACBF46CDFDCDF7C3BE2CB65 /* OfflineModeInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineModeInteractor.swift; sourceTree = "<group>"; };
 		BAE9980CB6B4D424C27760EA /* GradeListViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradeListViewControllerTests.swift; sourceTree = "<group>"; };
@@ -3253,6 +3253,7 @@
 		DCC794E75AC13E1E2657DA7F /* APIEnrollment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIEnrollment.swift; sourceTree = "<group>"; };
 		DCD8E3DEC1A3A938761AC60B /* Int64Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Int64Extensions.swift; sourceTree = "<group>"; };
 		DCEE3E0C258BFC92E55F9D00 /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		DD0233A387AC8841832F8C8C /* DownloadNotifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadNotifier.swift; sourceTree = "<group>"; };
 		DD081280C71F302B0F05C32B /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		DD526EB24E61B83F467E9E05 /* ModuleItemType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModuleItemType.swift; sourceTree = "<group>"; };
 		DD6BD50F8339637063BABBD3 /* NetworkAvailabilityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkAvailabilityService.swift; sourceTree = "<group>"; };
@@ -3377,6 +3378,7 @@
 		F0D723146389410FB28FDD85 /* CourseSyncProgressObserverInteractorLiveTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseSyncProgressObserverInteractorLiveTests.swift; sourceTree = "<group>"; };
 		F12AC654821F7177126C4248 /* CourseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseTests.swift; sourceTree = "<group>"; };
 		F132170D3BB81CDB820C2EFF /* DefaultViewProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultViewProviderTests.swift; sourceTree = "<group>"; };
+		F1AB309D023E0DB42BA27DC6 /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
 		F1B7F797D4E7AFA26302167D /* FileSubmissionAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSubmissionAssembly.swift; sourceTree = "<group>"; };
 		F1BAA05F55E05080F8B36B96 /* QuizPreviewInteractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizPreviewInteractorTests.swift; sourceTree = "<group>"; };
 		F1D13F31C6A0DC4363C33803 /* DeveloperMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperMenuViewController.swift; sourceTree = "<group>"; };
@@ -4015,7 +4017,8 @@
 				596A88F50BBBF29413257165 /* Result+Extensions.swift */,
 				B88CA3861F4F29C173C4F34D /* String+Extensions.swift */,
 				07DFD8C5DA07D37A3C958EAA /* UIViewController+Extensions.swift */,
-				A51F39A82A71B21300FBF7C8 /* URL+Extensions.swift */,
+				F1AB309D023E0DB42BA27DC6 /* URL+Extensions.swift */,
+				BA526D932A72C853003D570D /* Navigatable.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -7135,8 +7138,8 @@
 			isa = PBXGroup;
 			children = (
 				2634CFFB68B7610EDB854010 /* Cells */,
+				A28E1B1157DFA43CC36FB84C /* DownloadsContentView.swift */,
 				0D81BBCDA99DC5D7757E4AB2 /* DownloadsContentViewModel.swift */,
-				A51F39AA2A71B23300FBF7C8 /* DownloadsContentView.swift */,
 			);
 			path = DownloadsContents;
 			sourceTree = "<group>";
@@ -7829,9 +7832,9 @@
 				64B773073DD5C2E8E229A44F /* Course+OfflineStorageDataProtocol.swift */,
 				D22F83BE88844C96C6C84393 /* DownloadCourse+OfflineStorageDataProtocol.swift */,
 				41CEBEB1B584C5D5A0697189 /* DownloaderClient.swift */,
+				DD0233A387AC8841832F8C8C /* DownloadNotifier.swift */,
+				818246A10578CF636B3A6122 /* DownloadStatusProvider.swift */,
 				3F1E8437F741F6643D817BFC /* ImageDownloader.swift */,
-				A51F39AC2A71B25900FBF7C8 /* DownloadNotifier.swift */,
-				A51F39AE2A71B26900FBF7C8 /* DownloadStatusProvider.swift */,
 				43DF0C924ACFA5599DE81D10 /* ModuleItem+OfflineDownloadHelperProtocol.swift */,
 				62B504EB72C060530906289C /* ModuleItem+OfflineStorageDataProtocol.swift */,
 				CA0730ADDB8F03E576050BAA /* Page+OfflineDownloadHelperProtocol.swift */,
@@ -9756,7 +9759,6 @@
 				01351849B78C73C6498BE565 /* APICommentLibraryResponse.swift in Sources */,
 				67F09DAB70222118FE7460E3 /* APICommunicationChannel.swift in Sources */,
 				FD06BDB347DB8EBB8D08350E /* APIConference.swift in Sources */,
-				A51F39AD2A71B25900FBF7C8 /* DownloadNotifier.swift in Sources */,
 				F5516080A55ECBBB64CE30B0 /* APIConversation.swift in Sources */,
 				7D86702098C4B249C5273B45 /* APICourse.swift in Sources */,
 				37DB457B78EF83D43D7C110E /* APICourseSection.swift in Sources */,
@@ -10084,14 +10086,15 @@
 				95F2E4BB05AB9F0E4EE124E6 /* DocViewerViewController.swift in Sources */,
 				248B95D3107374D23924B067 /* DocumentExtensions.swift in Sources */,
 				FB197F025975F54ED47FBAD7 /* DownloadButton+TransitionAndAnimationExtension.swift in Sources */,
-				A51F39A92A71B21300FBF7C8 /* URL+Extensions.swift in Sources */,
 				4318F9413504EEC14415BA8F /* DownloadButton.swift in Sources */,
 				1EEB66B00BDFFC2D19817557 /* DownloadCourse+OfflineStorageDataProtocol.swift in Sources */,
 				F8741824D4FD519B9D3209CE /* DownloadCourseCellView.swift in Sources */,
 				416652C880F32BFA48B11D63 /* DownloadCourseViewModel.swift in Sources */,
 				9EF4D2E3305EA1368AF64CEC /* DownloadCoursesSectionView.swift in Sources */,
+				FD4C02179D0495B721E9E645 /* DownloadNotifier.swift in Sources */,
 				184188CA4035EB81F0C43193 /* DownloadPageListTableViewCell.swift in Sources */,
 				BD1D511A656C19D2E8314728 /* DownloadProgressSectionView.swift in Sources */,
+				800BAF11E8802B9C86E7D6BD /* DownloadStatusProvider.swift in Sources */,
 				229DB613B3BA88E358C71942 /* DownloadTaskPublisher.swift in Sources */,
 				8652B97FF54ED0C33A594DC6 /* DownloadableViewController.swift in Sources */,
 				17CEAC66D60C6D684D1504B4 /* DownloadedContentCellView.swift in Sources */,
@@ -10104,6 +10107,7 @@
 				7D4CDBD37CA08FFDFDAFB17C /* DownloadingModule.swift in Sources */,
 				463B05B66AD3BFF3EC6CDA25 /* DownloadsContentCellView.swift in Sources */,
 				F16E79AEB35CAF388EBE3B44 /* DownloadsContentList.swift in Sources */,
+				2EC5747C1F5EFC6491274A16 /* DownloadsContentView.swift in Sources */,
 				5E07DBBCB4AF9FB58AE3E19E /* DownloadsContentViewModel.swift in Sources */,
 				5DFC31BA8DBE504C54AD47CF /* DownloadsCourseCategoryViewModel.swift in Sources */,
 				562BBF744D1D7F00DF137412 /* DownloadsCourseDetailView.swift in Sources */,
@@ -10294,6 +10298,7 @@
 				96CDC7D88752F67C2BF229D0 /* IconView.swift in Sources */,
 				C79A358B09D87743D91C558D /* IdentifiableName.swift in Sources */,
 				5428A3941D2AA3F1244D9908 /* ImageBackground.swift in Sources */,
+				BA526D942A72C853003D570D /* Navigatable.swift in Sources */,
 				07D9A0522E1A356F2AD334C3 /* ImageDownloader.swift in Sources */,
 				BB206552E39A0481AD10261A /* InboxAssembly.swift in Sources */,
 				CF848A454985D319B862329B /* InboxCourse.swift in Sources */,
@@ -10456,7 +10461,6 @@
 				9E9FE87DF2279B6F88F1EEFF /* NSPersistentStoreExtensions.swift in Sources */,
 				EDAB1466C5FBA7F15E548B47 /* NSPredicateExtensions.swift in Sources */,
 				006D0AE97085E4EAB7AC7052 /* NWPathMonitorWrapper.swift in Sources */,
-				A51F39AF2A71B26900FBF7C8 /* DownloadStatusProvider.swift in Sources */,
 				E90FF93D771026D3F9185440 /* NavBarItems.swift in Sources */,
 				A2D9963BAFEEC230FA5AF9DE /* NetworkAvailabilityService.swift in Sources */,
 				5E9AA68BAE9BED307F0D96DB /* NetworkAvailabilityStatus.swift in Sources */,
@@ -10510,7 +10514,6 @@
 				A5CEB0CE792C299DA75F6D44 /* PreviewStore.swift in Sources */,
 				729A667B02C0F1BD10AB7C1F /* PrimaryButton.swift in Sources */,
 				3BB381D6C1A420E6BB76A65D /* ProcessInfoExtensions.swift in Sources */,
-				A51F39AB2A71B23300FBF7C8 /* DownloadsContentView.swift in Sources */,
 				08050B62E3B32B220D997CEA /* ProfileImagePicker.swift in Sources */,
 				4978049B90DCFBFD459418C6 /* ProfileSettingsViewController.swift in Sources */,
 				9007D73BE90F4D4A86FD108D /* ProgressButton.swift in Sources */,
@@ -10680,6 +10683,7 @@
 				F0BCF68264B90D755AA60C86 /* UIViewControllerExtensions.swift in Sources */,
 				DA434423003DFEFA2F3A1988 /* UIViewExtensions.swift in Sources */,
 				07ABBB24641EE81AA49D9469 /* UIWindowExtensions.swift in Sources */,
+				2120911605A44A441D0B9D7F /* URL+Extensions.swift in Sources */,
 				999FE06E36CDDF7EEAC1A480 /* URLComponentsExtensions.swift in Sources */,
 				543308A38BE83C0A2D145423 /* URLExtensions.swift in Sources */,
 				4607F5EFF85490DFC7EAC7D0 /* URLRequestExtensions.swift in Sources */,
