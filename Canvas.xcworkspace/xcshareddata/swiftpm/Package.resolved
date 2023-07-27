@@ -140,8 +140,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/2uinc/mobile-offline-downloader-ios.git",
       "state" : {
-        "branch" : "develop",
-        "revision" : "77e00356d4f61ec4bc1192635d699999ce0adeca"
+        "branch" : "feat/pause-resume",
+        "revision" : "964a27af31168c70d72fa1dbf08bb098ab267716"
       }
     },
     {
