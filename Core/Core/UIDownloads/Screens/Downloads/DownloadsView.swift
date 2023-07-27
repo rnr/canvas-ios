@@ -62,7 +62,7 @@ public struct DownloadsView: View, Navigatable {
             switch viewModel.state {
             case .none, .loading:
                 LoadingView()
-            case .loaded, .updated:
+            case .loaded, .deleting, .updated:
                 VStack {
                     if viewModel.isEmpty {
                         VStack {
@@ -80,6 +80,9 @@ public struct DownloadsView: View, Navigatable {
                         list
                     }
                 }
+            }
+            if viewModel.state == .deleting {
+                LoadingDarkView()
             }
         }
         .toolbar {

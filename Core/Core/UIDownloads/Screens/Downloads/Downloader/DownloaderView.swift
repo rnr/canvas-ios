@@ -43,7 +43,14 @@ struct DownloaderView: View, Navigatable {
     // MARK: - Views -
 
     var body: some View {
-        content
+        ZStack {
+            Color(.systemBackground)
+                .ignoresSafeArea()
+            content
+            if viewModel.deleting {
+                LoadingDarkView()
+            }
+        }
     }
 
     private var content: some View {

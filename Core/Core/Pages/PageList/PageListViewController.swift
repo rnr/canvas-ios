@@ -203,13 +203,6 @@ extension PageListViewController: UITableViewDataSource, UITableViewDelegate {
             return
         }
         guard let url = page.htmlURL else { return }
-        guard let course = course.first else { return }
-        DownloadableItemProvider.shared.set(
-            userInfo: url.absoluteString,
-            assetType: "Page",
-            object: page,
-            course: course
-        )
         env.router.route(to: url, from: self, options: .detail)
     }
 
