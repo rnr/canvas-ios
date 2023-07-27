@@ -29,6 +29,9 @@ final class DownloadsContentViewModel: ObservableObject {
     // MARK: - Properties -
 
     @Published var content: [OfflineDownloaderEntry]
+    @Published var error: String = ""
+    @Published var deleting: Bool = false
+    
     let courseDataModel: CourseStorageDataModel
     var onDeleted: ((OfflineDownloaderEntry) -> Void)?
     var onDeletedAll: (() -> Void)?
@@ -50,24 +53,40 @@ final class DownloadsContentViewModel: ObservableObject {
     }
 
     func deleteAll() {
-        content.forEach {
-            try? self.downloadsManager.delete(entry: $0)
-            storageManager.delete($0) {_ in}
+        deleting = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            do {
+                try self.content.forEach {
+                    try self.downloadsManager.delete(entry: $0)
+                }
+                self.onDeletedAll?()
+            } catch {
+                self.error = error.localizedDescription
+            }
+            self.deleting = false
         }
-        onDeletedAll?()
     }
 
     func swipeDelete(indexSet: IndexSet) {
         indexSet.forEach { index in
-            let entry = content[index]
-            delete(entry: entry)
+            do {
+                try downloadsManager.delete(entry: content[index])
+                content.remove(at: index)
+            } catch {
+                self.error = error.localizedDescription
+            }
         }
     }
 
     func delete(entry: OfflineDownloaderEntry) {
-        content.removeAll(where: {$0.dataModel.id  == entry.dataModel.id})
-        try? downloadsManager.delete(entry: entry)
-        storageManager.delete(entry) { _ in}
-        onDeleted?(entry)
+        do {
+            guard let index = content.firstIndex(where: {$0.dataModel.id  == entry.dataModel.id}) else {
+                return
+            }
+            try downloadsManager.delete(entry: content[index])
+            content.remove(at: index)
+        } catch {
+            self.error = error.localizedDescription
+        }
     }
 }

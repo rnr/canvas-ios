@@ -20,6 +20,8 @@ import Foundation
 import UIKit
 
 public class ModuleItemDetailsViewController: DownloadableViewController, ColoredNavViewProtocol {
+    var onEmbedContainer: ((UIViewController) -> Void)?
+
     let env = AppEnvironment.shared
     var courseID: String!
     var moduleID: String!
@@ -87,6 +89,7 @@ public class ModuleItemDetailsViewController: DownloadableViewController, Colore
         children.forEach { $0.unembed() }
         if let viewController = itemViewController, !container.isHidden {
             embed(viewController, in: container)
+            onEmbedContainer?(viewController)
             navigationItem.rightBarButtonItems = []
             observations = syncNavigationBar(with: viewController)
             NotificationCenter.default.post(name: .moduleItemViewDidLoad, object: nil, userInfo: [

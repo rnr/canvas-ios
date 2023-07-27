@@ -831,6 +831,8 @@
 		BA18C1C429DC426300090221 /* NotConnectionBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA18C1C329DC426300090221 /* NotConnectionBarView.swift */; };
 		BA1FBACE2A41C9020005E70A /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1FBACD2A41C9020005E70A /* Log.swift */; };
 		BA1FBAD02A4342010005E70A /* DownloadsContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1FBACF2A4342010005E70A /* DownloadsContentViewModel.swift */; };
+		BA26BAD62A72745300BDDFC0 /* DownloadableItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA26BAD52A72745300BDDFC0 /* DownloadableItems.swift */; };
+		BA26BAD82A72B5D100BDDFC0 /* LoadingDarkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA26BAD72A72B5D100BDDFC0 /* LoadingDarkView.swift */; };
 		BA3076462A388BF200A7617B /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA3076452A388BF200A7617B /* String+Extensions.swift */; };
 		BA3076482A38910F00A7617B /* DownloadsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA3076472A38910F00A7617B /* DownloadsHelper.swift */; };
 		BA3D51E229D4465B0011A14A /* Injected.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA3D51DA29D4465A0011A14A /* Injected.swift */; };
@@ -2473,6 +2475,8 @@
 		BA18C1C329DC426300090221 /* NotConnectionBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotConnectionBarView.swift; sourceTree = "<group>"; };
 		BA1FBACD2A41C9020005E70A /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		BA1FBACF2A4342010005E70A /* DownloadsContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsContentViewModel.swift; sourceTree = "<group>"; };
+		BA26BAD52A72745300BDDFC0 /* DownloadableItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadableItems.swift; sourceTree = "<group>"; };
+		BA26BAD72A72B5D100BDDFC0 /* LoadingDarkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingDarkView.swift; sourceTree = "<group>"; };
 		BA3076452A388BF200A7617B /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		BA3076472A38910F00A7617B /* DownloadsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsHelper.swift; sourceTree = "<group>"; };
 		BA3D51DA29D4465A0011A14A /* Injected.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Injected.swift; sourceTree = "<group>"; };
@@ -3102,6 +3106,7 @@
 				BAF659262A5EDC5100C767DC /* ImageDownloader.swift */,
 				BAF6592B2A657FC300C767DC /* DownloadStatusProvider.swift */,
 				BAD547ED2A700CAB005C49B8 /* DownloadNotifier.swift */,
+				BA26BAD52A72745300BDDFC0 /* DownloadableItems.swift */,
 			);
 			path = DownloaderClient;
 			sourceTree = "<group>";
@@ -5072,6 +5077,7 @@
 				BA5D83BD29DADE9200150235 /* LoadingView.swift */,
 				BA9341322A2F80180004060D /* DownloadsContentList.swift */,
 				BA9DDB5C2A29F9F500E446D3 /* SUWebView */,
+				BA26BAD72A72B5D100BDDFC0 /* LoadingDarkView.swift */,
 			);
 			path = SwiftUIVIews;
 			sourceTree = "<group>";
@@ -8613,6 +8619,7 @@
 				CFCE214C2656895E00E3B32A /* Bounds.swift in Sources */,
 				7DA25FDA23F72148005D2121 /* Keychain.swift in Sources */,
 				CF6F91CC28929416009F147E /* AssignmentPickerListService.swift in Sources */,
+				BA26BAD62A72745300BDDFC0 /* DownloadableItems.swift in Sources */,
 				7DA2609323F72315005D2121 /* UserProfile.swift in Sources */,
 				BA4B23D329D335560035D918 /* DownloadsView.swift in Sources */,
 				7DA260FE23F773D9005D2121 /* PlannerListViewController.swift in Sources */,
@@ -8900,6 +8907,7 @@
 				CF490F29285742430065D242 /* AnnotationExtensions.swift in Sources */,
 				EB75D49627903BA600AA273C /* K5ImportantDatesViewModel.swift in Sources */,
 				7DA25FF623F72268005D2121 /* CommentListViewController.swift in Sources */,
+				BA26BAD82A72B5D100BDDFC0 /* LoadingDarkView.swift in Sources */,
 				7DA25FB023F72136005D2121 /* APIExternalTool.swift in Sources */,
 				7DA2608F23F72315005D2121 /* HelpLink.swift in Sources */,
 				7DA260ED23F7235F005D2121 /* WrongAppViewController.swift in Sources */,

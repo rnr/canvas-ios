@@ -31,6 +31,7 @@ final class DownloaderViewModel: ObservableObject {
 
     @Published var downloadingModules: [DownloadsModuleCellViewModel] = []
     @Published var error: String = ""
+    @Published var deleting: Bool = false
     private var cancellables: [AnyCancellable] = []
 
     init(downloadingModules: [DownloadsModuleCellViewModel]) {
@@ -43,11 +44,15 @@ final class DownloaderViewModel: ObservableObject {
     func pauseResume() {}
 
     func deleteAll() {
-        do {
-            try downloadsManager.deleteDownloadingEntries()
-            downloadingModules = []
-        } catch {
-            self.error = error.localizedDescription
+        deleting = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            do {
+                try self.downloadsManager.deleteDownloadingEntries()
+                self.downloadingModules = []
+            } catch {
+                self.error = error.localizedDescription
+            }
+            self.deleting = false
         }
     }
 
