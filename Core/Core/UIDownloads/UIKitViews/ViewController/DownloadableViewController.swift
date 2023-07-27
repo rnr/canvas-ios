@@ -149,15 +149,15 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
                 }
             }
 
-        downloadsManager.eventObject(for: downloadableItem.object) { result in
+        downloadsManager.eventObject(for: downloadableItem.object) { [weak self] result in
             DispatchQueue.main.async {
-                result.success { [weak self] event in
+                result.success { event in
                     self?.statusChanged(event)
                 }
-                result.failure { [weak self] _ in
+                result.failure { _ in
                     self?.downloadButton.currentState = .idle
                 }
-                self.downloadButton.isHidden = false
+                self?.downloadButton.isHidden = false
             }
         }
     }

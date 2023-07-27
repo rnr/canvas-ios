@@ -41,7 +41,7 @@ public struct DownloadableItem {
     }
 }
 
-protocol DownloadableItems {
+protocol DownloadableItems: UIViewController {
     func subscribe(
         detailViewController: DownloadableViewController,
         assetType: GetModuleItemSequenceRequest.AssetType
@@ -69,7 +69,7 @@ extension DownloadableItems {
         assetType: GetModuleItemSequenceRequest.AssetType,
         completion: @escaping ((DownloadableItem) -> Void)
     ) {
-        moduleDetail.onEmbedContainer = { [weak moduleDetail] vc in
+        moduleDetail.onEmbedContainer = { [weak moduleDetail, weak self] vc in
             if assetType == .page, let detailPage = vc as? PageDetailsViewController {
                 detailPage.updated = { page, course in
                     guard let url = page.htmlURL  else {
@@ -86,12 +86,12 @@ extension DownloadableItems {
                     completion(item)
                 }
             } else if assetType == .moduleItem {
-                moduleDetail.flatMap {
-                    create(moduleDetail: $0, completion: completion)
+                if let moduleDetail = moduleDetail {
+                    self?.create(moduleDetail: moduleDetail, completion: completion)
                 }
             } else if vc is LTIViewController {
-                moduleDetail.flatMap {
-                    create(moduleDetail: $0, completion: completion)
+                if let moduleDetail = moduleDetail {
+                    self?.create(moduleDetail: moduleDetail, completion: completion)
                 }
             }
         }
