@@ -301,7 +301,6 @@
 		2FF73F8ADD6B519749A2B4EC /* DiscussionDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D216096E1F65E2A59B10896D /* DiscussionDetailsViewController.swift */; };
 		304585FFAF87E0963AC01B1A /* TypeSafeCodableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 562A0E1BA178E4D5780B67CD /* TypeSafeCodableTests.swift */; };
 		30BD8417CCF44CD155156400 /* K5DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28F48CD2C4DC6C13761C9F9 /* K5DashboardView.swift */; };
-		30C7D52FC1E5E321063EA932 /* mobile-offline-downloader-ios in Frameworks */ = {isa = PBXBuildFile; productRef = 0D03BCC4E71170051271FA52 /* mobile-offline-downloader-ios */; };
 		30DB441AB62A03139E9680F7 /* K5ResourcesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E957D065AF0E3D1295B9F40 /* K5ResourcesView.swift */; };
 		310C4045ACE1E23F3E91779B /* ComposeBatchUpload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786C013FED907B33E80DF4B0 /* ComposeBatchUpload.swift */; };
 		31B63EB379993E2E9299B4D5 /* ConversationParticipant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A938C507337C7A77C47494D /* ConversationParticipant.swift */; };
@@ -1041,6 +1040,7 @@
 		A52DD3FE31F0D22A7653EA69 /* RichContentEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059C04AF01A45E8B17C56177 /* RichContentEditorViewController.swift */; };
 		A56E37992A72CC4200DADE4D /* DownloadableItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56E37982A72CC4200DADE4D /* DownloadableItems.swift */; };
 		A56E379B2A72CC9C00DADE4D /* LoadingDarkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56E379A2A72CC9C00DADE4D /* LoadingDarkView.swift */; };
+		A58731C82A73F4F50028916E /* mobile-offline-downloader-ios in Frameworks */ = {isa = PBXBuildFile; productRef = A58731C72A73F4F50028916E /* mobile-offline-downloader-ios */; };
 		A5959DA96F69FA53D44D345B /* ComposeViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85D0E3FC18C36A8077C654DD /* ComposeViewController.storyboard */; };
 		A595C76ACB992B4367498A96 /* FileSubmissionErrorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216A59538283224E9F555B27 /* FileSubmissionErrorsTests.swift */; };
 		A5CEB0CE792C299DA75F6D44 /* PreviewStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B251845DF66CF32D328FF75 /* PreviewStore.swift */; };
@@ -2885,6 +2885,7 @@
 		A56E379A2A72CC9C00DADE4D /* LoadingDarkView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingDarkView.swift; sourceTree = "<group>"; };
 		A571497F76E9694BCC7A70D8 /* DynamicLabelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicLabelTests.swift; sourceTree = "<group>"; };
 		A59435E04AD83E555BDE51AE /* NSManagedObjectContextExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSManagedObjectContextExtensions.swift; sourceTree = "<group>"; };
+		A59DD1252A73F4B100F554E9 /* mobile-offline-downloader-ios */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "mobile-offline-downloader-ios"; path = "../mobile-offline-downloader-ios"; sourceTree = "<group>"; };
 		A61580548942CC239D28BAC5 /* PeopleListViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleListViewControllerTests.swift; sourceTree = "<group>"; };
 		A62284448F06E5517B5E4864 /* CourseSyncSelectorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseSyncSelectorViewModel.swift; sourceTree = "<group>"; };
 		A636EC448C789BE602EB0940 /* MessageDetailsAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageDetailsAssembly.swift; sourceTree = "<group>"; };
@@ -3497,7 +3498,7 @@
 				25C534647B7B805047B8E0C3 /* Lottie in Frameworks */,
 				0AC02ED0AAB62CEEF21FAACA /* PSPDFKit in Frameworks */,
 				AF3D4F61CDFF74B5749B35F1 /* CombineReachability in Frameworks */,
-				30C7D52FC1E5E321063EA932 /* mobile-offline-downloader-ios in Frameworks */,
+				A58731C82A73F4F50028916E /* mobile-offline-downloader-ios in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5644,11 +5645,13 @@
 		62824534F75515F48E8114A7 = {
 			isa = PBXGroup;
 			children = (
+				A59DD1242A73F30E00F554E9 /* Packages */,
 				FB1D9B989FD980296A1BCE7F /* Core */,
 				D6DA07AD8D44A6BE9FB7A57A /* CoreTester */,
 				9737837A3A471DE4E30BC35B /* CoreTests */,
 				250C62EE12DB56ECEBB473C3 /* Products */,
 				86FCAF8C0765226E13BD7339 /* Projects */,
+				A58731C62A73F4F50028916E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -7155,6 +7158,21 @@
 				DFD8A89E08CC0FE622C25E3C /* GetQuizSubmissionUsersTests.swift */,
 			);
 			path = QuizSubmissionList;
+			sourceTree = "<group>";
+		};
+		A58731C62A73F4F50028916E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A59DD1242A73F30E00F554E9 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				A59DD1252A73F4B100F554E9 /* mobile-offline-downloader-ios */,
+			);
+			name = Packages;
 			sourceTree = "<group>";
 		};
 		A643C917DBEF19BF0C2D6093 /* View */ = {
@@ -8950,7 +8968,7 @@
 				D784E9A4895EC777BDAD4BAD /* Lottie */,
 				8C5ECF283C56CEE5DC624958 /* PSPDFKit */,
 				06824168802A23727C271167 /* CombineReachability */,
-				0D03BCC4E71170051271FA52 /* mobile-offline-downloader-ios */,
+				A58731C72A73F4F50028916E /* mobile-offline-downloader-ios */,
 			);
 			productName = Core;
 			productReference = 4E249DD6423E938E1DE581C9 /* Core.framework */;
@@ -9027,7 +9045,6 @@
 				0123E127313854C775556360 /* XCRemoteSwiftPackageReference "combine-schedulers" */,
 				120AFC94F64412AA3A0FC3A7 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				C0C21C0C6F0179DCECB057F3 /* XCRemoteSwiftPackageReference "PSPDFKit-SP" */,
-				4EE212C9CDC0BA5982FDF373 /* XCRemoteSwiftPackageReference "mobile-offline-downloader-ios" */,
 			);
 			projectDirPath = "";
 			projectReferences = (
@@ -11292,14 +11309,6 @@
 				kind = branch;
 			};
 		};
-		4EE212C9CDC0BA5982FDF373 /* XCRemoteSwiftPackageReference "mobile-offline-downloader-ios" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/2uinc/mobile-offline-downloader-ios.git";
-			requirement = {
-				branch = "feat/pause-resume";
-				kind = branch;
-			};
-		};
 		C0C21C0C6F0179DCECB057F3 /* XCRemoteSwiftPackageReference "PSPDFKit-SP" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/PSPDFKit/PSPDFKit-SP";
@@ -11324,11 +11333,6 @@
 			package = 4EA524DFC5519849A16211D0 /* XCRemoteSwiftPackageReference "CombineReachability" */;
 			productName = CombineReachability;
 		};
-		0D03BCC4E71170051271FA52 /* mobile-offline-downloader-ios */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 4EE212C9CDC0BA5982FDF373 /* XCRemoteSwiftPackageReference "mobile-offline-downloader-ios" */;
-			productName = "mobile-offline-downloader-ios";
-		};
 		2373F3530A3FD2B901730D89 /* CombineExt */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = FCD1D04FD946BB6C6C264E50 /* XCRemoteSwiftPackageReference "CombineExt" */;
@@ -11338,6 +11342,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C0C21C0C6F0179DCECB057F3 /* XCRemoteSwiftPackageReference "PSPDFKit-SP" */;
 			productName = PSPDFKit;
+		};
+		A58731C72A73F4F50028916E /* mobile-offline-downloader-ios */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = "mobile-offline-downloader-ios";
 		};
 		B0C68AEA835B4F8582A30B43 /* CombineSchedulers */ = {
 			isa = XCSwiftPackageProductDependency;

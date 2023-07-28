@@ -48,7 +48,7 @@
     {
       "identity" : "combinereachability",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/istvan-kreisz/CombineReachability.git",
+      "location" : "git@github.com:istvan-kreisz/CombineReachability.git",
       "state" : {
         "branch" : "master",
         "revision" : "ba1cb2adeb111ee3ce475404ca1cdfb322505281"
@@ -133,15 +133,6 @@
       "state" : {
         "revision" : "b4bd0604ded9574807f41b4004b57dd1226a30a4",
         "version" : "3.5.0"
-      }
-    },
-    {
-      "identity" : "mobile-offline-downloader-ios",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/2uinc/mobile-offline-downloader-ios.git",
-      "state" : {
-        "branch" : "feat/pause-resume",
-        "revision" : "964a27af31168c70d72fa1dbf08bb098ab267716"
       }
     },
     {
