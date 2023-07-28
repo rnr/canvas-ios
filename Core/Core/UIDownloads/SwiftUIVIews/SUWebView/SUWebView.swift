@@ -6,8 +6,8 @@ public struct SUWebView: View {
     // MARK: - Properties -
 
     var configurator: WebViewConfigurator
-
     @State private var isContentLoaded: Bool = false
+    var onLinkActivated: ((URL) -> Void)?
 
     // MARK: - Lifecycle -
 
@@ -28,7 +28,8 @@ public struct SUWebView: View {
     private var webViewRepresentable: some View {
         SUWebViewRepresentable(
             configurator: configurator,
-            onLoaded: $isContentLoaded
+            onLoaded: $isContentLoaded,
+            onLinkActivated: onLinkActivated
         )
     }
 }

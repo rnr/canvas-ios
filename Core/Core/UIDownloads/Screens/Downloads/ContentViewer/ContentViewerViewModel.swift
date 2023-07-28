@@ -28,6 +28,17 @@ public class ContentViewerViewModel: ObservableObject {
         self.onDeleted = onDeleted
     }
 
+    var title: String {
+        if let page = try? Page.fromOfflineModel(entry.dataModel) {
+            return page.title
+        }
+        if let moduleItem = try? ModuleItem.fromOfflineModel(entry.dataModel) {
+            return moduleItem.title
+        }
+        return ""
+    }
+
+
     var requestType: WebViewConfigurator.RequestType? {
         let value = OfflineDownloadsManager.shared.savedValue(for: entry, pageIndex: .zero)
         switch value {

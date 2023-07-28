@@ -26,8 +26,8 @@ extension ModuleItemCell {
         }
         let downloadButton = addDownloadButton()
         let canDonwload = downloadButtonHelper.canDownload(object: item)
-        downloadButton.isHidden = !canDonwload
-        guard canDonwload else {
+        downloadButton.isHidden = !canDonwload || !reachability.isConnected
+        guard !downloadButton.isHidden else {
             return
         }
         let userInfo = item.htmlURL?.changeScheme("ModuleItem")?.absoluteString ?? "ModuleItem://site.com/courses/\(course.id)/modules"

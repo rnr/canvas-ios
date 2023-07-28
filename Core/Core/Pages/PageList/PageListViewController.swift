@@ -17,8 +17,13 @@
 //
 
 import UIKit
+import Combine
 
 public class PageListViewController: ScreenViewTrackableViewController, ColoredNavViewProtocol {
+
+    @Injected(\.reachability) var reachability: ReachabilityProvider
+    private var cancellables: [AnyCancellable] = []
+
     @IBOutlet weak var emptyMessageLabel: UILabel!
     @IBOutlet weak var emptyTitleLabel: UILabel!
     @IBOutlet weak var emptyView: UIView!
@@ -92,6 +97,8 @@ public class PageListViewController: ScreenViewTrackableViewController, ColoredN
         NotificationCenter.default.addObserver(self, selector: #selector(pageCreated), name: Notification.Name("page-created"), object: nil)
 
         tableView.registerCell(DownloadPageListTableViewCell.self)
+
+        connection()
     }
 
     public override func viewWillAppear(_ animated: Bool) {
@@ -221,6 +228,17 @@ extension PageListViewController: UITableViewDataSource, UITableViewDelegate {
         } else {
             return UITableView.automaticDimension
         }
+    }
+}
+
+extension PageListViewController {
+    func connection() {
+        reachability.newtorkReachabilityPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isConnected in
+                self?.tableView.reloadData()
+            }
+            .store(in: &cancellables)
     }
 }
 

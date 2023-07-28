@@ -7,6 +7,7 @@ public struct SUWebViewRepresentable: UIViewRepresentable {
     var isToolbarVisible: Bool = false
 
     @Binding var onLoaded: Bool
+    var onLinkActivated: ((URL) -> Void)?
 
     public func makeUIView(context: Self.Context) -> SUToolbarWebView {
         let webView = SUToolbarWebView(
@@ -52,6 +53,9 @@ public struct SUWebViewRepresentable: UIViewRepresentable {
         coordinator.onLoaded = { onLoaded in
             self.onLoaded = onLoaded
         }
+        coordinator.onLinkActivated = { action in
+            self.onLinkActivated?(action)
+        }
         return coordinator
     }
 }
@@ -63,6 +67,7 @@ extension SUWebViewRepresentable {
         var previousRequest: URLRequest?
         var previousURL: URL?
         var onLoaded: LoadedClouser?
+        var onLinkActivated: ((URL) -> Void)?
 
         public func webView(
             _ webView: WKWebView,
@@ -85,6 +90,20 @@ extension SUWebViewRepresentable {
                     self.onLoaded?(true)
                 }
             }
+        }
+
+        public func webView(
+            _ webView: WKWebView,
+            decidePolicyFor navigationAction: WKNavigationAction,
+            decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
+        ) {
+            if navigationAction.navigationType == .linkActivated,
+               let url = navigationAction.request.url {
+                onLinkActivated?(url)
+                decisionHandler(.cancel)
+                return
+            }
+            decisionHandler(.allow)
         }
     }
 }

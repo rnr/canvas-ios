@@ -29,7 +29,7 @@ public struct DownloadsCourseDetailsCellView: View {
     public var body: some View {
         VStack(spacing: .zero) {
             HStack(spacing: 12) {
-                Image(uiImage: .documentLine)
+                image
                     .frame(width: 20, height: 20)
                     .foregroundColor(Color(categoryViewModel.courseColor))
                 VStack(alignment: .leading) {
@@ -45,6 +45,16 @@ public struct DownloadsCourseDetailsCellView: View {
             .contentShape(Rectangle())
             .frame(height: 54)
             Divider()
+        }
+    }
+
+    @ViewBuilder
+    var image: some View {
+        switch categoryViewModel.contentType {
+        case .modules:
+            Image.moduleLine
+        case .pages:
+            Image.documentLine
         }
     }
 }

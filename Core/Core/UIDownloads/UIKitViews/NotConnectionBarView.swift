@@ -46,12 +46,7 @@ public class NotConnectionBarView: UIView {
         reachability.newtorkReachabilityPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] isConnected in
-                guard let self = self else {
-                    return
-                }
-                DispatchQueue.main.async {
-                    self.isHidden = isConnected
-                }
+                self?.isHidden = isConnected
             }
             .store(in: &cancellables)
     }

@@ -24,6 +24,8 @@ final class DownloadsViewModel: ObservableObject {
 
     // MARK: - Injected -
 
+    @Injected(\.reachability) var reachability: ReachabilityProvider
+
     private var storageManager: OfflineStorageManager = .shared
     private var downloadsManager: OfflineDownloadsManager = .shared
 
@@ -67,8 +69,7 @@ final class DownloadsViewModel: ObservableObject {
     @Published var isEmpty: Bool = false
 
     init() {
-        fetch()
-        observeDownloadsEvents()
+        configure()
     }
 
     // MARK: - Intents -
@@ -185,6 +186,12 @@ final class DownloadsViewModel: ObservableObject {
 
     // MARK: - Private methods -
 
+    private func configure() {
+        fetch()
+        isConnected = reachability.isConnected
+        addObservers()
+    }
+
     private func fetchEntries(
         courseDataModel: CourseStorageDataModel,
         completion: @escaping () -> Void
@@ -213,7 +220,7 @@ final class DownloadsViewModel: ObservableObject {
         }
     }
 
-    private func observeDownloadsEvents() {
+    private func addObservers() {
         downloadsManager
             .publisher
             .sink { [weak self] event in
@@ -223,6 +230,13 @@ final class DownloadsViewModel: ObservableObject {
                 case .progressChanged:
                     break
                 }
+            }
+            .store(in: &cancellables)
+        
+        reachability.newtorkReachabilityPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isConnected in
+                self?.isConnected = isConnected
             }
             .store(in: &cancellables)
     }

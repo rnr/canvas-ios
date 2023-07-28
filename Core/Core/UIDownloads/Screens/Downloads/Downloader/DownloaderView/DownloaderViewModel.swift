@@ -22,7 +22,9 @@ import mobile_offline_downloader_ios
 
 final class DownloaderViewModel: ObservableObject {
 
-    // MARK: - Injections -
+    // MARK: - Injection -
+
+    @Injected(\.reachability) var reachability: ReachabilityProvider
 
     private var storageManager: OfflineStorageManager = .shared
     private var downloadsManager: OfflineDownloadsManager = .shared
@@ -32,14 +34,20 @@ final class DownloaderViewModel: ObservableObject {
     @Published var downloadingModules: [DownloadsModuleCellViewModel] = []
     @Published var error: String = ""
     @Published var deleting: Bool = false
+    @Published var isConnected: Bool = true
     private var cancellables: [AnyCancellable] = []
 
     init(downloadingModules: [DownloadsModuleCellViewModel]) {
         self.downloadingModules = downloadingModules
-        observeDownloadsEvents()
+        configure()
     }
 
     // MARK: - Intents -
+
+    func configure() {
+        isConnected = reachability.isConnected
+        addObservers()
+    }
 
     func pauseResume() {}
 
@@ -68,7 +76,7 @@ final class DownloaderViewModel: ObservableObject {
         }
     }
 
-    private func observeDownloadsEvents() {
+    private func addObservers() {
         downloadsManager
             .publisher
             .sink { [weak self] event in
@@ -78,6 +86,13 @@ final class DownloaderViewModel: ObservableObject {
                 case .progressChanged:
                     break
                 }
+            }
+            .store(in: &cancellables)
+
+        reachability.newtorkReachabilityPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isConnected in
+                self?.isConnected = isConnected
             }
             .store(in: &cancellables)
     }

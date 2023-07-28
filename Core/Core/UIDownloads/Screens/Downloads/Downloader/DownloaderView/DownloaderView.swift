@@ -79,6 +79,11 @@ struct DownloaderView: View, Navigatable {
             )
             viewModel.error = ""
         }
+        .onChange(of: viewModel.isConnected) { isConnected in
+            if !isConnected {
+                presentationMode.wrappedValue.dismiss()
+            }
+        }
     }
 
     private var deleteAllButton: some View {

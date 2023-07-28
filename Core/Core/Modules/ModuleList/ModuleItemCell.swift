@@ -23,6 +23,8 @@ import Combine
 class ModuleItemCell: UITableViewCell {
     static let IndentMultiplier: CGFloat = 10
 
+    @Injected(\.reachability) var reachability: ReachabilityProvider
+
     @IBOutlet weak var hStackView: UIStackView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var dueLabel: UILabel!

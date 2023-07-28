@@ -100,36 +100,42 @@ public struct DownloadsView: View, Navigatable {
     private var list: some View {
         List {
             if !viewModel.downloadingModules.isEmpty {
-                if viewModel.downloadingModules.count > 3 {
-                    LinkDownloadingHeader(
-                        destination: DownloaderView(
-                            downloadingModules: viewModel.downloadingModules
-                        ),
-                        title: "Downloading"
-                    )
-                } else {
-                    Header(title: "Downloading")
-                }
                 modules
+                    .isHidden(!viewModel.isConnected)
             }
-            Header(title: "Courses")
-                .hidden(viewModel.courseViewModels.isEmpty )
             courses
+                .isHidden(viewModel.courseViewModels.isEmpty)
         }
         .listStyle(.inset)
         .background(Color.backgroundLightest.ignoresSafeArea())
     }
 
     private var modules: some View {
-        DownloadProgressSectionView(viewModel: viewModel)
-            .listRowInsets(EdgeInsets())
-            .listRowSeparator(.hidden)
+        SwiftUI.Group {
+            if viewModel.downloadingModules.count > 3 {
+                LinkDownloadingHeader(
+                    destination: DownloaderView(
+                        downloadingModules: viewModel.downloadingModules
+                    ),
+                    title: "Downloading"
+                )
+            } else {
+                Header(title: "Downloading")
+
+            }
+            DownloadProgressSectionView(viewModel: viewModel)
+                .listRowInsets(EdgeInsets())
+                .listRowSeparator(.hidden)
+        }
     }
 
     private var courses: some View {
-        DownloadCoursesSectionView(viewModel: viewModel)
-            .listRowInsets(EdgeInsets())
-            .listRowSeparator(.hidden)
+        SwiftUI.Group {
+            Header(title: "Courses")
+            DownloadCoursesSectionView(viewModel: viewModel)
+                .listRowInsets(EdgeInsets())
+                .listRowSeparator(.hidden)
+        }
     }
 
     private var deleteAllButton: some View {
