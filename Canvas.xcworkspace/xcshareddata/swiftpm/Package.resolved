@@ -136,15 +136,6 @@
       }
     },
     {
-      "identity" : "mobile-offline-downloader-ios",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/2uinc/mobile-offline-downloader-ios.git",
-      "state" : {
-        "branch" : "feat/pause-resume",
-        "revision" : "964a27af31168c70d72fa1dbf08bb098ab267716"
-      }
-    },
-    {
       "identity" : "nanopb",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/nanopb.git",
