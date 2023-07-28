@@ -32,6 +32,6 @@ struct Header: View {
         .padding(.horizontal, 16)
         .listRowInsets(EdgeInsets())
         .buttonStyle(PlainButtonStyle())
-        .iOS15ListRowSeparator(.hidden)
+        .listRowSeparator(.hidden)
     }
 }

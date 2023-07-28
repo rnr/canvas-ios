@@ -24,6 +24,7 @@ public class TestRouter: Router {
         super.init(routes: []) { _, _, _, _ in }
     }
     public var calls = [(URLComponents?, UIViewController, RouteOptions)]()
+    /// (presented, source, options)
     public var viewControllerCalls = [(UIViewController, UIViewController, RouteOptions)]()
     public var presented: UIViewController? {
         if viewControllerCalls.last?.2.isModal == true {
@@ -31,6 +32,11 @@ public class TestRouter: Router {
         }
         return nil
     }
+
+    public var lastViewController: UIViewController? {
+        viewControllerCalls.last?.0
+    }
+
     public var dismissed: UIViewController?
     public var last: UIViewController? { viewControllerCalls.last?.0 }
     public var routes = [URLComponents: () -> UIViewController?]()

@@ -80,6 +80,7 @@ public struct APIQuizSubmission: Codable {
     let finished_at: Date?
     let id: ID
     let quiz_id: ID
+    let score: Double?
     let started_at: Date?
     let submission_id: ID
     let user_id: ID
@@ -92,7 +93,6 @@ public struct APIQuizSubmission: Codable {
     // let manually_unlocked: Bool
     // let overdue_and_needs_submission: Bool
     // let score_before_regrade: Double?
-    // let score: Double?
     // let time_spent: TimeInterval?
 }
 
@@ -253,6 +253,7 @@ extension APIQuizSubmission {
         finished_at: Date? = nil,
         id: ID = "1",
         quiz_id: ID = "1",
+        score: Double? = nil,
         started_at: Date? = nil,
         submission_id: ID = "1",
         user_id: ID = "1",
@@ -267,6 +268,7 @@ extension APIQuizSubmission {
             finished_at: finished_at,
             id: id,
             quiz_id: quiz_id,
+            score: score,
             started_at: started_at,
             submission_id: submission_id,
             user_id: user_id,
@@ -443,4 +445,49 @@ struct PostQuizSubmissionCompleteRequest: APIRequestable {
     }
 
     let method = APIMethod.post
+}
+
+struct APIQuizParameters: Codable, Equatable {
+    let access_code: String?
+    let allowed_attempts: Int?
+    let assignment_group_id: String?
+    let cant_go_back: Bool?
+    let description: String?
+    let one_question_at_a_time: Bool?
+    let published: Bool?
+    let quiz_type: QuizType?
+    let scoring_policy: ScoringPolicy?
+    let shuffle_answers: Bool?
+    let time_limit: Double?
+    let title: String?
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(access_code, forKey: .access_code) // encode null to unset
+        try container.encodeIfPresent(allowed_attempts, forKey: .allowed_attempts)
+        try container.encodeIfPresent(assignment_group_id, forKey: .assignment_group_id)
+        try container.encodeIfPresent(cant_go_back, forKey: .cant_go_back)
+        try container.encodeIfPresent(description, forKey: .description)
+        try container.encodeIfPresent(one_question_at_a_time, forKey: .one_question_at_a_time)
+        try container.encodeIfPresent(published, forKey: .published)
+        try container.encodeIfPresent(quiz_type, forKey: .quiz_type)
+        try container.encodeIfPresent(scoring_policy, forKey: .scoring_policy)
+        try container.encodeIfPresent(shuffle_answers, forKey: .shuffle_answers)
+        try container.encode(time_limit, forKey: .time_limit) // encode null to unset
+        try container.encodeIfPresent(title, forKey: .title)
+    }
+}
+
+// https://canvas.instructure.com/doc/api/quizzes.html#method.quizzes/quizzes_api.update
+struct PutQuizRequest: APIRequestable {
+    typealias Response = APINoContent
+    struct Body: Codable, Equatable {
+        let quiz: APIQuizParameters
+    }
+    let courseID: String
+    let quizID: String
+
+    var method: APIMethod { .put }
+    var path: String { "courses/\(courseID)/quizzes/\(quizID)" }
+    let body: Body?
 }

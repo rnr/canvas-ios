@@ -39,6 +39,7 @@ public struct InboxView: View {
                         switch model.state {
                         case .data:
                             messagesList
+                                .listRowBackground(SwiftUI.EmptyView())
                             nextPageLoadingIndicator(geometry: geometry)
                                 .onAppear {
                                     model.contentDidScrollToBottom.send()
@@ -51,8 +52,12 @@ public struct InboxView: View {
                             SwiftUI.EmptyView()
                         }
                     }
-                    .iOS15Refreshable { completion in
-                        model.refreshDidTrigger.send(completion)
+                    .refreshable {
+                        await withCheckedContinuation { continuation in
+                            model.refreshDidTrigger.send {
+                                continuation.resume()
+                            }
+                        }
                     }
                     .listStyle(PlainListStyle())
                     .animation(.default, value: model.messages)
@@ -66,17 +71,19 @@ public struct InboxView: View {
     private var messagesList: some View {
         ForEach(model.messages) { message in
             VStack(spacing: 0) {
-                InboxMessageView(model: message)
+                InboxMessageView(model: message, cellDidTap: { messageID in
+                    model.messageDidTap.send((messageID: messageID, controller: controller))
+                })
                 Color.borderMedium
                     .frame(height: 0.5)
                     .overlay(Color.backgroundLightest.frame(width: 64), alignment: .leading)
             }
             .listRowInsets(EdgeInsets())
-            .iOS15ListRowSeparator(.hidden)
-            .iOS15SwipeActions(edge: .trailing) {
+            .listRowSeparator(.hidden)
+            .swipeActions(edge: .trailing) {
                 archiveButton(message: message)
             }
-            .iOS15SwipeActions(edge: .leading) {
+            .swipeActions(edge: .leading) {
                 readStatusToggleButton(message: message)
             }
         }
@@ -97,7 +104,7 @@ public struct InboxView: View {
                 }
                 .labelStyle(.iconOnly)
             }
-            .iOS15Tint(.ash)
+            .tint(.ash)
         } else {
             SwiftUI.EmptyView()
         }
@@ -122,7 +129,7 @@ public struct InboxView: View {
             }
             .labelStyle(.iconOnly)
         }
-        .iOS15Tint(.electric)
+        .tint(.electric)
     }
 
     private var loadingIndicator: some View {
@@ -131,7 +138,7 @@ public struct InboxView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .accentColor(Color(Brand.shared.primary))
             .listRowInsets(EdgeInsets())
-            .iOS15ListRowSeparator(.hidden)
+            .listRowSeparator(.hidden)
     }
 
     private func panda(geometry: GeometryProxy,
@@ -147,7 +154,7 @@ public struct InboxView: View {
                    alignment: .center)
             .background(Color.backgroundLightest)
             .listRowInsets(EdgeInsets())
-            .iOS15ListRowSeparator(.hidden)
+            .listRowSeparator(.hidden)
     }
 
     private var menuButton: some View {
@@ -171,7 +178,7 @@ public struct InboxView: View {
                 .frame(height: 44)
                 .frame(maxWidth: .infinity)
                 .accentColor(Color(Brand.shared.primary))
-                .iOS15ListRowSeparator(.hidden)
+                .listRowSeparator(.hidden)
                 .background(Color.backgroundLightest)
         }
     }
@@ -186,11 +193,9 @@ struct InboxView_Previews: PreviewProvider {
     static var previews: some View {
         InboxAssembly.makePreview(environment: env,
                                   messages: .make(count: 5, in: context))
-            .previewLayout(.sizeThatFits)
 
         InboxAssembly.makePreview(environment: env,
                                   messages: [])
-            .previewLayout(.sizeThatFits)
             .previewDisplayName("Empty State")
     }
 }

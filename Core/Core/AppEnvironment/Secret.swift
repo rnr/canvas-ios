@@ -28,6 +28,9 @@ public enum Secret {
     /// The value passed to `PSPDFKit.setLicenseKey`
     case studentPSPDFKitLicense, teacherPSPDFKitLicense
 
+    /// AWS keys values
+    case awsAccessKey, awsSecretKey, appArnTemplate
+
     /// The value passed to `Heap.initialize`
     case heapID
 

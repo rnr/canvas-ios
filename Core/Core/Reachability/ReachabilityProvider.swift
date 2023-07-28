@@ -60,6 +60,4 @@ public final class ReachabilityProvider: ObservableObject {
             }
             .store(in: &cancellables)
     }
-
-
 }

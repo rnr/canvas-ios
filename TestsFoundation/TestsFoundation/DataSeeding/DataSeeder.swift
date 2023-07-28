@@ -20,7 +20,7 @@ import Core
 
 public class DataSeeder {
     public struct Retry {
-        public static let standard = Retry(count: 10, gracePeriod: 2)
+        public static let standard = Retry(count: 10, gracePeriod: 6)
 
         /** The number of times the request to be retried in case of a failure. The total API call count will be 1 + `count`. */
         public let count: Int
@@ -30,7 +30,7 @@ public class DataSeeder {
 
     private let api: API
 
-    public init() {
+    public init(api: API? = nil) {
         let loginSession: LoginSession = {
             let dataSeedUser = UITestUser.dataSeedAdmin
             return LoginSession(accessToken: dataSeedUser.password,
@@ -38,11 +38,11 @@ public class DataSeeder {
                                 userID: "",
                                 userName: "")
         }()
-        self.api = API(loginSession)
+        self.api = api ?? API(loginSession)
     }
 
     @discardableResult
-    public func makeRequest<Request: APIRequestable>(_ requestable: Request, retry: Retry? = nil) throws -> Request.Response {
+    public func makeRequest<Request: APIRequestable>(_ requestable: Request, retry: Retry? = nil) -> Request.Response {
         let requestCount: Int =  {
             guard let retry = retry else {
                 return 1
@@ -69,7 +69,10 @@ public class DataSeeder {
             }
         }
 
-        throw result?.error ?? NSError.instructureError("API call failed")
+        XCTFail(result?.error?.localizedDescription ?? "API call failed")
+
+        // Next line never runs because the above one fails the test
+        return 0 as! Request.Response
     }
 
     private func request<Request: APIRequestable>(_ requestable: Request) -> (entity: Request.Response?, urlResponse: URLResponse?, error: Error?) {

@@ -54,9 +54,16 @@ let router = Router(routes: HelmManager.shared.routeHandlers([
 
     "/conversations": nil,
     "/conversations/compose": nil,
-    "/conversations/:conversationID": nil,
+    "/conversations/:conversationID": { url, params, userInfo in
+        if ExperimentalFeature.nativeStudentInbox.isEnabled {
+            guard let conversationID = params["conversationID"] else { return nil }
+            return MessageDetailsAssembly.makeViewController(env: AppEnvironment.shared, conversationID: conversationID)
+        } else {
+            return HelmViewController(moduleName: "/conversations/:conversationID", url: url, params: params, userInfo: userInfo)
+        }
+    },
 
-    "/courses": { _, _, _ in CoreHostingController(CourseListView()) },
+    "/courses": { _, _, _ in CourseListAssembly.makeCourseListViewController() },
 
     "/courses/:courseID": courseDetails,
     "/courses/:courseID/tabs": courseDetails,
@@ -339,9 +346,9 @@ let router = Router(routes: HelmManager.shared.routeHandlers([
     "/courses/:courseID/users/:userID": contextCard,
     "/groups/:groupID/users/:userID": groupContextCard,
 
-    "/courses/:courseID/user_preferences": nil,
-
-    "/dev-menu": nil,
+    "/dev-menu": { _, _, _ in
+        CoreHostingController(DeveloperMenuView())
+    },
 
     "/dev-menu/experimental-features": { _, _, _ in
         let vc = ExperimentalFeaturesViewController()
@@ -359,8 +366,32 @@ let router = Router(routes: HelmManager.shared.routeHandlers([
         CoreHostingController(WebSitePreviewView())
     },
 
+    "/dev-menu/snackbar": { _, _, _ in
+        CoreHostingController(SnackBarTestView())
+    },
+
     "/logs": { _, _, _ in
         return LogEventListViewController.create()
+    },
+
+    "/offline/sync_picker": { _, _, _ in
+        CourseSyncSelectorAssembly.makeViewController(env: .shared)
+    },
+    "/offline/sync_picker/:courseID": { _, params, _ in
+        CourseSyncSelectorAssembly.makeViewController(env: .shared, courseID: params["courseID"])
+    },
+    "/offline/progress": { _, _, _ in
+        CourseSyncProgressAssembly.makeViewController(env: .shared)
+    },
+    "/offline/settings": { _, _, _ in
+        guard let sessionDefaults = AppEnvironment.shared.userDefaults else {
+            return nil
+        }
+        return CourseSyncSettingsAssembly.makeViewController(sessionDefaults: sessionDefaults)
+    },
+
+    "/push-notifications": { _, _, _ in
+        CoreHostingController(PushNotificationDebugView())
     },
 
     "/profile": { _, _, _ in
@@ -393,6 +424,10 @@ let router = Router(routes: HelmManager.shared.routeHandlers([
 
     "/native-route/*route": nativeFactory,
     "/native-route-master/*route": nativeFactory,
+
+    "/about": { _, _, _ in
+        AboutAssembly.makeAboutViewController()
+    },
 ]))
 
 private func nativeFactory(url: URLComponents, params: [String: String], userInfo: [String: Any]?) -> UIViewController? {
@@ -521,7 +556,7 @@ private func courseDetails(url: URLComponents, params: [String: String], userInf
     }
 
     guard let courseID = params["courseID"],
-          let card = AppEnvironment.shared.subscribe(GetDashboardCards()).all.first(where: { $0.id == courseID })
+          let card = AppEnvironment.shared.subscribe(GetDashboardCards(showOnlyTeacherEnrollment: false)).all.first(where: { $0.id == courseID })
     else {
         return k5SubjectView()
     }

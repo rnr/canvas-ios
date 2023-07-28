@@ -31,7 +31,7 @@ final class DownloadsModulesViewModel: ObservableObject {
 
 }
 
-struct DownloadsModules: View {
+struct DownloadsModules: View, Navigatable {
 
     // MARK: - Injected -
 
@@ -40,17 +40,6 @@ struct DownloadsModules: View {
     // MARK: - Properties -
 
     @StateObject var viewModel: DownloadsModulesViewModel
-    private let env = AppEnvironment.shared
-
-    private var navigationController: UINavigationController? {
-        guard let topViewController = env.topViewController as? UITabBarController,
-              let helmSplitViewController = topViewController.viewControllers?.first as? UISplitViewController,
-              let navigationController = helmSplitViewController.viewControllers.first as? UINavigationController
-             else {
-            return nil
-        }
-        return navigationController
-    }
 
     init(modules: [OfflineDownloaderEntry], courseDataModel: CourseStorageDataModel) {
         let viewModel = DownloadsModulesViewModel(

@@ -19,7 +19,7 @@
 import Core
 import UIKit
 
-class AssignmentDetailsViewController: UIViewController, AssignmentDetailsViewProtocol {
+class AssignmentDetailsViewController: ScreenViewTrackableViewController, AssignmentDetailsViewProtocol {
     @IBOutlet weak var nameLabel: UILabel?
     @IBOutlet weak var pointsLabel: UILabel?
     @IBOutlet weak var statusIconView: UIImageView?
@@ -82,11 +82,13 @@ class AssignmentDetailsViewController: UIViewController, AssignmentDetailsViewPr
     var courseID = ""
     let env = AppEnvironment.shared
     var fragment: String?
-
+    public lazy var screenViewTrackingParameters = ScreenViewTrackingParameters(
+        eventName: "/courses/\(courseID)/assignments/\(assignmentID)"
+    )
     var refreshControl: CircleRefreshControl?
     let titleSubtitleView = TitleSubtitleView.create()
     var presenter: AssignmentDetailsPresenter?
-    private let webView = CoreWebView(pullToRefresh: .disabled)
+    private let webView = CoreWebView()
 
     static func create(courseID: String, assignmentID: String, fragment: String? = nil) -> AssignmentDetailsViewController {
         let controller = loadFromStoryboard()
@@ -166,13 +168,7 @@ class AssignmentDetailsViewController: UIViewController, AssignmentDetailsViewPr
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        presenter?.viewDidAppear()
         AppStoreReview.handleNavigateToAssignment()
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        presenter?.viewDidDisappear()
     }
 
     deinit {
@@ -316,7 +312,15 @@ class AssignmentDetailsViewController: UIViewController, AssignmentDetailsViewPr
         gradeSection?.isHidden = !showGradeSection
         submissionButtonSection?.isHidden = presenter.viewSubmissionButtonSectionIsHidden()
         showDescription(!presenter.descriptionIsHidden())
-        submitAssignmentButton.isHidden = presenter.submitAssignmentButtonIsHidden()
+
+        if assignment.submissionTypes.contains(where: { type in
+            type == .basic_lti_launch || type == .external_tool
+        }) {
+            submitAssignmentButton.makeUnavailableInOfflineMode()
+        } else {
+            submitAssignmentButton.isHidden = presenter.submitAssignmentButtonIsHidden()
+
+        }
 
         lockedSubheaderWebView.loadHTMLString(presenter.lockExplanation)
         centerLockedIconContainerView()
@@ -361,6 +365,7 @@ class AssignmentDetailsViewController: UIViewController, AssignmentDetailsViewPr
     }
 
     func showSubmitAssignmentButton(title: String?) {
+        view.bringSubviewToFront(submitAssignmentButton)
         submitAssignmentButton.setTitle(title, for: .normal)
 
         if title == nil {

@@ -18,13 +18,18 @@
 
 import SwiftUI
 
-public struct AssignmentListView: View {
+public struct AssignmentListView: View, ScreenViewTrackable {
     @Environment(\.viewController) private var controller
     @ObservedObject private var viewModel: AssignmentListViewModel
+    public let screenViewTrackingParameters: ScreenViewTrackingParameters
+
     @State private var isShowingGradingPeriodPicker = false
 
     public init(viewModel: AssignmentListViewModel) {
         self.viewModel = viewModel
+        screenViewTrackingParameters = ScreenViewTrackingParameters(
+            eventName: "/courses/\(viewModel.courseID)/assignments"
+        )
     }
 
     public var body: some View {
@@ -105,15 +110,16 @@ public struct AssignmentListView: View {
         GeometryReader { geometry in
             List {
                 EmptyPanda(.NoEvents, title: Text("No Assignments", bundle: .core), message: Text("There are no assignments to display.", bundle: .core))
-                    .iOS15ListRowSeparator(.hidden)
+                    .listRowSeparator(.hidden)
                     .frame(maxWidth: .infinity)
                     .frame(height: geometry.size.height)
                     .background(Color.backgroundLightest)
                     .listRowInsets(EdgeInsets())
+                    .listRowBackground(SwiftUI.EmptyView())
             }
             .listStyle(.plain)
-            .iOS15Refreshable { completion in
-                viewModel.refresh(completion: completion)
+            .refreshable {
+                await viewModel.refresh()
             }
         }
     }
@@ -131,11 +137,12 @@ public struct AssignmentListView: View {
         List {
             ForEach(groups, id: \.id) { assignmentGroup in
                 AssignmentGroupView(viewModel: assignmentGroup)
+                    .listRowBackground(SwiftUI.EmptyView())
             }
         }
         .listStyle(.plain)
-        .iOS15Refreshable { completion in
-            viewModel.refresh(completion: completion)
+        .refreshable {
+            await viewModel.refresh()
         }
     }
 
@@ -174,15 +181,12 @@ struct AssignmentListView_Previews: PreviewProvider {
         ]
         let viewModel = AssignmentListViewModel(state: .data(assignmentGroups))
         AssignmentListView(viewModel: viewModel)
-        AssignmentListView(viewModel: viewModel).preferredColorScheme(.dark)
 
         let emptyModel = AssignmentListViewModel(state: .empty)
         AssignmentListView(viewModel: emptyModel)
-        AssignmentListView(viewModel: emptyModel).preferredColorScheme(.dark)
 
         let loadingModel = AssignmentListViewModel(state: .loading)
         AssignmentListView(viewModel: loadingModel)
-        AssignmentListView(viewModel: loadingModel).preferredColorScheme(.dark)
     }
 }
 

@@ -22,7 +22,7 @@ open class SyllabusViewController: UIViewController, CoreWebViewLinkDelegate {
     public var courseID = ""
     public let env = AppEnvironment.shared
     public let refreshControl = CircleRefreshControl()
-    public var webView = CoreWebView(pullToRefresh: .disabled)
+    public var webView = CoreWebView()
 
     public lazy var courses = env.subscribe(GetCourse(courseID: courseID)) { [weak self] in
         self?.update()
@@ -51,6 +51,7 @@ open class SyllabusViewController: UIViewController, CoreWebViewLinkDelegate {
     func update() {
         if let html = courses.first?.syllabusBody, !html.isEmpty {
             webView.loadHTMLString(html)
+            webView.accessibilityIdentifier = "syllabusBody"
         }
     }
 

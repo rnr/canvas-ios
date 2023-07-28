@@ -19,7 +19,7 @@
 import Foundation
 import SafariServices
 
-public class ModuleListViewController: UIViewController, ColoredNavViewProtocol, ErrorViewController {
+public class ModuleListViewController: ScreenViewTrackableViewController, ColoredNavViewProtocol, ErrorViewController {
     let refreshControl = CircleRefreshControl()
     @IBOutlet weak var emptyMessageLabel: UILabel!
     @IBOutlet weak var emptyTitleLabel: UILabel!
@@ -33,6 +33,9 @@ public class ModuleListViewController: UIViewController, ColoredNavViewProtocol,
     public var color: UIColor?
     var courseID = ""
     var moduleID: String?
+    public lazy var screenViewTrackingParameters = ScreenViewTrackingParameters(
+        eventName: "/courses/\(courses.first?.id ?? "")/modules"
+    )
 
     lazy var colors = env.subscribe(GetCustomColors()) { [weak self] in
         self?.reloadCourse()
@@ -241,7 +244,12 @@ extension ModuleListViewController: UITableViewDataSource {
         default:
             let cell: ModuleItemCell = tableView.dequeue(for: indexPath)
             if let item = item {
-                cell.update(item, indexPath: indexPath, color: color)
+                cell.update(
+                    item,
+                    course: courses.first,
+                    indexPath: indexPath,
+                    color: color
+                )
             }
             return cell
         }
@@ -256,6 +264,7 @@ extension ModuleListViewController: UITableViewDelegate {
             let viewController = MasteryPathViewController.create(masteryPath: masteryPath)
             viewController.delegate = self
             env.router.show(viewController, from: self)
+            return
         }
         guard let htmlURL = item.htmlURL else {
             tableView.deselectRow(at: indexPath, animated: true)

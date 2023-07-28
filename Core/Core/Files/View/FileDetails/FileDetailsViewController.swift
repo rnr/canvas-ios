@@ -17,13 +17,14 @@
 //
 
 import AVKit
+import Combine
 import PSPDFKit
 import PSPDFKitUI
 import QuickLook
 import QuickLookThumbnailing
 import UIKit
 
-public class FileDetailsViewController: UIViewController, CoreWebViewLinkDelegate, ErrorViewController, PageViewEventViewControllerLoggingProtocol {
+public class FileDetailsViewController: ScreenViewTrackableViewController, CoreWebViewLinkDelegate, ErrorViewController {
     @IBOutlet weak var spinnerView: CircleProgressView!
     @IBOutlet weak var arButton: UIButton!
     @IBOutlet weak var arImageView: UIImageView!
@@ -51,17 +52,31 @@ public class FileDetailsViewController: UIViewController, CoreWebViewLinkDelegat
     var localURL: URL?
     var pdfAnnotationsMutatedMoveToDocsDirectory = false
     var originURL: URLComponents?
-
+    public lazy var screenViewTrackingParameters = ScreenViewTrackingParameters(
+        eventName: "\(context?.pathComponent ?? "")/files/\(fileID)"
+    )
     lazy var files = env.subscribe(GetFile(context: context, fileID: fileID)) { [weak self] in
         self?.update()
     }
+    private var accessReportInteractor: FileAccessReportInteractor?
+    private var subscriptions = Set<AnyCancellable>()
+    private var offlineFileInteractor: OfflineFileInteractor?
 
-    public static func create(context: Context?, fileID: String, originURL: URLComponents? = nil, assignmentID: String? = nil) -> FileDetailsViewController {
+    public static func create(context: Context?, fileID: String, originURL: URLComponents? = nil, assignmentID: String? = nil,
+                              offlineFileInteractor: OfflineFileInteractor = OfflineFileInteractorLive()) -> FileDetailsViewController {
         let controller = loadFromStoryboard()
         controller.assignmentID = assignmentID
         controller.context = context
         controller.fileID = fileID
         controller.originURL = originURL
+        controller.offlineFileInteractor = offlineFileInteractor
+
+        if let context {
+            controller.accessReportInteractor = FileAccessReportInteractor(context: context,
+                                                                           fileID: fileID,
+                                                                           api: controller.env.api)
+        }
+
         return controller
     }
 
@@ -102,11 +117,15 @@ public class FileDetailsViewController: UIViewController, CoreWebViewLinkDelegat
 
         view.layoutIfNeeded()
         files.refresh()
+
+        accessReportInteractor?
+            .reportFileAccess()
+            .sink()
+            .store(in: &subscriptions)
     }
 
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        startTrackingTimeOnViewController()
         env.userDefaults?.submitAssignmentCourseID = context?.contextType == .course ? context?.id : nil
         env.userDefaults?.submitAssignmentID = assignmentID
     }
@@ -115,7 +134,6 @@ public class FileDetailsViewController: UIViewController, CoreWebViewLinkDelegat
         super.viewWillDisappear(animated)
         saveAnnotations()
         downloadTask?.cancel()
-        stopTrackingTimeOnViewController(eventName: "\(context?.pathComponent ?? "")/files/\(fileID)")
     }
 
     @objc func fileEdited(_ notification: NSNotification) {
@@ -180,10 +198,7 @@ public class FileDetailsViewController: UIViewController, CoreWebViewLinkDelegat
     }
 
     func embedWebView(for url: URL, isLocalURL: Bool = true) {
-        let webView = CoreWebView(
-            pullToRefresh: .disabled,
-            invertColorsInDarkMode: true
-        )
+        let webView = CoreWebView(features: [.invertColorsInDarkMode])
         contentView.addSubview(webView)
         webView.pinWithThemeSwitchButton(inside: contentView)
         webView.linkDelegate = self
@@ -218,11 +233,12 @@ public class FileDetailsViewController: UIViewController, CoreWebViewLinkDelegat
         env.router.route(
             to: "\(context?.pathComponent ?? "")/files/\(fileID)/edit",
             from: self,
-            options: .modal(.formSheet, isDismissable: false, embedInNav: true)
+            options: .modal(isDismissable: false, embedInNav: true)
         )
     }
 
     @IBAction func share(_ sender: UIBarButtonItem) {
+        guard offlineFileInteractor?.isOffline == false else { return UIAlertController.showItemNotAvailableInOfflineAlert() }
         guard let url = localURL else { return }
         let pdf = children.first { $0 is PDFViewController } as? PDFViewController
         try? pdf?.document?.save()
@@ -252,27 +268,33 @@ public class FileDetailsViewController: UIViewController, CoreWebViewLinkDelegat
 
     var filePathComponent: String? {
         guard let sessionID = env.currentSession?.uniqueID, let name = files.first?.filename else { return nil }
+        if offlineFileInteractor?.isOffline == true {
+            return offlineFileInteractor?.filePath(sessionID: sessionID, fileID: fileID, fileName: name)
+        }
         return "\(sessionID)/\(fileID)/\(name)"
     }
 }
 
-extension FileDetailsViewController: URLSessionDownloadDelegate {
-    /// This must be called to set `localURL` before initiating download, otherwise there
-    /// will be a threading issue with trying to access core data from a different thread.
-    func prepLocalURL() -> URL? {
-        guard let filePathComponent = filePathComponent else { return nil }
+// MARK: - URLSessionDownloadDelegate
 
-        if files.first?.mimeClass == "pdf" {
-            //  check docs directory first if they have already added/modified annotations on an existing pdf
-            let docsURL = URL.Directories.documents.appendingPathComponent(filePathComponent)
-            if FileManager.default.fileExists(atPath: docsURL.path) { return docsURL }
+extension FileDetailsViewController: URLSessionDownloadDelegate, LocalFileURLCreator {
+    func downloadFile(at url: URL) {
+        guard
+            let filePathComponent = filePathComponent,
+            let mimeClass = files.first?.mimeClass
+        else {
+            return
         }
 
-        return URL.Directories.temporary.appendingPathComponent(filePathComponent)
-    }
+        let location = offlineFileInteractor?.isOffline == true ? URL.Directories.documents : URL.Directories.temporary
+        /// This must be called to set `localURL` before initiating download, otherwise there
+        /// will be a threading issue with trying to access core data from a different thread.
+        localURL = prepareLocalURL(
+            fileName: filePathComponent,
+            mimeClass: mimeClass,
+            location: location
+        )
 
-    func downloadFile(at url: URL) {
-        localURL = prepLocalURL()
         if let path = localURL?.path, FileManager.default.fileExists(atPath: path) { return downloadComplete() }
         downloadTask = API(urlSession: URLSession(configuration: .ephemeral, delegate: self, delegateQueue: nil)).makeDownloadRequest(url)
         downloadTask?.resume()
@@ -287,11 +309,17 @@ extension FileDetailsViewController: URLSessionDownloadDelegate {
     public func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
         guard let localURL = localURL else { return }
         if let status = (downloadTask.response as? HTTPURLResponse)?.statusCode, status >= 400 {
-            return showError(APIError.from(
-                data: try? Data(contentsOf: location),
-                response: downloadTask.response,
-                error: NSError.internalError()
-            ))
+            if status == 404 {
+                return performUIUpdate {
+                    self.showFileNoLongerExistsDialog()
+                }
+            } else {
+                return showError(APIError.from(
+                    data: try? Data(contentsOf: location),
+                    response: downloadTask.response,
+                    error: NSError.internalError()
+                ))
+            }
         }
         do {
             try FileManager.default.createDirectory(at: localURL.deletingLastPathComponent(), withIntermediateDirectories: true)
@@ -309,6 +337,18 @@ extension FileDetailsViewController: URLSessionDownloadDelegate {
         downloadTask = nil
         performUIUpdate { self.downloadComplete() }
         session.finishTasksAndInvalidate()
+    }
+
+    private func showFileNoLongerExistsDialog() {
+        let alert = UIAlertController(title: NSLocalizedString("File No Longer Exists", comment: ""),
+                                      message: NSLocalizedString("The file has been deleted by the author.", comment: ""),
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Close", comment: ""),
+                                      style: .default,
+                                      handler: { [env] _ in
+            env.router.dismiss(self)
+        }))
+        env.router.show(alert, from: self, options: .modal())
     }
 
     func downloadComplete() {
@@ -428,10 +468,15 @@ extension FileDetailsViewController: PDFViewControllerDelegate {
             builder.overrideClass(AnnotationToolbar.self, with: AnnotationToolbar.self)
         })
         controller.annotationToolbarController?.toolbar.toolbarPosition = .left
+
         let appearance = UIToolbarAppearance()
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = navigationController?.navigationBar.barTintColor
         controller.annotationToolbarController?.toolbar.standardAppearance = appearance
+
+        let annotationToolbarProxy = AnnotationToolbar.appearance()
+        annotationToolbarProxy.tintColor = navigationController?.navigationBar.tintColor
+
         controller.delegate = self
         embed(controller, in: contentView)
         addPDFAnnotationChangeNotifications()

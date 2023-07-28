@@ -73,9 +73,9 @@ extension Course: OfflineStorageDataProtocol {
                 course.isFavorite = isFavorite
             }
 
-            if let isFutureEnrollment = dictionary["isFutureEnrollment"] as? Bool {
-                course.isFutureEnrollment = isFutureEnrollment
-            }
+//            if let isFutureEnrollment = dictionary["isFutureEnrollment"] as? Bool {
+//                course.isFutureEnrollment = isFutureEnrollment
+//            }
 
             if let isHomeroomCourse = dictionary["isHomeroomCourse"] as? Bool {
                 course.isHomeroomCourse = isHomeroomCourse
@@ -120,7 +120,7 @@ extension Course: OfflineStorageDataProtocol {
             "imageDownloadURL": imageDownloadURL?.absoluteString ?? "",
             "isCourseDeleted": isCourseDeleted,
             "isFavorite": isFavorite,
-            "isFutureEnrollment": isFutureEnrollment,
+//            "isFutureEnrollment": isFutureEnrollment,
             "isHomeroomCourse": isHomeroomCourse,
             "isPastEnrollment": isPastEnrollment,
             "isPublished": isPublished,

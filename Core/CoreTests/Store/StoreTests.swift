@@ -99,6 +99,116 @@ class StoreTests: CoreTestCase {
         self.eventsExpectation.fulfill()
     }
 
+    // MARK: - Offline
+
+    func test_OfflineModeIsEnabled_RefreshCalled_ObjectsReturnFromDatabase() {
+        // Given
+        Course.make(from: .make(id: "0"))
+        ExperimentalFeature.offlineMode.isEnabled = true
+
+        // When
+        let expectation = expectation(description: "Refresh callback called")
+        let useCase = TestUseCase(courses: [.make(id: "1")])
+        let store = createStore(useCase: useCase)
+        store.refresh(force: true) { _ in
+            expectation.fulfill()
+        }
+
+        // Then
+        waitForExpectations(timeout: 0.1)
+        let ids = store.map { $0.id }
+        XCTAssertEqual(ids.count, 1)
+        XCTAssert(ids.contains("0"))
+        XCTAssert(!ids.contains("1"))
+        XCTAssertFalse(store.pending)
+        XCTAssertNil(store.error)
+    }
+
+    func test_OfflineModeIsEnabled_ExhaustCalled_ObjectsReturnFromDatabase() {
+        // Given
+        Course.make(from: .make(id: "0"))
+        ExperimentalFeature.offlineMode.isEnabled = true
+
+        // When
+        let expectation = expectation(description: "Exhaust callback called")
+        let useCase = TestUseCase(courses: [.make(id: "1")])
+        let store = createStore(useCase: useCase)
+        store.exhaust(force: true) { _ in
+            expectation.fulfill()
+            return false
+        }
+
+        // Then
+        waitForExpectations(timeout: 0.1)
+        let ids = store.map { $0.id }
+        XCTAssertEqual(ids.count, 1)
+        XCTAssert(ids.contains("0"))
+        XCTAssert(!ids.contains("1"))
+        XCTAssertFalse(store.pending)
+        XCTAssertNil(store.error)
+    }
+
+    func test_OfflineModeIsNotEnabled_RefreshCalled_ObjectsReturnFromNetwork() {
+        // Given
+        Course.make(from: .make(id: "0"))
+        ExperimentalFeature.offlineMode.isEnabled = false
+
+        // When
+        let useCase = TestUseCase(courses: [.make(id: "1")])
+        let store = createStore(useCase: useCase)
+        let expectation = expectation(description: "Refresh callback called")
+        store.refresh(force: true) { _ in
+            expectation.fulfill()
+        }
+
+        // Then
+        waitForExpectations(timeout: 0.1)
+        let ids = store.map { $0.id }
+        XCTAssertEqual(ids.count, 2)
+        XCTAssert(ids.contains("0"))
+        XCTAssert(ids.contains("1"))
+        XCTAssertFalse(store.pending)
+        XCTAssertNil(store.error)
+    }
+
+    func test_OfflineModeIsEnabled_RefreshCalled_StateChangesArePublished() {
+        // Given
+        Course.make(from: .make(id: "0"))
+        ExperimentalFeature.offlineMode.isEnabled = true
+
+        // When
+        let useCase = TestUseCase(courses: [])
+        let store = createStore(useCase: useCase)
+        let expectation = expectation(description: "State update is published")
+        let subscription = store
+            .statePublisher
+            .dropFirst()
+            .sink { state in
+                XCTAssertEqual(state, .data)
+                expectation.fulfill()
+            }
+        store.refresh()
+
+        // Then
+        waitForExpectations(timeout: 10.1)
+        subscription.cancel()
+    }
+
+    private func createStore<U: UseCase>(useCase: U) -> Store<U> {
+        Store(
+            env: environment,
+            offlineModeInteractor: createOfflineModeInteractor(),
+            context: environment.database.viewContext,
+            useCase: useCase
+        ) {}
+    }
+
+    private func createOfflineModeInteractor() -> OfflineModeInteractor {
+        let monitor = NWPathMonitorWrapper(start: { _ in () }, cancel: {})
+        let availabilityService = NetworkAvailabilityServiceLive(monitor: monitor)
+        return OfflineModeInteractorLive(availabilityService: availabilityService)
+    }
+
     // MARK: - Reactive Properties Tests -
 
     // MARK: All Objects
@@ -585,6 +695,35 @@ class StoreTests: CoreTestCase {
         wait(for: [expectation], timeout: 0.5)
     }
 
+    func testExhaustWithFutureWhileKeepsGoing() {
+        let prev = "https://cgnuonline-eniversity.edu/api/v1/date"
+        let curr = "https://cgnuonline-eniversity.edu/api/v1/date?page=2"
+        let next = "https://cgnuonline-eniversity.edu/api/v1/date?page=3"
+        let headers = [
+            "Link": "<\(curr)>; rel=\"current\",<>;, <\(prev)>; rel=\"prev\", <\(next)>; rel=\"next\"; count=1",
+        ]
+        let urlResponse = HTTPURLResponse(url: URL(string: curr)!, statusCode: 200, httpVersion: "HTTP/1.1", headerFields: headers)!
+        let page1 = [APICourse.make(id: "1")]
+        let page2 = [APICourse.make(id: "2")]
+        let useCase = TestUseCase(courses: page1, urlResponse: urlResponse)
+        api.mock(useCase.getNext(from: urlResponse)!, value: page2, response: nil, error: nil)
+        let expectation = XCTestExpectation(description: "exhausted")
+        store = environment.subscribe(useCase) {
+            if self.store.count == 2 {
+                expectation.fulfill()
+            }
+        }
+
+        let publishExpectation = XCTestExpectation(description: "Publisher should have sent initial value")
+        let subscription = store.exhaustWithFuture(while: { _ in return true })
+            .sink { _ in
+                publishExpectation.fulfill()
+            }
+
+        wait(for: [expectation], timeout: 0.5)
+        subscription.cancel()
+    }
+
     func testExhaustWhileStops() {
         let prev = "https://cgnuonline-eniversity.edu/api/v1/date"
         let curr = "https://cgnuonline-eniversity.edu/api/v1/date?page=2"
@@ -608,6 +747,37 @@ class StoreTests: CoreTestCase {
         store.exhaust(while: { _ in return false })
         wait(for: [expectation], timeout: 0.5)
         XCTAssertEqual(store.count, 1)
+    }
+
+    func testExhaustWithFutureWhileStops() {
+        let prev = "https://cgnuonline-eniversity.edu/api/v1/date"
+        let curr = "https://cgnuonline-eniversity.edu/api/v1/date?page=2"
+        let next = "https://cgnuonline-eniversity.edu/api/v1/date?page=3"
+        let headers = [
+            "Link": "<\(curr)>; rel=\"current\",<>;, <\(prev)>; rel=\"prev\", <\(next)>; rel=\"next\"; count=1",
+        ]
+        let urlResponse = HTTPURLResponse(url: URL(string: curr)!, statusCode: 200, httpVersion: "HTTP/1.1", headerFields: headers)!
+        let page1 = [APICourse.make(id: "1")]
+        let page2 = [APICourse.make(id: "2")]
+        let useCase = TestUseCase(courses: page1, urlResponse: urlResponse)
+        api.mock(useCase.getNext(from: urlResponse)!, value: page2, response: nil, error: nil)
+        let expectation = XCTestExpectation(description: "exhausted")
+        expectation.isInverted = true
+        store = environment.subscribe(useCase) {
+            if self.store.count == 2 {
+                expectation.fulfill()
+            }
+        }
+
+        let publishExpectation = XCTestExpectation(description: "Publisher should have sent initial value")
+        let subscription = store.exhaustWithFuture(while: { _ in return false })
+            .sink { _ in
+                publishExpectation.fulfill()
+            }
+
+        wait(for: [expectation], timeout: 0.5)
+        XCTAssertEqual(store.count, 1)
+        subscription.cancel()
     }
 
     func testDeletedObjects() {

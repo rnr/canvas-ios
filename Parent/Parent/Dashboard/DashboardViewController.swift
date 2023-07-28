@@ -20,7 +20,7 @@ import UIKit
 import CoreData
 import Core
 
-class DashboardViewController: UIViewController, ErrorViewController {
+class DashboardViewController: ScreenViewTrackableViewController, ErrorViewController {
     @IBOutlet weak var addStudentView: UIView!
     @IBOutlet weak var avatarView: AvatarView!
     @IBOutlet weak var studentListStack: UIStackView!
@@ -48,6 +48,7 @@ class DashboardViewController: UIViewController, ErrorViewController {
     let env = AppEnvironment.shared
     var hasStudents: Bool?
     var shownNotAParent = false
+    let screenViewTrackingParameters = ScreenViewTrackingParameters(eventName: "/")
 
     lazy var addStudentController = AddStudentController(presentingViewController: self, handler: { [weak self] error in
         if error == nil {
@@ -85,25 +86,28 @@ class DashboardViewController: UIViewController, ErrorViewController {
         permissions.refresh(force: true)
         students.exhaust { [weak self] list in
             // workaround temporary students.isEmpty && !students.pending
-            self?.hasStudents = self?.hasStudents == true || !list.isEmpty
+            self?.hasStudents = self?.hasStudents == true || !(list?.isEmpty ?? true)
             self?.update()
             return true
         }
-
+        NotificationCenter.default.addObserver(self, selector: #selector(checkForPolicyChanges), name: UIApplication.didBecomeActiveNotification, object: nil)
         reportScreenView(for: 0, viewController: self)
+        if env.userDefaults?.interfaceStyle == nil {
+            env.userDefaults?.interfaceStyle = .light
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.useContextColor(currentColor)
         navigationController?.setNavigationBarHidden(true, animated: true)
-        env.pageViewLogger.startTrackingTimeOnViewController()
         updateBadge()
+        checkForPolicyChanges()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        env.pageViewLogger.stopTrackingTimeOnViewController(eventName: "/", attributes: [:])
+        NotificationCenter.default.removeObserver(self, name: UIApplication.didBecomeActiveNotification, object: nil)
     }
 
     @IBAction func showProfile() {
@@ -157,7 +161,7 @@ class DashboardViewController: UIViewController, ErrorViewController {
     }
 
     func updateHeader() {
-        headerView.backgroundColor = currentColor
+        headerView.backgroundColor = currentColor.darkenToEnsureContrast(against: .white)
         profileButton.addBadge(number: badgeCount, color: currentColor)
         addStudentView.isHidden = false // provides shadow even when avatar covers it
 
@@ -254,6 +258,12 @@ class DashboardViewController: UIViewController, ErrorViewController {
         let map = ["courses", "calendar", "alerts"]
         let event = map[tabIndex]
         Analytics.shared.logScreenView(route: "/tabs/" + event, viewController: viewController)
+    }
+
+    @objc private func checkForPolicyChanges() {
+        LoginUsePolicy.checkAcceptablePolicy(from: self, cancelled: {
+            AppEnvironment.shared.loginDelegate?.changeUser()
+        })
     }
 }
 

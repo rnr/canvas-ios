@@ -19,7 +19,7 @@
 import SwiftUI
 import RealmSwift
 
-struct DownloadsCourseDetailView: View {
+struct DownloadsCourseDetailView: View, Navigatable {
 
     // MARK: - Injected -
 
@@ -33,17 +33,6 @@ struct DownloadsCourseDetailView: View {
 
     private let headerViewModel: DownloadsCourseDetailsHeaderViewModel
     @State private var selection: DownloadsCourseCategoryViewModel?
-    private let env = AppEnvironment.shared
-
-    private var navigationController: UINavigationController? {
-        guard let topViewController = env.topViewController as? UITabBarController,
-              let helmSplitViewController = topViewController.viewControllers?.first as? UISplitViewController,
-              let navigationController = helmSplitViewController.viewControllers.first as? UINavigationController
-             else {
-            return nil
-        }
-        return navigationController
-    }
 
     init(
         courseViewModel: DownloadCourseViewModel,
@@ -114,7 +103,7 @@ struct DownloadsCourseDetailView: View {
                 }
                 .listRowInsets(EdgeInsets())
                 .listRowBackground(Color.clear)
-                .iOS15ListRowSeparator(.hidden)
+                .listRowSeparator(.hidden)
                 .background(Color.backgroundLightest)
                 .padding(.top, headerViewModel.shouldShowHeader(for: geometry.size.height) ? headerViewModel.height : 0)
                 .transformAnchorPreference(key: ViewBoundsKey.self, value: .bounds) { preferences, bounds in
@@ -136,7 +125,7 @@ struct DownloadsCourseDetailView: View {
     private func destination(
         sectionViewModel: DownloadsCourseCategoryViewModel
     ) -> some View {
-        DownloadsContenView(
+        DownloadsContentView(
             content: sectionViewModel.content,
             courseDataModel: viewModel.courseViewModel.courseDataModel,
             title: sectionViewModel.title,

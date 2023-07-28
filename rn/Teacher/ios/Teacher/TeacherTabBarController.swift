@@ -34,26 +34,29 @@ class TeacherTabBarController: UITabBarController {
             paths.firstIndex(of: $0)
         } ?? 0
         tabBar.useGlobalNavStyle()
-
+        NotificationCenter.default.addObserver(self, selector: #selector(checkForPolicyChanges), name: UIApplication.didBecomeActiveNotification, object: nil)
         reportScreenView(for: selectedIndex, viewController: viewControllers![selectedIndex])
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        checkForPolicyChanges()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self, name: UIApplication.didBecomeActiveNotification, object: nil)
+    }
+
     func coursesTab() -> UIViewController {
-        let split = HelmSplitViewController()
-        split.viewControllers = [
-            HelmNavigationController(rootViewController: CoreHostingController(
-                DashboardCardView(
-                    shouldShowGroupList: false,
-                    showOnlyTeacherEnrollment: true))),
-            HelmNavigationController(rootViewController: EmptyViewController()),
-        ]
-        split.masterNavigationController?.delegate = split
-        split.tabBarItem.title = NSLocalizedString("Courses", comment: "")
-        split.tabBarItem.image = .coursesTab
-        split.tabBarItem.selectedImage = .coursesTabActive
-        split.tabBarItem.accessibilityIdentifier = "TabBar.dashboardTab"
-        split.preferredDisplayMode = .oneBesideSecondary
-        return split
+        let cardView = CoreHostingController(DashboardContainerView(shouldShowGroupList: false,
+                                                               showOnlyTeacherEnrollment: true))
+        let dashboard = DashboardContainerViewController(rootViewController: cardView) { HelmSplitViewController() }
+        dashboard.tabBarItem.title = NSLocalizedString("Courses", comment: "")
+        dashboard.tabBarItem.image = .coursesTab
+        dashboard.tabBarItem.selectedImage = .coursesTabActive
+        dashboard.tabBarItem.accessibilityIdentifier = "TabBar.dashboardTab"
+        return dashboard
     }
 
     func toDoTab() -> UIViewController {
@@ -98,6 +101,12 @@ class TeacherTabBarController: UITabBarController {
         let map = ["dashboard", "todo", "conversations"]
         let event = map[tabIndex]
         Analytics.shared.logScreenView(route: "/tabs/" + event, viewController: viewController)
+    }
+
+    @objc private func checkForPolicyChanges() {
+        LoginUsePolicy.checkAcceptablePolicy(from: self, cancelled: {
+            AppEnvironment.shared.loginDelegate?.changeUser()
+        })
     }
 }
 

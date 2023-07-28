@@ -18,8 +18,10 @@
 
 import UIKit
 
-public class ProfileSettingsViewController: UIViewController, PageViewEventViewControllerLoggingProtocol {
+public class ProfileSettingsViewController: ScreenViewTrackableViewController {
     let env = AppEnvironment.shared
+    public let screenViewTrackingParameters = ScreenViewTrackingParameters(eventName: "/profile/settings")
+
     private var sections: [Section] = []
     private var onElementaryViewToggleChanged: (() -> Void)?
 
@@ -79,12 +81,6 @@ public class ProfileSettingsViewController: UIViewController, PageViewEventViewC
         super.viewWillAppear(animated)
         navigationController?.navigationBar.useModalStyle()
         refresh()
-        startTrackingTimeOnViewController()
-    }
-
-    public override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        stopTrackingTimeOnViewController(eventName: "/profile/settings")
     }
 
     @objc func refresh(sender: Any? = nil) {
@@ -95,10 +91,12 @@ public class ProfileSettingsViewController: UIViewController, PageViewEventViewC
     }
 
     func reloadData() {
-        var channelTypes: [CommunicationChannelType: [CommunicationChannel]] = [:]
-        for channel in channels {
-            channelTypes[channel.type] = channelTypes[channel.type] ?? []
-            channelTypes[channel.type]?.append(channel)
+        var channelTypes: [CommunicationChannelType: [GeneratedCommunicationChannel]] = [:]
+        for channel in channels where channel.type != .push {
+            let isOverrided: Bool = channel.id == NotificationManager.shared.emailAsPushChannelID
+            let generatedChannel = GeneratedCommunicationChannel(type: isOverrided ? .push : channel.type, id: channel.id)
+            channelTypes[generatedChannel.type] = channelTypes[generatedChannel.type] ?? []
+            channelTypes[generatedChannel.type]?.append(generatedChannel)
         }
 
         channelTypeRows = channelTypes.values.map({ channels -> Row in
@@ -118,8 +116,13 @@ public class ProfileSettingsViewController: UIViewController, PageViewEventViewC
             }
         }).sorted(by: { $0.title < $1.title })
 
-        sections = [
-            preferencesSection,
+        var sections: [Section] = [preferencesSection]
+
+        if ExperimentalFeature.offlineMode.isEnabled, env.app == .student {
+            sections.append(offlineSettingSection)
+        }
+
+        sections.append(
             Section(NSLocalizedString("Legal", bundle: .core, comment: ""), rows: [
                 Row(NSLocalizedString("Privacy Policy", bundle: .core, comment: "")) { [weak self] in
                     guard let self = self else { return }
@@ -133,16 +136,35 @@ public class ProfileSettingsViewController: UIViewController, PageViewEventViewC
                     guard let self = self else { return }
                     self.env.router.route(to: "https://github.com/instructure/canvas-ios", from: self)
                 },
-            ]),
-        ]
+            ])
+        )
+        self.sections = sections
+
         if !channels.pending && !profile.pending && termsOfServiceRequest == nil {
             tableView.refreshControl?.endRefreshing()
         }
         tableView.reloadData()
     }
 
+    private var offlineSettingSection: Section {
+        let detailLabel: String = {
+            guard let defaults = env.userDefaults else {
+                return ""
+            }
+
+            return CourseSyncSettingsInteractorLive(storage: defaults).getOfflineSyncSettingsLabel()
+        }()
+        return Section(NSLocalizedString("Offline Content", comment: ""), rows: [
+                Row(NSLocalizedString("Synchronization", comment: ""),
+                    detail: detailLabel) { [weak self] in
+                        guard let self = self else { return }
+                        self.env.router.route(to: "/offline/settings", from: self)
+                    },
+               ])
+    }
+
     private var preferencesSection: Section {
-        return Section(NSLocalizedString("Preferences", bundle: .core, comment: ""), rows: preferencesRows)
+        Section(NSLocalizedString("Preferences", bundle: .core, comment: ""), rows: preferencesRows)
     }
 
     private var preferencesRows: [Any] {
@@ -152,11 +174,20 @@ public class ProfileSettingsViewController: UIViewController, PageViewEventViewC
         rows.append(contentsOf: k5DashboardSwitch)
         rows.append(contentsOf: channelTypeRows ?? [])
         rows.append(contentsOf: pairWithObserverButton)
-        rows.append(contentsOf: [Row(NSLocalizedString("Subscribe to Calendar Feed", bundle: .core, comment: ""), hasDisclosure: false) { [weak self] in
-            guard let url = self?.profile.first?.calendarURL else { return }
-            self?.env.loginDelegate?.openExternalURL(url)
-       },
-    ])
+
+        if AppEnvironment.shared.app == .student {
+            let row = Row(NSLocalizedString("Subscribe to Calendar Feed",
+                                            bundle: .core,
+                                            comment: ""),
+                          hasDisclosure: false) { [weak self] in
+                guard let url = self?.profile.first?.calendarURL else { return }
+                self?.env.loginDelegate?.openExternalURL(url)
+            }
+            rows.append(contentsOf: [row])
+        }
+
+        rows.append(contentsOf: aboutRow)
+
         return rows
     }
 
@@ -215,6 +246,15 @@ public class ProfileSettingsViewController: UIViewController, PageViewEventViewC
         ]
     }
 
+    private var aboutRow: [Row] {
+        return [
+            Row(NSLocalizedString("About", comment: "")) { [weak self] in
+                guard let self else { return }
+                self.env.router.route(to: "/about", from: self)
+            },
+        ]
+    }
+
     private var k5DashboardSwitch: [Any] {
         guard AppEnvironment.shared.k5.isK5Account, AppEnvironment.shared.k5.isRemoteFeatureFlagEnabled else { return [] }
 
@@ -226,6 +266,13 @@ public class ProfileSettingsViewController: UIViewController, PageViewEventViewC
     }
 
     private func refreshTermsOfService() {
+        if AppEnvironment.shared.app == .teacher {
+            if isPairingWithObserverAllowed {
+                isPairingWithObserverAllowed = false
+            }
+            return
+        }
+
         termsOfServiceRequest = env.api.makeRequest(GetAccountTermsOfServiceRequest()) { [weak self] response, _, _ in
             self?.termsOfServiceRequest = nil
             let isPairingAllowed: Bool
@@ -376,4 +423,9 @@ private enum LandingPage: String {
             ? [ .dashboard, .todo, .inbox ]
             : [ .dashboard, .calendar, .todo, .notifications, .inbox ]
     }()
+}
+
+struct GeneratedCommunicationChannel {
+    var type: CommunicationChannelType
+    var id: String
 }

@@ -98,9 +98,9 @@ extension CourseStorageDataModel: OfflineStorageDataProtocol {
                     downloadCourse.course.isFavorite = isFavorite
                 }
 
-                if let isFutureEnrollment = dictionary["isFutureEnrollment"] as? Bool {
-                    downloadCourse.course.isFutureEnrollment = isFutureEnrollment
-                }
+//                if let isFutureEnrollment = dictionary["isFutureEnrollment"] as? Bool {
+//                    downloadCourse.course.isFutureEnrollment = isFutureEnrollment
+//                }
 
                 if let isHomeroomCourse = dictionary["isHomeroomCourse"] as? Bool {
                     downloadCourse.course.isHomeroomCourse = isHomeroomCourse

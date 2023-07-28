@@ -32,14 +32,17 @@ class ModuleItemCell: UITableViewCell {
     @IBOutlet weak var completedStatusView: UIImageView!
 
     let env = AppEnvironment.shared
+    var course: Course?
     var item: ModuleItem?
-    var cancellable: AnyCancellable?
+    let downloadButtonHelper = DownloadStatusProvider()
 
-    func update(_ item: ModuleItem, indexPath: IndexPath, color: UIColor?) {
+    func update(_ item: ModuleItem, course: Course?, indexPath: IndexPath, color: UIColor?) {
+        self.course = course
         self.item = item
         backgroundColor = .backgroundLightest
         selectedBackgroundView = ContextCellBackgroundView.create(color: color)
-        isUserInteractionEnabled = env.app == .teacher || !item.isLocked
+        let isLocked = item.isLocked || item.masteryPath?.locked == true
+        isUserInteractionEnabled = env.app == .teacher || !isLocked
         nameLabel.setText(item.title, style: .textCellTitle)
         nameLabel.isEnabled = isUserInteractionEnabled
         nameLabel.textColor = nameLabel.isEnabled ? .textDarkest : .textLight
@@ -82,7 +85,10 @@ class ModuleItemCell: UITableViewCell {
                     : NSLocalizedString("unpublished", bundle: .core, comment: ""),
             ].compactMap { $0 }.joined(separator: ", ")
         }
+
         accessibilityIdentifier = "ModuleList.\(indexPath.section).\(indexPath.row)"
-        isDownloaded(item)
+        nameLabel.accessibilityIdentifier = "ModuleList.\(indexPath.section).\(indexPath.row).nameLabel"
+        dueLabel.accessibilityIdentifier = "ModuleList.\(indexPath.section).\(indexPath.row).dueLabel"
+        prepareForDownload()
     }
 }

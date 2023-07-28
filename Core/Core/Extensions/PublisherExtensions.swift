@@ -17,9 +17,22 @@
 //
 
 import Combine
+import CombineExt
 
 public extension Publisher {
     func sink() -> AnyCancellable {
         sink { _ in } receiveValue: { _ in }
+    }
+
+    func bindProgress(_ isLoading: PassthroughRelay<Bool>) -> AnyPublisher<Output, Failure> {
+        handleEvents(
+            receiveSubscription: { _ in
+                isLoading.accept(true)
+            },
+            receiveCompletion: { _ in
+                isLoading.accept(false)
+            }
+        )
+        .eraseToAnyPublisher()
     }
 }

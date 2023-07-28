@@ -19,8 +19,10 @@
 import Foundation
 import QuickLook
 import UIKit
+import Combine
+import CombineExt
 
-public class DiscussionReplyViewController: UIViewController, ErrorViewController, RichContentEditorDelegate {
+public class DiscussionReplyViewController: ScreenViewTrackableViewController, ErrorViewController, RichContentEditorDelegate {
     lazy var contentHeight = webView.heightAnchor.constraint(equalToConstant: 0)
     var contentHeightObs: NSKeyValueObservation?
     @IBOutlet weak var editorContainer: UIView!
@@ -29,7 +31,7 @@ public class DiscussionReplyViewController: UIViewController, ErrorViewControlle
     @IBOutlet weak var scrollView: UIScrollView!
     let titleSubtitleView = TitleSubtitleView.create()
     @IBOutlet weak var viewMoreButton: UIButton!
-    var webView = CoreWebView(pullToRefresh: .disabled)
+    var webView = CoreWebView()
     @IBOutlet weak var webViewContainer: UIView!
     @IBOutlet var webViewHeight: NSLayoutConstraint!
 
@@ -37,7 +39,8 @@ public class DiscussionReplyViewController: UIViewController, ErrorViewControlle
         let button = UIButton(type: .system)
         button.setImage(.paperclipLine, for: .normal)
         button.addTarget(self, action: #selector(attach), for: .primaryActionTriggered)
-        button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
+        button.configuration = UIButton.Configuration.plain()
+        button.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 0)
         button.addSubview(attachBadge)
         attachBadge.isHidden = true
         attachBadge.isUserInteractionEnabled = false
@@ -75,7 +78,13 @@ public class DiscussionReplyViewController: UIViewController, ErrorViewControlle
     var context = Context.currentUser
     var editEntryID: String?
     var editHTML: String?
-    lazy var editor = RichContentEditorViewController.create(context: context, uploadTo: env.app == .teacher ? .context(context) : .myFiles)
+    lazy var editor = RichContentEditorViewController.create(context: context,
+                                                             uploadTo: fileUploadContext)
+    private var fileUploadContext: FileUploadContext {
+        .makeForRCEUploads(app: env.app,
+                           context: context,
+                           session: env.currentSession)
+    }
     let env = AppEnvironment.shared
     lazy var filePicker = FilePicker(delegate: self)
     var isExpanded = false
@@ -83,7 +92,9 @@ public class DiscussionReplyViewController: UIViewController, ErrorViewControlle
     var replyToEntryID: String?
     var rceCanSubmit = false
     var topicID = ""
-
+    public lazy var screenViewTrackingParameters = ScreenViewTrackingParameters(
+        eventName: "\(context.pathComponent)/discussion_topics/\(topicID)/reply"
+    )
     lazy var course = env.subscribe(GetCourse(courseID: context.id)) { [weak self] in
         self?.updateNavBar()
     }
@@ -103,6 +114,7 @@ public class DiscussionReplyViewController: UIViewController, ErrorViewControlle
     lazy var topic = env.subscribe(GetDiscussionTopic(context: context, topicID: topicID)) { [weak self] in
         self?.update()
     }
+    private var subscriptions = Set<AnyCancellable>()
 
     public static func create(context: Context, topicID: String, replyToEntryID: String? = nil, editEntryID: String? = nil) -> DiscussionReplyViewController {
         let controller = loadFromStoryboard()
@@ -161,6 +173,15 @@ public class DiscussionReplyViewController: UIViewController, ErrorViewControlle
         }
         replyToEntry?.refresh()
         topic.refresh()
+
+        if context.id.hasShardID {
+            ContextBaseURLInteractor(api: env.api)
+                .getBaseURL(context: context)
+                .map { $0 as URL? }
+                .replaceError(with: nil)
+                .assign(to: \.fileUploadBaseURL, on: editor, ownership: .weak)
+                .store(in: &subscriptions)
+        }
     }
 
     public override func viewWillAppear(_ animated: Bool) {
@@ -174,8 +195,7 @@ public class DiscussionReplyViewController: UIViewController, ErrorViewControlle
     }
 
     func heightChanged() {
-        let themeSwitchButtonOffset: CGFloat = traitCollection.userInterfaceStyle == .dark ? 38 : 0
-        let contentHeight = self.contentHeight.constant + themeSwitchButtonOffset
+        let contentHeight = self.contentHeight.constant + webView.themeSwitcherHeight
         webViewHeight.constant = isExpanded || contentHeight <= collapsedHeight ? contentHeight : collapsedHeight
         viewMoreButton.isHidden = contentHeight <= collapsedHeight
     }

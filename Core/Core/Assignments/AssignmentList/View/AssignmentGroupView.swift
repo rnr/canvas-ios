@@ -40,7 +40,7 @@ public struct AssignmentGroupView: View {
             }
         }
         .listRowInsets(EdgeInsets())
-        .iOS15ListRowSeparator(.hidden)
+        .listRowSeparator(.hidden)
     }
 }
 
@@ -56,7 +56,6 @@ struct AssignmentGroupView_Previews: PreviewProvider {
             AssignmentGroupView(viewModel: AssignmentGroupViewModel(name: "Assignment Group 1", id: "1", assignments: [], courseColor: .red))
         }
         .listStyle(PlainListStyle())
-        .previewLayout(.sizeThatFits)
     }
 }
 

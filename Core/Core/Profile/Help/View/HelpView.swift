@@ -18,7 +18,9 @@
 
 import SwiftUI
 
-struct HelpView: View {
+struct HelpView: View, ScreenViewTrackable {
+    public let screenViewTrackingParameters = ScreenViewTrackingParameters(eventName: "/profile/help")
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
@@ -28,6 +30,7 @@ struct HelpView: View {
                 }
             }.padding(.bottom)
         }
+        .accessibilityIdentifier("helpItems")
     }
 
     private var helpLinks: [HelpLink]

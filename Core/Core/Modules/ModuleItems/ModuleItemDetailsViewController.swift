@@ -20,6 +20,8 @@ import Foundation
 import UIKit
 
 public class ModuleItemDetailsViewController: DownloadableViewController, ColoredNavViewProtocol {
+    var onEmbedContainer: ((UIViewController) -> Void)?
+
     let env = AppEnvironment.shared
     var courseID: String!
     var moduleID: String!
@@ -49,6 +51,7 @@ public class ModuleItemDetailsViewController: DownloadableViewController, Colore
 
     var item: ModuleItem? { store.first }
     var observations: [NSKeyValueObservation]?
+    private var isMarkingModule = false
 
     public static func create(courseID: String, moduleID: String, itemID: String) -> Self {
         let controller = loadFromStoryboard()
@@ -73,7 +76,7 @@ public class ModuleItemDetailsViewController: DownloadableViewController, Colore
     }
 
     func update() {
-        guard store.requested, !store.pending else { return }
+        guard store.requested, !store.pending, !isMarkingModule else { return }
         let itemViewController = self.itemViewController()
         let showLocked = env.app != .teacher && item?.visibleWhenLocked != true && item?.lockedForUser == true
         lockedView.isHidden = !showLocked
@@ -87,6 +90,7 @@ public class ModuleItemDetailsViewController: DownloadableViewController, Colore
         children.forEach { $0.unembed() }
         if let viewController = itemViewController, !container.isHidden {
             embed(viewController, in: container)
+            onEmbedContainer?(viewController)
             navigationItem.rightBarButtonItems = []
             observations = syncNavigationBar(with: viewController)
             NotificationCenter.default.post(name: .moduleItemViewDidLoad, object: nil, userInfo: [
@@ -123,9 +127,6 @@ public class ModuleItemDetailsViewController: DownloadableViewController, Colore
             title = NSLocalizedString("Module Item", bundle: .core, comment: "")
         }
         setupTitleViewInNavbar(title: title)
-        
-        setupObject(item)
-        setupCourse(course.first)
         addDownloadBarButtonItem()
     }
 
@@ -192,14 +193,16 @@ public class ModuleItemDetailsViewController: DownloadableViewController, Colore
                 self?.showError(error)
                 return
             }
+            self?.isMarkingModule = true
             NotificationCenter.default.post(name: .moduleItemRequirementCompleted, object: nil)
         } }
     }
 
     func markAsViewed() {
         let request = PostMarkModuleItemRead(courseID: courseID, moduleID: moduleID, moduleItemID: itemID)
-        env.api.makeRequest(request) { _, _, error in performUIUpdate {
+        env.api.makeRequest(request) { [weak self] _, _, error in performUIUpdate {
             if error == nil {
+                self?.isMarkingModule = true
                 NotificationCenter.default.post(name: .moduleItemRequirementCompleted, object: nil)
             }
         } }

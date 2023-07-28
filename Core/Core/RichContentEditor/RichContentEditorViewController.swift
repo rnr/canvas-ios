@@ -19,6 +19,7 @@
 import MobileCoreServices
 import UIKit
 import WebKit
+import UniformTypeIdentifiers
 
 public protocol RichContentEditorDelegate: AnyObject {
     func rce(_ editor: RichContentEditorViewController, canSubmit: Bool)
@@ -53,6 +54,8 @@ public class RichContentEditorViewController: UIViewController {
     }
 
     lazy var featureFlags = env.subscribe(GetEnabledFeatureFlags(context: context)) {}
+    /// The base url to be used for API access during file upload.
+    public var fileUploadBaseURL: URL?
 
     public static func create(context: Context, uploadTo uploadContext: FileUploadContext) -> RichContentEditorViewController {
         let controller = RichContentEditorViewController()
@@ -76,6 +79,17 @@ public class RichContentEditorViewController: UIViewController {
 
         featureFlags.refresh { [weak self] _ in
             self?.loadHTML()
+        }
+    }
+
+    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        guard previousTraitCollection?.userInterfaceStyle != traitCollection.userInterfaceStyle else { return }
+        getHTML { [weak self] htmlString in
+            self?.html = htmlString
+            if self?.traitCollection.userInterfaceStyle != .dark {
+                self?.webView.updateHtmlContentView()
+            }
         }
     }
 
@@ -266,7 +280,7 @@ extension RichContentEditorViewController: UIImagePickerControllerDelegate, UINa
         picker.delegate = self
         picker.imageExportPreset = .compatible
         picker.sourceType = UIImagePickerController.isSourceTypeAvailable(sourceType) ? sourceType : .photoLibrary
-        picker.mediaTypes = [ kUTTypeImage as String, kUTTypeMovie as String ]
+        picker.mediaTypes = [ UTType.image.identifier, UTType.movie.identifier ]
         env.router.show(picker, from: self, options: .modal())
     }
 
@@ -324,7 +338,7 @@ extension RichContentEditorViewController: UIImagePickerControllerDelegate, UINa
                 let datauri = CoreWebView.jsString("data:image/png;base64,\(base64)")
                 webView.evaluateJavaScript("editor.insertImagePlaceholder(\(string), \(datauri))")
             }
-            uploadManager.upload(file: file, to: uploadContext)
+            uploadManager.upload(file: file, to: uploadContext, baseURL: fileUploadBaseURL)
         } catch {
             updateFile(file, error: error)
         }

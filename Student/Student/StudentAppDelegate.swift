@@ -17,6 +17,8 @@
 //
 
 import AVKit
+import AWSLambda
+import AWSSNS
 import CanvasCore
 import Core
 import Firebase
@@ -80,51 +82,60 @@ class StudentAppDelegate: UIResponder, UIApplicationDelegate, AppEnvironmentDele
             Analytics.shared.logScreenView(route: "/login", viewController: window?.rootViewController)
         }
         setupOffline()
+        setupAWS()
         return true
     }
 
     func setupOffline() {
         DownloaderClient.setup()
     }
+    func setupAWS() {
+        guard let accessKey = Secret.awsAccessKey.string, let secretKey = Secret.awsSecretKey.string else { return }
+        let credProvider = AWSStaticCredentialsProvider(accessKey: accessKey, secretKey: secretKey)
+        if let awsConfiguration = AWSServiceConfiguration(region: .USEast1, credentialsProvider: credProvider) {
+            AWSSNS.register(with: awsConfiguration, forKey: "mySNS")
+            AWSLambda.register(with: awsConfiguration, forKey: "myLambda")
+        }
+    }
 
     func setup(session: LoginSession) {
         environment.userDidLogin(session: session)
-        environment.userDefaults?.isK5StudentView = shouldSetK5StudentView
-        environmentFeatureFlags = environment.subscribe(GetEnvironmentFeatureFlags(context: Context.currentUser))
-        environmentFeatureFlags?.refresh(force: true) { _ in
-            guard let envFlags = self.environmentFeatureFlags, envFlags.error == nil else { return }
-            self.initializeTracking()
-        }
 
-        updateInterfaceStyle(for: window)
+        GetUserProfile().fetch(environment: environment, force: true) { apiProfile, urlResponse, _ in performUIUpdate {
+            PageViewEventController.instance.userDidChange()
 
-        CoreWebView.keepCookieAlive(for: environment)
+            if urlResponse?.isUnauthorized == true, !session.isFakeStudent {
+                self.userDidLogout(session: session)
+                LoginViewModel().showLoginView(on: self.window!, loginDelegate: self, app: .student)
+                return
+            }
 
-        NotificationManager.shared.subscribeToPushChannel()
+            self.environment.userDefaults?.isK5StudentView = self.shouldSetK5StudentView
+            self.environmentFeatureFlags = self.environment.subscribe(GetEnvironmentFeatureFlags(context: Context.currentUser))
+            self.environmentFeatureFlags?.refresh(force: true) { _ in
+                guard let envFlags = self.environmentFeatureFlags, envFlags.error == nil else { return }
+                self.initializeTracking()
+            }
 
-        GetUserProfile().fetch(environment: environment, force: true) { apiProfile, urlResponse, _ in
+            self.updateInterfaceStyle(for: self.window)
+            CoreWebView.keepCookieAlive(for: self.environment)
+            NotificationManager.shared.subscribeToPushChannel()
+
             let isK5StudentView = self.environment.userDefaults?.isK5StudentView ?? false
             if isK5StudentView {
                 ExperimentalFeature.K5Dashboard.isEnabled = true
                 self.environment.userDefaults?.isElementaryViewEnabled = true
             }
             self.environment.k5.userDidLogin(profile: apiProfile, isK5StudentView: isK5StudentView)
+            Analytics.shared.logSession(session)
 
-            if urlResponse?.isUnauthorized == true, !session.isFakeStudent {
-                DispatchQueue.main.async { self.userDidLogout(session: session) }
+            self.refreshNotificationTab()
+            LocalizationManager.localizeForApp(UIApplication.shared, locale: apiProfile?.locale ?? session.locale) {
+                GetBrandVariables().fetch(environment: self.environment) { _, _, _ in performUIUpdate {
+                    NativeLoginManager.login(as: session)
+                }}
             }
-
-            PageViewEventController.instance.userDidChange()
-            DispatchQueue.main.async {
-                self.refreshNotificationTab()
-                LocalizationManager.localizeForApp(UIApplication.shared, locale: apiProfile?.locale ?? session.locale) {
-                    GetBrandVariables().fetch(environment: self.environment) { _, _, _ in performUIUpdate {
-                        NativeLoginManager.login(as: session)
-                    }}
-                }
-            }
-        }
-        Analytics.shared.logSession(session)
+        }}
     }
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
@@ -265,6 +276,7 @@ extension StudentAppDelegate: Core.AnalyticsHandler {
         options.disableTracking = !isSendUsageMetricsEnabled
         Heap.initialize(heapID, with: options)
         Heap.setTrackingEnabled(isSendUsageMetricsEnabled)
+        environment.heapID = Heap.userId()
     }
 
     private func disableTracking() {
@@ -389,10 +401,7 @@ extension StudentAppDelegate: LoginDelegate, NativeLoginManagerDelegate {
         environment.k5.userDidLogout()
         guard let window = window, !(window.rootViewController is LoginNavigationController) else { return }
         disableTracking()
-        UIView.transition(with: window, duration: 0.5, options: .transitionFlipFromLeft, animations: {
-            window.rootViewController = LoginNavigationController.create(loginDelegate: self, app: .student)
-            Analytics.shared.logScreenView(route: "/login", viewController: window.rootViewController)
-        }, completion: nil)
+        LoginViewModel().showLoginView(on: window, loginDelegate: self, app: .student)
     }
 
     func stopActing() {
@@ -425,7 +434,8 @@ extension StudentAppDelegate: LoginDelegate, NativeLoginManagerDelegate {
         LoginSession.remove(session)
         guard environment.currentSession == session else { return }
         PageViewEventController.instance.userDidChange()
-        NotificationManager.shared.unsubscribeFromPushChannel()
+//        NotificationManager.shared.unsubscribeFromPushChannel()
+        NotificationManager.shared.unsubscribeFromUserSNSTopic()
         UIApplication.shared.applicationIconBadgeNumber = 0
         environment.userDidLogout(session: session)
         CoreWebView.stopCookieKeepAlive()

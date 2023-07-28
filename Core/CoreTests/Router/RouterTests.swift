@@ -33,9 +33,7 @@ class RouterTests: CoreTestCase {
         var presented: UIViewController?
         override func present(_ vc: UIViewController, animated: Bool, completion: (() -> Void)? = nil) {
             presented = vc
-            if let completion = completion {
-                completion()
-            }
+            completion?()
         }
         var detail: UIViewController?
         override func showDetailViewController(_ vc: UIViewController, sender: Any?) {
@@ -376,7 +374,7 @@ class RouterTests: CoreTestCase {
 
     func testOpen() {
         var url = URL(string: "https://canvas.instructure.com/relative/url")!
-        api.mock(GetWebSessionRequest(to: url), value: .init(session_url: url))
+        api.mock(GetWebSessionRequest(to: url), value: .init(session_url: url, requires_terms_acceptance: false))
         Router.open(url: .parse("relative/url"))
         XCTAssertEqual(login.externalURL?.absoluteURL, url)
 
@@ -473,7 +471,7 @@ class RouterTests: CoreTestCase {
         XCTAssertEqual(testee.isRegisteredRoute(URL(string: "/courses/1234/assignments/4321")!), false)
     }
 
-    func testExternalWebsiteURLsOpenedInPopup() {
+    func testExternalURLsWithMatchingPathOfANativeRouteOpenedBySystem() {
         AppEnvironment.shared.currentSession = LoginSession(baseURL: URL(string: "https://canvas.com")!,
                                                             userID: "",
                                                             userName: "")
@@ -485,12 +483,26 @@ class RouterTests: CoreTestCase {
 
         testee.route(to: externalURL, from: mockViewController)
 
-        guard let navController = mockViewController.presented as? HelmNavigationController else {
-            return XCTFail()
-        }
+        XCTAssertEqual(login.externalURL?.absoluteURL, URL(string: "https://example.com/courses")!)
+        XCTAssertNil(mockViewController.shown)
+    }
 
-        XCTAssertEqual(navController.children.count, 1)
-        XCTAssertTrue(navController.children.first is CoreWebViewController)
+    func testExternalURLsFromPushOpenedNatively() {
+        AppEnvironment.shared.currentSession = LoginSession(baseURL: URL(string: "https://canvas.com")!,
+                                                            userID: "",
+                                                            userName: "")
+        let mockViewController = MockViewController()
+        var externalURLComponents = URLComponents(string: "https://example.com/courses")!
+        externalURLComponents.originIsNotification = true
+        let externalURL = externalURLComponents.url!
+        let testee = Router(routes: [
+            RouteHandler("/courses") { _, _, _ in UIViewController() },
+        ])
+
+        testee.route(to: externalURL, from: mockViewController)
+
+        XCTAssertNil(login.externalURL)
+        XCTAssertNotNil(mockViewController.shown)
     }
 
     func testExternalWebsitePopupReportedToAnalytics() {
@@ -507,7 +519,7 @@ class RouterTests: CoreTestCase {
         XCTAssertEqual(analyticsHandler.lastEventParameters as? [String: String], [
             "application": "student",
             "screen_name": "/external_url",
-            "screen_class": "CoreWebViewController",
+            "screen_class": "unknown",
         ])
     }
 }

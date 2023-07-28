@@ -239,10 +239,12 @@ public extension UIImage {
     static var k5schedule: UIImage { UIImage(named: "k5schedule", in: .core, compatibleWith: nil)! }
     static var logout: UIImage { UIImage(named: "logout", in: .core, compatibleWith: nil)! }
     static var markReadLine: UIImage { UIImage(named: "markReadLine", in: .core, compatibleWith: nil)! }
+    static var partialSolid: UIImage { UIImage(named: "partialSolid", in: .core, compatibleWith: nil)! }
     static var qrCode: UIImage { UIImage(named: "qrCode", in: .core, compatibleWith: nil)! }
     static var share: UIImage { UIImage(named: "share", in: .core, compatibleWith: nil)! }
     static var todoTab: UIImage { UIImage(named: "todoTab", in: .core, compatibleWith: nil)! }
     static var todoTabActive: UIImage { UIImage(named: "todoTabActive", in: .core, compatibleWith: nil)! }
+    static var unionLine: UIImage { UIImage(named: "unionLine", in: .core, compatibleWith: nil)! }
 }
 
 public extension Image {
@@ -463,8 +465,11 @@ public extension Image {
     static var k5schedule: Image { Image("k5schedule", bundle: .core) }
     static var logout: Image { Image("logout", bundle: .core) }
     static var markReadLine: Image { Image("markReadLine", bundle: .core) }
+    static var partialSolid: Image { Image("partialSolid", bundle: .core) }
     static var qrCode: Image { Image("qrCode", bundle: .core) }
     static var share: Image { Image("share", bundle: .core) }
     static var todoTab: Image { Image("todoTab", bundle: .core) }
     static var todoTabActive: Image { Image("todoTabActive", bundle: .core) }
+    static var unionLine: Image { Image("unionLine", bundle: .core) }
+    static var pandaBlocks: Image { Image("PandaBlocks", bundle: .core) }
 }

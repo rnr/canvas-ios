@@ -17,6 +17,7 @@
 //
 
 import Foundation
+import Combine
 import CoreData
 import SwiftUI
 import WidgetKit
@@ -37,7 +38,7 @@ open class AppEnvironment {
     public var logger: LoggerProtocol
     public var router: Router
     public var currentSession: LoginSession?
-    public var pageViewLogger: PageViewEventViewControllerLoggingProtocol = PresenterPageViewLogger()
+    public var heapID: String?
     public var userDefaults: SessionDefaults? {
         didSet {
             k5.sessionDefaults = userDefaults
@@ -48,6 +49,7 @@ open class AppEnvironment {
     public weak var loginDelegate: LoginDelegate?
     public weak var window: UIWindow?
     open var isTest: Bool { false }
+    private var subscriptions = Set<AnyCancellable>()
 
     public init() {
         self.database = globalDatabase
@@ -75,6 +77,14 @@ open class AppEnvironment {
         userDefaults = nil
         Logger.shared.database = database
         refreshWidgets()
+        deleteUserData(session: session)
+    }
+
+    private func deleteUserData(session: LoginSession) {
+        CourseSyncCleanupInteractor(session: session)
+            .clean()
+            .sink()
+            .store(in: &subscriptions)
     }
 
     public static var shared = AppEnvironment()
@@ -89,11 +99,19 @@ open class AppEnvironment {
     }
 
     public var topViewController: UIViewController? {
-        var controller = window?.rootViewController
-        while controller?.presentedViewController != nil {
-            controller = controller?.presentedViewController
+        let locateTopViewController: () -> UIViewController? = {
+            var controller = self.window?.rootViewController
+            while controller?.presentedViewController != nil {
+                controller = controller?.presentedViewController
+            }
+            return controller
         }
-        return controller
+
+        if Thread.isMainThread {
+            return locateTopViewController()
+        } else {
+            return DispatchQueue.main.sync { locateTopViewController() }
+        }
     }
 
     private var startupIsCompleted = false

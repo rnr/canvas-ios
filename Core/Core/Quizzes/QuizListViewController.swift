@@ -19,7 +19,7 @@
 import UIKit
 import CoreData
 
-public class QuizListViewController: UIViewController, ColoredNavViewProtocol {
+public class QuizListViewController: ScreenViewTrackableViewController, ColoredNavViewProtocol {
     @IBOutlet weak var emptyMessageLabel: UILabel!
     @IBOutlet weak var emptyTitleLabel: UILabel!
     @IBOutlet weak var emptyView: UIView!
@@ -33,6 +33,9 @@ public class QuizListViewController: UIViewController, ColoredNavViewProtocol {
     var courseID = ""
     let env = AppEnvironment.shared
     var selectedFirstQuiz: Bool = false
+    public lazy var screenViewTrackingParameters = ScreenViewTrackingParameters(
+        eventName: "courses/\(courseID)/quizzes"
+    )
 
     lazy var colors = env.subscribe(GetCustomColors()) { [weak self] in
         self?.update()
@@ -76,13 +79,7 @@ public class QuizListViewController: UIViewController, ColoredNavViewProtocol {
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableView.selectRow(at: nil, animated: false, scrollPosition: .none)
-        env.pageViewLogger.startTrackingTimeOnViewController()
         navigationController?.navigationBar.useContextColor(color)
-    }
-
-    public override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        env.pageViewLogger.stopTrackingTimeOnViewController(eventName: "courses/\(courseID)/quizzes", attributes: [:])
     }
 
     @objc func refresh() {
@@ -167,11 +164,16 @@ class QuizListCell: UITableViewCell {
             iconImageView.state = nil
         }
         dateLabel.setText(quiz?.dueText, style: .textCellSupportingText)
+        dateLabel.accessibilityIdentifier = "dateLabel"
         titleLabel.setText(quiz?.title, style: .textCellTitle)
+        titleLabel.accessibilityIdentifier = "titleLabel"
         pointsLabel.setText(quiz?.pointsPossibleText, style: .textCellBottomLabel)
+        pointsLabel.accessibilityIdentifier = "pointsLabel"
         questionsLabel.setText(quiz?.nQuestionsText, style: .textCellBottomLabel)
+        questionsLabel.accessibilityIdentifier = "questionsLabel"
         if let statusText = quiz?.lockStatusText {
             statusLabel.setText(statusText, style: .textCellSupportingText)
+            statusLabel.accessibilityIdentifier = "statusLabel"
             statusLabel.isHidden = false
             statusDot.isHidden = false
         } else {

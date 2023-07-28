@@ -39,7 +39,7 @@ const fire      = { normal: '#FC5E13', high: '#E36327' }
 const licorice  = { normal: '#2D3B45', high: '#2D3B45' }
 const oxford    = { normal: '#394B58', high: '#394B58' }
 const ash       = { normal: '#556572', high: '#556572' }
-const tiara     = { normal: '#C7CDD1', high: '#5565721' }
+const tiara     = { normal: '#C7CDD1', high: '#556572' }
 const porcelain = { normal: '#F5F5F5', high: '#FFFFFF' }
 const white     = { normal: '#FFFFFF', high: '#FFFFFF' }
 
@@ -115,6 +115,10 @@ const colors = {
   backgroundLightest: {
     light: white,
     dark: { normal: '#121212', high: '#121212' },
+  },
+  tabBarBackground: {
+  	light: white,
+  	dark: { normal: '#1D1E1F', high: '#1D1E1F' },
   },
   get backgroundAlert () { return colors.barney },
   get backgroundInfo () { return colors.electric },

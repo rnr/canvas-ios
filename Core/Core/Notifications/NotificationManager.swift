@@ -37,6 +37,17 @@ public class NotificationManager {
     public var remoteToken: Data?
     public var remoteSession: LoginSession?
 
+    private let subscriptArnKey: String = "icanvas.mobile.2u.subscriptArnKey"
+    public var subscriptionArn: String? {
+        get {
+            UserDefaults.standard.string(forKey: subscriptArnKey)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: subscriptArnKey)
+        }
+    }
+    public var emailAsPushChannelID: String?
+
     public static var shared = NotificationManager(
         notificationCenter: UNUserNotificationCenter.current(),
         logger: AppEnvironment.shared.logger
@@ -90,11 +101,13 @@ extension NotificationManager {
         }
         let newToken = token ?? remoteToken
         guard newToken != remoteToken || session != remoteSession else { return }
-        unsubscribeFromPushChannel()
+//        unsubscribeFromPushChannel()
         remoteToken = newToken
         remoteSession = session
         guard let token = newToken, let session = session else { return }
-        createPushChannel(token: token, session: session)
+//        createPushChannel(token: token, session: session)
+        checkIfShouldCreateEmailChannelForPush(session: session)
+        subscribeToUserSNSTopic(deviceToken: token, session: session)
     }
 
     func createPushChannel(token: Data, session: LoginSession, retriesLeft: Int = 4) {
@@ -105,7 +118,14 @@ extension NotificationManager {
                 return self.createPushChannel(token: token, session: session, retriesLeft: retriesLeft - 1)
             }
             guard let channelID = channel?.id.value, error == nil else {
-                return AppEnvironment.shared.reportError(error)
+                // Hide error alert when "Users can edit their communication channels" setting is turned off
+                if let apiError = error as? APIError, case .unauthorized = apiError {
+                    return
+                } else if error.isPushNotConfigured {
+                    return
+                } else {
+                    return AppEnvironment.shared.reportError(error)
+                }
             }
             api.makeRequest(GetNotificationDefaultsFlagRequest()) { data, _, error in
                 guard data == nil || error != nil else { return } // already set up defaults

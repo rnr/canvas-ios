@@ -28,16 +28,16 @@
 	<string>$(TeamIdentifierPrefix)$(CFBundleIdentifier)</string>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.com.instructure.icanvas.2u</string>
 		<string>group.com.instructure.Calendar.2u</string>
 		<string>group.com.instructure.Contexts.2u</string>
 		<string>group.com.instructure.Courses.2u</string>
+		<string>group.com.instructure.icanvas.2u</string>
 		<string>group.instructure.shared.2u</string>
 	</array>
 	<key>keychain-access-groups</key>
 	<array>
-		<string>$(AppIdentifierPrefix)com.instructure.icanvas.2u</string>
-		<string>$(AppIdentifierPrefix)com.instructure.shared-credentials.2u</string>
+		<string>$(AppIdentifierPrefix)com.instructure.icanvas</string>
+		<string>$(AppIdentifierPrefix)com.instructure.shared-credentials</string>
 	</array>
 </dict>
 </plist>

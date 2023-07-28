@@ -60,6 +60,22 @@ struct SideMenuBottomSection: View {
 
     var body: some View {
         VStack(spacing: 0) {
+            if showDevMenu {
+                SideMenuDeveloperOptionsSection(onDeveloperMenuTap: {
+                    route(to: "/dev-menu", options: .modal(embedInNav: true))
+                })
+                Divider()
+            }
+
+            if env.app == .parent {
+                Button {
+                    self.route(to: "/about", options: .modal(embedInNav: true, addDoneButton: true))
+                } label: {
+                    SideMenuItem(id: "about", image: .infoLine, title: Text("About", bundle: .core))
+                }
+                .buttonStyle(ContextButton(contextColor: Brand.shared.primary))
+            }
+
             if let root = helpLinks.first, helpLinks.count > 1 {
                 Button {
                     showHelpMenu()
@@ -106,15 +122,6 @@ struct SideMenuBottomSection: View {
                     handleLogout()
                 } label: {
                     SideMenuItem(id: "logOut", image: Image("logout", bundle: .core), title: Text("Log Out", bundle: .core))
-                }
-                .buttonStyle(ContextButton(contextColor: Brand.shared.primary))
-            }
-
-            if showDevMenu {
-                Button {
-                    route(to: "/dev-menu", options: .modal(embedInNav: true))
-                } label: {
-                    SideMenuItem(id: "developerMenu", image: .settingsLine, title: Text("Developer menu", bundle: .core))
                 }
                 .buttonStyle(ContextButton(contextColor: Brand.shared.primary))
             }

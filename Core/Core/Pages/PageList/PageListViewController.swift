@@ -18,7 +18,7 @@
 
 import UIKit
 
-public class PageListViewController: UIViewController, ColoredNavViewProtocol {
+public class PageListViewController: ScreenViewTrackableViewController, ColoredNavViewProtocol {
     @IBOutlet weak var emptyMessageLabel: UILabel!
     @IBOutlet weak var emptyTitleLabel: UILabel!
     @IBOutlet weak var emptyView: UIView!
@@ -34,6 +34,9 @@ public class PageListViewController: UIViewController, ColoredNavViewProtocol {
     var context = Context.currentUser
     let env = AppEnvironment.shared
     var selectedFirstPage: Bool = false
+    public lazy var screenViewTrackingParameters = ScreenViewTrackingParameters(
+        eventName: "\(context.pathComponent)/pages"
+    )
 
     lazy var colors = env.subscribe(GetCustomColors()) { [weak self] in
         self?.updateNavBar()
@@ -97,12 +100,6 @@ public class PageListViewController: UIViewController, ColoredNavViewProtocol {
             tableView.deselectRow(at: selected, animated: true)
         }
         navigationController?.navigationBar.useContextColor(color)
-        env.pageViewLogger.startTrackingTimeOnViewController()
-    }
-
-    public override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        env.pageViewLogger.stopTrackingTimeOnViewController(eventName: "\(context.pathComponent)/pages", attributes: [:])
     }
 
     func updateNavBar() {
@@ -124,7 +121,10 @@ public class PageListViewController: UIViewController, ColoredNavViewProtocol {
         emptyView.isHidden = pages.error != nil || isLoading || !frontPage.isEmpty || !pages.isEmpty
         errorView.isHidden = pages.error == nil
         let selected = tableView.indexPathForSelectedRow
-        tableView.reloadData()
+        debugLog(isLoading, "isLoading")
+        if isLoading {
+            tableView.reloadData()
+        }
         tableView.selectRow(at: selected, animated: false, scrollPosition: .none) // preserve prior selection
 
         if !selectedFirstPage, !isLoading, let url = frontPage.first?.htmlURL ?? pages.first?.htmlURL {
@@ -136,7 +136,7 @@ public class PageListViewController: UIViewController, ColoredNavViewProtocol {
     }
 
     @objc func createPage() {
-        env.router.route(to: "\(context.pathComponent)/pages/new", from: self, options: .modal(embedInNav: true))
+        env.router.route(to: "\(context.pathComponent)/pages/new", from: self, options: .modal(isDismissable: false, embedInNav: true))
     }
 
     @objc func refresh() {
@@ -188,13 +188,21 @@ extension PageListViewController: UITableViewDataSource, UITableViewDelegate {
             return LoadingCell(style: .default, reuseIdentifier: nil)
         }
         let cell: DownloadPageListTableViewCell = tableView.dequeue(for: indexPath)
-        cell.update(pages[indexPath.row], course: course.first, indexPath: indexPath, color: color)
+        let page = pages[indexPath.row]
+        cell.update(
+            page: page,
+            course: course.first,
+            indexPath: indexPath,
+            color: color
+        )
         return cell
     }
 
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let page = (indexPath.section == 0 && !frontPage.isEmpty) ? frontPage.first : pages[indexPath.row]
-        guard let url = page?.htmlURL else { return }
+        guard let page = (indexPath.section == 0 && !frontPage.isEmpty) ? frontPage.first : pages[indexPath.row] else {
+            return
+        }
+        guard let url = page.htmlURL else { return }
         env.router.route(to: url, from: self, options: .detail)
     }
 

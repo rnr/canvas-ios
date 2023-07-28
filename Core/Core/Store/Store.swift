@@ -60,7 +60,7 @@ public class Store<U: UseCase>: NSObject, NSFetchedResultsControllerDelegate, Ob
      `true` if the `refresh(force: false)` method will return data from the permanent store without any API calls.
 
      Use this to decide if a loading screen should be shown or not. Objects from the permanent store are available very quickly
-     so no lodaing indicator is necessary, on the other hand if the store will fetch data from the API it could be a lenghty operation.
+     so no loading indicator is necessary, on the other hand if the store will fetch data from the API it could be a lenghty operation.
      */
     public var isCachedDataAvailable: Bool { !isCachedDataExpired }
     /**
@@ -111,11 +111,19 @@ public class Store<U: UseCase>: NSObject, NSFetchedResultsControllerDelegate, Ob
     private let allObjectsSubject = CurrentValueSubject<[U.Model], Never>([])
     private let stateSubject = CurrentValueSubject<StoreState, Never>(.loading)
     private let hasNextPageSubject = CurrentValueSubject<Bool, Never>(false)
+    private let offlineModeInteractor: OfflineModeInteractor
 
     // MARK: -
 
-    public init(env: AppEnvironment, context: NSManagedObjectContext, useCase: U, eventHandler: @escaping EventHandler) {
+    public init(
+        env: AppEnvironment,
+        offlineModeInteractor: OfflineModeInteractor = OfflineModeInteractorLive.shared,
+        context: NSManagedObjectContext,
+        useCase: U,
+        eventHandler: @escaping EventHandler
+    ) {
         self.env = env
+        self.offlineModeInteractor = offlineModeInteractor
         self.useCase = useCase
         let scope = useCase.scope
         let request = NSFetchRequest<U.Model>(entityName: String(describing: U.Model.self))
@@ -197,11 +205,13 @@ public class Store<U: UseCase>: NSObject, NSFetchedResultsControllerDelegate, Ob
 
     @discardableResult
     public func exhaust(force: Bool = true,
-                        while condition: @escaping (U.Response) -> Bool = { _ in true }
+                        while condition: @escaping (U.Response?) -> Bool = { _ in true }
     ) -> Self {
         refresh(force: force) { [weak self] response in
             if let response = response, condition(response) {
                 self?.exhaustNext(while: condition)
+            } else {
+                _ = condition(nil)
             }
         }
     }
@@ -239,6 +249,25 @@ public class Store<U: UseCase>: NSObject, NSFetchedResultsControllerDelegate, Ob
         }
     }
 
+    public func exhaustWithFuture(
+        force: Bool = true,
+        while condition: @escaping (U.Response) -> Bool = { _ in true }
+    ) -> Future<Void, Never> {
+        Future<Void, Never> { [weak self] promise in
+            guard let self = self else {
+                promise(.success(()))
+                return
+            }
+            self.refresh(force: force) { [weak self] response in
+                if let response = response, condition(response) {
+                    self?.exhaustNext(while: condition) {
+                        promise(.success(()))
+                    }
+                }
+            }
+        }
+    }
+
     // MARK: - Private Methods
 
     private func notify() {
@@ -248,10 +277,12 @@ public class Store<U: UseCase>: NSObject, NSFetchedResultsControllerDelegate, Ob
         }
     }
 
-    private func exhaustNext(while condition: @escaping (U.Response) -> Bool) {
+    private func exhaustNext(while condition: @escaping (U.Response) -> Bool, completion: (() -> Void)? = nil) {
         getNextPage { [weak self] response in
             if let response = response, condition(response) {
-                self?.exhaustNext(while: condition)
+                self?.exhaustNext(while: condition, completion: completion)
+            } else {
+                completion?()
             }
         }
     }
@@ -261,17 +292,28 @@ public class Store<U: UseCase>: NSObject, NSFetchedResultsControllerDelegate, Ob
         requested = true
         pending = true
         notify()
-        useCase.fetch(environment: env, force: force) { [weak self] response, urlResponse, error in
-            self?.willChange()
-            self?.error = error
-            self?.pending = false
-            if let urlResponse = urlResponse {
-                self?.next = self?.useCase.getNext(from: urlResponse)
-            }
-            self?.notify()
-            self?.publishState()
+
+        if offlineModeInteractor.isOfflineModeEnabled() {
+            pending = false
+            error = nil
+            publishState()
+            notify()
             performUIUpdate {
-                callback?(response)
+                callback?(nil)
+            }
+        } else {
+            useCase.fetch(environment: env, force: force) { [weak self] response, urlResponse, error in
+                self?.willChange()
+                self?.error = error
+                self?.pending = false
+                if let urlResponse = urlResponse {
+                    self?.next = self?.useCase.getNext(from: urlResponse)
+                }
+                self?.notify()
+                self?.publishState()
+                performUIUpdate {
+                    callback?(response)
+                }
             }
         }
     }

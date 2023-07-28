@@ -24,7 +24,6 @@ class LoginStartViewControllerTests: CoreTestCase {
     var loggedIn: LoginSession?
     var loggedOut: LoginSession?
     var opened: URL?
-    var hasOpenedSupportTicket = false
     var supportsCanvasNetwork = true
     var helpURL: URL?
     var whatsNewURL = URL(string: "whats-new")
@@ -137,9 +136,6 @@ class LoginStartViewControllerTests: CoreTestCase {
         controller.canvasNetworkButton.sendActions(for: .primaryActionTriggered)
         XCTAssertEqual((router.viewControllerCalls.last?.0 as? LoginWebViewController)?.host, "learn.canvas.net")
 
-        controller.helpButton.sendActions(for: .primaryActionTriggered)
-        XCTAssertTrue(hasOpenedSupportTicket)
-
         controller.whatsNewLink.sendActions(for: .primaryActionTriggered)
         XCTAssertEqual(opened, whatsNewURL)
     }
@@ -214,33 +210,11 @@ class LoginStartViewControllerTests: CoreTestCase {
         XCTAssertFalse(controller.useQRCodeButton.isHidden)
         XCTAssertTrue(controller.useQRCodeDivider.isHidden)
     }
-
-    func testSavedLoginLayout() {
-        controller.viewDidLoad()
-
-        controller.previousLoginsView.isHidden = true
-        controller.lastLoginAccount = nil
-        XCTAssertTrue(controller.lastLoginButton.isHidden)
-        XCTAssertEqual(controller.loginTopConstraint.constant, 100)
-
-        controller.previousLoginsView.isHidden = false
-        controller.lastLoginAccount = nil
-        XCTAssertTrue(controller.lastLoginButton.isHidden)
-        XCTAssertEqual(controller.loginTopConstraint.constant, 50)
-
-        controller.lastLoginAccount = APIAccountResult(name: "", domain: "", authentication_provider: nil)
-        XCTAssertFalse(controller.lastLoginButton.isHidden)
-        XCTAssertEqual(controller.loginTopConstraint.constant, 50)
-    }
 }
 
 extension LoginStartViewControllerTests: LoginDelegate {
     func openExternalURL(_ url: URL) {
         opened = url
-    }
-
-    func openSupportTicket() {
-        hasOpenedSupportTicket = true
     }
 
     func userDidLogin(session: LoginSession) {

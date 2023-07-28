@@ -54,7 +54,6 @@
 		B1CA05071FE448F300B7D5AA /* NativeNotificationCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = B1CA05051FE448F300B7D5AA /* NativeNotificationCenter.m */; };
 		B1ED11942040CD5F00C3C580 /* CoreWebViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B1ED11932040CD5F00C3C580 /* CoreWebViewManager.m */; };
 		B1F4E8CC206179CC0056074A /* NativeFileSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = B1F4E8CB206179CC0056074A /* NativeFileSystem.m */; };
-		CF74C2FB26710EDD00424EA1 /* FullScreenPrimaryHelmSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF74C2FA26710EDD00424EA1 /* FullScreenPrimaryHelmSplitViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -109,20 +108,11 @@
 		78C610CB21C9FFFC00913B93 /* CanvasCrashlytics.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CanvasCrashlytics.h; sourceTree = "<group>"; };
 		78C610CC21CA022400913B93 /* CanvasCrashlytics.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CanvasCrashlytics.m; sourceTree = "<group>"; };
 		7D0215A221BAE703009A8E69 /* Core.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Core.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		7D349C6521430C8C004C1074 /* da-instk12 */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "da-instk12"; path = "da-instk12.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
-		7D349C6621430C8C004C1074 /* da-instk12 */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "da-instk12"; path = "da-instk12.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		7D349C6B21430CBF004C1074 /* en-GB-instukhe */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB-instukhe"; path = "en-GB-instukhe.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
-		7D349C6C21430CBF004C1074 /* en-GB-instukhe */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB-instukhe"; path = "en-GB-instukhe.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		7D349C7121430CF7004C1074 /* nb-instk12 */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "nb-instk12"; path = "nb-instk12.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
-		7D349C7221430CF7004C1074 /* nb-instk12 */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "nb-instk12"; path = "nb-instk12.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		7D349C7721430D2A004C1074 /* sv-instk12 */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sv-instk12"; path = "sv-instk12.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
-		7D349C7821430D2A004C1074 /* sv-instk12 */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sv-instk12"; path = "sv-instk12.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		7D6410EB2280B74E008FA345 /* NativeLoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeLoginManager.swift; sourceTree = "<group>"; };
 		7D6C8C7422F2335A00E5ADD8 /* HTTPRequestHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTTPRequestHandler.m; sourceTree = "<group>"; };
 		7D81F3FD24F04DD000C482D2 /* CoreWebViewWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreWebViewWrapper.swift; sourceTree = "<group>"; };
 		7D98611D24EDB2CD008F262F /* RichContentEditorManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RichContentEditorManager.m; sourceTree = "<group>"; };
 		7D98611F24EDB6EC008F262F /* RichContentEditorWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RichContentEditorWrapper.swift; sourceTree = "<group>"; };
-		7D9DF28B22BD7F4D003110B9 /* en-AU-unimelb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-AU-unimelb"; path = "en-AU-unimelb.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		7DD89E8A20AB626600650227 /* AppStoreReview.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppStoreReview.m; sourceTree = "<group>"; };
 		801BC15BB71585F55A4CD6C8 /* Pods_defaults_CanvasCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_defaults_CanvasCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F0A6C871FBB768A009CA750 /* mi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = mi; path = mi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -173,7 +163,6 @@
 		B1ED11932040CD5F00C3C580 /* CoreWebViewManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CoreWebViewManager.m; sourceTree = "<group>"; };
 		B1F4E8CB206179CC0056074A /* NativeFileSystem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NativeFileSystem.m; sourceTree = "<group>"; };
 		B2DEC606EFF5FA548C530DCD /* Pods-defaults-CanvasCore.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-defaults-CanvasCore.release.xcconfig"; path = "../Pods/Target Support Files/Pods-defaults-CanvasCore/Pods-defaults-CanvasCore.release.xcconfig"; sourceTree = "<group>"; };
-		CF74C2FA26710EDD00424EA1 /* FullScreenPrimaryHelmSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenPrimaryHelmSplitViewController.swift; sourceTree = "<group>"; };
 		D7D0C4CF2FDEC11C263CE767 /* Pods-defaults-CanvasCoreTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-defaults-CanvasCoreTests.release.xcconfig"; path = "../Pods/Target Support Files/Pods-defaults-CanvasCoreTests/Pods-defaults-CanvasCoreTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -300,7 +289,6 @@
 				497CA7661F82D18B00501613 /* Helm.swift */,
 				497CA7621F82D18900501613 /* HelmConstants.swift */,
 				497CA7651F82D18A00501613 /* HelmSplitViewController.swift */,
-				CF74C2FA26710EDD00424EA1 /* FullScreenPrimaryHelmSplitViewController.swift */,
 				497CA7631F82D18A00501613 /* HelmViewController.swift */,
 				2C195F51201948DB003B0D7D /* HelmScreenConfig.swift */,
 			);
@@ -389,15 +377,10 @@
 				pt,
 				ht,
 				zh,
-				"da-instk12",
-				"en-GB-instukhe",
-				"nb-instk12",
-				"sv-instk12",
 				cy,
 				"en-CY",
 				fi,
 				sl,
-				"en-AU-unimelb",
 				is,
 				ca,
 				"en-CA",
@@ -463,7 +446,6 @@
 				7D6C8C7522F2335A00E5ADD8 /* HTTPRequestHandler.m in Sources */,
 				494AE08A1F8436C1001A8F31 /* NativeLoginManager.m in Sources */,
 				2CAF1B3A1F72B1B7007225DF /* BundleExtensions.swift in Sources */,
-				CF74C2FB26710EDD00424EA1 /* FullScreenPrimaryHelmSplitViewController.swift in Sources */,
 				494AE09E1F843A09001A8F31 /* NativeAccessibility.m in Sources */,
 				494AE0AD1F843AAC001A8F31 /* VideoContainerView.swift in Sources */,
 				494AE0A01F843A09001A8F31 /* PushNotifications.m in Sources */,
@@ -529,10 +511,6 @@
 				9F523E051FBB76A40092A474 /* ht */,
 				9F5BA8591FBB76A800BDC402 /* es */,
 				5B85C9F520DF8096007AFAFC /* cy */,
-				7D349C6521430C8C004C1074 /* da-instk12 */,
-				7D349C6B21430CBF004C1074 /* en-GB-instukhe */,
-				7D349C7121430CF7004C1074 /* nb-instk12 */,
-				7D349C7721430D2A004C1074 /* sv-instk12 */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -561,14 +539,9 @@
 				9F523E061FBB76A40092A474 /* ht */,
 				9F5BA85A1FBB76A800BDC402 /* es */,
 				5B85C9F720DF8096007AFAFC /* cy */,
-				7D349C6621430C8C004C1074 /* da-instk12 */,
-				7D349C6C21430CBF004C1074 /* en-GB-instukhe */,
-				7D349C7221430CF7004C1074 /* nb-instk12 */,
-				7D349C7821430D2A004C1074 /* sv-instk12 */,
 				5BDF109421BCFCB700664A58 /* en-CY */,
 				5B5262B522ACEDAA00E14EB0 /* fi */,
 				5B1FFAA722BD70940019BAC8 /* sl */,
-				7D9DF28B22BD7F4D003110B9 /* en-AU-unimelb */,
 				5B2F8DFC240B9C90001087B2 /* is */,
 				5BAAF8AB24308633005A9D81 /* ca */,
 				5B0E4DC62430866600AB84EB /* en-CA */,
@@ -639,7 +612,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
@@ -702,7 +675,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = (
 					"-Xlinker",

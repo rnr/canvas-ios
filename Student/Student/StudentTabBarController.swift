@@ -43,11 +43,21 @@ class StudentTabBarController: UITabBarController {
         selectedIndex = AppEnvironment.shared.userDefaults?.landingPath
             .flatMap { paths.firstIndex(of: $0) } ?? 0
         tabBar.useGlobalNavStyle()
-
+        NotificationCenter.default.addObserver(self, selector: #selector(checkForPolicyChanges), name: UIApplication.didBecomeActiveNotification, object: nil)
         reportScreenView(for: selectedIndex, viewController: viewControllers![selectedIndex])
 
         attachDownloadingBarView()
         attachConnectionBarView()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        checkForPolicyChanges()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self, name: UIApplication.didBecomeActiveNotification, object: nil)
     }
 
     func dashboardTab() -> UIViewController {
@@ -66,14 +76,9 @@ class StudentTabBarController: UITabBarController {
             tabBarImage =  .homeroomTab
             tabBarImageSelected = .homeroomTabActive
         } else {
-            let split = HelmSplitViewController()
-            split.preferredDisplayMode = .oneBesideSecondary
-            split.viewControllers = [
-                HelmNavigationController(rootViewController: CoreHostingController(DashboardCardView(shouldShowGroupList: true, showOnlyTeacherEnrollment: false))),
-                HelmNavigationController(rootViewController: EmptyViewController()),
-            ]
-            split.masterNavigationController?.delegate = split
-            result = split
+            let dashboard = CoreHostingController(DashboardContainerView(shouldShowGroupList: true,
+                                                                    showOnlyTeacherEnrollment: false))
+            result = DashboardContainerViewController(rootViewController: dashboard) { HelmSplitViewController() }
 
             tabBarTitle = NSLocalizedString("Dashboard", comment: "dashboard page title")
             tabBarImage = .dashboardTab
@@ -163,6 +168,12 @@ class StudentTabBarController: UITabBarController {
         Analytics.shared.logScreenView(route: "/tabs/" + event, viewController: viewController)
     }
 
+    @objc private func checkForPolicyChanges() {
+        LoginUsePolicy.checkAcceptablePolicy(from: self, cancelled: {
+            AppEnvironment.shared.loginDelegate?.changeUser()
+        })
+    }
+
     private func attachDownloadingBarView() {
         downloadingBarView.attach(tabBar: tabBar, in: view)
         downloadingBarView.onTap = { [weak self] in
@@ -176,10 +187,13 @@ class StudentTabBarController: UITabBarController {
 
     private func showDownloadingView() {
         let downloadsViewController = CoreHostingController(DownloadsView())
-        ((viewControllers?[selectedIndex] as? HelmSplitViewController)?
-            .viewControllers
-            .first as? UINavigationController)?
-            .pushViewController(downloadsViewController, animated: true)
+        selectedViewController.flatMap {
+            AppEnvironment.shared.router.show(
+                downloadsViewController,
+                from: $0,
+                options: .push
+            )
+        }
     }
 
 }

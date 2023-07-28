@@ -65,6 +65,16 @@ extension UIViewController {
         return buttonItem
     }
 
+    public func findParentViewController<T: UIViewController>() -> T? {
+        if let self = self as? T {
+            return self
+        } else if let parent {
+            return parent.findParentViewController()
+        } else {
+            return nil
+        }
+    }
+
     public func addNavigationButton(_ button: UIBarButtonItem, side: NavigationItemSide) {
         switch side {
         case .right:
@@ -129,11 +139,11 @@ extension UIViewController {
         let right = navigationItem.rightBarButtonItems ?? []
         let left = navigationItem.leftBarButtonItems ?? []
         let leftItemsSupplementBackButton = navigationItem.leftItemsSupplementBackButton
-        navigationItem.rightBarButtonItems = (viewController.navigationItem.rightBarButtonItems ?? []) + right
+        navigationItem.rightBarButtonItems = (right + (viewController.navigationItem.rightBarButtonItems ?? [])).removeDuplicates()
         navigationItem.leftBarButtonItems = (viewController.navigationItem.leftBarButtonItems ?? []) + left
         navigationItem.leftItemsSupplementBackButton = viewController.navigationItem.leftItemsSupplementBackButton || leftItemsSupplementBackButton
 
-        return [
+        var observations = [
             viewController.observe(\.title) { [weak self] item, _ in
                 self?.title = item.title
             },
@@ -153,6 +163,17 @@ extension UIViewController {
                 self?.navigationItem.leftItemsSupplementBackButton = item.leftItemsSupplementBackButton || leftItemsSupplementBackButton
             },
         ]
+
+        if #available(iOSApplicationExtension 16.0, *) {
+            observations.append(viewController.navigationItem.observe(\.trailingItemGroups) { [weak self] item, _ in
+                let groupButtons = item.trailingItemGroups.flatMap { itemGroup in
+                    itemGroup.barButtonItems
+                }
+                self?.navigationItem.rightBarButtonItems = groupButtons + right
+            })
+        }
+
+        return observations
     }
 
     public func showPermissionError(_ error: PermissionError) {
@@ -166,6 +187,10 @@ extension UIViewController {
     }
 
     public func showThemeSelectorAlert() {
+
+        // Don't show the theme selector popup for UI Tests
+        guard !ProcessInfo.isUITest else { return }
+
         let alert = UIAlertController(title: NSLocalizedString("Canvas is now available in dark theme", bundle: .core, comment: ""),
                                       message: NSLocalizedString("Choose your app appearance!\nYou can change it later in the settings menu.", bundle: .core, comment: ""),
                                       preferredStyle: .alert)

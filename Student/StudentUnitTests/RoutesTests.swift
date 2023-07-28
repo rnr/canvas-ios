@@ -158,6 +158,12 @@ class RoutesTests: XCTestCase {
         XCTAssert(router.match("/groups/2/announcements/3?origin=module_item_details") is CoreHostingController<EmbeddedWebPageView<EmbeddedWebPageViewModelLive>>)
     }
 
+    func testOfflineScreenRoutes() {
+        XCTAssert(router.match("/offline/sync_picker/132") is CoreHostingController<CourseSyncSelectorView>)
+        XCTAssert(router.match("/offline/sync_picker") is CoreHostingController<CourseSyncSelectorView>)
+        XCTAssert(router.match("/offline/settings") is CoreHostingController<CourseSyncSettingsView>)
+    }
+
     // MARK: - K5 / non-K5 course detail route logic tests
 
     func testK5SubjectViewRoute() {
@@ -246,14 +252,14 @@ class RoutesTests: XCTestCase {
 
     func testFallbackNonHTTP() {
         let expected = URL(string: "https://canvas.instructure.com/not-a-native-route")!
-        api.mock(GetWebSessionRequest(to: expected), value: .init(session_url: expected))
+        api.mock(GetWebSessionRequest(to: expected), value: .init(session_url: expected, requires_terms_acceptance: false))
         router.route(to: "canvas-courses://canvas.instructure.com/not-a-native-route", from: UIViewController())
         XCTAssertEqual(login.opened, expected)
     }
 
     func testFallbackRelative() {
         let expected = URL(string: "https://canvas.instructure.com/not-a-native-route")!
-        api.mock(GetWebSessionRequest(to: expected), value: .init(session_url: expected))
+        api.mock(GetWebSessionRequest(to: expected), value: .init(session_url: expected, requires_terms_acceptance: false))
         AppEnvironment.shared.currentSession = LoginSession.make(baseURL: URL(string: "https://canvas.instructure.com")!)
         router.route(to: "not-a-native-route", from: UIViewController())
         XCTAssertEqual(login.opened?.absoluteURL, expected)
@@ -264,7 +270,7 @@ class RoutesTests: XCTestCase {
                                                             userID: "",
                                                             userName: "")
         let expected = URL(string: "https://instructure.com")!
-        api.mock(GetWebSessionRequest(to: URL(string: "https://canvas.com")!), value: .init(session_url: expected))
+        api.mock(GetWebSessionRequest(to: URL(string: "https://canvas.com")!), value: .init(session_url: expected, requires_terms_acceptance: false))
         router.route(to: "https://canvas.com", from: UIViewController())
         XCTAssertEqual(login.opened, expected)
     }
@@ -273,7 +279,7 @@ class RoutesTests: XCTestCase {
         let expected = URL(string: "https://canvas.instructure.com/not-a-native-route?token=abcdefg")!
         api.mock(
             GetWebSessionRequest(to: URL(string: "https://canvas.instructure.com/not-a-native-route")),
-            value: .init(session_url: expected)
+            value: .init(session_url: expected, requires_terms_acceptance: false)
         )
         router.route(to: "canvas-courses://canvas.instructure.com/not-a-native-route", from: UIViewController())
         XCTAssertEqual(login.opened, expected)

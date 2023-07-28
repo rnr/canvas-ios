@@ -19,6 +19,7 @@
 import XCTest
 import PSPDFKit
 import PSPDFKitUI
+import Combine
 @testable import Core
 
 class DocViewerViewControllerTests: CoreTestCase {
@@ -26,7 +27,8 @@ class DocViewerViewControllerTests: CoreTestCase {
         let controller = DocViewerViewController.create(
             filename: "instructure.pdf",
             previewURL: url, fallbackURL: url,
-            navigationItem: navigationItem
+            navigationItem: navigationItem,
+            offlineModeInteractor: MockOfflineModeInteractorDisabled()
         )
         controller.session = session
         controller.isAnnotatable = true
@@ -46,6 +48,39 @@ class DocViewerViewControllerTests: CoreTestCase {
             loading = downloadURL
         }
     }
+
+    class MockOfflineModeInteractorDisabled: OfflineModeInteractor {
+        func observeIsOfflineMode() -> AnyPublisher<Bool, Never> {
+            Just(false).eraseToAnyPublisher()
+        }
+
+        func observeNetworkStatus() -> AnyPublisher<Core.NetworkAvailabilityStatus, Never> {
+            Just(.connected(.wifi)).eraseToAnyPublisher()
+        }
+
+        func filePath(sessionID: String, fileID: String, fileName: String) -> String {
+            ""
+        }
+
+        func isOfflineModeEnabled() -> Bool { false }
+    }
+
+    class MockOfflineModeInteractorEnabled: OfflineModeInteractor {
+        func observeIsOfflineMode() -> AnyPublisher<Bool, Never> {
+            Just(true).eraseToAnyPublisher()
+        }
+
+        func observeNetworkStatus() -> AnyPublisher<Core.NetworkAvailabilityStatus, Never> {
+            Just(.disconnected).eraseToAnyPublisher()
+        }
+
+        func filePath(sessionID: String, fileID: String, fileName: String) -> String {
+            ""
+        }
+
+        func isOfflineModeEnabled() -> Bool { true }
+    }
+
     lazy var session: MockSession = {
         let session = MockSession { [weak self] in
             self?.controller.sessionIsReady()
@@ -108,6 +143,24 @@ class DocViewerViewControllerTests: CoreTestCase {
         controller.view.layoutIfNeeded()
         XCTAssertNil(controller.pdf.document)
         XCTAssertEqual(controller.fallbackUsed, true)
+    }
+
+    func testLoadFallbackWhenOfflineModeIsEnabled() {
+        controller = DocViewerViewController.create(
+            filename: "instructure.pdf",
+            previewURL: url, fallbackURL: url,
+            navigationItem: navigationItem,
+            offlineModeInteractor: MockOfflineModeInteractorEnabled()
+        )
+        controller.session = session
+        controller.isAnnotatable = true
+
+        session.error = APIDocViewerError.noData
+        controller.view.layoutIfNeeded()
+        XCTAssertNil(router.presented)
+        XCTAssertEqual(controller.fallbackUsed, false)
+        XCTAssertEqual(controller.loadingView.isHidden, true)
+        XCTAssertEqual(navigationItem.rightBarButtonItems, nil)
     }
 
     func testAnnotationContextMenuForFileAnnotations() {

@@ -28,13 +28,16 @@ final class RoundButton: UIButton {
        setImage(image, for: .normal)
        contentHorizontalAlignment = .fill
        contentVerticalAlignment = .fill
-       imageView?.contentMode = .scaleAspectFill
-
+       imageView?.contentMode = .scaleAspectFit
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
         layer.cornerRadius = frame.height / 2
+    }
+
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        return bounds.insetBy(dx: -10, dy: -10).contains(point)
     }
 
 }

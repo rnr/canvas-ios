@@ -29,8 +29,6 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
 
     // MARK: - Properties -
 
-    var page: Page?
-    var course: Course?
     private var cancellable: AnyCancellable?
 
     private var accessIconView: AccessIconView = .init(frame: .zero)
@@ -50,20 +48,9 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
         return dateLabel
     }()
 
-    private var savedImage: UIImageView = {
-        let savedImage = UIImageView()
-        savedImage.isHidden = true
-        savedImage.image = .init(systemName: "cloud")
-        savedImage.contentMode = .scaleAspectFit
-        return savedImage
-    }()
-
-    private var activityIndicator: UIActivityIndicatorView = {
-        let activityIndicator = UIActivityIndicatorView()
-        activityIndicator.isHidden = true
-        activityIndicator.color = .lightGray
-        return activityIndicator
-    }()
+    var downloadButtonHelper = DownloadStatusProvider()
+    var page: Page?
+    var course: Course?
 
     // MARK: - Init -
 
@@ -76,19 +63,12 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    public override func prepareForReuse() {
-        super.prepareForReuse()
-        savedImage.isHidden = true
-        activityIndicator.stopAnimating()
-        activityIndicator.isHidden = true
-    }
-
     // MARK: - Configuration -
 
     private func configure() {
         backgroundColor = .backgroundLightest
         accessoryType = .disclosureIndicator
-        [titleLabel, dateLabel, savedImage, activityIndicator, accessIconView].forEach {
+        [titleLabel, dateLabel, accessIconView].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview($0)
         }
@@ -108,21 +88,12 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
 
         titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8).isActive = true
         titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 60).isActive = true
-        titleLabel.trailingAnchor.constraint(equalTo: savedImage.leadingAnchor, constant: -15).isActive = true
+        titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -60).isActive = true
 
         dateLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor).isActive = true
         dateLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8).isActive = true
         dateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 60).isActive = true
-        dateLabel.trailingAnchor.constraint(equalTo: savedImage.leadingAnchor, constant: -15).isActive = true
-
-        savedImage.widthAnchor.constraint(equalToConstant: 25).isActive = true
-        savedImage.heightAnchor.constraint(equalToConstant: 25).isActive = true
-        savedImage.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
-        savedImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15).isActive = true
-        activityIndicator.widthAnchor.constraint(equalToConstant: 25).isActive = true
-        activityIndicator.heightAnchor.constraint(equalToConstant: 25).isActive = true
-        activityIndicator.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
-        activityIndicator.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15).isActive = true
+        dateLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -60).isActive = true
     }
 
     // MARK: - Action -
@@ -131,7 +102,7 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
 
     // MARK: - Intent -
 
-    func update(_ page: Page?, course: Course?, indexPath: IndexPath, color: UIColor?) {
+    func update(page: Page?, course: Course?, indexPath: IndexPath, color: UIColor?) {
         self.page = page
         self.course = course
         selectedBackgroundView = ContextCellBackgroundView.create(color: color)
@@ -144,57 +115,75 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
         dateLabel.setText(dateText, style: .textCellSupportingText)
         titleLabel.setText(page?.title, style: .textCellTitle)
         titleLabel.lineBreakMode = .byTruncatingTail
-        page.flatMap(isDownloaded)
+        prepareForDownload()
     }
 
-    private func isDownloaded(page: Page) {
-        OfflineDownloadsManager.shared.eventObject(for: page) { [weak self] result in
-            guard let self = self else {
-                return
-            }
-            result.success { event in
-                self.statusChanged(event, page: page)
-            }
-
-            result.failure { _ in
-                self.activityIndicator.isHidden = true
-                self.activityIndicator.stopAnimating()
-            }
-        }
-        cancellable = downloadsManager
-            .publisher
-            .sink { [weak self] event in
-                switch event {
-                case .statusChanged(object: let event):
-                    self?.statusChanged(event, page: page)
-                default:
-                    break
-                }
-            }
-    }
-
-    private func statusChanged(_ event: OfflineDownloadsManagerEventObject, page: Page) {
-        guard let object = self.page, object == page else {
+    func prepareForDownload() {
+        guard let page = page, let course = course else {
             return
         }
-        do {
-            let eventObjectId = try event.object.toOfflineModel().id
-            let objectId = try object.toOfflineModel().id
-            guard eventObjectId == objectId else {
+        let downloadButton = addDownloadButton()
+        let canDonwload = downloadButtonHelper.canDownload(object: page)
+        downloadButton.isHidden = !canDonwload
+        guard canDonwload else {
+            return
+        }
+        let userInfo = page.htmlURL?.changeScheme("Page")?.absoluteString ?? "Page://site.com/courses/\(course.id)/modules"
+        downloadButtonHelper.update(
+            object: page,
+            course: course,
+            userInfo: userInfo
+        )
+        downloadButtonHelper.status(
+            for: page,
+            onState: { [weak self] state, progress, eventObjectId in
+                guard let self = self, eventObjectId == self.page?.id else {
+                    return
+                }
+               debugLog(downloadButton.progress, "downloadButton.progress")
+               downloadButton.progress = Float(progress)
+               downloadButton.currentState = state
+                if state == .waiting {
+                    downloadButton.waitingView.startSpinning()
+                }
+            }
+        )
+        downloadButton.onTap = { [weak self] state in
+            guard let self = self, let page = self.page else {
                 return
             }
-            savedImage.isHidden = event.status != .completed
-            switch event.status {
-            case .initialized, .preparing, .active:
-                self.activityIndicator.isHidden = false
-                self.activityIndicator.startAnimating()
-            default:
-                activityIndicator.isHidden = true
-                activityIndicator.stopAnimating()
+            switch state {
+            case .downloaded:
+                self.downloadButtonHelper.delete(object: page)
+            case .downloading, .waiting:
+                self.downloadButtonHelper.pause(object: page)
+            case .retry:
+                self.downloadButtonHelper.resume(object: page)
+            case .idle:
+                self.downloadButtonHelper.download(object: page)
             }
-        } catch {
-            activityIndicator.isHidden = true
-            savedImage.isHidden = true
         }
+    }
+
+    func addDownloadButton() -> DownloadButton {
+        removeDownloadButton()
+        let downloadButton: DownloadButton = .init(frame: .zero)
+        downloadButton.mainTintColor = .systemBlue
+        downloadButton.currentState = .idle
+        contentView.addSubview(downloadButton)
+        downloadButton.translatesAutoresizingMaskIntoConstraints = false
+        downloadButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        downloadButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        downloadButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+        downloadButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15).isActive = true
+        return downloadButton
+    }
+
+    func removeDownloadButton() {
+        downloadButton()?.removeFromSuperview()
+    }
+
+    func downloadButton() -> DownloadButton? {
+        contentView.subviews.first(where: { $0 is DownloadButton }) as? DownloadButton
     }
 }

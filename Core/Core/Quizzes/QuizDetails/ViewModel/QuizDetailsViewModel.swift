@@ -76,7 +76,7 @@ public class QuizDetailsViewModel: QuizDetailsViewModelProtocol {
         router.route(
             to: "courses/\(courseID)/quizzes/\(quizID)/edit",
             from: viewController,
-            options: .modal(.formSheet, isDismissable: false, embedInNav: true)
+            options: .modal(isDismissable: false, embedInNav: true)
         )
     }
 
@@ -84,16 +84,28 @@ public class QuizDetailsViewModel: QuizDetailsViewModelProtocol {
         router.route(
             to: "courses/\(courseID)/quizzes/\(quizID)/preview",
             from: viewController,
-            options: .modal(.fullScreen, isDismissable: false, embedInNav: true)
+            options: .modal(.fullScreen, isDismissable: false, embedInNav: true, addDoneButton: true)
         )
     }
 
     // MARK: - Refreshable protocol
 
+    @available(*, renamed: "refresh()")
     public func refresh(completion: @escaping () -> Void) {
-        refreshCompletion = completion
-        quizUseCase.refresh(force: true)
-        assignmentsUseCase.refresh(force: true)
+        Task {
+            await refresh()
+            completion()
+        }
+    }
+
+    public func refresh() async {
+        return await withCheckedContinuation { continuation in
+            refreshCompletion = {
+                continuation.resume()
+            }
+            quizUseCase.refresh(force: true)
+            assignmentsUseCase.refresh(force: true)
+        }
     }
 
     // MARK: - Private functions

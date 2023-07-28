@@ -18,7 +18,7 @@
 
 import UIKit
 
-public class ConferenceDetailsViewController: UIViewController, ColoredNavViewProtocol {
+public class ConferenceDetailsViewController: ScreenViewTrackableViewController, ColoredNavViewProtocol {
     @IBOutlet weak var detailsHeadingLabel: UILabel!
     @IBOutlet weak var detailsLabel: UILabel!
     @IBOutlet weak var headerView: UIView!
@@ -36,6 +36,9 @@ public class ConferenceDetailsViewController: UIViewController, ColoredNavViewPr
     public var color: UIColor?
     var conferenceID: String = ""
     var context = Context.currentUser
+    public lazy var screenViewTrackingParameters = ScreenViewTrackingParameters(
+        eventName: "\(context.pathComponent)/conferences/\(conferenceID)"
+    )
 
     lazy var colors = env.subscribe(GetCustomColors()) { [weak self] in
         self?.updateNavBar()
@@ -75,6 +78,7 @@ public class ConferenceDetailsViewController: UIViewController, ColoredNavViewPr
 
         joinButton.setTitle(NSLocalizedString("Join", bundle: .core, comment: ""), for: .normal)
         joinButton.isHidden = true
+        joinButton.makeUnavailableInOfflineMode()
 
         recordingsHeadingLabel.text = NSLocalizedString("Recordings", bundle: .core, comment: "")
         recordingsView.isHidden = true

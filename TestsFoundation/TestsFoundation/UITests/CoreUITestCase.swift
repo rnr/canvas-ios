@@ -95,7 +95,7 @@ open class CoreUITestCase: XCTestCase {
     public var doLoginAfterSetup: Bool = true
     open override func setUp() {
         super.setUp()
-        LoginSession.useTestKeychain()
+        LoginSession.clearAll()
         continueAfterFailure = false
         if CoreUITestCase.needsLaunch || app.state != .runningForeground || isRetry {
             CoreUITestCase.needsLaunch = false
@@ -274,13 +274,14 @@ open class CoreUITestCase: XCTestCase {
         }
 
         // Test retries can work with last logged in instance
-        if LoginStart.lastLoginButton.exists() {
+        LoginStart.findSchoolButton.waitToExist()
+        if LoginStart.lastLoginButton.exists && LoginStart.lastLoginButton.label() == user.host {
             LoginStart.lastLoginButton.tap()
         } else {
             LoginStart.findSchoolButton.tap()
-            LoginFindSchool.searchField.typeText("\(user.host)\r")
+            LoginFindSchool.searchField.typeText("\(user.host)")
+            LoginFindSchool.keyboardGoButton.tap()
         }
-
         LoginWeb.emailField.waitToExist(60)
         LoginWeb.emailField.typeText(user.username)
         LoginWeb.passwordField.typeText(user.password)
@@ -288,7 +289,6 @@ open class CoreUITestCase: XCTestCase {
 
         homeScreen.waitToExist()
         user.session = currentSession()
-        setAppThemeToSystem()
     }
 
     open func currentSession() -> LoginSession? {
@@ -309,10 +309,25 @@ open class CoreUITestCase: XCTestCase {
         send(.show(route, options))
     }
 
-    open func pullToRefresh() {
+    /**
+     - parameters:
+        - x: The normalized horizontal position of the pull gesture in the screen. 0 is the left side of the screen while 1 is the right.
+     */
+    open func pullToRefresh(x: CGFloat = 0.5) {
         let window = app.find(type: .window)
-        window.relativeCoordinate(x: 0.5, y: 0.2)
-            .press(forDuration: 0.05, thenDragTo: window.relativeCoordinate(x: 0.5, y: 1.0))
+        window.relativeCoordinate(x: x, y: 0.2)
+            .press(forDuration: 0.05, thenDragTo: window.relativeCoordinate(x: x, y: 1.0))
+    }
+
+    open func pullToRefreshUntil(retry: Int = 5, x: CGFloat = 0.5, condition: () -> Bool) {
+        for _ in 0..<retry {
+            pullToRefresh(x: x)
+            sleep(1)
+            if condition() {
+                return
+            }
+        }
+        XCTFail("Condition is still not true after \(retry) pullToRefresh")
     }
 
     open func handleAlert(withTexts texts: [String]? = nil, byPressingButton button: String) {
@@ -672,7 +687,9 @@ open class CoreUITestCase: XCTestCase {
         XCTAssert(useMocks, "Mocks not allowed for E2E tests!")
         let key = request.key
         if httpMocks[key] != nil {
-            print("💫 \(key) overwriting mock")
+            print("💫 mock overwritten \(key)")
+        } else {
+            print("✅ mock added \(key)")
         }
         httpMocks[key] = response
     }
@@ -680,16 +697,5 @@ open class CoreUITestCase: XCTestCase {
     open func mockNow(_ date: Date) {
         Clock.mockNow(date)
         send(.mockNow(date))
-    }
-
-    // Workaround to handle app theme prompt
-    open func setAppThemeToSystem() {
-        let canvasThemePromptTitle = app.find(label: "Canvas is now available in dark theme")
-        let systemSettingsButton = app.find(label: "System settings", type: .button)
-        if canvasThemePromptTitle.waitToExist(5, shouldFail: false).exists() {
-            systemSettingsButton.tapUntil {
-                !canvasThemePromptTitle.exists()
-            }
-        }
     }
 }

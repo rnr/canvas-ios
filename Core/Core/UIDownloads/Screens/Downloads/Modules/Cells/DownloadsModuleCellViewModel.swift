@@ -28,7 +28,7 @@ final class DownloadsModuleCellViewModel: ObservableObject {
 
     // MARK: - Properties -
 
-    private let entry: OfflineDownloaderEntry
+    let entry: OfflineDownloaderEntry
     private var downloadsSubscriber: AnyCancellable?
 
     @Published var progress: Double = 0.0
@@ -95,12 +95,14 @@ final class DownloadsModuleCellViewModel: ObservableObject {
     }
 
     func pauseResume() {
-//        switch entry.status {
-//        case .initialized, .active, .preparing:
-//            downloadsManager.pause(entry: entry)
-//        default:
-//            downloadsManager.resume(entry: entry)
-//        }
+        switch entry.status {
+        case .initialized, .active, .preparing:
+            downloadsManager.pause(entry: entry)
+        case .paused, .failed:
+            downloadsManager.resume(entry: entry)
+        default:
+            downloadsManager.resume(entry: entry)
+        }
     }
 
     private func image(_ type: ModuleItemType?) -> UIImage? {
@@ -122,7 +124,7 @@ final class DownloadsModuleCellViewModel: ObservableObject {
             .sink { [weak self] event in
                 switch event {
                 case .statusChanged(object: let event):
-                    self?.downloaderStatus = event.status
+                    self?.statusChanged(event)
                 case .progressChanged(object: let event):
                     self?.progressChanged(event)
                 }
@@ -130,18 +132,23 @@ final class DownloadsModuleCellViewModel: ObservableObject {
         item.flatMap {
             downloadsManager.eventObject(for: $0) { [weak self] result in
                 result.success { event in
-                    guard let self = self else {
-                        return
-                    }
-                    let eventObjectId = try? event.object.toOfflineModel().id
-                    let objectId = self.dataModel.id
-                    guard eventObjectId == objectId else {
-                        return
-                    }
-                    self.downloaderStatus = event.status
+                    self?.statusChanged(event)
                 }
             }
         }
+    }
+
+    private func statusChanged(_ event: OfflineDownloadsManagerEventObject) {
+        let eventObjectId = try? event.object.toOfflineModel().id
+        let objectId = self.dataModel.id
+        guard eventObjectId == objectId else {
+            return
+        }
+        downloaderStatus = event.status
+        if event.status != .active {
+            progress = 0.0
+        }
+
     }
 
     private func progressChanged(_ event: OfflineDownloadsManagerEventObject) {
@@ -154,7 +161,14 @@ final class DownloadsModuleCellViewModel: ObservableObject {
             if event.progress == 0.0 {
                 return
             }
-            progress = event.progress
-        } catch {}
+            downloaderStatus = event.status
+            if event.status != .active {
+                progress = 0.0
+            } else {
+                progress = event.progress
+            }
+        } catch {
+            debugLog(error.localizedDescription)
+        }
     }
 }

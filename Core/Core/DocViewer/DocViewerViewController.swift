@@ -44,6 +44,7 @@ public class DocViewerViewController: UIViewController {
     private var dragGestureViewModel: AnnotationDragGestureViewModel?
     private var subscriptions = Set<AnyCancellable>()
     private var annotationContextMenuModel: DocViewerAnnotationContextMenuModel?
+    private var offlineModeInteractor: OfflineModeInteractor!
 
     public internal(set) static var hasPSPDFKitLicense = false
 
@@ -53,7 +54,13 @@ public class DocViewerViewController: UIViewController {
         hasPSPDFKitLicense = true
     }
 
-    public static func create(filename: String, previewURL: URL?, fallbackURL: URL, navigationItem: UINavigationItem? = nil) -> DocViewerViewController {
+    public static func create(
+        filename: String,
+        previewURL: URL?,
+        fallbackURL: URL,
+        navigationItem: UINavigationItem? = nil,
+        offlineModeInteractor: OfflineModeInteractor = OfflineModeInteractorLive.shared
+    ) -> DocViewerViewController {
         stylePSPDFKit()
 
         let controller = loadFromStoryboard()
@@ -62,6 +69,7 @@ public class DocViewerViewController: UIViewController {
         controller.previewURL = previewURL
         controller.fallbackURL = fallbackURL
         controller.parentNavigationItem = navigationItem
+        controller.offlineModeInteractor = offlineModeInteractor
         return controller
     }
 
@@ -130,7 +138,16 @@ public class DocViewerViewController: UIViewController {
     }
 
     func loadFallback() {
-        if let error = session.error { showError(error) }
+        if let error = session.error {
+            // If offline mode is enabled we don't want to show API errors
+            if offlineModeInteractor.isOfflineModeEnabled() {
+                loadingView.isHidden = true
+                return
+            } else {
+                showError(error)
+            }
+        }
+
         if let url = session.localURL {
             return load(document: Document(url: url))
         }
@@ -221,7 +238,6 @@ extension DocViewerViewController: PDFViewControllerDelegate, AnnotationStateMan
     public func pdfViewController(_ pdfController: PDFViewController, shouldShow controller: UIViewController, options: [String: Any]? = nil, animated: Bool) -> Bool {
         return !(controller is StampViewController)
     }
-    // swiftlint:enable function_parameter_count
 }
 
 extension DocViewerViewController: UIGestureRecognizerDelegate {

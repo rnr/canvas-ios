@@ -19,7 +19,7 @@
 import UIKit
 import WebKit
 
-public class DiscussionDetailsViewController: UIViewController, ColoredNavViewProtocol, ErrorViewController {
+public class DiscussionDetailsViewController: ScreenViewTrackableViewController, ColoredNavViewProtocol, ErrorViewController {
     @IBOutlet weak var courseSectionsView: UIView!
     @IBOutlet weak var courseSectionsLabel: UILabel!
     @IBOutlet weak var dueSection: UIView!
@@ -37,7 +37,7 @@ public class DiscussionDetailsViewController: UIViewController, ColoredNavViewPr
     public var titleSubtitleView = TitleSubtitleView.create()
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var webViewPlaceholder: UIView!
-    var webView = CoreWebView(pullToRefresh: .disabled)
+    var webView = CoreWebView()
 
     public var color: UIColor?
     var context = Context.currentUser
@@ -54,6 +54,11 @@ public class DiscussionDetailsViewController: UIViewController, ColoredNavViewPr
     var topicID = ""
     private var newReplyIDFromCurrentUser: String?
     private var isContentLargerThanView: Bool { webView.scrollView.contentSize.height > view.frame.size.height }
+    private var offlineModeInteractor: OfflineModeInteractor?
+
+    public lazy var screenViewTrackingParameters = ScreenViewTrackingParameters(
+        eventName: "\(context.pathComponent)/\(isAnnouncement ? "announcements" : "discussion_topics")/\(topicID)"
+    )
 
     var assignment: Store<GetAssignment>?
     lazy var colors = env.subscribe(GetCustomColors()) { [weak self] in
@@ -94,7 +99,8 @@ public class DiscussionDetailsViewController: UIViewController, ColoredNavViewPr
         topicID: String,
         isAnnouncement: Bool = false,
         showEntryID: String? = nil,
-        showRepliesToEntryID: String? = nil
+        showRepliesToEntryID: String? = nil,
+        offlineModeInteractor: OfflineModeInteractor? = OfflineModeInteractorLive.shared
     ) -> DiscussionDetailsViewController {
         let controller = loadFromStoryboard()
         controller.context = context
@@ -102,6 +108,7 @@ public class DiscussionDetailsViewController: UIViewController, ColoredNavViewPr
         controller.showEntryID = showEntryID
         controller.showRepliesToEntryID = showRepliesToEntryID
         controller.topicID = topicID
+        controller.offlineModeInteractor = offlineModeInteractor
         // needs to be set early for helm to correctly place done button
         controller.navigationItem.rightBarButtonItem = controller.optionsButton
         return controller
@@ -130,6 +137,7 @@ public class DiscussionDetailsViewController: UIViewController, ColoredNavViewPr
         // Can't put in storyboard because that breaks cookie sharing
         // & discussion view is cached without verifiers on images
         webViewPlaceholder.addSubview(webView)
+        webView.accessibilityIdentifier = "DiscussionDetails.body"
         webView.pinWithThemeSwitchButton(inside: webViewPlaceholder)
         webView.heightAnchor.constraint(equalToConstant: 100).isActive = true
 
@@ -170,12 +178,6 @@ public class DiscussionDetailsViewController: UIViewController, ColoredNavViewPr
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.useContextColor(color)
-        env.pageViewLogger.startTrackingTimeOnViewController()
-    }
-
-    public override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        env.pageViewLogger.stopTrackingTimeOnViewController(eventName: "\(context.pathComponent)/\(isAnnouncement ? "announcements" : "discussion_topics")/\(topicID)", attributes: [:])
     }
 
     deinit {
@@ -503,12 +505,22 @@ extension DiscussionDetailsViewController: CoreWebViewLinkDelegate {
         let path = Array(url.pathComponents.dropFirst(5))
         // Reply to main discussion
         if path.count == 1, path[0] == "reply" {
+            if offlineModeInteractor?.isOfflineModeEnabled() == true {
+                UIAlertController.showItemNotAvailableInOfflineAlert()
+                return true
+            }
+
             Analytics.shared.logEvent(isAnnouncement ? "announcement_replied" : "discussion_topic_replied")
             env.router.route(to: url, from: self, options: .modal(.formSheet, isDismissable: false, embedInNav: true))
             return true
         }
         // Reply to thread
         if path.count == 3, path[0] == "entries", !path[1].isEmpty, path[2] == "replies" {
+            if offlineModeInteractor?.isOfflineModeEnabled() == true {
+                UIAlertController.showItemNotAvailableInOfflineAlert()
+                return true
+            }
+
             env.router.route(to: url, from: self, options: .modal(.formSheet, isDismissable: false, embedInNav: true))
             return true
         }
@@ -527,8 +539,16 @@ extension DiscussionDetailsViewController: CoreWebViewLinkDelegate {
     }
 }
 
+// MARK: - User Actions From Nav Bar
+
 extension DiscussionDetailsViewController {
-    @objc func showTopicOptions() {
+
+    @objc
+    func showTopicOptions() {
+        if offlineModeInteractor?.isOfflineModeEnabled() == true {
+            return UIAlertController.showItemNotAvailableInOfflineAlert()
+        }
+
         guard let topic = topic.first else { return }
 
         let sheet = BottomSheetPickerViewController.create()
@@ -590,7 +610,7 @@ extension DiscussionDetailsViewController {
 
     func editTopic() {
         let path = "\(context.pathComponent)/\(isAnnouncement ? "announcements" : "discussion_topics")/\(topicID)/edit"
-        env.router.route(to: path, from: self, options: .modal(.formSheet, isDismissable: false, embedInNav: true))
+        env.router.route(to: path, from: self, options: .modal(isDismissable: false, embedInNav: true))
     }
 
     func markAllRead(isRead: Bool) {
@@ -619,8 +639,15 @@ extension DiscussionDetailsViewController {
     }
 }
 
+// MARK: - User Actions From HTML
+
 extension DiscussionDetailsViewController {
+
     private func handleLike(_ message: WKScriptMessage) {
+        if offlineModeInteractor?.isOfflineModeEnabled() == true {
+            return UIAlertController.showItemNotAvailableInOfflineAlert()
+        }
+
         guard
             let body = message.body as? [String: Any],
             let entryID = body["entryID"] as? String,
@@ -653,6 +680,10 @@ extension DiscussionDetailsViewController {
     }
 
     private func handleMoreOptions(_ message: WKScriptMessage) {
+        if offlineModeInteractor?.isOfflineModeEnabled() == true {
+            return UIAlertController.showItemNotAvailableInOfflineAlert()
+        }
+
         guard
             let body = message.body as? [String: Any],
             let entryID = body["entryID"] as? String

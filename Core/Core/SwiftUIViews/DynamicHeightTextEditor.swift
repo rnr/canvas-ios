@@ -33,7 +33,8 @@ public struct DynamicHeightTextEditor: View {
     @State private var textEditorHeight: CGFloat = 33.5
     // These are estimated values. SwiftUI.TextEditor has some internal paddings which we cannot influence nor measure.
     private let textEditorVerticalPadding: CGFloat = 7
-    private let textEditorHorizontalPadding: CGFloat = 4
+    private let textEditorHorizontalPadding: CGFloat = 5
+    private let textEditorTopPadding: CGFloat = 0.5
     @State private var textToMeasureHeight: String = "Placeholder"
 
     // MARK: - Init
@@ -52,11 +53,19 @@ public struct DynamicHeightTextEditor: View {
                         key: ViewSizeKey.self,
                         value: $0.frame(in: .local).size.height
                     )
-                })
+                }).hidden()
             TextEditor(text: $text)
                 .foregroundColor(.textDarkest)
+                .background(Color.clear)
+                .iOS16HideListScrollContentBackground()
                 .frame(height: textEditorHeight)
                 .overlay(placeholderView, alignment: .leading)
+                .offset(y: -2)
+                .onAppear {
+                   UITextView.appearance().backgroundColor = .clear
+                 }.onDisappear {
+                   UITextView.appearance().backgroundColor = nil
+                 }
         }
         .onChange(of: text, perform: { newValue in
             textToMeasureHeight = newValue.isEmpty ? "Placeholder" : newValue
@@ -68,10 +77,11 @@ public struct DynamicHeightTextEditor: View {
 
     @ViewBuilder
     private var placeholderView: some View {
-        if text.isEmpty, let placeholder = placeholder, #available(iOS 15, *) {
+        if text.isEmpty, let placeholder = placeholder {
             Text(placeholder)
                 .foregroundColor(.textDark)
                 .padding(.leading, textEditorHorizontalPadding)
+                .padding(.top, textEditorTopPadding)
                 .accessibility(hidden: true)
                 .allowsHitTesting(false) // Make sure taps go through to the TextEditor, doesn't work on iOS 14
         }

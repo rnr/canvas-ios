@@ -65,6 +65,7 @@ class DSContextCardE2ETests: E2ETestCase {
         pullToRefresh()
         app.find(label: student.name).tap()
         ContextCard.userNameLabel.waitToExist(15)
+        ContextCard.submissionsTotalLabel.waitToExist()
         XCTAssertEqual(ContextCard.userNameLabel.label(), student.name)
         XCTAssertEqual(ContextCard.courseLabel.label(), course.name)
         XCTAssertEqual(ContextCard.sectionLabel.label(), "Section: \(course.name)")

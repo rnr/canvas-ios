@@ -31,14 +31,11 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
 
     private let downloadsManager = OfflineDownloadsManager.shared
     private let storageManager = OfflineStorageManager.shared
+    private var downloadableItem: DownloadableItem?
+
     private let imageDownloader = ImageDownloader()
     private let env = AppEnvironment.shared
-
-    private var course: Course?
-    private var object: OfflineDownloadTypeProtocol?
     private var downloadsSubscriber: AnyCancellable?
-    private var userInfo: String?
-    private var assetType: String?
 
     public var downloadButton: DownloadButton = {
         let downloadButton = DownloadButton()
@@ -57,30 +54,12 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
 
     // MARK: - Configuration -
 
-    public func set(userInfo: String, assetType: String) {
-        self.userInfo = userInfo
-        self.assetType = assetType
-        print(
-            self,
-            "routeURL: \(userInfo)",
-            "assetType: \(assetType)"
-        )
-    }
-
-    public func setupObject(_ object: OfflineDownloadTypeProtocol?) {
-        if self.object != nil {
+    func set(downloadableItem: DownloadableItem) {
+        if downloadableItem.objectId == self.downloadableItem?.objectId {
             return
         }
-        self.object = object
+        self.downloadableItem = downloadableItem
         observeDownloadsEvents()
-        configure()
-    }
-
-    public func setupCourse(_ course: Course?) {
-        if self.course != nil {
-            return
-        }
-        self.course = course
     }
 
     public func configure() {
@@ -90,13 +69,24 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
 
     public func actions() {
         downloadButton.onTap = { [weak self] state in
+            guard let self = self else {
+                return
+            }
             switch state {
             case .downloaded:
-                self?.delete()
+                self.delete()
+            case .waiting, .downloading:
+                self.pause()
+            case .retry:
+                do {
+                    try self.downloadableItem.flatMap {
+                        try self.downloadsManager.resume(object: $0.object)
+                    }
+                } catch {
+                    showError(error)
+                }
             case .idle:
-                self?.download()
-            default:
-                break
+                self.download()
             }
         }
     }
@@ -121,38 +111,18 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
         return rightBarButtonItem
     }
 
-    public func isDownloaded(completion: @escaping(Bool) -> Void) {
-        guard let object = object else {
-            return
-        }
-        downloadsManager.isDownloaded(object: object) { [weak self] result in
-            guard let self = self else {
-                return
-            }
-            self.downloadButton.isHidden = false
-            if case let .success(isSaved) = result {
-                self.downloadButton.currentState = isSaved ? .downloaded : .idle
-                completion(isSaved)
-            } else {
-                self.downloadButton.currentState = .idle
-                completion(false)
-            }
-        }
-    }
-
     // MARK: - Private Intents -
 
     private func download() {
-        guard  let object = self.object,
-                let userInfo = self.userInfo,
-                let assetType = self.assetType,
-                let url = URL(string: userInfo)
-        else { return }
+        guard let downloadableItem = downloadableItem,
+              let url = URL(string: downloadableItem.userInfo) else {
+            return
+        }
         var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
-        components?.scheme = assetType
+        components?.scheme = downloadableItem.assetType
         do {
-            try downloadsManager.addAndStart(
-                object: object,
+            try downloadsManager.start(
+                object: downloadableItem.object,
                 userInfo: components?.url?.absoluteString
             )
             addOrUpdateCourse()
@@ -163,6 +133,11 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
     }
 
     private func observeDownloadsEvents() {
+        guard let downloadableItem = downloadableItem,
+              downloadsManager.canDownload(object: downloadableItem.object) else {
+            downloadButton.isHidden = true
+            return
+        }
         downloadsSubscriber = downloadsManager
             .publisher
             .sink { [weak self] event in
@@ -174,34 +149,21 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
                 }
             }
 
-        object.flatMap {
-            downloadsManager.eventObject(for: $0) { [weak self] result in
-                guard let self = self else {
-                    return
+        downloadsManager.eventObject(for: downloadableItem.object) { [weak self] result in
+            DispatchQueue.main.async {
+                result.success { event in
+                    self?.statusChanged(event)
                 }
-                DispatchQueue.main.async {
-                    result.success { event in
-                        switch event.status {
-                        case .completed:
-                            self.downloadButton.currentState = .downloaded
-                        case .preparing, .initialized:
-                            self.downloadButton.currentState = .waiting
-                        case .active:
-                            self.downloadButton.currentState = .downloading
-                            self.downloadButton.progress = Float(event.progress)
-                        default:
-                            self.downloadButton.currentState = .idle
-                        }
-
-                    }
-                    self.downloadButton.isHidden = false
+                result.failure { _ in
+                    self?.downloadButton.currentState = .idle
                 }
+                self?.downloadButton.isHidden = false
             }
         }
     }
 
     private func statusChanged(_ event: OfflineDownloadsManagerEventObject) {
-        guard let object = object else {
+        guard let object = downloadableItem?.object else {
             return
         }
         do {
@@ -212,13 +174,26 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
             }
             switch event.status {
             case .completed:
-                downloadButton.currentState = .downloaded
+                if downloadButton.currentState != .downloaded {
+                    downloadButton.currentState = .downloaded
+                }
             case .initialized, .preparing:
-                downloadButton.currentState = .waiting
+                if downloadButton.currentState != .waiting {
+                    downloadButton.currentState = .waiting
+                }
             case .active:
-                downloadButton.currentState = .downloading
+                if downloadButton.currentState != .downloading {
+                    downloadButton.currentState = .downloading
+                    downloadButton.progress = Float(event.progress)
+                }
             case .removed:
-                downloadButton.currentState = .idle
+                if downloadButton.currentState != .idle {
+                    downloadButton.currentState = .idle
+                }
+            case .failed, .paused:
+                if downloadButton.currentState != .retry {
+                    downloadButton.currentState = .retry
+                }
             default:
                 downloadButton.currentState = .idle
             }
@@ -228,7 +203,7 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
     }
 
     private func progressChanged(_ event: OfflineDownloadsManagerEventObject) {
-        guard let object = object else {
+        guard let object = downloadableItem?.object else {
             return
         }
         do {
@@ -247,7 +222,7 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
     }
 
     private func addOrUpdateCourse() {
-        guard let course = course else {
+        guard let course = downloadableItem?.course else {
             return
         }
 
@@ -272,8 +247,19 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
         }
     }
 
+    private func pause() {
+        guard let object = downloadableItem?.object else {
+            return
+        }
+        do {
+            try downloadsManager.pause(object: object)
+        } catch {
+            showError(error)
+        }
+    }
+
     private func delete() {
-        guard let object = object else {
+        guard let object = downloadableItem?.object else {
             return
         }
         do {

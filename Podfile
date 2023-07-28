@@ -2,7 +2,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 
 workspace 'Canvas.xcworkspace'
 inhibit_all_warnings!
-platform :ios, '14.0'
+platform :ios, '15.0'
 require_relative './rn/Teacher/node_modules/react-native/scripts/react_native_pods'
 # require_relative './rn/Teacher/node_modules/@react-native-community/cli-platform-ios/native_modules'
 
@@ -18,7 +18,7 @@ def canvas_crashlytics_rn_firebase_pods
 end
 
 def pspdfkit
-  pod 'PSPDFKit', podspec: 'https://customers.pspdfkit.com/pspdfkit-ios/12.0.3.podspec'
+  pod 'PSPDFKit', podspec: 'https://customers.pspdfkit.com/pspdfkit-ios/12.3.0.podspec'
 end
 
 def react_native_pods
@@ -45,9 +45,6 @@ end
 abstract_target 'needs-pspdfkit' do
   use_frameworks!
   pspdfkit
-  target 'Core' do project 'Core/Core.xcodeproj' end
-  target 'CoreTests' do project 'Core/Core.xcodeproj' end
-  target 'CoreTester' do project 'Core/Core.xcodeproj' end
   target 'StudentUITests' do project 'Student/Student.xcodeproj' end
   target 'StudentE2ETests' do project 'Student/Student.xcodeproj' end
   target 'TeacherUITests' do project 'rn/Teacher/ios/Teacher.xcodeproj' end

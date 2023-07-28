@@ -30,7 +30,7 @@ struct DownloadsContentList<Content: View>: View {
             builder()
                 .listRowInsets(EdgeInsets())
                 .listRowBackground(Color.clear)
-                .iOS15ListRowSeparator(.hidden)
+                .listRowSeparator(.hidden)
                 .background(Color.backgroundLightest)
         }
         .listStyle(.plain)

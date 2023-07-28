@@ -53,6 +53,7 @@ class TeacherAppDelegate: UIResponder, UIApplicationDelegate, UNUserNotification
         setupDefaultErrorHandling()
         DocViewerViewController.setup(.teacherPSPDFKitLicense)
         prepareReactNative()
+        setupPageViewLogging()
         NotificationManager.shared.notificationCenter.delegate = self
         try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
         UITableView.setupDefaultSectionHeaderTopPadding()
@@ -76,34 +77,38 @@ class TeacherAppDelegate: UIResponder, UIApplicationDelegate, UNUserNotification
 
     func setup(session: LoginSession, wasReload: Bool = false) {
         environment.userDidLogin(session: session)
-        environmentFeatureFlags = environment.subscribe(GetEnvironmentFeatureFlags(context: Context.currentUser))
-        environmentFeatureFlags?.refresh(force: true) { _ in
-            guard let envFlags = self.environmentFeatureFlags, envFlags.error == nil else { return }
-            self.initializeTracking()
-        }
-        updateInterfaceStyle(for: window)
-        CoreWebView.keepCookieAlive(for: environment)
-        NotificationManager.shared.subscribeToPushChannel()
 
         let getProfile = GetUserProfileRequest(userID: "self")
-        environment.api.makeRequest(getProfile) { apiProfile, urlResponse, error in
+        environment.api.makeRequest(getProfile) { apiProfile, urlResponse, error in performUIUpdate {
+            PageViewEventController.instance.userDidChange()
+
             guard let apiProfile = apiProfile, error == nil else {
                 if urlResponse?.isUnauthorized == true {
-                    DispatchQueue.main.async { self.userDidLogout(session: session) }
+                    self.userDidLogout(session: session)
+                    LoginViewModel().showLoginView(on: self.window!, loginDelegate: self, app: .teacher)
                 }
                 return
             }
-            self.isK5User = apiProfile.k5_user == true
 
-            DispatchQueue.main.async {
-                LocalizationManager.localizeForApp(UIApplication.shared, locale: apiProfile.locale) {
-                    GetBrandVariables().fetch(environment: self.environment) { _, _, _ in performUIUpdate {
-                        NativeLoginManager.login(as: session)
-                    }}
-                }
+            self.environmentFeatureFlags = self.environment.subscribe(GetEnvironmentFeatureFlags(context: Context.currentUser))
+            self.environmentFeatureFlags?.refresh(force: true) { _ in
+                guard let envFlags = self.environmentFeatureFlags, envFlags.error == nil else { return }
+                self.initializeTracking()
             }
-        }
-        Analytics.shared.logSession(session)
+
+            self.updateInterfaceStyle(for: self.window)
+            CoreWebView.keepCookieAlive(for: self.environment)
+            NotificationManager.shared.subscribeToPushChannel()
+
+            self.isK5User = apiProfile.k5_user == true
+            Analytics.shared.logSession(session)
+
+            LocalizationManager.localizeForApp(UIApplication.shared, locale: apiProfile.locale) {
+                GetBrandVariables().fetch(environment: self.environment) { _, _, _ in performUIUpdate {
+                    NativeLoginManager.login(as: session)
+                }}
+            }
+        }}
     }
 
     @objc func prepareReactNative() {
@@ -210,6 +215,39 @@ class TeacherAppDelegate: UIResponder, UIApplicationDelegate, UNUserNotification
     }
 }
 
+// MARK: PageView Logging
+extension TeacherAppDelegate {
+    func setupPageViewLogging() {
+        class BackgroundAppHelper: AppBackgroundHelperProtocol {
+
+            let queue = DispatchQueue(label: "com.instructure.icanvas.app-background-helper", attributes: .concurrent)
+            var tasks: [String: UIBackgroundTaskIdentifier] = [:]
+
+            func startBackgroundTask(taskName: String) {
+                queue.async(flags: .barrier) { [weak self] in
+                    self?.tasks[taskName] = UIApplication.shared.beginBackgroundTask(
+                        withName: taskName,
+                        expirationHandler: { [weak self] in
+                            self?.endBackgroundTask(taskName: taskName)
+                    })
+                }
+            }
+
+            func endBackgroundTask(taskName: String) {
+                queue.async(flags: .barrier) { [weak self] in
+                    if let task = self?.tasks[taskName] {
+                        self?.tasks[taskName] = .invalid
+                        UIApplication.shared.endBackgroundTask(task)
+                    }
+                }
+            }
+        }
+
+        let helper = BackgroundAppHelper()
+        PageViewEventController.instance.configure(backgroundAppHelper: helper)
+    }
+}
+
 extension TeacherAppDelegate: AnalyticsHandler {
     func handleEvent(_ name: String, parameters: [String: Any]?) {
         guard FirebaseOptions.defaultOptions()?.apiKey != nil else {
@@ -236,6 +274,7 @@ extension TeacherAppDelegate: AnalyticsHandler {
         options.disableTracking = !isSendUsageMetricsEnabled
         Heap.initialize(heapID, with: options)
         Heap.setTrackingEnabled(isSendUsageMetricsEnabled)
+        environment.heapID = Heap.userId()
     }
 
     private func disableTracking() {
@@ -254,10 +293,7 @@ extension TeacherAppDelegate: LoginDelegate, NativeLoginManagerDelegate {
     func changeUser() {
         guard let window = window, !(window.rootViewController is LoginNavigationController) else { return }
         disableTracking()
-        UIView.transition(with: window, duration: 0.5, options: .transitionFlipFromLeft, animations: {
-            window.rootViewController = LoginNavigationController.create(loginDelegate: self, app: .teacher)
-            Analytics.shared.logScreenView(route: "/login", viewController: window.rootViewController)
-        }, completion: nil)
+        LoginViewModel().showLoginView(on: window, loginDelegate: self, app: .teacher)
     }
 
     func stopActing() {
@@ -294,7 +330,9 @@ extension TeacherAppDelegate: LoginDelegate, NativeLoginManagerDelegate {
         disableTracking()
         LoginSession.remove(session)
         guard environment.currentSession == session else { return }
-        NotificationManager.shared.unsubscribeFromPushChannel()
+        PageViewEventController.instance.userDidChange()
+//        NotificationManager.shared.unsubscribeFromPushChannel()
+        NotificationManager.shared.unsubscribeFromUserSNSTopic()
         UIApplication.shared.applicationIconBadgeNumber = 0
         environment.userDidLogout(session: session)
         CoreWebView.stopCookieKeepAlive()
