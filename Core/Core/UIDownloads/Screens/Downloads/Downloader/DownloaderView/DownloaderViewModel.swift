@@ -31,10 +31,16 @@ final class DownloaderViewModel: ObservableObject {
 
     // MARK: - Properties -
 
-    @Published var downloadingModules: [DownloadsModuleCellViewModel] = []
+    @Published var downloadingModules: [DownloadsModuleCellViewModel] = [] {
+        didSet {
+            isEmpty = downloadingModules.isEmpty
+        }
+    }
     @Published var error: String = ""
     @Published var deleting: Bool = false
     @Published var isConnected: Bool = true
+    @Published var isEmpty: Bool = true
+
     private var cancellables: [AnyCancellable] = []
 
     init(downloadingModules: [DownloadsModuleCellViewModel]) {

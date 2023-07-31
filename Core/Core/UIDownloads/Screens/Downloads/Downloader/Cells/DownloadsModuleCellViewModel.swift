@@ -31,7 +31,7 @@ final class DownloadsModuleCellViewModel: ObservableObject {
     let entry: OfflineDownloaderEntry
     private var downloadsSubscriber: AnyCancellable?
 
-    @Published var progress: Double = 0.0
+    @Published var progress: Float = 0.0
     @Published var downloaderStatus: OfflineDownloaderStatus = .initialized
 
     init(entry: OfflineDownloaderEntry) {
@@ -145,10 +145,6 @@ final class DownloadsModuleCellViewModel: ObservableObject {
             return
         }
         downloaderStatus = event.status
-        if event.status != .active {
-            progress = 0.0
-        }
-
     }
 
     private func progressChanged(_ event: OfflineDownloadsManagerEventObject) {
@@ -162,11 +158,7 @@ final class DownloadsModuleCellViewModel: ObservableObject {
                 return
             }
             downloaderStatus = event.status
-            if event.status != .active {
-                progress = 0.0
-            } else {
-                progress = event.progress
-            }
+            progress = Float(event.progress)
         } catch {
             debugLog(error.localizedDescription)
         }

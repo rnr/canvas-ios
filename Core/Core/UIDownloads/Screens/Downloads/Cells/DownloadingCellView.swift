@@ -48,30 +48,14 @@ struct DownloadingCellView: View {
 
     private var content: some View {
         HStack {
-            VStack(alignment: .leading, spacing: 3) {
-                Text(viewModel.title)
-                    .font(.semibold18)
-                    .foregroundColor(.textDarkest)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .lineLimit(2)
-                HStack(alignment: .center, spacing: 2) {
-                    ProgressView(value: viewModel.progress)
-                        .progressViewStyle(
-                            LinearProgressViewStyle(
-                                tint: Color(Brand.shared.linkColor)
-                            )
-                        )
-                        .frame(height: 5)
-                    Spacer()
-                    Text("\(Int(round(viewModel.progress * 100))) %")
-                        .font(.caption.monospacedDigit())
-                        .foregroundColor(.secondary)
-                        .frame(width: 40)
-                    Spacer()
-                }
-            }
+            Text(viewModel.title)
+                .font(.semibold18)
+                .foregroundColor(.textDarkest)
+                .fixedSize(horizontal: false, vertical: true)
+                .lineLimit(2)
+            Spacer()
             DownloadButtonRepresentable(
-                progress: .constant(1),
+                progress: .constant(viewModel.progress),
                 currentState: .constant(currentState),
                 mainTintColor: Brand.shared.linkColor,
                 onState: { state in
