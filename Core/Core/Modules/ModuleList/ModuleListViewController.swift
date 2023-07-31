@@ -20,10 +20,10 @@ import Foundation
 import SafariServices
 import Combine
 
-public class ModuleListViewController: ScreenViewTrackableViewController, ColoredNavViewProtocol, ErrorViewController {
+public class ModuleListViewController: ScreenViewTrackableViewController, ColoredNavViewProtocol, ErrorViewController, Reachabilitable {
 
     @Injected(\.reachability) var reachability: ReachabilityProvider
-    private var cancellables: [AnyCancellable] = []
+    var cancellables: [AnyCancellable] = []
 
     let refreshControl = CircleRefreshControl()
     @IBOutlet weak var emptyMessageLabel: UILabel!
@@ -107,7 +107,9 @@ public class ModuleListViewController: ScreenViewTrackableViewController, Colore
         modules.refresh()
         tabs.refresh()
 
-        connection()
+        connection { [weak self] _ in
+            self?.tableView.reloadData()
+        }
     }
 
     public override func viewWillAppear(_ animated: Bool) {
@@ -325,16 +327,5 @@ extension ModuleListViewController: MasteryPathDelegate {
             }
             self?.refresh()
         } }
-    }
-}
-
-extension ModuleListViewController {
-    func connection() {
-        reachability.newtorkReachabilityPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.tableView.reloadData()
-            }
-            .store(in: &cancellables)
     }
 }

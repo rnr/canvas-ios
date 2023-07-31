@@ -19,10 +19,10 @@
 import UIKit
 import Combine
 
-public class PageListViewController: ScreenViewTrackableViewController, ColoredNavViewProtocol {
+public class PageListViewController: ScreenViewTrackableViewController, ColoredNavViewProtocol, Reachabilitable {
 
     @Injected(\.reachability) var reachability: ReachabilityProvider
-    private var cancellables: [AnyCancellable] = []
+    var cancellables: [AnyCancellable] = []
 
     @IBOutlet weak var emptyMessageLabel: UILabel!
     @IBOutlet weak var emptyTitleLabel: UILabel!
@@ -98,7 +98,9 @@ public class PageListViewController: ScreenViewTrackableViewController, ColoredN
 
         tableView.registerCell(DownloadPageListTableViewCell.self)
 
-        connection()
+        connection { [weak self] _  in
+            self?.tableView.reloadData()
+        }
     }
 
     public override func viewWillAppear(_ animated: Bool) {
@@ -228,17 +230,6 @@ extension PageListViewController: UITableViewDataSource, UITableViewDelegate {
         } else {
             return UITableView.automaticDimension
         }
-    }
-}
-
-extension PageListViewController {
-    func connection() {
-        reachability.newtorkReachabilityPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] isConnected in
-                self?.tableView.reloadData()
-            }
-            .store(in: &cancellables)
     }
 }
 

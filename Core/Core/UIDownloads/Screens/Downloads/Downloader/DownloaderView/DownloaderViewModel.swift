@@ -20,7 +20,7 @@ import Combine
 import SwiftUI
 import mobile_offline_downloader_ios
 
-final class DownloaderViewModel: ObservableObject {
+final class DownloaderViewModel: ObservableObject, Reachabilitable {
 
     // MARK: - Injection -
 
@@ -41,7 +41,7 @@ final class DownloaderViewModel: ObservableObject {
     @Published var isConnected: Bool = true
     @Published var isEmpty: Bool = true
 
-    private var cancellables: [AnyCancellable] = []
+    var cancellables: [AnyCancellable] = []
 
     init(downloadingModules: [DownloadsModuleCellViewModel]) {
         self.downloadingModules = downloadingModules
@@ -95,12 +95,9 @@ final class DownloaderViewModel: ObservableObject {
             }
             .store(in: &cancellables)
 
-        reachability.newtorkReachabilityPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] isConnected in
-                self?.isConnected = isConnected
-            }
-            .store(in: &cancellables)
+        connection { [weak self] isConnected in
+            self?.isConnected = isConnected
+        }
     }
 
     private func statusChanged(_ event: OfflineDownloadsManagerEventObject) {

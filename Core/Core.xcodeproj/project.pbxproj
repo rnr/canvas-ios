@@ -1176,6 +1176,7 @@
 		BA5E98F4FC647FD448488431 /* RichContentEditor.js in Resources */ = {isa = PBXBuildFile; fileRef = 7CD06BD85946FE58878B9134 /* RichContentEditor.js */; };
 		BA812AAEDDC344B2F1273FF4 /* APICommentLibraryRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38294A8FA8F588332BF0C2E0 /* APICommentLibraryRequest.swift */; };
 		BAD28C8C2A77B97F0037F033 /* DownloadButtonRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAD28C8B2A77B97F0037F033 /* DownloadButtonRepresentable.swift */; };
+		BAD6A3F32A780524002439A6 /* Reachabilitable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAD6A3F22A780524002439A6 /* Reachabilitable.swift */; };
 		BB206552E39A0481AD10261A /* InboxAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D114C3F2B149C57DC9EAA7F /* InboxAssembly.swift */; };
 		BB4203A9042EAF729CC13DB6 /* RichContentEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74853D7E3A4FAF817AD060D /* RichContentEditor.swift */; };
 		BB4EF46850550E3621E96551 /* GetEnabledFeatureFlagsRequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76D702D639BBFCB710DD675 /* GetEnabledFeatureFlagsRequestTests.swift */; };
@@ -3021,6 +3022,7 @@
 		BA98A219C0118BC1617B8616 /* EmptyView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EmptyView.xib; sourceTree = "<group>"; };
 		BACBF46CDFDCDF7C3BE2CB65 /* OfflineModeInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineModeInteractor.swift; sourceTree = "<group>"; };
 		BAD28C8B2A77B97F0037F033 /* DownloadButtonRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadButtonRepresentable.swift; sourceTree = "<group>"; };
+		BAD6A3F22A780524002439A6 /* Reachabilitable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachabilitable.swift; sourceTree = "<group>"; };
 		BAE9980CB6B4D424C27760EA /* GradeListViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradeListViewControllerTests.swift; sourceTree = "<group>"; };
 		BAF17BF402BA72B5DAE1972C /* CoreActivityViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreActivityViewControllerTests.swift; sourceTree = "<group>"; };
 		BB13FE3661707D5C320E59ED /* GetAccountHelpLinks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetAccountHelpLinks.swift; sourceTree = "<group>"; };
@@ -4022,6 +4024,7 @@
 				B88CA3861F4F29C173C4F34D /* String+Extensions.swift */,
 				07DFD8C5DA07D37A3C958EAA /* UIViewController+Extensions.swift */,
 				F1AB309D023E0DB42BA27DC6 /* URL+Extensions.swift */,
+				BAD6A3F22A780524002439A6 /* Reachabilitable.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -9854,6 +9857,7 @@
 				EE9CB888C39082EFD3A32165 /* AssignmentDetailsView.swift in Sources */,
 				7D9F7BB9BEC09E94CC490BDD /* AssignmentDueDateItemView.swift in Sources */,
 				4CC17F560DD2B343B3B6D148 /* AssignmentDueDateItemViewModel.swift in Sources */,
+				BAD6A3F32A780524002439A6 /* Reachabilitable.swift in Sources */,
 				A6F80FCDDEDBC2E752438A57 /* AssignmentDueDatesAssembly.swift in Sources */,
 				42EA12E28B24AFC3D1C0F462 /* AssignmentDueDatesInteractor.swift in Sources */,
 				7C7EEB9F588D06322754DC86 /* AssignmentDueDatesInteractorLive.swift in Sources */,
