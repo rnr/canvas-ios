@@ -28,7 +28,7 @@ final class RoundButton: UIButton {
        setImage(image, for: .normal)
        contentHorizontalAlignment = .fill
        contentVerticalAlignment = .fill
-       imageView?.contentMode = .scaleAspectFit
+       imageView?.contentMode = .scaleAspectFill
     }
 
     override func layoutSubviews() {

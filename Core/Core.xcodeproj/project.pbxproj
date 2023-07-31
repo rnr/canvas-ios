@@ -1175,6 +1175,7 @@
 		BA5419F816E27C21071C3207 /* UITestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB895C3AEEA85C6EFC4D563 /* UITestHelpers.swift */; };
 		BA5E98F4FC647FD448488431 /* RichContentEditor.js in Resources */ = {isa = PBXBuildFile; fileRef = 7CD06BD85946FE58878B9134 /* RichContentEditor.js */; };
 		BA812AAEDDC344B2F1273FF4 /* APICommentLibraryRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38294A8FA8F588332BF0C2E0 /* APICommentLibraryRequest.swift */; };
+		BAD28C8C2A77B97F0037F033 /* DownloadButtonRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAD28C8B2A77B97F0037F033 /* DownloadButtonRepresentable.swift */; };
 		BB206552E39A0481AD10261A /* InboxAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D114C3F2B149C57DC9EAA7F /* InboxAssembly.swift */; };
 		BB4203A9042EAF729CC13DB6 /* RichContentEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74853D7E3A4FAF817AD060D /* RichContentEditor.swift */; };
 		BB4EF46850550E3621E96551 /* GetEnabledFeatureFlagsRequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76D702D639BBFCB710DD675 /* GetEnabledFeatureFlagsRequestTests.swift */; };
@@ -3019,6 +3020,7 @@
 		BA392AE7CE716F9D5DF3E4FE /* SideMenuSubHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuSubHeaderView.swift; sourceTree = "<group>"; };
 		BA98A219C0118BC1617B8616 /* EmptyView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EmptyView.xib; sourceTree = "<group>"; };
 		BACBF46CDFDCDF7C3BE2CB65 /* OfflineModeInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineModeInteractor.swift; sourceTree = "<group>"; };
+		BAD28C8B2A77B97F0037F033 /* DownloadButtonRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadButtonRepresentable.swift; sourceTree = "<group>"; };
 		BAE9980CB6B4D424C27760EA /* GradeListViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradeListViewControllerTests.swift; sourceTree = "<group>"; };
 		BAF17BF402BA72B5DAE1972C /* CoreActivityViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreActivityViewControllerTests.swift; sourceTree = "<group>"; };
 		BB13FE3661707D5C320E59ED /* GetAccountHelpLinks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetAccountHelpLinks.swift; sourceTree = "<group>"; };
@@ -4292,6 +4294,7 @@
 				3073B9B49F3E39CFF5C387D8 /* LinkDownloadingHeader.swift */,
 				82F21CFCC1DAE6C8EAD26531 /* LoadingDarkView.swift */,
 				5922DB6FE9E7AD1C538264D5 /* LoadingView.swift */,
+				BAD28C8B2A77B97F0037F033 /* DownloadButtonRepresentable.swift */,
 			);
 			path = SwiftUIVIews;
 			sourceTree = "<group>";
@@ -10376,6 +10379,7 @@
 				BE46BFD1F5718B24DB93E1BD /* K5ScheduleEntryViewModel.swift in Sources */,
 				01752D17F8AA911B5B88E831 /* K5ScheduleItemInfo.swift in Sources */,
 				78B07F8D50A6FD0F8BFFDCD9 /* K5ScheduleMissingItemsView.swift in Sources */,
+				BAD28C8C2A77B97F0037F033 /* DownloadButtonRepresentable.swift in Sources */,
 				BDDF6993A496E201BA84AE04 /* K5ScheduleSubject.swift in Sources */,
 				4F7B88538A203DA24D7D7F32 /* K5ScheduleSubjectView.swift in Sources */,
 				BBD0A6B1AF9AC0B41D7324DA /* K5ScheduleSubjectViewModel.swift in Sources */,

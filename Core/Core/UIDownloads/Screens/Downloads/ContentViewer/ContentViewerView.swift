@@ -74,7 +74,6 @@ public struct ContentViewerView: View, Navigatable {
             )
             let hosting = CoreHostingController(root)
             navigationController?.pushViewController(hosting, animated: true)
-
         }
     }
 }

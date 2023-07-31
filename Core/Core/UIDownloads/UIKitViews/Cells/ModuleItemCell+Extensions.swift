@@ -70,7 +70,7 @@ extension ModuleItemCell {
     private func addDownloadButton() -> DownloadButton {
         removeDownloadButton()
         let downloadButton: DownloadButton = .init(frame: .zero)
-        downloadButton.mainTintColor = .systemBlue
+        downloadButton.mainTintColor = Brand.shared.linkColor
         downloadButton.currentState = .idle
         hStackView.addArrangedSubview(downloadButton)
         downloadButton.translatesAutoresizingMaskIntoConstraints = false

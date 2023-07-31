@@ -70,31 +70,32 @@ struct DownloadingCellView: View {
                     Spacer()
                 }
             }
-            Button {
-                viewModel.pauseResume()
-            } label: {
-                buttonImage
-            }
-            .padding(.trailing, 5)
+            DownloadButtonRepresentable(
+                progress: .constant(1),
+                currentState: .constant(currentState),
+                mainTintColor: Brand.shared.linkColor,
+                onState: { state in
+                    debugLog(state)
+                },
+                onTap: { _ in
+                    viewModel.pauseResume()
+                }
+            ).frame(width: 30, height: 30)
         }
         .padding(.all, 10)
     }
 
-    private var buttonImage: some View {
-        var imageSystemName = ""
+    private var currentState: DownloadButton.State {
         switch viewModel.downloaderStatus {
-        case .initialized, .preparing, .active:
-            imageSystemName = "stop.circle"
+        case .initialized, .preparing:
+            return .waiting
+        case .active:
+            return .downloading
         case .paused, .failed:
-            imageSystemName = "arrow.clockwise.circle"
+            return .retry
         default:
-            imageSystemName = "play.circle"
+            return .retry
         }
-        return Image(systemName: imageSystemName)
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(width: 25, height: 25)
-            .foregroundColor(Color(Brand.shared.linkColor))
     }
 
 }
