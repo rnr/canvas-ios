@@ -1,7 +1,7 @@
 import Combine
 import SwiftUI
 import mobile_offline_downloader_ios
-import SafariServices
+import PDFKit
 
 public struct ContentViewerView: View, Navigatable {
 
@@ -67,10 +67,14 @@ public struct ContentViewerView: View, Navigatable {
         if url.scheme?.contains("http") == true {
             openURL(url)
         } else if url.scheme?.contains("file") == true {
-            let config = SFSafariViewController.Configuration()
-                  config.entersReaderIfAvailable = true
-            let vc = SFSafariViewController(url: url, configuration: config)
-            navigationController?.present(vc, animated: true)
+            let root = DocViewer(
+                filename: url.lastPathComponent,
+                previewURL: url,
+                fallbackURL: url
+            )
+            let hosting = CoreHostingController(root)
+            navigationController?.pushViewController(hosting, animated: true)
+
         }
     }
 }
