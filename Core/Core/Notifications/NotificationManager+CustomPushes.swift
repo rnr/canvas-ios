@@ -53,9 +53,7 @@ extension NotificationManager {
         emailAsPushChannelID = emailChannelID
         api.makeRequest(GetNotificationPreferencesRequest(channelID: pushChannelID)) { response, _, error in
             let allowedTypes = [
-                "all_submissions",
                 "announcement",
-                "announcement_created_by_you",
                 "appointment_availability",
                 "appointment_cancelations",
                 "calendar",
@@ -66,6 +64,7 @@ extension NotificationManager {
                 "invitation",
                 "student_appointment_signups",
                 "submission_comment",
+                "discussion_mention",
             ]
             if error == nil && response != nil,
                let notif_pref_immediately = response?.notification_preferences.filter({ allowedTypes.contains($0.category ?? "") }).filter({ $0.frequency == .immediately }) {
