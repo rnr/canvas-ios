@@ -31,8 +31,21 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
         return false
     }
 
+    public static func getItem(with dataModel: OfflineStorageDataModel) async throws -> ModuleItem {
+        try await withCheckedThrowingContinuation({ continuation in
+            DispatchQueue.main.async {
+                do {
+                    let item = try fromOfflineModel(dataModel)
+                    continuation.resume(returning: item)
+                } catch {
+                    continuation.resume(throwing: error)
+                }
+            }
+        })
+    }
+
     public static func prepareForDownload(entry: OfflineDownloaderEntry) async throws {
-        let item = try fromOfflineModel(entry.dataModel)
+        let item = try await getItem(with: entry.dataModel)
         if case let .externalTool(toolID, url) = item.type {
             try await prepareLTI(entry: entry, toolID: toolID, url: url)
         } else if case let .page(url) = item.type {
