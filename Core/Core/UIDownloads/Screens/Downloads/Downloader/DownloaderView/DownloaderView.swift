@@ -79,6 +79,16 @@ struct DownloaderView: View, Navigatable {
             )
             viewModel.error = ""
         }
+        .onChange(of: viewModel.isConnected) { isConnected in
+            if !isConnected {
+                presentationMode.wrappedValue.dismiss()
+            }
+        }
+        .onChange(of: viewModel.isEmpty) { isEmpty in
+            if isEmpty {
+                presentationMode.wrappedValue.dismiss()
+            }
+        }
     }
 
     private var deleteAllButton: some View {
@@ -88,7 +98,6 @@ struct DownloaderView: View, Navigatable {
                 viewModel.deleteAll()
                 guard viewModel.error.isEmpty else { return }
                 didDeleteAll?()
-                presentationMode.wrappedValue.dismiss()
             }
             navigationController?.showAlert(
                 title: NSLocalizedString("Are you sure you want to remove all downloading content?", comment: ""),

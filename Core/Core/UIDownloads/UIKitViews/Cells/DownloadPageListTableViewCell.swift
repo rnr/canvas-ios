@@ -24,6 +24,7 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
 
     // MARK: - Injected -
 
+    @Injected(\.reachability) var reachability: ReachabilityProvider
     private let storageManager = OfflineStorageManager.shared
     private let downloadsManager = OfflineDownloadsManager.shared
 
@@ -124,8 +125,9 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
         }
         let downloadButton = addDownloadButton()
         let canDonwload = downloadButtonHelper.canDownload(object: page)
-        downloadButton.isHidden = !canDonwload
-        guard canDonwload else {
+        downloadButton.isHidden = !canDonwload || !reachability.isConnected
+
+        guard !downloadButton.isHidden else {
             return
         }
         let userInfo = page.htmlURL?.changeScheme("Page")?.absoluteString ?? "Page://site.com/courses/\(course.id)/modules"
@@ -168,7 +170,7 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
     func addDownloadButton() -> DownloadButton {
         removeDownloadButton()
         let downloadButton: DownloadButton = .init(frame: .zero)
-        downloadButton.mainTintColor = .systemBlue
+        downloadButton.mainTintColor = Brand.shared.linkColor
         downloadButton.currentState = .idle
         contentView.addSubview(downloadButton)
         downloadButton.translatesAutoresizingMaskIntoConstraints = false

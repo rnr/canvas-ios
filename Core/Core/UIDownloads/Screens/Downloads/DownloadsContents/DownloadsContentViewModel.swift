@@ -31,7 +31,7 @@ final class DownloadsContentViewModel: ObservableObject {
     @Published var content: [OfflineDownloaderEntry]
     @Published var error: String = ""
     @Published var deleting: Bool = false
-    
+
     let courseDataModel: CourseStorageDataModel
     var onDeleted: ((OfflineDownloaderEntry) -> Void)?
     var onDeletedAll: (() -> Void)?

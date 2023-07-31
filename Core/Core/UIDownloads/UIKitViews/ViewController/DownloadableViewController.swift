@@ -27,6 +27,10 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
         print("☠️ Deinitialized -> \(String.init(describing: self))☠️")
     }
 
+    // MARK: - Injected -
+
+    @Injected(\.reachability) var reachability: ReachabilityProvider
+
     // MARK: - Properties -
 
     private let downloadsManager = OfflineDownloadsManager.shared
@@ -36,8 +40,9 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
     private let imageDownloader = ImageDownloader()
     private let env = AppEnvironment.shared
     private var downloadsSubscriber: AnyCancellable?
+    private var connectionSubscriber: AnyCancellable?
 
-    public var downloadButton: DownloadButton = {
+    public lazy var downloadButton: DownloadButton = {
         let downloadButton = DownloadButton()
         downloadButton.mainTintColor = .white
         downloadButton.currentState = .idle
@@ -59,7 +64,7 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
             return
         }
         self.downloadableItem = downloadableItem
-        observeDownloadsEvents()
+        addObservers()
     }
 
     public func configure() {
@@ -98,6 +103,9 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
     }
 
     public func attachDownloadButton() {
+        if !reachability.isConnected {
+            return
+        }
         navigationItem.rightBarButtonItem = downloadBarButtonItem
     }
 
@@ -132,7 +140,7 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
         }
     }
 
-    private func observeDownloadsEvents() {
+    private func addObservers() {
         guard let downloadableItem = downloadableItem,
               downloadsManager.canDownload(object: downloadableItem.object) else {
             downloadButton.isHidden = true
@@ -149,6 +157,12 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
                 }
             }
 
+        connectionSubscriber = reachability.newtorkReachabilityPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isConnected in
+                self?.connection(isConnected)
+            }
+
         downloadsManager.eventObject(for: downloadableItem.object) { [weak self] result in
             DispatchQueue.main.async {
                 result.success { event in
@@ -160,6 +174,18 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
                 self?.downloadButton.isHidden = false
             }
         }
+    }
+
+    private func connection(_ isConnected: Bool) {
+        guard let downloadableItem = downloadableItem else {
+            return
+        }
+
+        if !downloadsManager.canDownload(object: downloadableItem.object) {
+            downloadButton.isHidden = true
+            return
+        }
+        downloadButton.isHidden = !isConnected
     }
 
     private func statusChanged(_ event: OfflineDownloadsManagerEventObject) {

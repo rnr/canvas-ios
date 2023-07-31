@@ -26,8 +26,8 @@ extension ModuleItemCell {
         }
         let downloadButton = addDownloadButton()
         let canDonwload = downloadButtonHelper.canDownload(object: item)
-        downloadButton.isHidden = !canDonwload
-        guard canDonwload else {
+        downloadButton.isHidden = !canDonwload || !reachability.isConnected
+        guard !downloadButton.isHidden else {
             return
         }
         let userInfo = item.htmlURL?.changeScheme("ModuleItem")?.absoluteString ?? "ModuleItem://site.com/courses/\(course.id)/modules"
@@ -70,7 +70,7 @@ extension ModuleItemCell {
     private func addDownloadButton() -> DownloadButton {
         removeDownloadButton()
         let downloadButton: DownloadButton = .init(frame: .zero)
-        downloadButton.mainTintColor = .systemBlue
+        downloadButton.mainTintColor = Brand.shared.linkColor
         downloadButton.currentState = .idle
         hStackView.addArrangedSubview(downloadButton)
         downloadButton.translatesAutoresizingMaskIntoConstraints = false

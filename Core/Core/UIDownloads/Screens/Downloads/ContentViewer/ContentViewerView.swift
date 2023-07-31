@@ -1,12 +1,14 @@
 import Combine
 import SwiftUI
 import mobile_offline_downloader_ios
+import PDFKit
 
-public struct ContentViewerView: View {
+public struct ContentViewerView: View, Navigatable {
 
     // MARK: - Injected -
 
     @Environment(\.presentationMode) private var presentationMode
+    @Environment(\.openURL) var openURL
 
     // MARK: - Properties -
 
@@ -32,17 +34,26 @@ public struct ContentViewerView: View {
             SUWebView(
                 configurator: .init(
                     requestType: type
-                )
+                ),
+                onLinkActivated: onLinkActivated
             )
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                Button {
-                    viewModel.delete()
-                } label: {
-                    Image(systemName: "trash.circle")
-                        .resizable()
-                        .frame(width: 30, height: 30)
+                ToolbarItem(placement: .principal) {
+                    Text(viewModel.title)
+                        .foregroundColor(.white)
+                        .font(.semibold16)
                 }
-                .foregroundColor(.white)
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        viewModel.delete()
+                    } label: {
+                        Image(systemName: "trash.circle")
+                            .resizable()
+                            .frame(width: 30, height: 30)
+                    }
+                    .foregroundColor(.white)
+                }
             }
             .onReceive(viewModel.viewDismissalModePublisher) { shouldDismiss in
                 if shouldDismiss {
@@ -52,4 +63,17 @@ public struct ContentViewerView: View {
         }
     }
 
+    private func onLinkActivated(_ url: URL) {
+        if url.scheme?.contains("http") == true {
+            openURL(url)
+        } else if url.scheme?.contains("file") == true {
+            let root = DocViewer(
+                filename: url.lastPathComponent,
+                previewURL: url,
+                fallbackURL: url
+            )
+            let hosting = CoreHostingController(root)
+            navigationController?.pushViewController(hosting, animated: true)
+        }
+    }
 }

@@ -48,53 +48,38 @@ struct DownloadingCellView: View {
 
     private var content: some View {
         HStack {
-            VStack(alignment: .leading, spacing: 3) {
-                Text(viewModel.title)
-                    .font(.semibold18)
-                    .foregroundColor(.textDarkest)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .lineLimit(2)
-                HStack(alignment: .center, spacing: 2) {
-                    ProgressView(value: viewModel.progress)
-                        .progressViewStyle(
-                            LinearProgressViewStyle(
-                                tint: Color(Brand.shared.linkColor)
-                            )
-                        )
-                        .frame(height: 5)
-                    Spacer()
-                    Text("\(Int(round(viewModel.progress * 100))) %")
-                        .font(.caption.monospacedDigit())
-                        .foregroundColor(.secondary)
-                        .frame(width: 40)
-                    Spacer()
+            Text(viewModel.title)
+                .font(.semibold18)
+                .foregroundColor(.textDarkest)
+                .fixedSize(horizontal: false, vertical: true)
+                .lineLimit(2)
+            Spacer()
+            DownloadButtonRepresentable(
+                progress: .constant(viewModel.progress),
+                currentState: .constant(currentState),
+                mainTintColor: Brand.shared.linkColor,
+                onState: { state in
+                    debugLog(state)
+                },
+                onTap: { _ in
+                    viewModel.pauseResume()
                 }
-            }
-            Button {
-                viewModel.pauseResume()
-            } label: {
-                buttonImage
-            }
-            .padding(.trailing, 5)
+            ).frame(width: 30, height: 30)
         }
         .padding(.all, 10)
     }
 
-    private var buttonImage: some View {
-        var imageSystemName = ""
+    private var currentState: DownloadButton.State {
         switch viewModel.downloaderStatus {
-        case .initialized, .preparing, .active:
-            imageSystemName = "stop.circle"
+        case .initialized, .preparing:
+            return .waiting
+        case .active:
+            return .downloading
         case .paused, .failed:
-            imageSystemName = "arrow.clockwise.circle"
+            return .retry
         default:
-            imageSystemName = "play.circle"
+            return .retry
         }
-        return Image(systemName: imageSystemName)
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(width: 25, height: 25)
-            .foregroundColor(Color(Brand.shared.linkColor))
     }
 
 }

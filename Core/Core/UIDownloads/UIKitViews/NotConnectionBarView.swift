@@ -19,11 +19,10 @@
 import UIKit
 import Combine
 
-public class NotConnectionBarView: UIView {
+public class NotConnectionBarView: UIView, Reachabilitable {
 
     @Injected(\.reachability) var reachability: ReachabilityProvider
-
-    private var cancellables: [AnyCancellable] = []
+    var cancellables: [AnyCancellable] = []
 
     private let titleLabel: UILabel = {
         let titleLabel = UILabel()
@@ -43,17 +42,10 @@ public class NotConnectionBarView: UIView {
         if reachability.notifierRunning {
             isHidden = reachability.isConnected
         }
-        reachability.newtorkReachabilityPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] isConnected in
-                guard let self = self else {
-                    return
-                }
-                DispatchQueue.main.async {
-                    self.isHidden = isConnected
-                }
-            }
-            .store(in: &cancellables)
+
+        connection { [weak self] isConnected in
+            self?.isHidden = isConnected
+        }
     }
 
     private func attachLabel() {

@@ -16,21 +16,21 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-import Foundation
+import Combine
 
-final class DownloadingModule: Identifiable, Hashable {
-    static func == (lhs: DownloadingModule, rhs: DownloadingModule) -> Bool {
-        lhs.id == rhs.id
+protocol Reachabilitable: AnyObject {
+    var reachability: ReachabilityProvider { get }
+    var cancellables: [AnyCancellable] { get set }
+    func connection(on: ((Bool) -> Void)?)
+}
+
+extension Reachabilitable {
+    func connection(on: ((Bool) -> Void)?) {
+        reachability.newtorkReachabilityPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { isConnected in
+               on?(isConnected)
+            }
+            .store(in: &cancellables)
     }
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
-
-    let id: String = Foundation.UUID().uuidString
-    let shortName: String
-
-    init(shortName: String) {
-       self.shortName = shortName
-   }
 }

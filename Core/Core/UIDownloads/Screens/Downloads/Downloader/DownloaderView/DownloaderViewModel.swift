@@ -20,26 +20,40 @@ import Combine
 import SwiftUI
 import mobile_offline_downloader_ios
 
-final class DownloaderViewModel: ObservableObject {
+final class DownloaderViewModel: ObservableObject, Reachabilitable {
 
-    // MARK: - Injections -
+    // MARK: - Injection -
+
+    @Injected(\.reachability) var reachability: ReachabilityProvider
 
     private var storageManager: OfflineStorageManager = .shared
     private var downloadsManager: OfflineDownloadsManager = .shared
 
     // MARK: - Properties -
 
-    @Published var downloadingModules: [DownloadsModuleCellViewModel] = []
+    @Published var downloadingModules: [DownloadsModuleCellViewModel] = [] {
+        didSet {
+            isEmpty = downloadingModules.isEmpty
+        }
+    }
     @Published var error: String = ""
     @Published var deleting: Bool = false
-    private var cancellables: [AnyCancellable] = []
+    @Published var isConnected: Bool = true
+    @Published var isEmpty: Bool = true
+
+    var cancellables: [AnyCancellable] = []
 
     init(downloadingModules: [DownloadsModuleCellViewModel]) {
         self.downloadingModules = downloadingModules
-        observeDownloadsEvents()
+        configure()
     }
 
     // MARK: - Intents -
+
+    func configure() {
+        isConnected = reachability.isConnected
+        addObservers()
+    }
 
     func pauseResume() {}
 
@@ -68,7 +82,7 @@ final class DownloaderViewModel: ObservableObject {
         }
     }
 
-    private func observeDownloadsEvents() {
+    private func addObservers() {
         downloadsManager
             .publisher
             .sink { [weak self] event in
@@ -80,6 +94,10 @@ final class DownloaderViewModel: ObservableObject {
                 }
             }
             .store(in: &cancellables)
+
+        connection { [weak self] isConnected in
+            self?.isConnected = isConnected
+        }
     }
 
     private func statusChanged(_ event: OfflineDownloadsManagerEventObject) {

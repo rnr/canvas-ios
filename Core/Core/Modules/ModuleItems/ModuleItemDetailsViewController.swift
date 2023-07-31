@@ -135,6 +135,9 @@ public class ModuleItemDetailsViewController: DownloadableViewController, Colore
         if item?.completionRequirementType == .must_mark_done {
             navigationItem.rightBarButtonItems?.append(optionsButton)
         }
+        guard reachability.isConnected else {
+            return
+        }
         switch item?.type {
         case .externalTool, .page:
             navigationItem.rightBarButtonItems?.append(downloadBarButtonItem)
