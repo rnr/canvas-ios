@@ -100,7 +100,10 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
             }
         }
 
-        let extractor = await OfflineHTMLDynamicsLinksExtractor(url: url)
+        let extractor = await OfflineHTMLDynamicsLinksExtractor(
+            url: url,
+            linksHandler: OfflineDownloadsManager.shared.config.linksHandler
+        )
         try await extractor.fetch()
         if let latestURL = await extractor.latestRedirectURL {
             let downloader = OfflineLinkDownloader()

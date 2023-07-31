@@ -26,6 +26,12 @@ public struct DownloaderClient {
 
         let downloaderConfig = OfflineDownloaderConfig()
         downloaderConfig.downloadTypes = [Page.self, ModuleItem.self]
+        downloaderConfig.linksHandler = { urlString in
+            if urlString.contains("/files/") && !urlString.contains("/download") && urlString.contains(AppEnvironment.shared.api.baseURL.absoluteString) {
+                return urlString.replacingOccurrences(of: "?", with: "/download?")
+            }
+            return urlString
+        }
         OfflineDownloadsManager.shared.setConfig(downloaderConfig)
     }
 }
