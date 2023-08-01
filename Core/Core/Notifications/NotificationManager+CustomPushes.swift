@@ -28,7 +28,9 @@ extension NotificationManager {
             if error == nil {
                 // check if we have needed channel already
                 // ToDo: change to prod domain for release
-                if let generatedPushChannel = response?.first(where: { $0.address.contains("@yanelena.com") }) {
+                if let domain = Secret.customPushDomain.string,
+                    !domain.isEmpty,
+                    let generatedPushChannel = response?.first(where: { $0.address.contains("@\(domain)") }) {
                     self?.emailAsPushChannelID = generatedPushChannel.id.value
                 } else {
                     let pushChannel = response?.first(where: { $0.type == .push })
