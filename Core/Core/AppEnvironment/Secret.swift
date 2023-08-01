@@ -30,6 +30,7 @@ public enum Secret {
 
     /// AWS keys values
     case awsAccessKey, awsSecretKey, appArnTemplate
+    case customPushDomain
 
     /// The value passed to `Heap.initialize`
     case heapID
