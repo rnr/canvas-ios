@@ -25,6 +25,9 @@ import QuickLookThumbnailing
 import UIKit
 
 public class FileDetailsViewController: ScreenViewTrackableViewController, CoreWebViewLinkDelegate, ErrorViewController {
+    var updated: ((File, Course) -> Void)?
+    private var courses: Store<GetCourse>?
+
     @IBOutlet weak var spinnerView: CircleProgressView!
     @IBOutlet weak var arButton: UIButton!
     @IBOutlet weak var arImageView: UIImageView!
@@ -58,6 +61,7 @@ public class FileDetailsViewController: ScreenViewTrackableViewController, CoreW
     lazy var files = env.subscribe(GetFile(context: context, fileID: fileID)) { [weak self] in
         self?.update()
     }
+
     private var accessReportInteractor: FileAccessReportInteractor?
     private var subscriptions = Set<AnyCancellable>()
     private var offlineFileInteractor: OfflineFileInteractor?
@@ -122,6 +126,11 @@ public class FileDetailsViewController: ScreenViewTrackableViewController, CoreW
             .reportFileAccess()
             .sink()
             .store(in: &subscriptions)
+
+        if let context = context, context.contextType == .course {
+            courses = env.subscribe(GetCourse(courseID: context.id)) { [weak self] in }
+        }
+
     }
 
     public override func viewWillAppear(_ animated: Bool) {
@@ -174,6 +183,10 @@ public class FileDetailsViewController: ScreenViewTrackableViewController, CoreW
         } else if let file = files.first, let url = file.url, remoteURL != url {
             remoteURL = url
             downloadFile(at: url)
+        }
+
+        if let course = courses?.first {
+            updated?(file, course)
         }
     }
 

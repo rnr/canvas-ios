@@ -31,5 +31,9 @@ public struct ListWithoutVerticalScrollIndicator<Content: View>: View {
             content().padding(.horizontal, scrollIndicatorWidth)
         }
         .padding(.horizontal, -scrollIndicatorWidth)
+        .safeAreaInset(edge: .bottom) {
+            Color.clear
+                .frame(height: 60)
+        }
     }
 }

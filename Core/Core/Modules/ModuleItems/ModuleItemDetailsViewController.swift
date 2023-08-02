@@ -139,7 +139,7 @@ public class ModuleItemDetailsViewController: DownloadableViewController, Colore
             return
         }
         switch item?.type {
-        case .externalTool, .page:
+        case .externalTool, .page, .file:
             navigationItem.rightBarButtonItems?.append(downloadBarButtonItem)
             downloadButton.isHidden = false
         default:

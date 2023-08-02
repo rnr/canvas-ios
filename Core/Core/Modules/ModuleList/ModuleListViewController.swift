@@ -93,6 +93,7 @@ public class ModuleListViewController: ScreenViewTrackableViewController, Colore
         tableView.refreshControl = refreshControl
         tableView.registerCell(EmptyCell.self)
         tableView.registerHeaderFooterView(ModuleSectionHeaderView.self, fromNib: false)
+        tableView.contentInset = .init(top: 0, left: 0, bottom: 60, right: 0)
         if let footer = tableView.tableFooterView as? UILabel {
             footer.isHidden = true
             footer.text = NSLocalizedString("Loading more modules...", bundle: .core, comment: "")

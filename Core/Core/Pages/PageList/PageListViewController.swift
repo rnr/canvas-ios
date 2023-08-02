@@ -130,8 +130,8 @@ public class PageListViewController: ScreenViewTrackableViewController, ColoredN
         emptyView.isHidden = pages.error != nil || isLoading || !frontPage.isEmpty || !pages.isEmpty
         errorView.isHidden = pages.error == nil
         let selected = tableView.indexPathForSelectedRow
-        debugLog(isLoading, "isLoading")
         if isLoading {
+            tableView.contentInset = .init(top: 0, left: 0, bottom: 60, right: 0)
             tableView.reloadData()
         }
         tableView.selectRow(at: selected, animated: false, scrollPosition: .none) // preserve prior selection

@@ -154,7 +154,7 @@ public struct DownloadsView: View, Navigatable, DownloadsProgressBarHidden {
             controller.value.showAlert(
                 title: NSLocalizedString("Are you sure you want to remove all downloaded content?", comment: ""),
                 actions: [cancelAction, deleteAction],
-                style: .actionSheet
+                style: .alert
             )
         }
         .foregroundColor(.white)

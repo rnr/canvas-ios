@@ -59,7 +59,6 @@ public class DownloadingBarView: UIView {
             name: .DownloadingBarViewShow,
             object: nil
         )
-
     }
 
     @objc
