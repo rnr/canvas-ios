@@ -18,21 +18,18 @@
 
 import SwiftUI
 
-struct Header: View {
-    let title: String
-
-    var body: some View {
-        HStack(alignment: .lastTextBaseline) {
-            Text(title)
-                .font(.bold17)
-                .foregroundColor(.textDarkest)
-            Spacer()
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal, 16)
-        .listRowInsets(EdgeInsets())
-        .buttonStyle(PlainButtonStyle())
-        .listRowSeparator(.hidden)
-        .listRowBackground(Color.backgroundLightest)
-    }
+public extension View {
+  /// Modify a view with a `ViewBuilder` closure.
+  ///
+  /// This represents a streamlining of the
+  /// [`modifier`](https://developer.apple.com/documentation/swiftui/view/modifier(_:))
+  /// \+ [`ViewModifier`](https://developer.apple.com/documentation/swiftui/viewmodifier)
+  /// pattern.
+  /// - Note: Useful only when you don't need to reuse the closure.
+  /// If you do, turn the closure into an extension! ♻️
+  func modifier<ModifiedContent: View>(
+    @ViewBuilder body: (_ content: Self) -> ModifiedContent
+  ) -> ModifiedContent {
+    body(self)
+  }
 }

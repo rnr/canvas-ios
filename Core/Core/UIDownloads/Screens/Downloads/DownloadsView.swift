@@ -19,12 +19,11 @@
 import Combine
 import SwiftUI
 
-public struct DownloadsView: View, Navigatable {
+public struct DownloadsView: View, Navigatable, DownloadsProgressBarHidden {
 
     // MARK: - Injected -
 
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    @Environment(\.viewController) var controller
+    @Environment(\.viewController) var controller: WeakViewController
 
     // MARK: - Properties -
 
@@ -42,7 +41,10 @@ public struct DownloadsView: View, Navigatable {
             .accentColor(Color(Brand.shared.linkColor))
             .onAppear {
                 navigationController?.navigationBar.useGlobalNavStyle()
-                hideDownloadingBarView()
+                toggleDownloadingBarView(hidden: true)
+            }
+            .onDisappear {
+                toggleDownloadingBarView(hidden: false)
             }
             .onChange(of: viewModel.error) { newValue in
                 if newValue.isEmpty { return }
@@ -57,7 +59,7 @@ public struct DownloadsView: View, Navigatable {
 
     private var content: some View {
         ZStack {
-            Color(.systemBackground)
+            Color.backgroundLightest
                 .ignoresSafeArea()
             switch viewModel.state {
             case .none, .loading:
@@ -76,6 +78,7 @@ public struct DownloadsView: View, Navigatable {
                                 .foregroundColor(.textDarkest)
                                 .multilineTextAlignment(.center)
                         }
+                        .background(Color.backgroundLightest)
                     } else {
                         list
                     }
@@ -95,6 +98,7 @@ public struct DownloadsView: View, Navigatable {
                 deleteAllButton
             }
         }
+        .background(Color.backgroundLightest)
     }
 
     private var list: some View {
@@ -106,8 +110,9 @@ public struct DownloadsView: View, Navigatable {
             courses
                 .isHidden(viewModel.courseViewModels.isEmpty)
         }
+        .listRowBackground(Color.backgroundLightest)
         .listStyle(.inset)
-        .background(Color.backgroundLightest.ignoresSafeArea())
+        .listSystemBackgroundColor()
     }
 
     private var modules: some View {
@@ -119,23 +124,25 @@ public struct DownloadsView: View, Navigatable {
                     ),
                     title: "Downloading"
                 )
+                .background(Color.backgroundLightest)
             } else {
                 Header(title: "Downloading")
-
             }
             DownloadProgressSectionView(viewModel: viewModel)
-                .listRowInsets(EdgeInsets())
-                .listRowSeparator(.hidden)
         }
+        .listRowBackground(Color.backgroundLightest)
+        .listRowSeparator(.hidden)
+        .listRowInsets(EdgeInsets())
     }
 
     private var courses: some View {
         SwiftUI.Group {
             Header(title: "Courses")
             DownloadCoursesSectionView(viewModel: viewModel)
-                .listRowInsets(EdgeInsets())
-                .listRowSeparator(.hidden)
         }
+        .listRowBackground(Color.backgroundLightest)
+        .listRowSeparator(.hidden)
+        .listRowInsets(EdgeInsets())
     }
 
     private var deleteAllButton: some View {
@@ -152,14 +159,5 @@ public struct DownloadsView: View, Navigatable {
         }
         .foregroundColor(.white)
         .hidden(viewModel.isEmpty)
-    }
-
-    private func hideDownloadingBarView() {
-        guard let downloadingBarView = controller.value.tabBarController?.view.subviews.first(
-            where: { $0 is DownloadingBarView }) as? DownloadingBarView
-        else {
-            return
-        }
-        downloadingBarView.hidden()
     }
 }

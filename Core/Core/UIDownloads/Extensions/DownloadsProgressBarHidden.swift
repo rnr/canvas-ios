@@ -16,23 +16,22 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-import SwiftUI
+import Foundation
 
-struct Header: View {
-    let title: String
+protocol DownloadsProgressBarHidden {
+    func toggleDownloadingBarView(hidden: Bool)
+}
+extension NSNotification.Name {
+    public static var DownloadingBarViewHidden = NSNotification.Name("DownloadingBarViewHidden")
+    public static var DownloadingBarViewShow = NSNotification.Name("DownloadingBarViewShow")
 
-    var body: some View {
-        HStack(alignment: .lastTextBaseline) {
-            Text(title)
-                .font(.bold17)
-                .foregroundColor(.textDarkest)
-            Spacer()
+}
+extension DownloadsProgressBarHidden {
+    func toggleDownloadingBarView(hidden: Bool) {
+        if hidden {
+            NotificationCenter.default.post(name: .DownloadingBarViewHidden, object: nil)
+        } else {
+            NotificationCenter.default.post(name: .DownloadingBarViewShow, object: nil)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal, 16)
-        .listRowInsets(EdgeInsets())
-        .buttonStyle(PlainButtonStyle())
-        .listRowSeparator(.hidden)
-        .listRowBackground(Color.backgroundLightest)
     }
 }

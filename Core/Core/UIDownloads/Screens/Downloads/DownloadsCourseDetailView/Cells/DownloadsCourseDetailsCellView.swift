@@ -35,7 +35,7 @@ public struct DownloadsCourseDetailsCellView: View {
                 VStack(alignment: .leading) {
                     Text(categoryViewModel.title)
                         .font(.semibold16)
-                        .foregroundColor(.oxford)
+                        .foregroundColor(.textDarkest)
                 }
                 Spacer()
                 InstDisclosureIndicator()

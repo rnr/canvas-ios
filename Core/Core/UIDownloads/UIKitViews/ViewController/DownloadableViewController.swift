@@ -21,7 +21,7 @@ import SwiftUI
 import Combine
 import mobile_offline_downloader_ios
 
-public class DownloadableViewController: UIViewController, ErrorViewController {
+public class DownloadableViewController: UIViewController, ErrorViewController, DownloadsProgressBarHidden {
 
     deinit {
         print("☠️ Deinitialized -> \(String.init(describing: self))☠️")
@@ -55,11 +55,18 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configure()
+        toggleDownloadingBarView(hidden: true)
+    }
+
+    public override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        toggleDownloadingBarView(hidden: false)
     }
 
     // MARK: - Configuration -
 
     func set(downloadableItem: DownloadableItem) {
+        toggleDownloadingBarView(hidden: true)
         if downloadableItem.objectId == self.downloadableItem?.objectId {
             return
         }
@@ -93,6 +100,7 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
             case .idle:
                 self.download()
             }
+            self.toggleDownloadingBarView(hidden: true)
         }
     }
 

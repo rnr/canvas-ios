@@ -19,10 +19,11 @@
 import Combine
 import SwiftUI
 
-struct DownloaderView: View, Navigatable {
+struct DownloaderView: View, Navigatable, DownloadsProgressBarHidden {
 
     // MARK: - Injected -
 
+    @Environment(\.viewController) var controller: WeakViewController
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
 
     // MARK: - Properties -
@@ -44,12 +45,14 @@ struct DownloaderView: View, Navigatable {
 
     var body: some View {
         ZStack {
-            Color(.systemBackground)
+            Color.backgroundLight
                 .ignoresSafeArea()
             content
             if viewModel.deleting {
                 LoadingDarkView()
             }
+        }.onAppear {
+            toggleDownloadingBarView(hidden: true)
         }
     }
 

@@ -35,7 +35,7 @@ public struct DownloadsContentCellView: View {
             VStack(alignment: .leading) {
                 Text(viewModel.title)
                     .font(.semibold16)
-                    .foregroundColor(.oxford)
+                    .foregroundColor(.textDarkest)
                 viewModel.lastUpdated.flatMap(dateText)
             }
             Spacer()
@@ -45,6 +45,7 @@ public struct DownloadsContentCellView: View {
         .frame(height: 60)
         .padding(.horizontal, 15)
         .contentShape(Rectangle())
+        .background(Color.backgroundLightest)
     }
 
     private func dateText(date: Date) -> some View {
