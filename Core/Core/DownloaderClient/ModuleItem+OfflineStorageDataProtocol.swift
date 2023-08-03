@@ -35,7 +35,8 @@ extension ModuleItem: OfflineStorageDataProtocol {
             let dictionary = (try? JSONSerialization.jsonObject(with: data!) as? [String: Any]) ?? [:]
             let context = env.database.viewContext
             let predicate = NSPredicate(format: "%K == %@", #keyPath(ModuleItem.id), model.id)
-            let moduleItem: ModuleItem = context.fetch(predicate).first ?? context.insert()
+            if let moduleItem: ModuleItem = context.fetch(predicate).first { return moduleItem }
+            let moduleItem: ModuleItem = context.insert()
 
             if let id = dictionary["id"] as? String {
                 moduleItem.id = id

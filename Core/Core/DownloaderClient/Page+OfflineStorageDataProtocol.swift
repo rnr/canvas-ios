@@ -27,7 +27,9 @@ extension Page: OfflineStorageDataProtocol {
             let dictionary = (try? JSONSerialization.jsonObject(with: data!) as? [String: Any]) ?? [:]
             let context = env.database.viewContext
             let predicate = NSPredicate(format: "%K == %@", #keyPath(Page.id), model.id)
-            let page: Page = context.fetch(predicate).first ?? context.insert()
+            if let page: Page = context.fetch(predicate).first { return page }
+
+            let page: Page = context.insert()
 
             if let url = dictionary["url"] as? String {
                 page.url = url
