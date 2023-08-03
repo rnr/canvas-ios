@@ -16,6 +16,7 @@ public struct SUWebViewRepresentable: UIViewRepresentable {
             isToolbarVisible: isToolbarVisible
         )
         webView.webView.navigationDelegate = context.coordinator
+        webView.webView.configuration.defaultWebpagePreferences.preferredContentMode = .mobile
         webView.webView.uiDelegate = context.coordinator
         #if DEBUG
         if #available(iOSApplicationExtension 16.4, *) {
@@ -38,8 +39,6 @@ public struct SUWebViewRepresentable: UIViewRepresentable {
         case let .indexURL(url, allowingReadAccessTo):
             guard url.path != context.coordinator.previousURL?.path else { return }
             context.coordinator.previousURL = url
-            let request = URLRequest(url: url)
-            uiView.webView.load(request)
             uiView.webView.loadFileURL(url, allowingReadAccessTo: allowingReadAccessTo)
         case .request(let request):
             guard request.url?.path != context.coordinator.previousRequest?.url?.path else { return }

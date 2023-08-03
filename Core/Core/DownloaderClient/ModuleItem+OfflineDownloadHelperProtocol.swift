@@ -18,6 +18,7 @@
 
 import Foundation
 import mobile_offline_downloader_ios
+import SwiftSoup
 
 extension ModuleItem: OfflineDownloadTypeProtocol {
     public static func canDownload(entry: OfflineDownloaderEntry) -> Bool {
@@ -73,8 +74,7 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
         })
     }
 
-    static func prepareLTI(entry: OfflineDownloaderEntry, toolID: String, url: URL) async throws {
-        let item = try fromOfflineModel(entry.dataModel)
+    static func getLtiURL(from item: ModuleItem, toolID: String, url: URL) async throws -> URL {
         let tools = LTITools(
             context: .course(item.courseID),
             id: toolID,
@@ -84,7 +84,7 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
             moduleItemID: item.id
         )
 
-        let url: URL = try await withCheckedThrowingContinuation { continuation in
+        return try await withCheckedThrowingContinuation { continuation in
             tools.getSessionlessLaunch { response in
                 guard let response = response else {
                     continuation.resume(throwing: ModuleItemError.wrongSession)
@@ -99,19 +99,45 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
                 }
             }
         }
+    }
+
+    static func prepareLTI(entry: OfflineDownloaderEntry, toolID: String, url: URL) async throws {
+        let item = try fromOfflineModel(entry.dataModel)
+
+        let url: URL = try await getLtiURL(from: item, toolID: toolID, url: url)
 
         let extractor = await OfflineHTMLDynamicsLinksExtractor(
             url: url,
             linksHandler: OfflineDownloadsManager.shared.config.linksHandler
         )
         try await extractor.fetch()
-        if let latestURL = await extractor.latestRedirectURL {
-            let downloader = OfflineLinkDownloader()
-            let cookieString = await extractor.cookies().cookieString
-            downloader.additionCookies = cookieString
-            let ltiContents = try await downloader.contents(urlString: latestURL.absoluteString)
-            entry.addHtmlPart(ltiContents, baseURL: latestURL.absoluteString, cookieString: cookieString)
+        if let latestURL = await extractor.latestRedirectURL, let html = await extractor.html {
+            if html.contains(latestURL.absoluteString) {
+                let downloader = OfflineLinkDownloader()
+                let cookieString = await extractor.cookies().cookieString
+                downloader.additionCookies = cookieString
+                let ltiContents = try await downloader.contents(urlString: latestURL.absoluteString)
+                entry.addHtmlPart(ltiContents, baseURL: latestURL.absoluteString, cookieString: cookieString)
+            } else {
+                let html = try prepare(html: html)
+                let cookieString = await extractor.cookies().cookieString
+                entry.addHtmlPart(html, baseURL: latestURL.absoluteString, cookieString: cookieString)
+            }
         }
+    }
+
+    static func prepare(html: String) throws -> String {
+        let document = try SwiftSoup.parse(html)
+        let videoTags = try document.getElementsByTag("video")
+        for tag in videoTags where tag.hasClass("vjs-tech") {
+            try tag.attr("controls", "true")
+            try tag.attr("width", "100%")
+            try tag.removeAttr("crossorigin")
+            if let app = try document.getElementById("app") {
+                try app.replaceWith(tag)
+            }
+        }
+        return try document.html()
     }
 
     public func downloaderEntry() throws -> OfflineDownloaderEntry {
