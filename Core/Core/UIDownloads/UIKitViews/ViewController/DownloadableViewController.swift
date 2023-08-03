@@ -21,7 +21,7 @@ import SwiftUI
 import Combine
 import mobile_offline_downloader_ios
 
-public class DownloadableViewController: UIViewController, ErrorViewController {
+public class DownloadableViewController: UIViewController, ErrorViewController, DownloadsProgressBarHidden {
 
     deinit {
         print("☠️ Deinitialized -> \(String.init(describing: self))☠️")
@@ -42,6 +42,8 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
     private var downloadsSubscriber: AnyCancellable?
     private var connectionSubscriber: AnyCancellable?
 
+    private var willDisappearing: Bool = false
+
     public lazy var downloadButton: DownloadButton = {
         let downloadButton = DownloadButton()
         downloadButton.mainTintColor = .white
@@ -57,9 +59,16 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
         configure()
     }
 
+    public override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        willDisappearing = true
+        toggleDownloadingBarView(hidden: false)
+    }
+
     // MARK: - Configuration -
 
     func set(downloadableItem: DownloadableItem) {
+        toggleDownloadingBarView(hidden: false)
         if downloadableItem.objectId == self.downloadableItem?.objectId {
             return
         }
@@ -68,6 +77,8 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
     }
 
     public func configure() {
+        toggleDownloadingBarView(hidden: true)
+        willDisappearing = false
         layout()
         actions()
     }
@@ -93,6 +104,7 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
             case .idle:
                 self.download()
             }
+            self.toggleDownloadingBarView(hidden: true)
         }
     }
 
@@ -149,11 +161,17 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
         downloadsSubscriber = downloadsManager
             .publisher
             .sink { [weak self] event in
+                guard let self = self else {
+                    return
+                }
+                if !self.willDisappearing {
+                    self.toggleDownloadingBarView(hidden: true)
+                }
                 switch event {
                 case .statusChanged(object: let event):
-                    self?.statusChanged(event)
+                    self.statusChanged(event)
                 case .progressChanged(object: let event):
-                    self?.progressChanged(event)
+                    self.progressChanged(event)
                 }
             }
 
@@ -164,14 +182,20 @@ public class DownloadableViewController: UIViewController, ErrorViewController {
             }
 
         downloadsManager.eventObject(for: downloadableItem.object) { [weak self] result in
+            guard let self = self else {
+                return
+            }
             DispatchQueue.main.async {
+                if !self.willDisappearing {
+                    self.toggleDownloadingBarView(hidden: true)
+                }
                 result.success { event in
-                    self?.statusChanged(event)
+                    self.statusChanged(event)
                 }
                 result.failure { _ in
-                    self?.downloadButton.currentState = .idle
+                    self.downloadButton.currentState = .idle
                 }
-                self?.downloadButton.isHidden = false
+                self.downloadButton.isHidden = false
             }
         }
     }

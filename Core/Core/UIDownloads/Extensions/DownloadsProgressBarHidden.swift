@@ -1,6 +1,6 @@
 //
 // This file is part of Canvas.
-// Copyright (C) 2022-present  Instructure, Inc.
+// Copyright (C) 2023-present  Instructure, Inc.
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -16,24 +16,22 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-import SwiftUI
+import Foundation
 
-public struct ListWithoutVerticalScrollIndicator<Content: View>: View {
-    private let scrollIndicatorWidth: CGFloat = 6
-    private let content: () -> Content
+protocol DownloadsProgressBarHidden {
+    func toggleDownloadingBarView(hidden: Bool)
+}
+extension NSNotification.Name {
+    public static var DownloadingBarViewHidden = NSNotification.Name("DownloadingBarViewHidden")
+    public static var DownloadingBarViewShow = NSNotification.Name("DownloadingBarViewShow")
 
-    public init(content: @escaping () -> Content) {
-        self.content = content
-    }
-
-    public var body: some View {
-        List {
-            content().padding(.horizontal, scrollIndicatorWidth)
-        }
-        .padding(.horizontal, -scrollIndicatorWidth)
-        .safeAreaInset(edge: .bottom) {
-            Color.clear
-                .frame(height: 60)
+}
+extension DownloadsProgressBarHidden {
+    func toggleDownloadingBarView(hidden: Bool) {
+        if hidden {
+            NotificationCenter.default.post(name: .DownloadingBarViewHidden, object: nil)
+        } else {
+            NotificationCenter.default.post(name: .DownloadingBarViewShow, object: nil)
         }
     }
 }

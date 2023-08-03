@@ -38,7 +38,6 @@ public class ContentViewerViewModel: ObservableObject {
         return ""
     }
 
-
     var requestType: WebViewConfigurator.RequestType? {
         let value = OfflineDownloadsManager.shared.savedValue(for: entry, pageIndex: .zero)
         switch value {

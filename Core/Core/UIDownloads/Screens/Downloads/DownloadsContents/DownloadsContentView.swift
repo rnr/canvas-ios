@@ -52,7 +52,7 @@ struct DownloadsContentView: View, Navigatable {
 
     var body: some View {
         ZStack {
-            Color(.systemBackground)
+            Color.backgroundLight
                 .ignoresSafeArea()
             content
             if viewModel.deleting {
