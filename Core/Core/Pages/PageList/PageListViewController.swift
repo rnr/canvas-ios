@@ -85,6 +85,7 @@ public class PageListViewController: ScreenViewTrackableViewController, ColoredN
         tableView.backgroundColor = .backgroundLightest
         tableView.refreshControl = refreshControl
         tableView.separatorColor = .borderMedium
+        tableView.contentInset = .init(top: 0, left: 0, bottom: 60, right: 0)
 
         colors.refresh()
         frontPage.refresh()
@@ -130,10 +131,7 @@ public class PageListViewController: ScreenViewTrackableViewController, ColoredN
         emptyView.isHidden = pages.error != nil || isLoading || !frontPage.isEmpty || !pages.isEmpty
         errorView.isHidden = pages.error == nil
         let selected = tableView.indexPathForSelectedRow
-        if isLoading {
-            tableView.contentInset = .init(top: 0, left: 0, bottom: 60, right: 0)
-            tableView.reloadData()
-        }
+        tableView.reloadData()
         tableView.selectRow(at: selected, animated: false, scrollPosition: .none) // preserve prior selection
 
         if !selectedFirstPage, !isLoading, let url = frontPage.first?.htmlURL ?? pages.first?.htmlURL {
