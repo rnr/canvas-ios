@@ -158,6 +158,6 @@ public struct DownloadsView: View, Navigatable, DownloadsProgressBarHidden {
             )
         }
         .foregroundColor(.white)
-        .hidden(viewModel.isEmpty)
+        .hidden(viewModel.courseViewModels.isEmpty)
     }
 }

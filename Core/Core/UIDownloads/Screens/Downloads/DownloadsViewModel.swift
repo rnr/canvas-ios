@@ -80,16 +80,7 @@ final class DownloadsViewModel: ObservableObject, Reachabilitable {
         state = .deleting
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             do {
-                try self.courseViewModels.forEach { viewModel in
-                    self.storageManager.delete(viewModel.courseDataModel) { _ in }
-                    let models = self.categories.removeValue(forKey: viewModel.courseId)
-                    try models
-                        .flatMap { $0.flatMap { $0.content } }?
-                        .forEach {
-                        try self.downloadsManager.delete(entry: $0)
-                    }
-                }
-                self.storageManager.deleteAll { [weak self] _ in
+                try self.downloadsManager.deleteCompletedEntries { [weak self] in
                     guard let self = self else {
                         return
                     }
@@ -124,7 +115,6 @@ final class DownloadsViewModel: ObservableObject, Reachabilitable {
             do {
                 try indexSet.forEach { index in
                     let viewModel = self.courseViewModels.remove(at: index)
-                    self.storageManager.delete(viewModel.courseDataModel) { _ in }
                     let models = self.categories.removeValue(forKey: viewModel.courseId)
                     try models
                         .flatMap { $0.flatMap { $0.content } }?
@@ -147,16 +137,12 @@ final class DownloadsViewModel: ObservableObject, Reachabilitable {
                 return
             }
             result.success { courses in
-                let dispatchGroup = DispatchGroup()
                 courses.forEach { courseStorageDataModel in
-                    dispatchGroup.enter()
-                    self.fetchEntries(courseDataModel: courseStorageDataModel) {
-                        dispatchGroup.leave()
-                    }
+                    self.configureCourseViewModels(
+                        courseDataModel: courseStorageDataModel
+                    )
                 }
-                dispatchGroup.notify(queue: .main) {
-                    self.state = .loaded
-                }
+                self.state = .loaded
             }
             result.failure { _ in
                 self.state = .loaded
@@ -192,31 +178,20 @@ final class DownloadsViewModel: ObservableObject, Reachabilitable {
         addObservers()
     }
 
-    private func fetchEntries(
-        courseDataModel: CourseStorageDataModel,
-        completion: @escaping () -> Void
+    private func configureCourseViewModels(
+        courseDataModel: CourseStorageDataModel
     ) {
-        storageManager.loadAll(of: OfflineDownloaderEntry.self) { [weak self] result in
-            guard let self = self else {
-                return
-            }
-            result.success { entries in
-                let categories = DownloadsHelper.categories(
-                    from: entries.filter { $0.status == .completed },
+        let categories = DownloadsHelper.categories(
+            from: downloadsManager.completedEntries,
+            courseDataModel: courseDataModel
+        )
+        if !categories.isEmpty {
+            self.categories[courseDataModel.course.id] = categories
+            self.courseViewModels.append(
+                DownloadCourseViewModel(
                     courseDataModel: courseDataModel
                 )
-                if !categories.isEmpty {
-                    self.categories[courseDataModel.course.id] = categories
-                    self.courseViewModels.append(
-                        DownloadCourseViewModel(
-                            courseDataModel: courseDataModel
-                        )
-                    )
-                }
-            }
-            DispatchQueue.main.async {
-                completion()
-            }
+            )
         }
     }
 
@@ -271,7 +246,7 @@ final class DownloadsViewModel: ObservableObject, Reachabilitable {
                     return
                 }
 
-                if self.categories.contains(where: { $0.key == courseId }) {
+                if self.categories.contains(where: { $0.key == courseId }) && !self.courseViewModels.isEmpty {
                     let pageSection = DownloadsHelper.pages(
                         courseId: courseId,
                         entries: [entry]
