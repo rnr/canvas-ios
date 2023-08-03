@@ -1,6 +1,6 @@
 //
 // This file is part of Canvas.
-// Copyright (C) 2022-present  Instructure, Inc.
+// Copyright (C) 2023-present  Instructure, Inc.
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -18,22 +18,18 @@
 
 import SwiftUI
 
-public struct ListWithoutVerticalScrollIndicator<Content: View>: View {
-    private let scrollIndicatorWidth: CGFloat = 6
-    private let content: () -> Content
-
-    public init(content: @escaping () -> Content) {
-        self.content = content
-    }
-
-    public var body: some View {
-        List {
-            content().padding(.horizontal, scrollIndicatorWidth)
-        }
-        .padding(.horizontal, -scrollIndicatorWidth)
-        .safeAreaInset(edge: .bottom) {
-            Color.clear
-                .frame(height: 60)
-        }
-    }
+public extension View {
+  /// Modify a view with a `ViewBuilder` closure.
+  ///
+  /// This represents a streamlining of the
+  /// [`modifier`](https://developer.apple.com/documentation/swiftui/view/modifier(_:))
+  /// \+ [`ViewModifier`](https://developer.apple.com/documentation/swiftui/viewmodifier)
+  /// pattern.
+  /// - Note: Useful only when you don't need to reuse the closure.
+  /// If you do, turn the closure into an extension! ♻️
+  func modifier<ModifiedContent: View>(
+    @ViewBuilder body: (_ content: Self) -> ModifiedContent
+  ) -> ModifiedContent {
+    body(self)
+  }
 }

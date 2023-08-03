@@ -109,6 +109,7 @@ public class FileListViewController: ScreenViewTrackableViewController, ColoredN
         tableView.backgroundColor = .backgroundLightest
         tableView.refreshControl = refreshControl
         tableView.separatorColor = .borderMedium
+        tableView.contentInset = .init(top: 0, left: 0, bottom: 60, right: 0)
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
             self.tableView.contentOffset.y = self.searchBar.frame.height
         }

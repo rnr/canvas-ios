@@ -19,12 +19,11 @@
 import SwiftUI
 import RealmSwift
 
-struct DownloadsCourseDetailView: View, Navigatable {
+struct DownloadsCourseDetailView: View, Navigatable, DownloadsProgressBarHidden {
 
     // MARK: - Injected -
 
     @Environment(\.presentationMode) private var presentationMode
-    @Environment(\.viewController) var controller
 
     // MARK: - Properties -
 
@@ -78,12 +77,14 @@ struct DownloadsCourseDetailView: View, Navigatable {
         }
         .onPreferenceChange(ViewBoundsKey.self, perform: headerViewModel.scrollPositionChanged)
         .onAppear {
+            toggleDownloadingBarView(hidden: true)
             navigationController?.navigationBar.useContextColor(viewModel.courseViewModel.color)
         }
     }
 
     private func content(geometry: GeometryProxy) -> some View {
         ZStack(alignment: .top) {
+            Color.backgroundLightest
             imageHeader(geometry: geometry)
             List {
                 VStack(spacing: 0) {
@@ -101,17 +102,17 @@ struct DownloadsCourseDetailView: View, Navigatable {
                             }
                     }
                 }
+                .listSystemBackgroundColor()
                 .listRowInsets(EdgeInsets())
                 .listRowBackground(Color.clear)
                 .listRowSeparator(.hidden)
-                .background(Color.backgroundLightest)
                 .padding(.top, headerViewModel.shouldShowHeader(for: geometry.size.height) ? headerViewModel.height : 0)
                 .transformAnchorPreference(key: ViewBoundsKey.self, value: .bounds) { preferences, bounds in
                     preferences = [.init(viewId: 0, bounds: geometry[bounds])]
                 }
             }
-            .listStyle(.plain)
             .iOS16HideListScrollContentBackground()
+            .listStyle(.plain)
         }
     }
 

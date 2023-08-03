@@ -27,38 +27,27 @@ struct DownloaderContentView: View {
     var body: some View {
         List {
             Header(title: "Downloading")
-                .listRowSeparator(.hidden)
-            ForEach(
-                Array(viewModel.downloadingModules.enumerated()),
-                id: \.offset
-            ) { _, viewModel in
-                DownloadingCellView(viewModel: viewModel)
-                    .listRowInsets(EdgeInsets())
-                    .buttonStyle(PlainButtonStyle())
-                    .padding(.vertical, 5)
-            }.onDelete { indexSet in
-                onDelete(indexSet)
-            }
-            .listRowSeparator(.hidden)
+            content
         }
         .listStyle(.inset)
-        .background(Color.backgroundLightest.ignoresSafeArea())
+        .listSystemBackgroundColor()
     }
 
-    private var headerDownloading: some View {
-        HStack {
-            Text("Downloading")
-                .font(.system(size: 14, weight: .bold))
-            Spacer()
-            Button(
-                action: {
-                    viewModel.pauseResume()
-                },
-                label: {
-                    Text("Button")
-                        .font(.system(size: 14, weight: .regular))
-                }
-            )
+    var content: some View {
+        ForEach(
+            Array(viewModel.downloadingModules.enumerated()),
+            id: \.offset
+        ) { _, viewModel in
+            DownloadingCellView(viewModel: viewModel)
+                .listRowInsets(EdgeInsets())
+                .buttonStyle(PlainButtonStyle())
+                .padding(.vertical, 5)
+                .background(Color.backgroundLightest)
+        }.onDelete { indexSet in
+            onDelete(indexSet)
         }
+        .listRowBackground(Color.backgroundLightest)
+        .listRowSeparator(.hidden)
+        .listRowInsets(EdgeInsets())
     }
 }

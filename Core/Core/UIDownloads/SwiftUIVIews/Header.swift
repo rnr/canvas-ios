@@ -33,5 +33,6 @@ struct Header: View {
         .listRowInsets(EdgeInsets())
         .buttonStyle(PlainButtonStyle())
         .listRowSeparator(.hidden)
+        .listRowBackground(Color.backgroundLightest)
     }
 }

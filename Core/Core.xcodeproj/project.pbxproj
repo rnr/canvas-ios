@@ -1177,6 +1177,8 @@
 		BA812AAEDDC344B2F1273FF4 /* APICommentLibraryRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38294A8FA8F588332BF0C2E0 /* APICommentLibraryRequest.swift */; };
 		BAD28C8C2A77B97F0037F033 /* DownloadButtonRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAD28C8B2A77B97F0037F033 /* DownloadButtonRepresentable.swift */; };
 		BAD6A3F32A780524002439A6 /* Reachabilitable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAD6A3F22A780524002439A6 /* Reachabilitable.swift */; };
+		BAECDA352A79477600AFB526 /* View+Modifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAECDA342A79477600AFB526 /* View+Modifier.swift */; };
+		BAECDA372A79667100AFB526 /* DownloadsProgressBarHidden.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAECDA362A79667100AFB526 /* DownloadsProgressBarHidden.swift */; };
 		BB206552E39A0481AD10261A /* InboxAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D114C3F2B149C57DC9EAA7F /* InboxAssembly.swift */; };
 		BB4203A9042EAF729CC13DB6 /* RichContentEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74853D7E3A4FAF817AD060D /* RichContentEditor.swift */; };
 		BB4EF46850550E3621E96551 /* GetEnabledFeatureFlagsRequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76D702D639BBFCB710DD675 /* GetEnabledFeatureFlagsRequestTests.swift */; };
@@ -3024,6 +3026,8 @@
 		BAD28C8B2A77B97F0037F033 /* DownloadButtonRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadButtonRepresentable.swift; sourceTree = "<group>"; };
 		BAD6A3F22A780524002439A6 /* Reachabilitable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachabilitable.swift; sourceTree = "<group>"; };
 		BAE9980CB6B4D424C27760EA /* GradeListViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradeListViewControllerTests.swift; sourceTree = "<group>"; };
+		BAECDA342A79477600AFB526 /* View+Modifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Modifier.swift"; sourceTree = "<group>"; };
+		BAECDA362A79667100AFB526 /* DownloadsProgressBarHidden.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsProgressBarHidden.swift; sourceTree = "<group>"; };
 		BAF17BF402BA72B5DAE1972C /* CoreActivityViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreActivityViewControllerTests.swift; sourceTree = "<group>"; };
 		BB13FE3661707D5C320E59ED /* GetAccountHelpLinks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetAccountHelpLinks.swift; sourceTree = "<group>"; };
 		BB22D9B64EBF2559C21C91E2 /* MockFileTextAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFileTextAnnotation.swift; sourceTree = "<group>"; };
@@ -4025,6 +4029,8 @@
 				07DFD8C5DA07D37A3C958EAA /* UIViewController+Extensions.swift */,
 				F1AB309D023E0DB42BA27DC6 /* URL+Extensions.swift */,
 				BAD6A3F22A780524002439A6 /* Reachabilitable.swift */,
+				BAECDA342A79477600AFB526 /* View+Modifier.swift */,
+				BAECDA362A79667100AFB526 /* DownloadsProgressBarHidden.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -9833,6 +9839,7 @@
 				68B27EB53944E917C40FA865 /* AccountNotification.swift in Sources */,
 				D28D7D10781C48724B5AB138 /* ActAsUserViewController.swift in Sources */,
 				23A528F2F95D189C028A841D /* ActAsUserWindow.swift in Sources */,
+				BAECDA372A79667100AFB526 /* DownloadsProgressBarHidden.swift in Sources */,
 				3624024E844E2C614D782DC2 /* Activity.swift in Sources */,
 				E19017C3E581AF9EBE21C7A7 /* AddMessage.swift in Sources */,
 				5CFE89A939B340C4E7DB6A28 /* AlertAction.swift in Sources */,
@@ -10673,6 +10680,7 @@
 				08A60250C457FA4ADCAA227D /* TransactionExtensions.swift in Sources */,
 				FF8D98E00FB89FA38F3EBB1D /* TypeSafeCodable.swift in Sources */,
 				E1F961E80F6300AE58E3D784 /* Typography.swift in Sources */,
+				BAECDA352A79477600AFB526 /* View+Modifier.swift in Sources */,
 				F69685953151151062097481 /* TypographyTestViews.swift in Sources */,
 				1D0CB50857AB33A8383D8B1A /* UIAccessibilityAnnouncement.swift in Sources */,
 				E5F13083096134000E076326 /* UIApplicationDelegateExtensions.swift in Sources */,

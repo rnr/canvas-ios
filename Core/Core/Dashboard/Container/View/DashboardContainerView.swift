@@ -18,7 +18,7 @@
 
 import SwiftUI
 
-public struct DashboardContainerView: View, ScreenViewTrackable {
+public struct DashboardContainerView: View, ScreenViewTrackable, DownloadsProgressBarHidden {
     @StateObject var viewModel: DashboardContainerViewModel
     @ObservedObject var courseCardListViewModel: DashboardCourseCardListViewModel
     @ObservedObject var colors: Store<GetCustomColors>
@@ -92,7 +92,7 @@ public struct DashboardContainerView: View, ScreenViewTrackable {
                     controller.value.showThemeSelectorAlert()
                 }
             }
-            showDownloadingBarView()
+            toggleDownloadingBarView(hidden: false)
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             fileUploadNotificationCardViewModel.sceneDidBecomeActive.send()
@@ -358,14 +358,5 @@ public struct DashboardContainerView: View, ScreenViewTrackable {
             from: controller,
             options: .push
         )
-    }
-
-    private func showDownloadingBarView() {
-        guard let downloadingBarView = controller.value.tabBarController?.view.subviews.first(
-            where: { $0 is DownloadingBarView }) as? DownloadingBarView
-        else {
-            return
-        }
-        downloadingBarView.show()
     }
 }

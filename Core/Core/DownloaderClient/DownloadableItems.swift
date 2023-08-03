@@ -85,11 +85,22 @@ extension DownloadableItems {
                     )
                     completion(item)
                 }
-            } else if assetType == .moduleItem {
-                if let moduleDetail = moduleDetail {
-                    self?.create(moduleDetail: moduleDetail, completion: completion)
+            } else if let pageDetails = vc as? FileDetailsViewController {
+                pageDetails.updated = { file, course in
+//                    guard let url = file.url  else {
+//                        return
+//                    }
+//                    debugLog("subscribe detail File", url, assetType.rawValue, file.displayName, course.name ?? "")
+//                    let item = DownloadableItem(
+//                        objectId: file.id ,
+//                        userInfo: url.absoluteString,
+//                        assetType: assetType.rawValue,
+//                        object: file,
+//                        course: course
+//                    )
+//                    completion(item)
                 }
-            } else if vc is LTIViewController {
+            } else if assetType == .moduleItem || vc is LTIViewController {
                 if let moduleDetail = moduleDetail {
                     self?.create(moduleDetail: moduleDetail, completion: completion)
                 }

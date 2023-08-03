@@ -47,8 +47,21 @@ public class DownloadingBarView: UIView {
 
     public convenience init() {
         self.init(frame: .zero)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(hidden),
+            name: .DownloadingBarViewHidden,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(show),
+            name: .DownloadingBarViewShow,
+            object: nil
+        )
     }
 
+    @objc
     public func hidden() {
         if downloadsManager.activeEntries.isEmpty {
             return
@@ -57,6 +70,7 @@ public class DownloadingBarView: UIView {
         isHidden = true
     }
 
+    @objc
     public func show() {
         if downloadsManager.activeEntries.isEmpty {
             return

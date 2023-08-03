@@ -29,11 +29,11 @@ struct DownloadsContentList<Content: View>: View {
         List {
             builder()
                 .listRowInsets(EdgeInsets())
-                .listRowBackground(Color.clear)
+                .listRowBackground(Color.backgroundLightest)
                 .listRowSeparator(.hidden)
                 .background(Color.backgroundLightest)
         }
         .listStyle(.plain)
-        .iOS16HideListScrollContentBackground()
+        .listSystemBackgroundColor()
     }
 }

@@ -134,7 +134,7 @@ public struct AssignmentListView: View, ScreenViewTrackable {
     }
 
     private func assignmentList(_ groups: [AssignmentGroupViewModel]) -> some View {
-        List {
+        ListWithoutVerticalScrollIndicator {
             ForEach(groups, id: \.id) { assignmentGroup in
                 AssignmentGroupView(viewModel: assignmentGroup)
                     .listRowBackground(SwiftUI.EmptyView())
