@@ -1040,7 +1040,7 @@
 		A48DAFAB210B4BBC4EE2E75D /* CourseListInteractorLiveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9073C1C0ABBA0A173295180 /* CourseListInteractorLiveTests.swift */; };
 		A4E3A7D718F91CDF06170915 /* MessageListStateUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF2DE564B9DEF83671BB4FE /* MessageListStateUpdater.swift */; };
 		A4F54E00F32E74C6BDA3090B /* QuizListViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CA3953E307CAF39AF2668A96 /* QuizListViewController.storyboard */; };
-		A511E6672A7C135E00728E48 /* mobile-offline-downloader-ios in Frameworks */ = {isa = PBXBuildFile; productRef = A511E6662A7C135E00728E48 /* mobile-offline-downloader-ios */; };
+		A50D35D12A7D1C2B006204F1 /* mobile-offline-downloader-ios in Frameworks */ = {isa = PBXBuildFile; productRef = A50D35D02A7D1C2B006204F1 /* mobile-offline-downloader-ios */; };
 		A52DD3FE31F0D22A7653EA69 /* RichContentEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059C04AF01A45E8B17C56177 /* RichContentEditorViewController.swift */; };
 		A5959DA96F69FA53D44D345B /* ComposeViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85D0E3FC18C36A8077C654DD /* ComposeViewController.storyboard */; };
 		A595C76ACB992B4367498A96 /* FileSubmissionErrorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216A59538283224E9F555B27 /* FileSubmissionErrorsTests.swift */; };
@@ -2884,7 +2884,6 @@
 		A4D92FCB619653A9DEFBE765 /* LogEventListPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogEventListPresenterTests.swift; sourceTree = "<group>"; };
 		A4EE905F8704D81DC37F88CA /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A508EB535365B3A1355EB1FC /* StudentViewCellViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentViewCellViewModelTests.swift; sourceTree = "<group>"; };
-		A511E6632A7C129700728E48 /* mobile-offline-downloader-ios */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "mobile-offline-downloader-ios"; path = "../mobile-offline-downloader-ios"; sourceTree = "<group>"; };
 		A51E25F3BA93FD66FEB9B520 /* CourseSyncSelectorViewModelItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseSyncSelectorViewModelItem.swift; sourceTree = "<group>"; };
 		A521299CB8FC225619DE6BB0 /* UITableViewHeaderFooterViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewHeaderFooterViewExtensions.swift; sourceTree = "<group>"; };
 		A54CFDBD18BCE51A7498A22B /* CourseSyncFilesInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseSyncFilesInteractor.swift; sourceTree = "<group>"; };
@@ -2892,6 +2891,7 @@
 		A56C8EAEDD96E8716CB5A484 /* FileUploadProgressObserversCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUploadProgressObserversCacheTests.swift; sourceTree = "<group>"; };
 		A571497F76E9694BCC7A70D8 /* DynamicLabelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicLabelTests.swift; sourceTree = "<group>"; };
 		A59435E04AD83E555BDE51AE /* NSManagedObjectContextExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSManagedObjectContextExtensions.swift; sourceTree = "<group>"; };
+		A5B914802A7D1A590057484F /* mobile-offline-downloader-ios */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "mobile-offline-downloader-ios"; path = "../mobile-offline-downloader-ios"; sourceTree = "<group>"; };
 		A61580548942CC239D28BAC5 /* PeopleListViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleListViewControllerTests.swift; sourceTree = "<group>"; };
 		A62284448F06E5517B5E4864 /* CourseSyncSelectorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseSyncSelectorViewModel.swift; sourceTree = "<group>"; };
 		A636EC448C789BE602EB0940 /* MessageDetailsAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageDetailsAssembly.swift; sourceTree = "<group>"; };
@@ -3502,7 +3502,7 @@
 				25C534647B7B805047B8E0C3 /* Lottie in Frameworks */,
 				0AC02ED0AAB62CEEF21FAACA /* PSPDFKit in Frameworks */,
 				AF3D4F61CDFF74B5749B35F1 /* CombineReachability in Frameworks */,
-				A511E6672A7C135E00728E48 /* mobile-offline-downloader-ios in Frameworks */,
+				A50D35D12A7D1C2B006204F1 /* mobile-offline-downloader-ios in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5653,13 +5653,13 @@
 		62824534F75515F48E8114A7 = {
 			isa = PBXGroup;
 			children = (
-				A511E6632A7C129700728E48 /* mobile-offline-downloader-ios */,
+				A5B914802A7D1A590057484F /* mobile-offline-downloader-ios */,
 				FB1D9B989FD980296A1BCE7F /* Core */,
 				D6DA07AD8D44A6BE9FB7A57A /* CoreTester */,
 				9737837A3A471DE4E30BC35B /* CoreTests */,
 				250C62EE12DB56ECEBB473C3 /* Products */,
 				86FCAF8C0765226E13BD7339 /* Projects */,
-				A511E6652A7C135E00728E48 /* Frameworks */,
+				A50D35CF2A7D1C2B006204F1 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -7168,7 +7168,7 @@
 			path = DownloadsContents;
 			sourceTree = "<group>";
 		};
-		A511E6652A7C135E00728E48 /* Frameworks */ = {
+		A50D35CF2A7D1C2B006204F1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 			);
@@ -8966,7 +8966,7 @@
 				D784E9A4895EC777BDAD4BAD /* Lottie */,
 				8C5ECF283C56CEE5DC624958 /* PSPDFKit */,
 				06824168802A23727C271167 /* CombineReachability */,
-				A511E6662A7C135E00728E48 /* mobile-offline-downloader-ios */,
+				A50D35D02A7D1C2B006204F1 /* mobile-offline-downloader-ios */,
 			);
 			productName = Core;
 			productReference = 4E249DD6423E938E1DE581C9 /* Core.framework */;
@@ -11343,7 +11343,7 @@
 			package = C0C21C0C6F0179DCECB057F3 /* XCRemoteSwiftPackageReference "PSPDFKit-SP" */;
 			productName = PSPDFKit;
 		};
-		A511E6662A7C135E00728E48 /* mobile-offline-downloader-ios */ = {
+		A50D35D02A7D1C2B006204F1 /* mobile-offline-downloader-ios */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = "mobile-offline-downloader-ios";
 		};
