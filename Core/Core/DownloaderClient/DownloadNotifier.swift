@@ -36,6 +36,7 @@ final class DownloadNotifier {
                 switch event {
                 case .completed(let success):
                     notifyAboutDownloadCompletion(success: success)
+                default: break
                 }
             }
             .store(in: &cancellables)
