@@ -26,7 +26,7 @@ struct DownloadsContentList<Content: View>: View {
     }
 
     var body: some View {
-        List {
+        ListNoConnectionBarPadding {
             builder()
                 .listRowInsets(EdgeInsets())
                 .listRowBackground(Color.backgroundLightest)

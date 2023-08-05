@@ -186,7 +186,7 @@ class StudentTabBarController: UITabBarController {
     }
 
     private func showDownloadingView() {
-        let downloadsViewController = CoreHostingController(DownloadsView())
+        let downloadsViewController = CoreHostingController(DownloadsView().navigationBarBackButtonHidden(true))
         selectedViewController.flatMap {
             AppEnvironment.shared.router.show(
                 downloadsViewController,

@@ -137,11 +137,15 @@ struct SideMenuMainSection: View {
     }
 
     func showDownloads() {
-        let downloadsViewHostingController = CoreHostingController(DownloadsView())
+        var downloadsViewHostingController: CoreHostingController<DownloadsView>?
+        let view = DownloadsView { [weak downloadsViewHostingController] in
+            downloadsViewHostingController?.dismiss(animated: true)
+        }
+        downloadsViewHostingController = CoreHostingController(view)
         let dashboard = self.dashboard
         env.router.dismiss(controller) {
             self.env.router.show(
-                downloadsViewHostingController,
+                downloadsViewHostingController!,
                 from: dashboard,
                 options: .push
             )

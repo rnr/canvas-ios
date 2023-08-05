@@ -29,22 +29,49 @@ public struct DownloadsView: View, Navigatable, DownloadsProgressBarHidden {
 
     @StateObject var viewModel: DownloadsViewModel = .init()
     @State var isDisplayingAlert: Bool = false
+    var onBack: (() -> Void)?
 
     var isSheet: Bool = false
 
-    public init() {}
+    public init(onBack: (() -> Void)? = nil) {
+        self.onBack = onBack
+    }
 
     // MARK: - Views -
 
     public var body: some View {
         content
+            .hideBackButton()
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        if let navigationController = controller.value.navigationController {
+                            toggleDownloadingBarView(hidden: false)
+                            AppEnvironment.shared.router.dismiss(navigationController)
+                        }
+                    } label: {
+                        HStack {
+                            Image(systemName: "chevron.backward")
+                                .font(.system(size: 17, weight: .medium))
+                                .padding(.leading, -5)
+                            Spacer()
+                        }
+                    }
+                    .foregroundColor(.white)
+                }
+                ToolbarItem(placement: .principal) {
+                    Text("Downloads")
+                        .foregroundColor(.white)
+                        .font(.semibold16)
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    deleteAllButton
+                }
+            }
             .accentColor(Color(Brand.shared.linkColor))
             .onAppear {
                 navigationController?.navigationBar.useGlobalNavStyle()
                 toggleDownloadingBarView(hidden: true)
-            }
-            .onDisappear {
-                toggleDownloadingBarView(hidden: false)
             }
             .onChange(of: viewModel.error) { newValue in
                 if newValue.isEmpty { return }
@@ -88,21 +115,11 @@ public struct DownloadsView: View, Navigatable, DownloadsProgressBarHidden {
                 LoadingDarkView()
             }
         }
-        .toolbar {
-            ToolbarItem(placement: .principal) {
-                Text("Downloads")
-                    .foregroundColor(.white)
-                    .font(.semibold16)
-            }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                deleteAllButton
-            }
-        }
         .background(Color.backgroundLightest)
     }
 
     private var list: some View {
-        List {
+        ListNoConnectionBarPadding {
             if !viewModel.downloadingModules.isEmpty {
                 modules
                     .isHidden(!viewModel.isConnected)
@@ -160,4 +177,12 @@ public struct DownloadsView: View, Navigatable, DownloadsProgressBarHidden {
         .foregroundColor(.white)
         .hidden(viewModel.courseViewModels.isEmpty)
     }
+}
+
+extension UINavigationController {
+  func popToViewController(ofClass: AnyClass, animated: Bool = true) {
+    if let vc = viewControllers.last(where: { $0.isKind(of: ofClass) }) {
+      popToViewController(vc, animated: animated)
+    }
+  }
 }
