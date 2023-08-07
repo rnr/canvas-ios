@@ -19,6 +19,11 @@
 import Combine
 import SwiftUI
 
+extension NSNotification.Name {
+    public static var DownloadsViewOpened = NSNotification.Name("DownloadsViewOpened")
+    public static var DownloadsViewClosed = NSNotification.Name("DownloadsViewClosed")
+}
+
 public struct DownloadsView: View, Navigatable, DownloadsProgressBarHidden {
 
     // MARK: - Injected -
@@ -35,30 +40,14 @@ public struct DownloadsView: View, Navigatable, DownloadsProgressBarHidden {
 
     public init(onBack: (() -> Void)? = nil) {
         self.onBack = onBack
+        NotificationCenter.default.post(name: .DownloadsViewOpened, object: nil)
     }
 
     // MARK: - Views -
 
     public var body: some View {
         content
-            .hideBackButton()
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        if let navigationController = controller.value.navigationController {
-                            toggleDownloadingBarView(hidden: false)
-                            AppEnvironment.shared.router.dismiss(navigationController)
-                        }
-                    } label: {
-                        HStack {
-                            Image(systemName: "chevron.backward")
-                                .font(.system(size: 17, weight: .medium))
-                                .padding(.leading, -5)
-                            Spacer()
-                        }
-                    }
-                    .foregroundColor(.white)
-                }
                 ToolbarItem(placement: .principal) {
                     Text("Downloads")
                         .foregroundColor(.white)
@@ -69,10 +58,7 @@ public struct DownloadsView: View, Navigatable, DownloadsProgressBarHidden {
                 }
             }
             .accentColor(Color(Brand.shared.linkColor))
-            .onAppear {
-                navigationController?.navigationBar.useGlobalNavStyle()
-                toggleDownloadingBarView(hidden: true)
-            }
+            .onAppear(perform: onAppear)
             .onChange(of: viewModel.error) { newValue in
                 if newValue.isEmpty { return }
                 navigationController?.showAlert(
@@ -177,12 +163,9 @@ public struct DownloadsView: View, Navigatable, DownloadsProgressBarHidden {
         .foregroundColor(.white)
         .hidden(viewModel.courseViewModels.isEmpty)
     }
-}
 
-extension UINavigationController {
-  func popToViewController(ofClass: AnyClass, animated: Bool = true) {
-    if let vc = viewControllers.last(where: { $0.isKind(of: ofClass) }) {
-      popToViewController(vc, animated: animated)
+    private func onAppear() {
+        navigationController?.navigationBar.useGlobalNavStyle()
+        toggleDownloadingBarView(hidden: true)
     }
-  }
 }

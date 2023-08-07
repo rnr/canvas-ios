@@ -25,7 +25,6 @@ class StudentTabBarController: UITabBarController {
 
     lazy var downloadingBarView = DownloadingBarView()
     lazy var connectionBarView = NotConnectionBarView()
-    private var downloadOpened: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -188,12 +187,9 @@ class StudentTabBarController: UITabBarController {
 
     private func showDownloadingView() {
         let downloadsViewController = CoreHostingController(
-            DownloadsView { [weak self] in
-                self?.downloadOpened = false
-            }
+            DownloadsView()
         )
         selectedViewController.flatMap {
-            downloadOpened = true
             AppEnvironment.shared.router.show(
                 downloadsViewController,
                 from: $0,
@@ -215,7 +211,7 @@ extension StudentTabBarController: UITabBarControllerDelegate {
     }
 
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
-        if downloadOpened { return }
+        if downloadingBarView.downloadsOpened { return }
         if selectedIndex == 0 {
             downloadingBarView.show()
         } else {

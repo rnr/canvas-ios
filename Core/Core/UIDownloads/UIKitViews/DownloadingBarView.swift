@@ -20,13 +20,16 @@ import UIKit
 import Combine
 import mobile_offline_downloader_ios
 
-public class DownloadingBarView: UIView {
+public class DownloadingBarView: UIView, Reachabilitable {
+
+    @Injected(\.reachability) var reachability: ReachabilityProvider
 
     private var downloadsManager: OfflineDownloadsManager = .shared
     private let downloadNotifier = DownloadNotifier()
 
     public var onTap: (() -> Void)?
-    private var cancellables: [AnyCancellable] = []
+    public var downloadsOpened: Bool = false
+    var cancellables: [AnyCancellable] = []
 
     private let titleLabel: UILabel = {
         let titleLabel = UILabel()
@@ -59,6 +62,18 @@ public class DownloadingBarView: UIView {
             name: .DownloadingBarViewShow,
             object: nil
         )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(downloadsViewOpened),
+            name: .DownloadsViewOpened,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(downloadsViewClosed),
+            name: .DownloadsViewClosed,
+            object: nil
+        )
     }
 
     @objc
@@ -72,11 +87,21 @@ public class DownloadingBarView: UIView {
 
     @objc
     public func show() {
-        if downloadsManager.activeEntries.isEmpty {
+        if downloadsManager.activeEntries.isEmpty || downloadsOpened {
             return
         }
         mustBeHidden = false
         isHidden = false
+    }
+
+    @objc
+    public func downloadsViewOpened() {
+        downloadsOpened = true
+    }
+
+    @objc
+    public func downloadsViewClosed() {
+        downloadsOpened = false
     }
 
     public func attach(tabBar: UITabBar, in superview: UIView) {
@@ -162,6 +187,14 @@ public class DownloadingBarView: UIView {
                 }
             }
             .store(in: &cancellables)
+
+        connection { [weak self] isConnected in
+            if isConnected {
+                self?.show()
+            } else {
+                self?.hidden()
+            }
+        }
     }
 
     private func update(_ event: OfflineDownloadsManagerEventObject? = nil) {
