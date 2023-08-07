@@ -102,6 +102,7 @@ public class DownloadingBarView: UIView, Reachabilitable {
     @objc
     public func downloadsViewClosed() {
         downloadsOpened = false
+        show()
     }
 
     public func attach(tabBar: UITabBar, in superview: UIView) {
@@ -195,6 +196,17 @@ public class DownloadingBarView: UIView, Reachabilitable {
                 self?.hidden()
             }
         }
+
+        downloadsManager.queuePublisher
+            .sink { [weak self] event in
+            switch event {
+            case .completed:
+                self?.mustBeHidden = false
+            default:
+                break
+            }
+        }
+        .store(in: &cancellables)
     }
 
     private func update(_ event: OfflineDownloadsManagerEventObject? = nil) {

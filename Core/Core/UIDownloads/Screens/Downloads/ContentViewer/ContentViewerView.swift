@@ -67,6 +67,10 @@ public struct ContentViewerView: View, Navigatable {
         if url.scheme?.contains("http") == true {
             openURL(url)
         } else if url.scheme?.contains("file") == true {
+            guard DocViewerViewController.hasPSPDFKitLicense else {
+                webView(for: url)
+                return
+            }
             let root = DocViewer(
                 filename: url.lastPathComponent,
                 previewURL: url,
@@ -75,5 +79,11 @@ public struct ContentViewerView: View, Navigatable {
             let hosting = CoreHostingController(root)
             navigationController?.pushViewController(hosting, animated: true)
         }
+    }
+
+    func webView(for url: URL, isLocalURL: Bool = true) {
+        let webView = CoreWebViewRepresentable(url: url)
+        let hosting = CoreHostingController(webView)
+        navigationController?.pushViewController(hosting, animated: true)
     }
 }
