@@ -55,6 +55,8 @@ public struct DownloadsCourseDetailsCellView: View {
             Image.moduleLine
         case .pages:
             Image.documentLine
+        case .files:
+            Image.folderSolid
         }
     }
 }

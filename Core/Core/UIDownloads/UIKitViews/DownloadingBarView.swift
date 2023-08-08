@@ -219,6 +219,9 @@ public class DownloadingBarView: UIView, Reachabilitable {
             if let moduleItem = try? ModuleItem.fromOfflineModel(entry.dataModel) {
                 subtitleLabel.text = moduleItem.title
             }
+            if let file = try? File.fromOfflineModel(entry.dataModel) {
+                subtitleLabel.text = file.displayName ?? file.filename
+            }
         }
     }
 

@@ -23,6 +23,7 @@ public enum OfflineContentType: String {
     case moduleitem
     case page
     case course
+    case file
     case downloadcourse
 }
 
