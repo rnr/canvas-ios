@@ -255,6 +255,10 @@ final class DownloadsViewModel: ObservableObject, Reachabilitable {
                         courseId: courseId,
                         entries: [entry]
                     ).first
+                    let fileSection = DownloadsHelper.files(
+                        courseId: courseId,
+                        entries: [entry]
+                    ).first
 
                     pageSection.flatMap {
                         self.categories[courseId]?
@@ -265,6 +269,12 @@ final class DownloadsViewModel: ObservableObject, Reachabilitable {
                     moduleSection.flatMap {
                         self.categories[courseId]?
                             .first(where: { $0.contentType == .modules})?
+                            .content
+                            .append($0)
+                    }
+                    fileSection.flatMap {
+                        self.categories[courseId]?
+                            .first(where: { $0.contentType == .files})?
                             .content
                             .append($0)
                     }
@@ -310,4 +320,3 @@ final class DownloadsViewModel: ObservableObject, Reachabilitable {
         }
     }
 }
-
