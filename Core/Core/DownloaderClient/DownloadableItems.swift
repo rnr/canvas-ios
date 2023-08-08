@@ -61,6 +61,10 @@ extension DownloadableItems {
             subscribe(pageDetail: pageDetail, assetType: assetType) { [weak detailViewController] item in
                 detailViewController?.set(downloadableItem: item)
             }
+        } else if let fileDetail = detailViewController as? FileDetailsViewController {
+            subscribe(fileDetail: fileDetail, assetType: assetType) { [weak detailViewController] item in
+                detailViewController?.set(downloadableItem: item)
+            }
         }
     }
 
@@ -85,8 +89,8 @@ extension DownloadableItems {
                     )
                     completion(item)
                 }
-            } else if let pageDetails = vc as? FileDetailsViewController {
-                pageDetails.updated = { file, course in
+            } else if let fileDetail = vc as? FileDetailsViewController {
+                fileDetail.updated = { file, course in
 //                    guard let url = file.url  else {
 //                        return
 //                    }
@@ -145,6 +149,27 @@ extension DownloadableItems {
                 course: course
             )
             completion(item)
+        }
+    }
+
+    private func subscribe(
+        fileDetail: FileDetailsViewController,
+        assetType: GetModuleItemSequenceRequest.AssetType,
+        completion: @escaping ((DownloadableItem) -> Void)
+    ) {
+        fileDetail.updated = { file, course in
+            //                    guard let url = file.url  else {
+            //                        return
+            //                    }
+            //                    debugLog("subscribe detail File", url, assetType.rawValue, file.displayName, course.name ?? "")
+            //                    let item = DownloadableItem(
+            //                        objectId: file.id ,
+            //                        userInfo: url.absoluteString,
+            //                        assetType: assetType.rawValue,
+            //                        object: file,
+            //                        course: course
+            //                    )
+            //                    completion(item)
         }
     }
 }
