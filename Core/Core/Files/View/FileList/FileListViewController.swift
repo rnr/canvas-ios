@@ -17,6 +17,7 @@
 //
 
 import UIKit
+import mobile_offline_downloader_ios
 
 public class FileListViewController: ScreenViewTrackableViewController, ColoredNavViewProtocol {
     @IBOutlet weak var emptyImageView: UIImageView!
@@ -417,7 +418,7 @@ extension FileListViewController: UITableViewDataSource, UITableViewDelegate {
         } else {
             let item: FolderItem? = items?[indexPath.row]
             let isAvailable = offlineFileInteractor?.isItemAvailableOffline(courseID: course?.first?.id, fileID: item?.id) == true
-            cell.update(item: item, color: color, isOffline: isOffline, isAvailable: isAvailable)
+            cell.update(item: item, course: course?.first, color: color, isOffline: isOffline, isAvailable: isAvailable)
         }
 
         return cell
@@ -503,13 +504,29 @@ class FileListUploadCell: UITableViewCell {
 }
 
 class FileListCell: UITableViewCell {
+
+    @Injected(\.reachability) var reachability: ReachabilityProvider
+    private let storageManager = OfflineStorageManager.shared
+    private let downloadsManager = OfflineDownloadsManager.shared
+
+    var downloadButtonHelper = DownloadStatusProvider()
+    var file: File?
+    var course: Course?
+
     @IBOutlet weak var iconView: AccessIconView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var sizeLabel: UILabel!
 
     private var fileID: String?
 
-    func update(item: FolderItem?, color: UIColor?, isOffline: Bool, isAvailable: Bool) {
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        file = nil
+        course = nil
+        removeDownloadButton()
+    }
+
+    func update(item: FolderItem?, course: Course?, color: UIColor?, isOffline: Bool, isAvailable: Bool) {
         fileID = item?.id
         setCellState(isAvailable: isAvailable, isUserInteractionEnabled: true)
         backgroundColor = .backgroundLightest
@@ -527,6 +544,8 @@ class FileListCell: UITableViewCell {
             return
         }
         let file = item?.file
+        self.file = file
+        self.course = course
         if !isOffline, let url = file?.thumbnailURL, let c = file?.createdAt, Clock.now.timeIntervalSince(c) > 3600 {
             iconView.load(url: url)
         } else {
@@ -535,6 +554,7 @@ class FileListCell: UITableViewCell {
         iconView.setState(locked: file?.locked, hidden: file?.hidden, unlockAt: file?.unlockAt, lockAt: file?.lockAt)
         sizeLabel.setText(file?.size.humanReadableFileSize, style: .textCellSupportingText)
         updateAccessibilityLabel()
+        prepareForDownload()
     }
 
     func update(result: APIFile?, isOffline: Bool, isAvailable: Bool) {
