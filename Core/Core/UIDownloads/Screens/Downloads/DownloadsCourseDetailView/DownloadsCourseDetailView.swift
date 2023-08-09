@@ -122,19 +122,34 @@ struct DownloadsCourseDetailView: View, Navigatable {
         }
     }
 
+    @ViewBuilder
     private func destination(
         sectionViewModel: DownloadsCourseCategoryViewModel
     ) -> some View {
-        DownloadsContentView(
-            content: sectionViewModel.content,
-            courseDataModel: viewModel.courseViewModel.courseDataModel,
-            title: sectionViewModel.title,
-            onDeleted: { entry in
-                viewModel.delete(entry: entry, from: sectionViewModel)
-            },
-            onDeletedAll: {
-                viewModel.delete(sectionViewModel: sectionViewModel)
-            }
-        )
+        if sectionViewModel.contentType == .modules {
+            DownloadsModulesView(
+                entries: sectionViewModel.content,
+                courseDataModel: viewModel.courseViewModel.courseDataModel,
+                title: sectionViewModel.title,
+                onDeleted: { entry in
+                    viewModel.delete(entry: entry, from: sectionViewModel)
+                },
+                onDeletedAll: {
+                    viewModel.delete(sectionViewModel: sectionViewModel)
+                }
+            )
+        } else {
+            DownloadsContentView(
+                content: sectionViewModel.content,
+                courseDataModel: viewModel.courseViewModel.courseDataModel,
+                title: sectionViewModel.title,
+                onDeleted: { entry in
+                    viewModel.delete(entry: entry, from: sectionViewModel)
+                },
+                onDeletedAll: {
+                    viewModel.delete(sectionViewModel: sectionViewModel)
+                }
+            )
+        }
     }
 }
