@@ -29,6 +29,9 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
         if case .page = item.type {
             return true
         }
+        if case .file = item.type {
+            return true
+        }
         return false
     }
 
@@ -51,6 +54,8 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
             try await prepareLTI(entry: entry, toolID: toolID, url: url)
         } else if case let .page(url) = item.type {
             try await preparePage(entry: entry, url: url, courseID: item.courseID)
+        } else if case let .file(url) = item.type {
+            //try await prepareFile(entry: entry, url: url, courseID: item.courseID)
         }
     }
 
@@ -72,6 +77,26 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
                 }
             })
         })
+    }
+
+    public static func prepareFile(entry: OfflineDownloaderEntry, item: ModuleItem) async throws {
+//        guard let url = item.url else {
+//            return nil
+//        }
+//        guard let fileID = item.url.queryItems?.first(where: { $0.name == "preview" })?.value ?? params["fileID"] else { return nil }
+//        var context = Context(path: item.url.path)
+//          if let courseID = url.queryItems?.first(where: { $0.name == "courseID" })?.value {
+//              context = Context(.course, id: courseID)
+//          }
+//        if entry.dataModel.type == OfflineContentType.file.rawValue {
+//            if let file = try? File.fromOfflineModel(entry.dataModel),
+//               let url = file.url {
+//                DispatchQueue.main.async {
+//                    entry.parts.removeAll()
+//                    entry.addURLPart(url.absoluteString)
+//                }
+//            }
+//        }
     }
 
     static func getLtiURL(from item: ModuleItem, toolID: String, url: URL) async throws -> URL {

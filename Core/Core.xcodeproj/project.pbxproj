@@ -1182,6 +1182,7 @@
 		BA5E98F4FC647FD448488431 /* RichContentEditor.js in Resources */ = {isa = PBXBuildFile; fileRef = 7CD06BD85946FE58878B9134 /* RichContentEditor.js */; };
 		BA812AAEDDC344B2F1273FF4 /* APICommentLibraryRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38294A8FA8F588332BF0C2E0 /* APICommentLibraryRequest.swift */; };
 		BAB674C42A814E8500DF718B /* CoreWebViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAB674C32A814E8500DF718B /* CoreWebViewRepresentable.swift */; };
+		BAB674D42A83A0B200DF718B /* FileListCell+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAB674D32A83A0B200DF718B /* FileListCell+Extensions.swift */; };
 		BB206552E39A0481AD10261A /* InboxAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D114C3F2B149C57DC9EAA7F /* InboxAssembly.swift */; };
 		BB4203A9042EAF729CC13DB6 /* RichContentEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74853D7E3A4FAF817AD060D /* RichContentEditor.swift */; };
 		BB4EF46850550E3621E96551 /* GetEnabledFeatureFlagsRequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76D702D639BBFCB710DD675 /* GetEnabledFeatureFlagsRequestTests.swift */; };
@@ -3031,6 +3032,7 @@
 		BA98A219C0118BC1617B8616 /* EmptyView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EmptyView.xib; sourceTree = "<group>"; };
 		BAB674B22A7E4DFE00DF718B /* mobile-offline-downloader-ios */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "mobile-offline-downloader-ios"; path = "../../mobile-offline-downloader-ios"; sourceTree = "<group>"; };
 		BAB674C32A814E8500DF718B /* CoreWebViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreWebViewRepresentable.swift; sourceTree = "<group>"; };
+		BAB674D32A83A0B200DF718B /* FileListCell+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileListCell+Extensions.swift"; sourceTree = "<group>"; };
 		BACBF46CDFDCDF7C3BE2CB65 /* OfflineModeInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineModeInteractor.swift; sourceTree = "<group>"; };
 		BAE9980CB6B4D424C27760EA /* GradeListViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradeListViewControllerTests.swift; sourceTree = "<group>"; };
 		BAF17BF402BA72B5DAE1972C /* CoreActivityViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreActivityViewControllerTests.swift; sourceTree = "<group>"; };
@@ -8274,6 +8276,7 @@
 			children = (
 				FF6D7A6B317056B95A586D16 /* DownloadPageListTableViewCell.swift */,
 				DA5A7851441FC11C2E87A87C /* ModuleItemCell+Extensions.swift */,
+				BAB674D32A83A0B200DF718B /* FileListCell+Extensions.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -10305,6 +10308,7 @@
 				4A662C453BF5FCE6507BFE98 /* GetSubmissionSummary.swift in Sources */,
 				FCE1FB24AEEBA29714CF9176 /* GetSubmissions.swift in Sources */,
 				D6DF7FAD174108E28051786A /* GetUserSettings.swift in Sources */,
+				BAB674D42A83A0B200DF718B /* FileListCell+Extensions.swift in Sources */,
 				B51884AD83FC462A08BF6B7D /* GoogleCloudAssignmentViewController.swift in Sources */,
 				F6BA6513BE8CDAD0818DD833 /* Grade.swift in Sources */,
 				D4BD3B0D9B06347A0503843F /* GradeCircleView.swift in Sources */,
