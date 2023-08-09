@@ -186,7 +186,9 @@ class StudentTabBarController: UITabBarController {
     }
 
     private func showDownloadingView() {
-        let downloadsViewController = CoreHostingController(DownloadsView())
+        let downloadsViewController = CoreHostingController(
+            DownloadsView()
+        )
         selectedViewController.flatMap {
             AppEnvironment.shared.router.show(
                 downloadsViewController,
@@ -209,6 +211,7 @@ extension StudentTabBarController: UITabBarControllerDelegate {
     }
 
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        if downloadingBarView.downloadsOpened { return }
         if selectedIndex == 0 {
             downloadingBarView.show()
         } else {

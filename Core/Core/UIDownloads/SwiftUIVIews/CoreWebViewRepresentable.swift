@@ -18,22 +18,14 @@
 
 import SwiftUI
 
-struct DownloadsContentList<Content: View>: View {
-    private let builder: () -> Content
-
-    init(@ViewBuilder _ builder: @escaping () -> Content) {
-        self.builder = builder
+struct CoreWebViewRepresentable: UIViewRepresentable {
+    let url: URL
+    func makeUIView(context: Self.Context) -> CoreWebView {
+        let coreWebView = CoreWebView(features: [.invertColorsInDarkMode])
+        coreWebView.accessibilityLabel = "FileDetails.webView"
+        coreWebView.loadFileURL(url, allowingReadAccessTo: url)
+        return coreWebView
     }
 
-    var body: some View {
-        ListNoConnectionBarPadding {
-            builder()
-                .listRowInsets(EdgeInsets())
-                .listRowBackground(Color.backgroundLightest)
-                .listRowSeparator(.hidden)
-                .background(Color.backgroundLightest)
-        }
-        .listStyle(.plain)
-        .listSystemBackgroundColor()
-    }
+    func updateUIView(_ uiView: CoreWebView, context: Self.Context) {}
 }

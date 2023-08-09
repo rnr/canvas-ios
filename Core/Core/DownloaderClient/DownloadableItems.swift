@@ -61,6 +61,10 @@ extension DownloadableItems {
             subscribe(pageDetail: pageDetail, assetType: assetType) { [weak detailViewController] item in
                 detailViewController?.set(downloadableItem: item)
             }
+        } else if let fileDetail = detailViewController as? FileDetailsViewController {
+            subscribe(fileDetail: fileDetail, assetType: assetType) { [weak detailViewController] item in
+                detailViewController?.set(downloadableItem: item)
+            }
         }
     }
 
@@ -72,10 +76,13 @@ extension DownloadableItems {
         moduleDetail.onEmbedContainer = { [weak moduleDetail, weak self] vc in
             if assetType == .page, let detailPage = vc as? PageDetailsViewController {
                 detailPage.updated = { page, course in
-                    guard let url = page.htmlURL  else {
+                    guard var url = page.htmlURL  else {
                         return
                     }
                     debugLog("subscribe detail PAGE", url, assetType.rawValue, page.title, course.name ?? "")
+                    if DownloadsHelper.getCourseId(userInfo: url.absoluteString) == nil {
+                        url = url.appendingPathComponent("/courses/\(course.id)")
+                    }
                     let item = DownloadableItem(
                         objectId: page.id,
                         userInfo: url.absoluteString,
@@ -85,12 +92,15 @@ extension DownloadableItems {
                     )
                     completion(item)
                 }
-            } else if let pageDetails = vc as? FileDetailsViewController {
-                pageDetails.updated = { file, course in
-                    guard let url = file.url  else {
+            } else if let fileDetails = vc as? FileDetailsViewController {
+                fileDetails.updated = { file, course in
+                    guard var url = file.url  else {
                         return
                     }
-                    debugLog("subscribe detail File", url, assetType.rawValue, file.displayName, course.name ?? "")
+                    debugLog("subscribe detail File", url, assetType.rawValue, file.displayName ?? "", course.name ?? "")
+                    if DownloadsHelper.getCourseId(userInfo: url.absoluteString) == nil {
+                        url = url.appendingPathComponent("/courses/\(course.id)")
+                    }
                     let item = DownloadableItem(
                         objectId: file.id ?? UUID.string,
                         userInfo: url.absoluteString,
@@ -113,9 +123,12 @@ extension DownloadableItems {
         completion: @escaping ((DownloadableItem) -> Void)
     ) {
         guard let moduleItem = moduleDetail.item,
-              let url = moduleDetail.item?.htmlURL,
+              var url = moduleDetail.item?.htmlURL,
               let course = moduleDetail.course.first else {
             return
+        }
+        if DownloadsHelper.getCourseId(userInfo: url.absoluteString) == nil {
+            url = url.appendingPathComponent("/courses/\(course.id)")
         }
         let item = DownloadableItem(
             objectId: moduleItem.id,
@@ -133,15 +146,42 @@ extension DownloadableItems {
         completion: @escaping ((DownloadableItem) -> Void)
     ) {
         pageDetail.updated = { page, course in
-            guard let url = page.htmlURL else {
+            guard var url = page.htmlURL else {
                 return
             }
             debugLog("subscribe detail PAGE", url, assetType.rawValue, page.title, course.name ?? "")
+            if DownloadsHelper.getCourseId(userInfo: url.absoluteString) == nil {
+                url = url.appendingPathComponent("/courses/\(course.id)")
+            }
             let item = DownloadableItem(
                 objectId: page.id,
                 userInfo: url.absoluteString,
                 assetType: assetType.rawValue,
                 object: page,
+                course: course
+            )
+            completion(item)
+        }
+    }
+
+    private func subscribe(
+        fileDetail: FileDetailsViewController,
+        assetType: GetModuleItemSequenceRequest.AssetType,
+        completion: @escaping ((DownloadableItem) -> Void)
+    ) {
+        fileDetail.updated = { file, course in
+            guard var url = file.url  else {
+                return
+            }
+            debugLog("subscribe detail File", url, assetType.rawValue, file.displayName ?? "", course.name ?? "")
+            if DownloadsHelper.getCourseId(userInfo: url.absoluteString) == nil {
+                url = url.appendingPathComponent("/courses/\(course.id)")
+            }
+            let item = DownloadableItem(
+                objectId: file.id ?? UUID.string,
+                userInfo: url.absoluteString,
+                assetType: assetType.rawValue,
+                object: file,
                 course: course
             )
             completion(item)

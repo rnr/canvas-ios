@@ -34,8 +34,10 @@ public struct DownloadsContentCellView: View {
                 .foregroundColor(color)
             VStack(alignment: .leading) {
                 Text(viewModel.title)
+                    .lineLimit(2)
                     .font(.semibold16)
                     .foregroundColor(.textDarkest)
+
                 viewModel.lastUpdated.flatMap(dateText)
             }
             Spacer()

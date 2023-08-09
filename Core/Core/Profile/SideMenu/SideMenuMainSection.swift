@@ -137,7 +137,9 @@ struct SideMenuMainSection: View {
     }
 
     func showDownloads() {
-        let downloadsViewHostingController = CoreHostingController(DownloadsView())
+        let downloadsViewHostingController = CoreHostingController(
+            DownloadsView()
+        )
         let dashboard = self.dashboard
         env.router.dismiss(controller) {
             self.env.router.show(

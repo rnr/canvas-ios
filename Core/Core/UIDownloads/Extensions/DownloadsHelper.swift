@@ -39,6 +39,13 @@ final class DownloadsHelper {
             }
     }
 
+    static func files(courseId: String, entries: [OfflineDownloaderEntry]) -> [OfflineDownloaderEntry] {
+        entries
+            .filter {
+                $0.userInfo?.lowercased().contains("file:") == true
+            }
+    }
+
     static func getCourseId(userInfo: String) -> String? {
         if let url = URL(string: userInfo),
            let index = url.pathComponents.firstIndex(of: "courses"),
@@ -66,6 +73,12 @@ final class DownloadsHelper {
             courseId: courseDataModel.course.id,
             entries: courseEntries
         )
+
+        let filesSection = DownloadsHelper.files(
+            courseId: courseDataModel.course.id,
+            entries: courseEntries
+        )
+
         if !pagesSection.isEmpty {
             categories.append(
                 DownloadsCourseCategoryViewModel(
@@ -81,6 +94,15 @@ final class DownloadsHelper {
                     course: courseDataModel.course,
                     content: modulesSection,
                     contentType: .modules
+                )
+            )
+        }
+        if !filesSection.isEmpty {
+            categories.append(
+                DownloadsCourseCategoryViewModel(
+                    course: courseDataModel.course,
+                    content: filesSection,
+                    contentType: .files
                 )
             )
         }

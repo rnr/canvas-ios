@@ -19,11 +19,12 @@
 import Foundation
 import UIKit
 
-public class ModuleItemSequenceViewController: UIViewController, DownloadableItems {
+public class ModuleItemSequenceViewController: UIViewController, DownloadableItems, DownloadsProgressBarHidden {
     public typealias AssetType = GetModuleItemSequenceRequest.AssetType
 
     deinit {
         debugLog("☠️ Deinitialized -> \(String.init(describing: self))☠️")
+        toggleDownloadingBarView(hidden: false)
     }
 
     @IBOutlet weak var pagesContainer: UIView!
@@ -94,6 +95,7 @@ public class ModuleItemSequenceViewController: UIViewController, DownloadableIte
         spinnerView.isHidden = true
         if embed, let viewController = currentViewController() {
             setCurrentPage(viewController)
+            toggleDownloadingBarView(hidden: true)
         }
         showSequenceButtons(prev: sequence?.prev != nil, next: sequence?.next != nil)
     }
