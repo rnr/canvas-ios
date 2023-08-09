@@ -19,7 +19,7 @@
 import Combine
 import SwiftUI
 
-struct DownloaderView: View, Navigatable, DownloadsProgressBarHidden {
+struct DownloaderView: View, Navigatable {
 
     // MARK: - Injected -
 
@@ -51,8 +51,6 @@ struct DownloaderView: View, Navigatable, DownloadsProgressBarHidden {
             if viewModel.deleting {
                 LoadingDarkView()
             }
-        }.onAppear {
-            toggleDownloadingBarView(hidden: true)
         }
     }
 

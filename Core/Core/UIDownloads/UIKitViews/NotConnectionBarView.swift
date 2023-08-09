@@ -26,7 +26,7 @@ public class NotConnectionBarView: UIView, Reachabilitable {
 
     private let titleLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.font = .systemFont(ofSize: 18, weight: .semibold)
+        titleLabel.font = .systemFont(ofSize: 14, weight: .semibold)
         titleLabel.textColor = .white
         titleLabel.text = "No Internet Connection"
         return titleLabel
@@ -63,7 +63,7 @@ public class NotConnectionBarView: UIView, Reachabilitable {
         leftAnchor.constraint(equalTo: superview.leftAnchor).isActive = true
         rightAnchor.constraint(equalTo: superview.rightAnchor).isActive = true
         bottomAnchor.constraint(equalTo: tabBar.topAnchor).isActive = true
-        heightAnchor.constraint(equalToConstant: 30).isActive = true
+        heightAnchor.constraint(equalToConstant: 20).isActive = true
 
         attachLabel()
     }

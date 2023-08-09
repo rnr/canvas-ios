@@ -19,7 +19,7 @@
 import SwiftUI
 import RealmSwift
 
-struct DownloadsCourseDetailView: View, Navigatable, DownloadsProgressBarHidden {
+struct DownloadsCourseDetailView: View, Navigatable {
 
     // MARK: - Injected -
 
@@ -77,7 +77,6 @@ struct DownloadsCourseDetailView: View, Navigatable, DownloadsProgressBarHidden 
         }
         .onPreferenceChange(ViewBoundsKey.self, perform: headerViewModel.scrollPositionChanged)
         .onAppear {
-            toggleDownloadingBarView(hidden: true)
             navigationController?.navigationBar.useContextColor(viewModel.courseViewModel.color)
         }
     }

@@ -54,6 +54,9 @@ final class DownloadsModuleCellViewModel: ObservableObject {
         if let moduleItem = try? ModuleItem.fromOfflineModel(dataModel) {
             return moduleItem
         }
+        if let file = try? File.fromOfflineModel(dataModel) {
+            return file
+        }
         return nil
     }
 
@@ -63,6 +66,9 @@ final class DownloadsModuleCellViewModel: ObservableObject {
         }
         if let moduleItem = try? ModuleItem.fromOfflineModel(dataModel) {
             return moduleItem.title
+        }
+        if let file = try? File.fromOfflineModel(dataModel) {
+            return file.displayName ?? file.filename
         }
         return ""
     }
@@ -74,6 +80,9 @@ final class DownloadsModuleCellViewModel: ObservableObject {
         if let moduleItem = try? ModuleItem.fromOfflineModel(dataModel) {
             return image(moduleItem.type)
         }
+        if let file = try? File.fromOfflineModel(dataModel) {
+            return .documentSolid
+        }
         return nil
     }
 
@@ -83,6 +92,12 @@ final class DownloadsModuleCellViewModel: ObservableObject {
         }
         if let moduleItem = try? ModuleItem.fromOfflineModel(dataModel) {
             return moduleItem.type
+        }
+        if let moduleItem = try? ModuleItem.fromOfflineModel(dataModel) {
+            return moduleItem.type
+        }
+        if let moduleItem = try? ModuleItem.fromOfflineModel(dataModel) {
+            return .file("")
         }
         return nil
     }
@@ -112,6 +127,8 @@ final class DownloadsModuleCellViewModel: ObservableObject {
             uiImage = .ltiLine
         case .page:
             uiImage = .documentLine
+        case .file:
+            uiImage = .documentSolid
         default:
             return nil
         }

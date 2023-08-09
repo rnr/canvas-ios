@@ -29,6 +29,9 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
         if case .page = item.type {
             return true
         }
+        if case .file = item.type {
+            return true
+        }
         return false
     }
 
@@ -51,6 +54,8 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
             try await prepareLTI(entry: entry, toolID: toolID, url: url)
         } else if case let .page(url) = item.type {
             try await preparePage(entry: entry, url: url, courseID: item.courseID)
+        } else if case let .file(fileId) = item.type {
+            try await prepareFile(entry: entry, item: item, fileId: fileId)
         }
     }
 
@@ -70,6 +75,30 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
                     }
                     continuation.resume()
                 }
+            })
+        })
+    }
+
+    public static func prepareFile(entry: OfflineDownloaderEntry, item: ModuleItem, fileId: String) async throws {
+        guard let url = item.url, let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
+            throw ModuleItemError.unsupported
+        }
+
+        let fileID = urlComponents.queryItems?.first(where: { $0.name == "preview" })?.value ?? fileId
+
+        var context = Context(path: url.path)
+        if let courseID = urlComponents.queryItems?.first(where: { $0.name == "courseID" })?.value {
+            context = Context(.course, id: courseID)
+        }
+
+        return try await withCheckedThrowingContinuation({[weak entry] continuation in
+            let files: Store<GetFile> = AppEnvironment.shared.subscribe(GetFile(context: context, fileID: fileID)) {}
+            files.refresh(force: true, callback: {[entry] file in
+                if let url = file?.url?.rawValue {
+                    entry?.parts.removeAll()
+                    entry?.addURLPart(url.absoluteString)
+                }
+                continuation.resume()
             })
         })
     }

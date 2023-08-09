@@ -19,6 +19,9 @@
 import SwiftUI
 
 public struct DashboardContainerView: View, ScreenViewTrackable, DownloadsProgressBarHidden {
+
+    @Injected(\.reachability) var reachability: ReachabilityProvider
+
     @StateObject var viewModel: DashboardContainerViewModel
     @ObservedObject var courseCardListViewModel: DashboardCourseCardListViewModel
     @ObservedObject var colors: Store<GetCustomColors>
@@ -68,11 +71,11 @@ public struct DashboardContainerView: View, ScreenViewTrackable, DownloadsProgre
                 VStack(spacing: 0) {
                     DashboardOfflineSyncProgressCardView(viewModel: offlineSyncCardViewModel)
                     fileUploadNotificationCards()
-//                    if !cards.reachability.isConnected {
-//                        DownloadedContentCellView {
-//                            showDownloads()
-//                        }
-//                    }
+                    if !reachability.isConnected {
+                        DownloadedContentCellView {
+                            showDownloads()
+                        }
+                    }
                     list(CGSize(width: geometry.size.width - 32, height: geometry.size.height))
                 }
                 .animation(.default, value: offlineSyncCardViewModel.isVisible)
@@ -92,6 +95,7 @@ public struct DashboardContainerView: View, ScreenViewTrackable, DownloadsProgre
                     controller.value.showThemeSelectorAlert()
                 }
             }
+            NotificationCenter.default.post(name: .DownloadsViewClosed, object: nil)
             toggleDownloadingBarView(hidden: false)
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in

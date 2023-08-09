@@ -24,7 +24,7 @@ import QuickLook
 import QuickLookThumbnailing
 import UIKit
 
-public class FileDetailsViewController: ScreenViewTrackableViewController, CoreWebViewLinkDelegate, ErrorViewController {
+public class FileDetailsViewController: DownloadableViewController, CoreWebViewLinkDelegate {
     var updated: ((File, Course) -> Void)?
     private var courses: Store<GetCourse>?
 
@@ -100,7 +100,8 @@ public class FileDetailsViewController: ScreenViewTrackableViewController, CoreW
         if presentingViewController != nil, navigationItem.leftBarButtonItem == nil {
             addDoneButton(side: .left)
         }
-        navigationItem.rightBarButtonItem = env.app == .teacher ? editButton : shareButton
+        navigationItem.rightBarButtonItems = env.app == .teacher ? [downloadBarButtonItem, editButton] : [downloadBarButtonItem, shareButton]
+        downloadButton.isHidden = false
         editButton.accessibilityIdentifier = "FileDetails.editButton"
         shareButton.accessibilityIdentifier = "FileDetails.shareButton"
         shareButton.isEnabled = false
@@ -500,10 +501,12 @@ extension FileDetailsViewController: PDFViewControllerDelegate {
         let search = controller.searchButtonItem
         search.accessibilityIdentifier = "FileDetails.searchButton"
         navigationItem.rightBarButtonItems = [
+            downloadBarButtonItem,
             env.app == .teacher ? editButton : shareButton,
             annotate,
             search,
         ]
+        downloadButton.isHidden = false
         NotificationCenter.default.post(name: .init("FileViewControllerBarButtonItemsDidChange"), object: nil)
 
         doneLoading()

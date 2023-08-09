@@ -19,6 +19,11 @@
 import Combine
 import SwiftUI
 
+extension NSNotification.Name {
+    public static var DownloadsViewOpened = NSNotification.Name("DownloadsViewOpened")
+    public static var DownloadsViewClosed = NSNotification.Name("DownloadsViewClosed")
+}
+
 public struct DownloadsView: View, Navigatable, DownloadsProgressBarHidden {
 
     // MARK: - Injected -
@@ -29,23 +34,31 @@ public struct DownloadsView: View, Navigatable, DownloadsProgressBarHidden {
 
     @StateObject var viewModel: DownloadsViewModel = .init()
     @State var isDisplayingAlert: Bool = false
+    var onBack: (() -> Void)?
 
     var isSheet: Bool = false
 
-    public init() {}
+    public init(onBack: (() -> Void)? = nil) {
+        self.onBack = onBack
+        NotificationCenter.default.post(name: .DownloadsViewOpened, object: nil)
+    }
 
     // MARK: - Views -
 
     public var body: some View {
         content
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("Downloads")
+                        .foregroundColor(.white)
+                        .font(.semibold16)
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    deleteAllButton
+                }
+            }
             .accentColor(Color(Brand.shared.linkColor))
-            .onAppear {
-                navigationController?.navigationBar.useGlobalNavStyle()
-                toggleDownloadingBarView(hidden: true)
-            }
-            .onDisappear {
-                toggleDownloadingBarView(hidden: false)
-            }
+            .onAppear(perform: onAppear)
             .onChange(of: viewModel.error) { newValue in
                 if newValue.isEmpty { return }
                 navigationController?.showAlert(
@@ -88,21 +101,11 @@ public struct DownloadsView: View, Navigatable, DownloadsProgressBarHidden {
                 LoadingDarkView()
             }
         }
-        .toolbar {
-            ToolbarItem(placement: .principal) {
-                Text("Downloads")
-                    .foregroundColor(.white)
-                    .font(.semibold16)
-            }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                deleteAllButton
-            }
-        }
         .background(Color.backgroundLightest)
     }
 
     private var list: some View {
-        List {
+        ListNoConnectionBarPadding {
             if !viewModel.downloadingModules.isEmpty {
                 modules
                     .isHidden(!viewModel.isConnected)
@@ -159,5 +162,10 @@ public struct DownloadsView: View, Navigatable, DownloadsProgressBarHidden {
         }
         .foregroundColor(.white)
         .hidden(viewModel.courseViewModels.isEmpty)
+    }
+
+    private func onAppear() {
+        navigationController?.navigationBar.useGlobalNavStyle()
+        toggleDownloadingBarView(hidden: true)
     }
 }

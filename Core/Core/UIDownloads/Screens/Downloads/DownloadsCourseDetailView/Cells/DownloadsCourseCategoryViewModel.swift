@@ -36,6 +36,7 @@ final class DownloadsCourseCategoryViewModel: Identifiable, Hashable {
     enum ContentType {
         case pages
         case modules
+        case files
     }
 
     var courseColor: UIColor {
@@ -48,6 +49,8 @@ final class DownloadsCourseCategoryViewModel: Identifiable, Hashable {
             return "Pages"
         case .modules:
             return "Modules"
+        case .files:
+            return "Files"
         }
     }
 

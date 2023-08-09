@@ -35,6 +35,9 @@ public class ContentViewerViewModel: ObservableObject {
         if let moduleItem = try? ModuleItem.fromOfflineModel(entry.dataModel) {
             return moduleItem.title
         }
+        if let file = try? File.fromOfflineModel(entry.dataModel) {
+            return file.displayName ?? file.filename
+        }
         return ""
     }
 
