@@ -23,11 +23,13 @@ import mobile_offline_downloader_ios
 public class LTIWebViewController: UIViewController, ColoredNavViewProtocol, ErrorViewController {
     @IBOutlet weak var spinnerView: CircleProgressView!
     @IBOutlet weak var webView: CoreWebView!
+    @IBOutlet weak var oldLTIContainer: UIView!
     let refreshControl = CircleRefreshControl()
     let env = AppEnvironment.shared
     public var tools: LTITools!
     public var color: UIColor?
     public var titleSubtitleView: TitleSubtitleView = TitleSubtitleView.create()
+    public var name: String?
 
     public var moduleItem: ModuleItem?
 
@@ -47,6 +49,7 @@ public class LTIWebViewController: UIViewController, ColoredNavViewProtocol, Err
     public static func create(tools: LTITools, name: String? = nil) -> Self {
         let controller = loadFromStoryboard()
         controller.tools = tools
+        controller.name = name
         return controller
     }
 
@@ -66,26 +69,14 @@ public class LTIWebViewController: UIViewController, ColoredNavViewProtocol, Err
         webView.scrollView.refreshControl = refreshControl
         setupTitleViewInNavbar(title: NSLocalizedString("External Tool", bundle: .core, comment: ""))
         // try to get a more descriptive name of the tool
-        tools.getSessionlessLaunch { [weak self] response in
-            performUIUpdate {
-                guard let response = response else {
-                    return
-                }
-
-                let url = response.url.appendingQueryItems(URLQueryItem(name: "platform", value: "mobile"))
-                if response.name == "Google Apps" {
-                    // TODO: show open button
-                } else {
-                    self?.loadLTI(url: url)
-                }
-
-            }
-        }
+        refresh()
+        webView.linkDelegate = self
         colors.refresh()
         courses?.refresh()
     }
 
     func loadLTI(url: URL) {
+        Analytics.shared.logEvent("external_tool_launched", parameters: ["launchUrl": url])
         webView.load(URLRequest(url: url))
     }
 
@@ -109,5 +100,49 @@ public class LTIWebViewController: UIViewController, ColoredNavViewProtocol, Err
     }
 
     @objc func refresh() {
+        tools.getSessionlessLaunch { [weak self] response in
+            performUIUpdate {
+                guard let response = response else {
+                    return
+                }
+
+                let url = response.url.appendingQueryItems(URLQueryItem(name: "platform", value: "mobile"))
+                if response.name == "Google Apps" {
+                    self?.showOldLTI()
+                } else {
+                    self?.loadLTI(url: url)
+                }
+                self?.refreshControl.endRefreshing()
+            }
+        }
+    }
+
+    func showOldLTI() {
+        var controller: LTIViewController?
+        if let moduleItem = moduleItem {
+            controller = LTIViewController.create(tools: tools, moduleItem: moduleItem)
+        } else {
+            controller = LTIViewController.create(tools: tools, name: name)
+        }
+
+        guard let controller = controller else { return }
+        webView.isHidden = true
+        oldLTIContainer.isHidden = false
+        controller.willMove(toParent: self)
+        controller.view.frame = oldLTIContainer.bounds
+        oldLTIContainer.addSubview(controller.view)
+        controller.view.leadingAnchor.constraint(equalTo: oldLTIContainer.leadingAnchor, constant: 0).isActive = true
+        controller.view.trailingAnchor.constraint(equalTo: oldLTIContainer.trailingAnchor, constant: 0).isActive = true
+        controller.view.topAnchor.constraint(equalTo: oldLTIContainer.topAnchor, constant: 0).isActive = true
+        controller.view.bottomAnchor.constraint(equalTo: oldLTIContainer.bottomAnchor, constant: 0).isActive = true
+        oldLTIContainer.layoutIfNeeded()
+        controller.didMove(toParent: self)
+    }
+}
+
+extension LTIWebViewController: CoreWebViewLinkDelegate {
+
+    public func finishedNavigation() {
+        UIAccessibility.post(notification: .screenChanged, argument: titleSubtitleView)
     }
 }

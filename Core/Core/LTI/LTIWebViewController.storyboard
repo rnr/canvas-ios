@@ -33,19 +33,28 @@
                                     <constraint firstAttribute="width" constant="40" id="zwE-ek-0zt"/>
                                 </constraints>
                             </view>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Zv-FN-BIb">
+                                <rect key="frame" x="0.0" y="59" width="393" height="759"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="amr-Bl-MUu"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="amr-Bl-MUu" firstAttribute="bottom" secondItem="8Zv-FN-BIb" secondAttribute="bottom" id="5Gm-Oh-Ajc"/>
                             <constraint firstItem="amr-Bl-MUu" firstAttribute="bottom" secondItem="Zwb-JE-aFc" secondAttribute="bottom" id="7hq-hy-Xyk"/>
                             <constraint firstItem="amr-Bl-MUu" firstAttribute="trailing" secondItem="Zwb-JE-aFc" secondAttribute="trailing" id="8Ct-eX-jyT"/>
                             <constraint firstItem="R0c-LQ-jfg" firstAttribute="centerY" secondItem="amr-Bl-MUu" secondAttribute="centerY" id="MTO-te-g8C"/>
+                            <constraint firstItem="8Zv-FN-BIb" firstAttribute="leading" secondItem="amr-Bl-MUu" secondAttribute="leading" id="Nwk-dF-9hP"/>
                             <constraint firstItem="Zwb-JE-aFc" firstAttribute="leading" secondItem="amr-Bl-MUu" secondAttribute="leading" id="Va1-gt-TBo"/>
+                            <constraint firstItem="amr-Bl-MUu" firstAttribute="trailing" secondItem="8Zv-FN-BIb" secondAttribute="trailing" id="cRx-aT-yEw"/>
                             <constraint firstItem="Zwb-JE-aFc" firstAttribute="top" secondItem="amr-Bl-MUu" secondAttribute="top" id="oHo-Q6-ETo"/>
                             <constraint firstItem="R0c-LQ-jfg" firstAttribute="centerX" secondItem="amr-Bl-MUu" secondAttribute="centerX" id="peh-mw-jJo"/>
+                            <constraint firstItem="8Zv-FN-BIb" firstAttribute="top" secondItem="amr-Bl-MUu" secondAttribute="top" id="qMY-lU-447"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="oldLTIContainer" destination="8Zv-FN-BIb" id="opI-p9-R5l"/>
                         <outlet property="spinnerView" destination="R0c-LQ-jfg" id="0lZ-aG-T17"/>
                         <outlet property="webView" destination="Zwb-JE-aFc" id="Ako-xN-KBT"/>
                     </connections>
