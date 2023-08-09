@@ -64,7 +64,6 @@ public class LTIWebViewController: UIViewController, ColoredNavViewProtocol, Err
     public override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .backgroundLightest
-        spinnerView.isHidden = true
         refreshControl.addTarget(self, action: #selector(refresh), for: .primaryActionTriggered)
         webView.scrollView.refreshControl = refreshControl
         setupTitleViewInNavbar(title: NSLocalizedString("External Tool", bundle: .core, comment: ""))
@@ -85,21 +84,8 @@ public class LTIWebViewController: UIViewController, ColoredNavViewProtocol, Err
         updateNavBar(subtitle: course?.name, color: course?.color)
     }
 
-    @IBAction func openButtonPressed(_ sender: UIButton) {
-        sender.isEnabled = false
-        spinnerView.isHidden = false
-        tools.presentTool(from: self, animated: true) { [weak self, weak sender] success in
-            performUIUpdate {
-                self?.spinnerView.isHidden = true
-                sender?.isEnabled = true
-                if !success {
-                    self?.showError(message: NSLocalizedString("Could not launch tool. Please try again.", bundle: .core, comment: ""))
-                }
-            }
-        }
-    }
-
     @objc func refresh() {
+        spinnerView.isHidden = false
         tools.getSessionlessLaunch { [weak self] response in
             performUIUpdate {
                 guard let response = response else {
@@ -118,6 +104,7 @@ public class LTIWebViewController: UIViewController, ColoredNavViewProtocol, Err
     }
 
     func showOldLTI() {
+        spinnerView.isHidden = true
         var controller: LTIViewController?
         if let moduleItem = moduleItem {
             controller = LTIViewController.create(tools: tools, moduleItem: moduleItem)
@@ -143,6 +130,7 @@ public class LTIWebViewController: UIViewController, ColoredNavViewProtocol, Err
 extension LTIWebViewController: CoreWebViewLinkDelegate {
 
     public func finishedNavigation() {
+        spinnerView.isHidden = true
         UIAccessibility.post(notification: .screenChanged, argument: titleSubtitleView)
     }
 }
