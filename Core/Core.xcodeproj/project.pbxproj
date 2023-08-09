@@ -45,6 +45,8 @@
 		069ADE5FFD74EA7C53F5DC39 /* ConversationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E5C2BA04CDCAB0E73F111CA /* ConversationTests.swift */; };
 		06A8F6F92A82598700306E23 /* File+OfflineStorageDataProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A8F6F82A82598700306E23 /* File+OfflineStorageDataProtocol.swift */; };
 		06A8F6FB2A82599C00306E23 /* File+OfflineDownloadHelperProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A8F6FA2A82599C00306E23 /* File+OfflineDownloadHelperProtocol.swift */; };
+		06A8F7032A83999E00306E23 /* LTIWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A8F7022A83999E00306E23 /* LTIWebViewController.swift */; };
+		06A8F7092A83A23200306E23 /* LTIWebViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 06A8F7082A83A23200306E23 /* LTIWebViewController.storyboard */; };
 		06BB9A5DE911CB9B67C8216E /* DueViewable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16F1C849E6FB194387C1E9BA /* DueViewable.swift */; };
 		06C01F98E55467701471E849 /* DragInfoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38B56455E1EE98589994C16F /* DragInfoTests.swift */; };
 		0743DC45F54D3B2D2C2C1EA7 /* FileUploadProgressObserversCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68C47BB65A3CC54AFB20E97C /* FileUploadProgressObserversCache.swift */; };
@@ -1747,6 +1749,8 @@
 		06A8F6F82A82598700306E23 /* File+OfflineStorageDataProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "File+OfflineStorageDataProtocol.swift"; sourceTree = "<group>"; };
 		06A8F6FA2A82599C00306E23 /* File+OfflineDownloadHelperProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "File+OfflineDownloadHelperProtocol.swift"; sourceTree = "<group>"; };
 		06A8F7012A8386EA00306E23 /* mobile-offline-downloader-ios */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "mobile-offline-downloader-ios"; path = "../mobile-offline-downloader-ios"; sourceTree = "<group>"; };
+		06A8F7022A83999E00306E23 /* LTIWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LTIWebViewController.swift; sourceTree = "<group>"; };
+		06A8F7082A83A23200306E23 /* LTIWebViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LTIWebViewController.storyboard; sourceTree = "<group>"; };
 		06B97D724933DE47176D5B65 /* LockStatusViewable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockStatusViewable.swift; sourceTree = "<group>"; };
 		06DB0DEDFB0432B842A2227E /* PageViewEventViewControllerLoggingProtocolTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewEventViewControllerLoggingProtocolTests.swift; sourceTree = "<group>"; };
 		06ECC203B471A5296C7F605F /* APITab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APITab.swift; sourceTree = "<group>"; };
@@ -7962,6 +7966,8 @@
 				AF5251EA27C5E9428BE54E6D /* LTITools.swift */,
 				49B8B46D319AC624135F694E /* LTIViewController.storyboard */,
 				89F9662262942FB22ECFED92 /* LTIViewController.swift */,
+				06A8F7022A83999E00306E23 /* LTIWebViewController.swift */,
+				06A8F7082A83A23200306E23 /* LTIWebViewController.storyboard */,
 			);
 			path = LTI;
 			sourceTree = "<group>";
@@ -9169,6 +9175,7 @@
 				7F41FEE0D3C344372DBA4E06 /* PageListViewController.storyboard in Resources */,
 				AFB51AD0F588B63174371797 /* PairWithObserverViewController.storyboard in Resources */,
 				B9D3EE1DDF8B439AB1D090F0 /* PairWithStudentQRCodeTutorialViewController.storyboard in Resources */,
+				06A8F7092A83A23200306E23 /* LTIWebViewController.storyboard in Resources */,
 				72532EDCEF9DEAE842D93066 /* PeopleListViewController.storyboard in Resources */,
 				5F3D8290E2A0832CF6115549 /* PlannerFilterViewController.storyboard in Resources */,
 				EBB3DE9F0B60D0645433411B /* PlannerListViewController.storyboard in Resources */,
@@ -10357,6 +10364,7 @@
 				4E39E04C028229AC103A2DFE /* InboxMessageScope.swift in Sources */,
 				B0C26385CA232FDA605DB685 /* InboxMessageScopeFilter.swift in Sources */,
 				240D4C47E9667E45DE783E96 /* InboxMessageView.swift in Sources */,
+				06A8F7032A83999E00306E23 /* LTIWebViewController.swift in Sources */,
 				775A0EBC4698864086154BA5 /* InboxView.swift in Sources */,
 				367CC267BA82F6C63103B248 /* InboxViewModel.swift in Sources */,
 				DAEBC99EE0C86163DCCC7B1C /* IndeterminateBarProgressViewStyle.swift in Sources */,
