@@ -101,6 +101,9 @@ struct DownloadsContentView: View, Navigatable {
         let cancelAction = AlertAction(NSLocalizedString("Cancel", comment: ""), style: .cancel) { _ in }
         let deleteAction = AlertAction(NSLocalizedString("Delete", comment: ""), style: .destructive) { _ in
             viewModel.swipeDelete(indexSet: indexSet)
+            if viewModel.content.isEmpty {
+                presentationMode.wrappedValue.dismiss()
+            }
         }
         navigationController?.showAlert(
             title: NSLocalizedString("Are you sure you want to remove content?", comment: ""),

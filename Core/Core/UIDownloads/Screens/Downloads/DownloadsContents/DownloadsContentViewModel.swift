@@ -59,7 +59,7 @@ final class DownloadsContentViewModel: ObservableObject {
                 try self.content.forEach {
                     try self.downloadsManager.delete(entry: $0)
                 }
-                self.onDeletedAll?()
+                self.isDeleteAll()
             } catch {
                 self.error = error.localizedDescription
             }
@@ -72,6 +72,7 @@ final class DownloadsContentViewModel: ObservableObject {
             do {
                 try downloadsManager.delete(entry: content[index])
                 content.remove(at: index)
+                isDeleteAll()
             } catch {
                 self.error = error.localizedDescription
             }
@@ -85,8 +86,16 @@ final class DownloadsContentViewModel: ObservableObject {
             }
             try downloadsManager.delete(entry: content[index])
             content.remove(at: index)
+            isDeleteAll()
         } catch {
             self.error = error.localizedDescription
         }
+    }
+
+    private func isDeleteAll() {
+        guard content.isEmpty else {
+            return
+        }
+        onDeletedAll?()
     }
 }
