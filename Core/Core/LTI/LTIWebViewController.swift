@@ -89,6 +89,7 @@ public class LTIWebViewController: UIViewController, ColoredNavViewProtocol, Err
         tools.getSessionlessLaunch { [weak self] response in
             performUIUpdate {
                 guard let response = response else {
+                    self?.showOldLTI()
                     return
                 }
 
