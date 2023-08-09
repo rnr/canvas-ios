@@ -54,8 +54,8 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
             try await prepareLTI(entry: entry, toolID: toolID, url: url)
         } else if case let .page(url) = item.type {
             try await preparePage(entry: entry, url: url, courseID: item.courseID)
-        } else if case let .file(url) = item.type {
-            //try await prepareFile(entry: entry, url: url, courseID: item.courseID)
+        } else if case let .file(fileId) = item.type {
+            try await prepareFile(entry: entry, item: item, fileId: fileId)
         }
     }
 
@@ -79,24 +79,28 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
         })
     }
 
-    public static func prepareFile(entry: OfflineDownloaderEntry, item: ModuleItem) async throws {
-//        guard let url = item.url else {
-//            return nil
-//        }
-//        guard let fileID = item.url.queryItems?.first(where: { $0.name == "preview" })?.value ?? params["fileID"] else { return nil }
-//        var context = Context(path: item.url.path)
-//          if let courseID = url.queryItems?.first(where: { $0.name == "courseID" })?.value {
-//              context = Context(.course, id: courseID)
-//          }
-//        if entry.dataModel.type == OfflineContentType.file.rawValue {
-//            if let file = try? File.fromOfflineModel(entry.dataModel),
-//               let url = file.url {
-//                DispatchQueue.main.async {
-//                    entry.parts.removeAll()
-//                    entry.addURLPart(url.absoluteString)
-//                }
-//            }
-//        }
+    public static func prepareFile(entry: OfflineDownloaderEntry, item: ModuleItem, fileId: String) async throws {
+        guard let url = item.url, let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
+            throw ModuleItemError.unsupported
+        }
+
+        let fileID = urlComponents.queryItems?.first(where: { $0.name == "preview" })?.value ?? fileId
+
+        var context = Context(path: url.path)
+        if let courseID = urlComponents.queryItems?.first(where: { $0.name == "courseID" })?.value {
+            context = Context(.course, id: courseID)
+        }
+
+        return try await withCheckedThrowingContinuation({[weak entry] continuation in
+            let files: Store<GetFile> = AppEnvironment.shared.subscribe(GetFile(context: context, fileID: fileID)) {}
+            files.refresh(force: true, callback: {[entry] file in
+                if let url = file?.url?.rawValue {
+                    entry?.parts.removeAll()
+                    entry?.addURLPart(url.absoluteString)
+                }
+                continuation.resume()
+            })
+        })
     }
 
     static func getLtiURL(from item: ModuleItem, toolID: String, url: URL) async throws -> URL {
