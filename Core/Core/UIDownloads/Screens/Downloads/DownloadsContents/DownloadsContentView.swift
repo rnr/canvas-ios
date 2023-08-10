@@ -82,25 +82,28 @@ struct DownloadsContentView: View, Navigatable {
 
     private var content: some View {
         DownloadsContentList {
-            ForEach(viewModel.content, id: \.dataModel.id) { entry in
+            ForEach(Array(viewModel.content.enumerated()), id: \.element.dataModel.id) { indexRow, entry in
                 VStack(spacing: 0) {
                     DownloadsContentCellView(
                         viewModel: DownloadsModuleCellViewModel(entry: entry),
-                        color: Color(viewModel.color)
-                    ).onTapGesture {
-                        destination(entry: entry)
-                    }
+                        color: Color(viewModel.color),
+                        onTap: {
+                            destination(entry: entry)
+                        },
+                        onDelete: {
+                            onDelete(index: indexRow)
+                        }
+                    )
                     Divider()
                 }
             }
-            .onDelete(perform: onDelete)
         }
     }
 
-    private func onDelete(indexSet: IndexSet) {
+    private func onDelete(index: Int) {
         let cancelAction = AlertAction(NSLocalizedString("Cancel", comment: ""), style: .cancel) { _ in }
         let deleteAction = AlertAction(NSLocalizedString("Delete", comment: ""), style: .destructive) { _ in
-            viewModel.swipeDelete(indexSet: indexSet)
+            viewModel.delete(index: index)
             if viewModel.content.isEmpty {
                 presentationMode.wrappedValue.dismiss()
             }

@@ -44,16 +44,16 @@ struct CustomDisclosureGroup<Header: View, Content: View>: View {
     var body: some View {
         VStack(spacing: 0) {
             header
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    withAnimation(animation) {
+                        onClick()
+                    }
+                }
             if isExpanded {
                 content
             }
         }
         .clipped()
-        .contentShape(Rectangle())
-        .onTapGesture {
-            withAnimation(animation) {
-                onClick()
-            }
-        }
     }
 }

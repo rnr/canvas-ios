@@ -104,6 +104,15 @@ final class DownloadsModulesViewModel: ObservableObject {
             }
         }
         sections.sort(by: { $0.position < $1.position })
+        sections.forEach { section in
+            section.content.sort {
+                guard let moduleItem0 = try? ModuleItem.fromOfflineModel($0.dataModel),
+                      let moduleItem1 = try? ModuleItem.fromOfflineModel($1.dataModel) else {
+                    return false
+                }
+                return moduleItem0.position < moduleItem1.position
+            }
+        }
         return sections
     }
 
@@ -114,6 +123,7 @@ final class DownloadsModulesViewModel: ObservableObject {
                 try self.content.flatMap { $0.content }.forEach {
                     try self.downloadsManager.delete(entry: $0)
                 }
+                self.content = []
                 self.isDeleteAll()
             } catch {
                 self.error = error.localizedDescription
@@ -122,29 +132,37 @@ final class DownloadsModulesViewModel: ObservableObject {
         }
     }
 
-    func swipeDelete(indexSet: IndexSet) {
-//        indexSet.forEach { index in
-//            do {
-//                try downloadsManager.delete(entry: content[index])
-//                content.remove(at: index)
-//                isDeleteAll()
-//            } catch {
-//                self.error = error.localizedDescription
-//            }
-//        }
+    func delete(section: Int, row: Int) {
+        do {
+            let entry = content[section].content[row]
+            try downloadsManager.delete(entry: entry)
+            content[section].content.remove(at: row)
+            if content[section].content.isEmpty {
+                content.remove(at: section)
+            }
+            isDeleteAll()
+        } catch {
+            self.error = error.localizedDescription
+        }
     }
 
     func delete(entry: OfflineDownloaderEntry) {
-//        do {
-//            guard let index = content.firstIndex(where: {$0.dataModel.id  == entry.dataModel.id}) else {
-//                return
-//            }
-//            try downloadsManager.delete(entry: content[index])
-//            content.remove(at: index)
-//            isDeleteAll()
-//        } catch {
-//            self.error = error.localizedDescription
-//        }
+        content.enumerated().forEach { sectionIndex, section in
+            section.content.enumerated().forEach { rowIndex, entry in
+                if entry.dataModel.id == entry.dataModel.id {
+                    do {
+                        try downloadsManager.delete(entry: entry)
+                        content[sectionIndex].content.remove(at: rowIndex)
+                        if content[sectionIndex].content.isEmpty {
+                            content.remove(at: sectionIndex)
+                        }
+                        isDeleteAll()
+                    } catch {
+                        self.error = error.localizedDescription
+                    }
+                }
+            }
+        }
     }
 
     private func isDeleteAll() {

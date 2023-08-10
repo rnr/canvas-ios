@@ -16,7 +16,6 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-
 import SwiftUI
 import mobile_offline_downloader_ios
 
@@ -31,6 +30,8 @@ struct DownloadsModulesView: View, Navigatable {
 
     @StateObject var viewModel: DownloadsModulesViewModel
     private let title: String
+
+    @State private var isExpandedIndexes: [Int] = []
 
     init(
         entries: [OfflineDownloaderEntry],
@@ -81,7 +82,6 @@ struct DownloadsModulesView: View, Navigatable {
         }
     }
 
-    @State private var isExpandedIndexes: [Int] = []
     private var content: some View {
         ScrollView {
             LazyVStack(
@@ -113,14 +113,17 @@ struct DownloadsModulesView: View, Navigatable {
                             VStack(spacing: 0) {
                                 DownloadsContentCellView(
                                     viewModel: DownloadsModuleCellViewModel(entry: entry),
-                                    color: Color(viewModel.color)
-                                ).onTapGesture {
-                                    destination(entry: entry)
-                                }
+                                    color: Color(viewModel.color),
+                                    onTap: {
+                                        destination(entry: entry)
+                                    },
+                                    onDelete: {
+                                        onDelete(section: indexSection, row: indexRow)
+                                    }
+                                )
                                 Divider()
                             }
                         }
-                        .onDelete(perform: onDelete)
                     }
                 }
             }
@@ -155,10 +158,10 @@ struct DownloadsModulesView: View, Navigatable {
         .listRowInsets(EdgeInsets())
     }
 
-    private func onDelete(indexSet: IndexSet) {
+    private func onDelete(section: Int, row: Int) {
         let cancelAction = AlertAction(NSLocalizedString("Cancel", comment: ""), style: .cancel) { _ in }
         let deleteAction = AlertAction(NSLocalizedString("Delete", comment: ""), style: .destructive) { _ in
-            viewModel.swipeDelete(indexSet: indexSet)
+            viewModel.delete(section: section, row: row)
             if viewModel.content.isEmpty {
                 presentationMode.wrappedValue.dismiss()
             }

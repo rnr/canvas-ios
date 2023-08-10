@@ -57,11 +57,6 @@ struct DownloadsCourseDetailView: View, Navigatable {
                 switch viewModel.state {
                 case .loaded, .updated:
                     content(geometry: geometry)
-                        .onAppear {
-                            if viewModel.categories.isEmpty {
-                                presentationMode.wrappedValue.dismiss()
-                            }
-                        }
                 case .loading, .none:
                     LoadingView()
                 }
@@ -133,9 +128,11 @@ struct DownloadsCourseDetailView: View, Navigatable {
                 title: sectionViewModel.title,
                 onDeleted: { entry in
                     viewModel.delete(entry: entry, from: sectionViewModel)
+                    isEmpty()
                 },
                 onDeletedAll: {
                     viewModel.delete(sectionViewModel: sectionViewModel)
+                    isEmpty()
                 }
             )
         } else {
@@ -145,11 +142,19 @@ struct DownloadsCourseDetailView: View, Navigatable {
                 title: sectionViewModel.title,
                 onDeleted: { entry in
                     viewModel.delete(entry: entry, from: sectionViewModel)
+                    isEmpty()
                 },
                 onDeletedAll: {
                     viewModel.delete(sectionViewModel: sectionViewModel)
+                    isEmpty()
                 }
             )
+        }
+    }
+
+    private func isEmpty() {
+        if viewModel.categories.isEmpty {
+            presentationMode.wrappedValue.dismiss()
         }
     }
 }
