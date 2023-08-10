@@ -87,6 +87,9 @@ public class DownloadingBarView: UIView, Reachabilitable {
 
     @objc
     public func show() {
+        if !reachability.isConnected {
+            return
+        }
         if downloadsManager.activeEntries.isEmpty || downloadsOpened {
             return
         }

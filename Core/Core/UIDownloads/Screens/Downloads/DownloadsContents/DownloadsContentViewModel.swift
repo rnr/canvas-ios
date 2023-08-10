@@ -71,7 +71,8 @@ final class DownloadsContentViewModel: ObservableObject {
     func delete(index: Int) {
         do {
             try downloadsManager.delete(entry: content[index])
-            content.remove(at: index)
+            let entry = content.remove(at: index)
+            onDeleted?(entry)
             isDeleteAll()
         } catch {
             self.error = error.localizedDescription
@@ -84,7 +85,8 @@ final class DownloadsContentViewModel: ObservableObject {
                 return
             }
             try downloadsManager.delete(entry: content[index])
-            content.remove(at: index)
+            let entry = content.remove(at: index)
+            onDeleted?(entry)
             isDeleteAll()
         } catch {
             self.error = error.localizedDescription

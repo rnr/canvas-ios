@@ -83,7 +83,7 @@ struct DownloadsModulesView: View, Navigatable {
     }
 
     private var content: some View {
-        ScrollView {
+        ScrollViewNoConnectionBarPadding {
             LazyVStack(
                 alignment: .leading,
                 spacing: 0

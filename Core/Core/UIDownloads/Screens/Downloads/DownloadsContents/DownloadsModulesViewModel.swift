@@ -140,6 +140,7 @@ final class DownloadsModulesViewModel: ObservableObject {
             if content[section].content.isEmpty {
                 content.remove(at: section)
             }
+            onDeleted?(entry)
             isDeleteAll()
         } catch {
             self.error = error.localizedDescription
@@ -148,14 +149,15 @@ final class DownloadsModulesViewModel: ObservableObject {
 
     func delete(entry: OfflineDownloaderEntry) {
         content.enumerated().forEach { sectionIndex, section in
-            section.content.enumerated().forEach { rowIndex, entry in
-                if entry.dataModel.id == entry.dataModel.id {
+            section.content.enumerated().forEach { rowIndex, contentEntry in
+                if entry.dataModel.id == contentEntry.dataModel.id {
                     do {
                         try downloadsManager.delete(entry: entry)
                         content[sectionIndex].content.remove(at: rowIndex)
                         if content[sectionIndex].content.isEmpty {
                             content.remove(at: sectionIndex)
                         }
+                        onDeleted?(entry)
                         isDeleteAll()
                     } catch {
                         self.error = error.localizedDescription
