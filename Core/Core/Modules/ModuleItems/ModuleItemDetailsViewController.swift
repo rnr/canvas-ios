@@ -161,7 +161,7 @@ public class ModuleItemDetailsViewController: DownloadableViewController, Colore
                 moduleID: moduleID,
                 moduleItemID: itemID
             )
-            return LTIViewController.create(tools: tools, moduleItem: item)
+            return LTIWebViewController.create(tools: tools, moduleItem: item)
         default:
             guard let url = item.url else { return nil }
             return env.router.match(url.appendingOrigin("module_item_details"))
