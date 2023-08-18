@@ -118,7 +118,7 @@ extension CoreHostingController: DownloadsProgressBarHidden {
     func isOpenDownloadsView() {
         if rootView is CoreHostingBaseView<DownloadsView> {
             debugLog("isDownloadsView = opened")
-            NotificationCenter.default.post(name: .DownloadsViewOpened, object: nil)
+            NotificationCenter.default.post(name: .DownloadContentOpened, object: nil)
             toggleDownloadingBarView(hidden: true)
         }
     }
@@ -126,7 +126,7 @@ extension CoreHostingController: DownloadsProgressBarHidden {
     func isClosedDownloadsView() {
         if rootView is CoreHostingBaseView<DownloadsView> {
             debugLog("isDownloadsView = closed")
-            NotificationCenter.default.post(name: .DownloadsViewClosed, object: nil)
+            NotificationCenter.default.post(name: .DownloadContentClosed, object: nil)
             toggleDownloadingBarView(hidden: false)
         }
     }

@@ -25,6 +25,7 @@ public class ModuleItemSequenceViewController: UIViewController, DownloadableIte
     deinit {
         debugLog("☠️ Deinitialized -> \(String.init(describing: self))☠️")
         toggleDownloadingBarView(hidden: false)
+        NotificationCenter.default.post(name: .DownloadContentClosed, object: nil)
     }
 
     @IBOutlet weak var pagesContainer: UIView!
@@ -96,6 +97,7 @@ public class ModuleItemSequenceViewController: UIViewController, DownloadableIte
         if embed, let viewController = currentViewController() {
             setCurrentPage(viewController)
             toggleDownloadingBarView(hidden: true)
+            NotificationCenter.default.post(name: .DownloadContentOpened, object: nil)
         }
         showSequenceButtons(prev: sequence?.prev != nil, next: sequence?.next != nil)
     }

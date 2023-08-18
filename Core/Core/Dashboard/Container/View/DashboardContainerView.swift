@@ -95,7 +95,7 @@ public struct DashboardContainerView: View, ScreenViewTrackable, DownloadsProgre
                     controller.value.showThemeSelectorAlert()
                 }
             }
-            NotificationCenter.default.post(name: .DownloadsViewClosed, object: nil)
+            NotificationCenter.default.post(name: .DownloadContentClosed, object: nil)
             toggleDownloadingBarView(hidden: false)
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in

@@ -25,6 +25,8 @@ final class DownloadNotifier {
     private var downloadsManager: OfflineDownloadsManager = .shared
     private var cancellables: [AnyCancellable] = []
 
+    var canShowBanner: Bool = true
+
     init() {
         addObservers()
     }
@@ -35,6 +37,7 @@ final class DownloadNotifier {
                 guard let self = self else { return }
                 switch event {
                 case .completed(let success):
+                    guard self.canShowBanner else { return }
                     notifyAboutDownloadCompletion(success: success)
                 default:
                     break
