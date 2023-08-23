@@ -64,7 +64,7 @@ public struct DownloadsView: View, Navigatable, DownloadsProgressBarHidden {
                 navigationController?.showAlert(
                     title: NSLocalizedString(newValue, comment: ""),
                     actions: [AlertAction(NSLocalizedString("Cancel", comment: ""), style: .cancel) { _ in }],
-                    style: .actionSheet
+                    style: UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
                 )
                 viewModel.error = ""
             }

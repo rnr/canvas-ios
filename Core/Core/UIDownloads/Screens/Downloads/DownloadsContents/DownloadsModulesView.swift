@@ -76,7 +76,7 @@ struct DownloadsModulesView: View, Navigatable {
             navigationController?.showAlert(
                 title: NSLocalizedString(newValue, comment: ""),
                 actions: [AlertAction(NSLocalizedString("Cancel", comment: ""), style: .cancel) { _ in }],
-                style: .actionSheet
+                style: UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
             )
             viewModel.error = ""
         }
@@ -169,7 +169,7 @@ struct DownloadsModulesView: View, Navigatable {
         navigationController?.showAlert(
             title: NSLocalizedString("Are you sure you want to remove content?", comment: ""),
             actions: [cancelAction, deleteAction],
-            style: .actionSheet
+            style: UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
         )
     }
 
@@ -183,7 +183,7 @@ struct DownloadsModulesView: View, Navigatable {
             navigationController?.showAlert(
                 title: NSLocalizedString("Are you sure you want to remove content?", comment: ""),
                 actions: [cancelAction, deleteAction],
-                style: .actionSheet
+                style: UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
             )
         }
         .foregroundColor(.white)
