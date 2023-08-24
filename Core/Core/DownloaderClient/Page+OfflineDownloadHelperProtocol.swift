@@ -35,13 +35,16 @@ extension Page: OfflineDownloadTypeProtocol {
                     pages = env.subscribe(GetPage(context: context, url: page.url)) {}
 
                     pages?.refresh(force: true, callback: {[entry] page in
+                        guard let entry = entry else { return }
                         DispatchQueue.main.async {
                             if let body = page?.body {
                                 let fullHTML = CoreWebView().html(for: body)
-                                entry?.parts.removeAll()
-                                entry?.addHtmlPart(fullHTML, baseURL: page?.html_url.absoluteString)
+                                entry.parts.removeAll()
+                                entry.addHtmlPart(fullHTML, baseURL: page?.html_url.absoluteString)
+                                continuation.resume()
+                            } else {
+                                continuation.resume(throwing: PageError.cantGetPage(data: entry.dataModel))
                             }
-                            continuation.resume()
                         }
                     })
                     return
@@ -54,5 +57,32 @@ extension Page: OfflineDownloadTypeProtocol {
     public func downloaderEntry() throws -> OfflineDownloaderEntry {
         let model = try self.toOfflineModel()
         return OfflineDownloaderEntry(dataModel: model, parts: [])
+    }
+
+    public static func isCritical(error: Error) -> Bool {
+        switch error {
+        case PageError.cantGetPage,
+            OfflineEntryPartDownloaderError.cantDownloadHTMLPart:
+            return true
+        default:
+            return false
+        }
+    }
+
+    public static func replaceHTML(tag: String?) -> String? {
+        DownloaderClient.replaceHtml(for: tag)
+    }
+}
+
+extension Page {
+    enum PageError: Error, LocalizedError {
+        case cantGetPage(data: OfflineStorageDataModel)
+
+        var errorDescription: String? {
+            switch self {
+            case let .cantGetPage(data):
+                return "Can't get page: \(data.json)."
+            }
+        }
     }
 }

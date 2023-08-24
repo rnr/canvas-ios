@@ -35,4 +35,24 @@ public struct DownloaderClient {
         }
         OfflineDownloadsManager.shared.setConfig(downloaderConfig)
     }
+    
+    public static func replaceHtml(for tag: String?) -> String? {
+        if tag?.lowercased() == "video" ||
+            tag?.lowercased() == "audio" ||
+            tag?.lowercased() == "iframe" ||
+            tag?.lowercased() == "source" {
+            let image = UIImage(named: "PandaNoResults", in: .core, with: nil)?
+                .pngData()?
+                .base64EncodedString() ?? ""
+            return """
+                    <div style = "width:100%; border: 2px solid #e5146fff;" >
+                        <center>
+                            <img src="data:image/png;base64, \(image)">
+                            <p> This content has not been downloaded. </p>
+                        </center>
+                    </div>
+                """
+        }
+        return nil
+    }
 }

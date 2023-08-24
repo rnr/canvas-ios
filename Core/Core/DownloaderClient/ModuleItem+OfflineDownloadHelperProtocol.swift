@@ -42,7 +42,7 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
                     let item = try fromOfflineModel(dataModel)
                     continuation.resume(returning: item)
                 } catch {
-                    continuation.resume(throwing: error)
+                    continuation.resume(throwing: ModuleItemError.cantGetItem(data: dataModel, error: error))
                 }
             }
         })
@@ -56,6 +56,8 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
             try await preparePage(entry: entry, url: url, courseID: item.courseID)
         } else if case let .file(fileId) = item.type {
             try await prepareFile(entry: entry, item: item, fileId: fileId)
+        } else {
+            throw ModuleItemError.unsupported(type: item.type?.label ?? "", id: item.id)
         }
     }
 
@@ -67,13 +69,16 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
             pages = AppEnvironment.shared.subscribe(GetPage(context: context, url: url)) {}
 
             pages?.refresh(force: true, callback: {[entry] page in
+                guard let entry = entry else { return }
                 DispatchQueue.main.async {
                     if let body = page?.body {
                         let fullHTML = CoreWebView().html(for: body)
-                        entry?.parts.removeAll()
-                        entry?.addHtmlPart(fullHTML, baseURL: page?.html_url.absoluteString)
+                        entry.parts.removeAll()
+                        entry.addHtmlPart(fullHTML, baseURL: page?.html_url.absoluteString)
+                        continuation.resume()
+                    } else {
+                        continuation.resume(throwing: ModuleItemError.cantGetPage(data: entry.dataModel))
                     }
-                    continuation.resume()
                 }
             })
         })
@@ -81,7 +86,7 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
 
     public static func prepareFile(entry: OfflineDownloaderEntry, item: ModuleItem, fileId: String) async throws {
         guard let url = item.url, let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
-            throw ModuleItemError.unsupported
+            throw ModuleItemError.unsupported(type: item.type?.label ?? "", id: item.id)
         }
 
         let fileID = urlComponents.queryItems?.first(where: { $0.name == "preview" })?.value ?? fileId
@@ -94,11 +99,14 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
         return try await withCheckedThrowingContinuation({[weak entry] continuation in
             let files: Store<GetFile> = AppEnvironment.shared.subscribe(GetFile(context: context, fileID: fileID)) {}
             files.refresh(force: true, callback: {[entry] file in
+                guard let entry = entry else { return }
                 if let url = file?.url?.rawValue {
-                    entry?.parts.removeAll()
-                    entry?.addURLPart(url.absoluteString)
+                    entry.parts.removeAll()
+                    entry.addURLPart(url.absoluteString)
+                    continuation.resume()
+                } else {
+                    continuation.resume(throwing: ModuleItemError.cantGetFile(data: entry.dataModel))
                 }
-                continuation.resume()
             })
         })
     }
@@ -122,7 +130,7 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
 
                 let url = response.url.appendingQueryItems(URLQueryItem(name: "platform", value: "mobile"))
                 if response.name == "Google Apps" {
-                    continuation.resume(throwing: ModuleItemError.unsupported)
+                    continuation.resume(throwing: ModuleItemError.unsupported(type: item.type?.label ?? "", id: item.id))
                 } else {
                     continuation.resume(returning: url)
                 }
@@ -131,27 +139,29 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
     }
 
     static func prepareLTI(entry: OfflineDownloaderEntry, toolID: String, url: URL) async throws {
-        let item = try fromOfflineModel(entry.dataModel)
-
-        let url: URL = try await getLtiURL(from: item, toolID: toolID, url: url)
-
-        let extractor = await OfflineHTMLDynamicsLinksExtractor(
-            url: url,
-            linksHandler: OfflineDownloadsManager.shared.config.linksHandler
-        )
-        try await extractor.fetch()
-        if let latestURL = await extractor.latestRedirectURL, let html = await extractor.html {
-            if html.contains(latestURL.absoluteString) {
-                let downloader = OfflineLinkDownloader()
-                let cookieString = await extractor.cookies().cookieString
-                downloader.additionCookies = cookieString
-                let ltiContents = try await downloader.contents(urlString: latestURL.absoluteString)
-                entry.addHtmlPart(ltiContents, baseURL: latestURL.absoluteString, cookieString: cookieString)
-            } else {
-                let html = try prepare(html: html)
-                let cookieString = await extractor.cookies().cookieString
-                entry.addHtmlPart(html, baseURL: latestURL.absoluteString, cookieString: cookieString)
+        do {
+            let item = try fromOfflineModel(entry.dataModel)
+            let url: URL = try await getLtiURL(from: item, toolID: toolID, url: url)
+            let extractor = await OfflineHTMLDynamicsLinksExtractor(
+                url: url,
+                linksHandler: OfflineDownloadsManager.shared.config.linksHandler
+            )
+            try await extractor.fetch()
+            if let latestURL = await extractor.latestRedirectURL, let html = await extractor.html {
+                if html.contains(latestURL.absoluteString) {
+                    let downloader = OfflineLinkDownloader()
+                    let cookieString = await extractor.cookies().cookieString
+                    downloader.additionCookies = cookieString
+                    let ltiContents = try await downloader.contents(urlString: latestURL.absoluteString)
+                    entry.addHtmlPart(ltiContents, baseURL: latestURL.absoluteString, cookieString: cookieString)
+                } else {
+                    let html = try prepare(html: html)
+                    let cookieString = await extractor.cookies().cookieString
+                    entry.addHtmlPart(html, baseURL: latestURL.absoluteString, cookieString: cookieString)
+                }
             }
+        } catch {
+            throw ModuleItemError.cantPrepareLTI(data: entry.dataModel, error: error)
         }
     }
 
@@ -173,19 +183,52 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
         let model = try self.toOfflineModel()
         return OfflineDownloaderEntry(dataModel: model, parts: [])
     }
+
+    public static func isCritical(error: Error) -> Bool {
+        switch error {
+        case ModuleItemError.wrongSession,
+            ModuleItemError.unsupported,
+            ModuleItemError.cantGetItem,
+            ModuleItemError.cantPrepareLTI,
+            ModuleItemError.cantGetPage,
+            ModuleItemError.cantGetFile,
+            OfflineEntryPartDownloaderError.cantDownloadHTMLPart:
+            return true
+        default:
+            return false
+        }
+
+    }
+
+    public static func replaceHTML(tag: String?) -> String? {
+        DownloaderClient.replaceHtml(for: tag)
+    }
 }
 
 extension ModuleItem {
     enum ModuleItemError: Error, LocalizedError {
         case wrongSession
-        case unsupported
+        case unsupported(type: String, id: String)
+        case cantGetItem(data: OfflineStorageDataModel, error: Error)
+        case cantPrepareLTI(data: OfflineStorageDataModel, error: Error)
+        case cantGetPage(data: OfflineStorageDataModel)
+        case cantGetFile(data: OfflineStorageDataModel)
 
         var errorDescription: String? {
             switch self {
             case .wrongSession:
                 return "Can't get sessionless launch."
-            case .unsupported:
-                return "Unsupported type"
+            case let .unsupported(type, id):
+                return "Unsupported type. Type: \(type), id: \(id)"
+            case let .cantGetItem(data, error):
+                return "Can't get item for data: \(data.json). Error: \(error)"
+            case let .cantPrepareLTI(data, error):
+                return "Can't get item for data: \(data.json). Error: \(error)"
+            case let .cantGetPage(data):
+                return "Can't get page for data: \(data.json)."
+            case let .cantGetFile(data):
+                return "Can't get file for data: \(data.json)."
+
             }
         }
     }

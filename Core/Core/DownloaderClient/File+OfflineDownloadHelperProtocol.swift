@@ -25,12 +25,16 @@ extension File: OfflineDownloadTypeProtocol {
 
     public static func prepareForDownload(entry: OfflineDownloaderEntry) async throws {
         if entry.dataModel.type == OfflineContentType.file.rawValue {
-            if let file = try? File.fromOfflineModel(entry.dataModel),
-               let url = file.url {
-                DispatchQueue.main.async {
-                    entry.parts.removeAll()
-                    entry.addURLPart(url.absoluteString)
+            do {
+                let file = try File.fromOfflineModel(entry.dataModel)
+                if let url = file.url {
+                    DispatchQueue.main.async {
+                        entry.parts.removeAll()
+                        entry.addURLPart(url.absoluteString)
+                    }
                 }
+            } catch {
+                throw FileError.cantGetFile(data: entry.dataModel, error: error)
             }
         }
     }
@@ -38,5 +42,32 @@ extension File: OfflineDownloadTypeProtocol {
     public func downloaderEntry() throws -> OfflineDownloaderEntry {
         let model = try self.toOfflineModel()
         return OfflineDownloaderEntry(dataModel: model, parts: [])
+    }
+
+    public static func isCritical(error: Error) -> Bool {
+        switch error {
+        case FileError.cantGetFile,
+            OfflineEntryPartDownloaderError.cantDownloadLinkPart:
+            return true
+        default:
+            return false
+        }
+    }
+    
+    public static func replaceHTML(tag: String?) -> String? {
+        nil
+    }
+}
+
+extension File {
+    enum FileError: Error, LocalizedError {
+        case cantGetFile(data: OfflineStorageDataModel, error: Error)
+
+        var errorDescription: String? {
+            switch self {
+            case let .cantGetFile(data, error):
+                return "Can't get file for data: \(data.json). Error: \(error)"
+            }
+        }
     }
 }
