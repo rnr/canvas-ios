@@ -28,6 +28,13 @@ public class ContentViewerViewModel: ObservableObject {
         self.onDeleted = onDeleted
     }
 
+    var canShare: Bool {
+        if let file = try? File.fromOfflineModel(entry.dataModel) {
+            return true
+        }
+        return false
+    }
+
     var title: String {
         if let page = try? Page.fromOfflineModel(entry.dataModel) {
             return page.title

@@ -24,24 +24,42 @@ public struct DownloadsContentCellView: View {
 
     let viewModel: DownloadsModuleCellViewModel
     var color: Color = .oxford
+    var onTap: (() -> Void)?
+    var onDelete: (() -> Void)?
 
     // MARK: - Views -
 
     public var body: some View {
         HStack(spacing: 15) {
-            Image(uiImage: viewModel.uiImage ?? .documentLine)
-                .frame(width: 20, height: 20)
-                .foregroundColor(color)
-            VStack(alignment: .leading) {
-                Text(viewModel.title)
-                    .lineLimit(2)
-                    .font(.semibold16)
-                    .foregroundColor(.textDarkest)
-
-                viewModel.lastUpdated.flatMap(dateText)
+            HStack(spacing: 15) {
+                Image(uiImage: viewModel.uiImage ?? .documentLine)
+                    .frame(width: 20, height: 20)
+                    .foregroundColor(color)
+                VStack(alignment: .leading) {
+                    Text(viewModel.title)
+                        .lineLimit(2)
+                        .font(.semibold16)
+                        .foregroundColor(.textDarkest)
+                    viewModel.lastUpdated.flatMap(dateText)
+                }
+                Spacer()
             }
-            Spacer()
-            InstDisclosureIndicator()
+            .contentShape(Rectangle())
+            .onTapGesture {
+                onTap?()
+            }
+            DownloadButtonRepresentable(
+                progress: .constant(0),
+                currentState: .constant(.downloaded),
+                mainTintColor: Brand.shared.linkColor,
+                onState: { state in
+                    debugLog(state)
+                },
+                onTap: { _ in
+                    onDelete?()
+                }
+            )
+            .frame(width: 30, height: 30)
         }
         .fixedSize(horizontal: false, vertical: true)
         .frame(height: 60)

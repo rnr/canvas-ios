@@ -44,7 +44,18 @@ public struct ContentViewerView: View, Navigatable {
                         .foregroundColor(.white)
                         .font(.semibold16)
                 }
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    if viewModel.canShare {
+                        Button {
+                            share()
+                        } label: {
+                            Image(systemName: "square.and.arrow.up")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 30, height: 30)
+                        }
+                        .foregroundColor(.white)
+                    }
                     Button {
                         viewModel.delete()
                     } label: {
@@ -85,5 +96,13 @@ public struct ContentViewerView: View, Navigatable {
         let webView = CoreWebViewRepresentable(url: url)
         let hosting = CoreHostingController(webView)
         navigationController?.pushViewController(hosting, animated: true)
+    }
+
+    func share() {
+        guard case .url(let url) = viewModel.requestType  else {
+           return
+        }
+        let controller = CoreActivityViewController(activityItems: [url], applicationActivities: nil)
+        navigationController?.present(controller, animated: true)
     }
 }

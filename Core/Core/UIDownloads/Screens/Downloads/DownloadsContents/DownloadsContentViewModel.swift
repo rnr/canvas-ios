@@ -28,7 +28,7 @@ final class DownloadsContentViewModel: ObservableObject {
 
     // MARK: - Properties -
 
-    @Published var content: [OfflineDownloaderEntry]
+    @Published var content: [OfflineDownloaderEntry] = []
     @Published var error: String = ""
     @Published var deleting: Bool = false
 
@@ -46,10 +46,10 @@ final class DownloadsContentViewModel: ObservableObject {
         onDeleted: ((OfflineDownloaderEntry) -> Void)? = nil,
         onDeletedAll: (() -> Void)? = nil
     ) {
-        self.content = content
         self.courseDataModel = courseDataModel
         self.onDeleted = onDeleted
         self.onDeletedAll = onDeletedAll
+        self.content = self.sort(content: content)
     }
 
     func deleteAll() {
@@ -59,7 +59,8 @@ final class DownloadsContentViewModel: ObservableObject {
                 try self.content.forEach {
                     try self.downloadsManager.delete(entry: $0)
                 }
-                self.onDeletedAll?()
+                self.content = []
+                self.isDeleteAll()
             } catch {
                 self.error = error.localizedDescription
             }
@@ -67,14 +68,14 @@ final class DownloadsContentViewModel: ObservableObject {
         }
     }
 
-    func swipeDelete(indexSet: IndexSet) {
-        indexSet.forEach { index in
-            do {
-                try downloadsManager.delete(entry: content[index])
-                content.remove(at: index)
-            } catch {
-                self.error = error.localizedDescription
-            }
+    func delete(index: Int) {
+        do {
+            try downloadsManager.delete(entry: content[index])
+            let entry = content.remove(at: index)
+            onDeleted?(entry)
+            isDeleteAll()
+        } catch {
+            self.error = error.localizedDescription
         }
     }
 
@@ -84,9 +85,33 @@ final class DownloadsContentViewModel: ObservableObject {
                 return
             }
             try downloadsManager.delete(entry: content[index])
-            content.remove(at: index)
+            let entry = content.remove(at: index)
+            onDeleted?(entry)
+            isDeleteAll()
         } catch {
             self.error = error.localizedDescription
         }
+    }
+
+    private func isDeleteAll() {
+        guard content.isEmpty else {
+            return
+        }
+        onDeletedAll?()
+    }
+
+    func sort(content: [OfflineDownloaderEntry]) -> [OfflineDownloaderEntry] {
+       let sortedContent = content.sorted {
+            if let page0 = try? Page.fromOfflineModel($0.dataModel),
+                  let page1 = try? Page.fromOfflineModel($1.dataModel) {
+                return page0.title < page1.title
+            }
+            if let file0 = try? File.fromOfflineModel($0.dataModel),
+                let file1 = try? File.fromOfflineModel($1.dataModel) {
+                return file0.displayName ?? file0.filename  < file1.displayName ?? file1.filename
+            }
+            return false
+        }
+        return sortedContent
     }
 }
