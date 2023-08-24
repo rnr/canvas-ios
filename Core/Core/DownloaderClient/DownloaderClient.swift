@@ -29,6 +29,7 @@ public struct DownloaderClient {
         downloaderConfig.linksHandler = { urlString in
             if urlString.contains("/files/") && !urlString.contains("/download") && urlString.contains(AppEnvironment.shared.api.baseURL.absoluteString) {
                 return urlString.replacingOccurrences(of: "?", with: "/download?")
+                    .replacingOccurrences(of: "/preview", with: "")
             }
             return urlString
         }
