@@ -125,7 +125,7 @@ extension CourseStorageDataModel: OfflineStorageDataProtocol {
                 if let termName = dictionary["termName"] as? String {
                     downloadCourse.course.termName = termName
                 }
-            }          
+            }
             return downloadCourse
         }
         throw OfflineStorageDataError.cantCreateObject(type: ModuleItem.self)
