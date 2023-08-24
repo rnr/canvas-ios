@@ -18,6 +18,7 @@
 
 import Combine
 import SwiftUI
+import SwiftUIIntrospect
 
 extension NSNotification.Name {
     public static var DownloadContentOpened = NSNotification.Name("DownloadContentOpened")
@@ -46,6 +47,43 @@ public struct DownloadsView: View, Navigatable, DownloadsProgressBarHidden {
     // MARK: - Views -
 
     public var body: some View {
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            iPadBody
+        } else {
+            iPhoneBody
+        }
+    }
+
+    private var iPadBody: some View {
+        NavigationView {
+            content
+                .toolbar {
+                    ToolbarItem(placement: .principal) {
+                        Text("Downloads")
+                            .foregroundColor(.textDark)
+                            .font(.semibold16)
+                    }
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        deleteAllButton
+                    }
+                }
+        }
+        .navigationViewStyle(DoubleColumnNavigationViewStyle())
+        .introspect(
+            .navigationView(style: .columns),
+            on: .iOS(.v13, .v14, .v15, .v16, .v17)
+        ) { splitViewController in
+            splitViewController.preferredDisplayMode = .oneBesideSecondary
+        }
+        .introspect(
+            .navigationView(style: .stack),
+            on: .iOS(.v13, .v14, .v15, .v16, .v17)
+        ) { navViewController in
+            navViewController.navigationBar.prefersLargeTitles = false
+        }
+    }
+
+    private var iPhoneBody: some View {
         content
             .toolbar {
                 ToolbarItem(placement: .principal) {
@@ -57,21 +95,10 @@ public struct DownloadsView: View, Navigatable, DownloadsProgressBarHidden {
                     deleteAllButton
                 }
             }
-            .accentColor(Color(Brand.shared.linkColor))
-            .onAppear(perform: onAppear)
-            .onChange(of: viewModel.error) { newValue in
-                if newValue.isEmpty { return }
-                navigationController?.showAlert(
-                    title: NSLocalizedString(newValue, comment: ""),
-                    actions: [AlertAction(NSLocalizedString("Cancel", comment: ""), style: .cancel) { _ in }],
-                    style: UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
-                )
-                viewModel.error = ""
-            }
     }
 
     private var content: some View {
-        ZStack {
+        ZStack(alignment: .top) {
             Color.backgroundLightest
                 .ignoresSafeArea()
             switch viewModel.state {
@@ -102,6 +129,17 @@ public struct DownloadsView: View, Navigatable, DownloadsProgressBarHidden {
             }
         }
         .background(Color.backgroundLightest)
+        .accentColor(Color(Brand.shared.linkColor))
+        .onAppear(perform: onAppear)
+        .onChange(of: viewModel.error) { newValue in
+            if newValue.isEmpty { return }
+            navigationController?.showAlert(
+                title: NSLocalizedString(newValue, comment: ""),
+                actions: [AlertAction(NSLocalizedString("Cancel", comment: ""), style: .cancel) { _ in }],
+                style: UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
+            )
+            viewModel.error = ""
+        }
     }
 
     private var list: some View {
@@ -160,7 +198,7 @@ public struct DownloadsView: View, Navigatable, DownloadsProgressBarHidden {
                 style: .alert
             )
         }
-        .foregroundColor(.white)
+        .foregroundColor(UIDevice.current.userInterfaceIdiom == .phone ? .white : Color(Brand.shared.linkColor))
         .hidden(viewModel.courseViewModels.isEmpty)
     }
 

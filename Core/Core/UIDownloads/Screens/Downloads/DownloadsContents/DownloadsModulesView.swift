@@ -29,6 +29,8 @@ struct DownloadsModulesView: View, Navigatable {
     // MARK: - Properties -
 
     @StateObject var viewModel: DownloadsModulesViewModel
+    @State private var selection: String?
+
     private let title: String
 
     @State private var isExpandedIndexes: [Int] = []
@@ -111,16 +113,7 @@ struct DownloadsModulesView: View, Navigatable {
                             id: \.element.dataModel.id
                         ) { indexRow, entry in
                             VStack(spacing: 0) {
-                                DownloadsContentCellView(
-                                    viewModel: DownloadsModuleCellViewModel(entry: entry),
-                                    color: Color(viewModel.color),
-                                    onTap: {
-                                        destination(entry: entry)
-                                    },
-                                    onDelete: {
-                                        onDelete(section: indexSection, row: indexRow)
-                                    }
-                                )
+                                cell(indexRow: indexRow, indexSection: indexSection, entry: entry)
                                 Divider()
                             }
                         }
@@ -130,6 +123,44 @@ struct DownloadsModulesView: View, Navigatable {
 
         }.onAppear {
             isExpandedIndexes = Array((0...(viewModel.content.count - 1)))
+        }
+    }
+
+    @ViewBuilder
+    private func cell(indexRow: Int, indexSection: Int, entry: OfflineDownloaderEntry) -> some View {
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            DownloadsContentCellView(
+                viewModel: DownloadsModuleCellViewModel(entry: entry),
+                color: Color(viewModel.color),
+                onTap: {
+                    selection = entry.dataModel.id
+                },
+                onDelete: {
+                    onDelete(section: indexSection, row: indexRow)
+                }
+            )
+            .background(
+                NavigationLink(
+                    destination: ContentViewerView(
+                        entry: entry,
+                        courseDataModel: viewModel.courseDataModel,
+                        onDeleted: viewModel.delete
+                    ),
+                    tag: entry.dataModel.id,
+                    selection: $selection
+                ) { SwiftUI.EmptyView() }.hidden()
+            )
+        } else {
+            DownloadsContentCellView(
+                viewModel: DownloadsModuleCellViewModel(entry: entry),
+                color: Color(viewModel.color),
+                onTap: {
+                    destination(entry: entry)
+                },
+                onDelete: {
+                    onDelete(section: indexSection, row: indexRow)
+                }
+            )
         }
     }
 

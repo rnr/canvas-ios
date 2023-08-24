@@ -29,6 +29,8 @@ struct DownloadsContentView: View, Navigatable {
     // MARK: - Properties -
 
     @StateObject var viewModel: DownloadsContentViewModel
+    @State private var selection: String?
+
     private let title: String
 
     init(
@@ -84,16 +86,40 @@ struct DownloadsContentView: View, Navigatable {
         DownloadsContentList {
             ForEach(Array(viewModel.content.enumerated()), id: \.element.dataModel.id) { indexRow, entry in
                 VStack(spacing: 0) {
-                    DownloadsContentCellView(
-                        viewModel: DownloadsModuleCellViewModel(entry: entry),
-                        color: Color(viewModel.color),
-                        onTap: {
-                            destination(entry: entry)
-                        },
-                        onDelete: {
-                            onDelete(index: indexRow)
+                    if UIDevice.current.userInterfaceIdiom == .pad {
+                        DownloadsContentCellView(
+                            viewModel: DownloadsModuleCellViewModel(entry: entry),
+                            color: Color(viewModel.color),
+                            onDelete: {
+                                onDelete(index: indexRow)
+                            }
+                        )
+                        .background(
+                            NavigationLink(
+                                destination: ContentViewerView(
+                                    entry: entry,
+                                    courseDataModel: viewModel.courseDataModel,
+                                    onDeleted: viewModel.delete
+                                ),
+                                tag: entry.dataModel.id,
+                                selection: $selection
+                            ) { SwiftUI.EmptyView() }.hidden()
+                        )
+                        .onTapGesture {
+                            selection = entry.dataModel.id
                         }
-                    )
+                    } else {
+                        DownloadsContentCellView(
+                            viewModel: DownloadsModuleCellViewModel(entry: entry),
+                            color: Color(viewModel.color),
+                            onTap: {
+                                destination(entry: entry)
+                            },
+                            onDelete: {
+                                onDelete(index: indexRow)
+                            }
+                        )
+                    }
                     Divider()
                 }
             }

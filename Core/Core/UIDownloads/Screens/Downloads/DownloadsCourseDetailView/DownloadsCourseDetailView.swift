@@ -18,6 +18,7 @@
 
 import SwiftUI
 import RealmSwift
+import SwiftUIIntrospect
 
 struct DownloadsCourseDetailView: View, Navigatable {
 
@@ -76,6 +77,7 @@ struct DownloadsCourseDetailView: View, Navigatable {
         }
     }
 
+    @ViewBuilder
     private func content(geometry: GeometryProxy) -> some View {
         ZStack(alignment: .top) {
             Color.backgroundLightest
@@ -107,6 +109,11 @@ struct DownloadsCourseDetailView: View, Navigatable {
             }
             .iOS16HideListScrollContentBackground()
             .listStyle(.plain)
+            .introspect(.viewController, on: .iOS(.v13, .v14, .v15, .v16, .v17)) {
+                $0.navigationController?.navigationBar.useContextColor(viewModel.courseViewModel.color)
+                $0.navigationController?.navigationBar.barTintColor = .white
+                $0.navigationController?.navigationBar.tintColor = .white
+            }
         }
     }
 
