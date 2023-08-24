@@ -19,7 +19,7 @@
 import SwiftUI
 import mobile_offline_downloader_ios
 
-struct DownloadsContentView: View, Navigatable {
+struct DownloadsModulesView: View, Navigatable {
 
     // MARK: - Injected -
 
@@ -28,18 +28,20 @@ struct DownloadsContentView: View, Navigatable {
 
     // MARK: - Properties -
 
-    @StateObject var viewModel: DownloadsContentViewModel
+    @StateObject var viewModel: DownloadsModulesViewModel
     private let title: String
 
+    @State private var isExpandedIndexes: [Int] = []
+
     init(
-        content: [OfflineDownloaderEntry],
+        entries: [OfflineDownloaderEntry],
         courseDataModel: CourseStorageDataModel,
         title: String,
         onDeleted: ((OfflineDownloaderEntry) -> Void)? = nil,
         onDeletedAll: (() -> Void)? = nil
     ) {
-        let viewModel = DownloadsContentViewModel(
-            content: content,
+        let viewModel = DownloadsModulesViewModel(
+            entries: entries,
             courseDataModel: courseDataModel,
             onDeleted: onDeleted,
             onDeletedAll: onDeletedAll
@@ -81,29 +83,85 @@ struct DownloadsContentView: View, Navigatable {
     }
 
     private var content: some View {
-        DownloadsContentList {
-            ForEach(Array(viewModel.content.enumerated()), id: \.element.dataModel.id) { indexRow, entry in
-                VStack(spacing: 0) {
-                    DownloadsContentCellView(
-                        viewModel: DownloadsModuleCellViewModel(entry: entry),
-                        color: Color(viewModel.color),
-                        onTap: {
-                            destination(entry: entry)
+        ScrollViewNoConnectionBarPadding {
+            LazyVStack(
+                alignment: .leading,
+                spacing: 0
+            ) {
+                ForEach(Array(viewModel.content.enumerated()), id: \.element.id) { indexSection, section in
+                    CustomDisclosureGroup(
+                        animation: .easeInOut(duration: 0.2),
+                        isExpanded: .constant(isExpandedIndexes.contains(where: {$0 == indexSection})),
+                        onClick: {
+                            if let index = isExpandedIndexes.firstIndex(where: {$0 == indexSection}) {
+                                isExpandedIndexes.remove(at: index)
+                            } else {
+                                isExpandedIndexes.append(indexSection)
+                            }
                         },
-                        onDelete: {
-                            onDelete(index: indexRow)
+                        header: {
+                            header(
+                                title: section.title,
+                                isExpanded: isExpandedIndexes.contains(where: {$0 == indexSection})
+                            )
                         }
-                    )
-                    Divider()
+                    ) {
+                        ForEach(
+                            Array(section.content.enumerated()),
+                            id: \.element.dataModel.id
+                        ) { indexRow, entry in
+                            VStack(spacing: 0) {
+                                DownloadsContentCellView(
+                                    viewModel: DownloadsModuleCellViewModel(entry: entry),
+                                    color: Color(viewModel.color),
+                                    onTap: {
+                                        destination(entry: entry)
+                                    },
+                                    onDelete: {
+                                        onDelete(section: indexSection, row: indexRow)
+                                    }
+                                )
+                                Divider()
+                            }
+                        }
+                    }
                 }
             }
+
+        }.onAppear {
+            isExpandedIndexes = Array((0...(viewModel.content.count - 1)))
         }
     }
 
-    private func onDelete(index: Int) {
+    private func header(title: String, isExpanded: Bool) -> some View {
+        SwiftUI.Group {
+            HStack {
+                if isExpanded {
+                    Image.miniArrowUpSolid
+                        .frame(width: 24, height: 24)
+                } else {
+                    Image.miniArrowUpSolid
+                        .frame(width: 24, height: 24)
+                        .rotationEffect(.degrees(180))
+                }
+                Text(title)
+                    .font(.bold20)
+                    .foregroundColor(.textDarkest)
+                    .padding(.leading, 16)
+                Spacer()
+            }
+            .padding(.top, 32)
+            .padding(.bottom, 8)
+            Divider()
+        }
+        .background(Color.backgroundLight)
+        .listRowInsets(EdgeInsets())
+    }
+
+    private func onDelete(section: Int, row: Int) {
         let cancelAction = AlertAction(NSLocalizedString("Cancel", comment: ""), style: .cancel) { _ in }
         let deleteAction = AlertAction(NSLocalizedString("Delete", comment: ""), style: .destructive) { _ in
-            viewModel.delete(index: index)
+            viewModel.delete(section: section, row: row)
             if viewModel.content.isEmpty {
                 presentationMode.wrappedValue.dismiss()
             }

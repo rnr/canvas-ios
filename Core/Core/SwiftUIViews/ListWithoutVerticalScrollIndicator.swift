@@ -40,7 +40,7 @@ public struct ListWithoutVerticalScrollIndicator<Content: View>: View {
     }
 }
 
-final class ListNoConnectionViewModel: ObservableObject, Reachabilitable {
+final class NoConnectionViewModel: ObservableObject, Reachabilitable {
 
     @Injected(\.reachability) var reachability: ReachabilityProvider
     var cancellables: [AnyCancellable] = []
@@ -57,7 +57,7 @@ final class ListNoConnectionViewModel: ObservableObject, Reachabilitable {
 
 public struct ListNoConnectionBarPadding<Content: View>: View {
 
-    @StateObject private var viewModel: ListNoConnectionViewModel = .init()
+    @StateObject private var viewModel: NoConnectionViewModel = .init()
     private let content: () -> Content
 
     public init(@ViewBuilder content: @escaping () -> Content) {
@@ -66,6 +66,23 @@ public struct ListNoConnectionBarPadding<Content: View>: View {
 
     public var body: some View {
         List {
+            content()
+        }
+        .padding(.bottom, viewModel.isConnected ? 0 : 20)
+    }
+}
+
+public struct ScrollViewNoConnectionBarPadding<Content: View>: View {
+
+    @StateObject private var viewModel: NoConnectionViewModel = .init()
+    private let content: () -> Content
+
+    public init(@ViewBuilder content: @escaping () -> Content) {
+        self.content = content
+    }
+
+    public var body: some View {
+        ScrollView {
             content()
         }
         .padding(.bottom, viewModel.isConnected ? 0 : 20)

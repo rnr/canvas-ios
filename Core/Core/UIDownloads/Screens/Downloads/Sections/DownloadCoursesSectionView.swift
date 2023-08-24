@@ -64,7 +64,7 @@ struct DownloadCoursesSectionView: View {
         controller.value.showAlert(
             title: NSLocalizedString("Are you sure you want to remove downloaded course?", comment: ""),
             actions: [cancelAction, deleteAction],
-            style: .actionSheet
+            style: UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
         )
     }
 

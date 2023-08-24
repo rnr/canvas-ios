@@ -28,7 +28,7 @@ public class DownloadingBarView: UIView, Reachabilitable {
     private let downloadNotifier = DownloadNotifier()
 
     public var onTap: (() -> Void)?
-    public var downloadsOpened: Bool = false
+    public var downloadContentOpened: Bool = false
     var cancellables: [AnyCancellable] = []
 
     private let titleLabel: UILabel = {
@@ -48,6 +48,12 @@ public class DownloadingBarView: UIView, Reachabilitable {
     private let progressView = CustomCircleProgressView(frame: .zero)
     var mustBeHidden: Bool = false
 
+    public override var isHidden: Bool {
+        willSet {
+            downloadNotifier.canShowBanner = isHidden && !downloadContentOpened
+        }
+    }
+
     public convenience init() {
         self.init(frame: .zero)
         NotificationCenter.default.addObserver(
@@ -64,14 +70,14 @@ public class DownloadingBarView: UIView, Reachabilitable {
         )
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(downloadsViewOpened),
-            name: .DownloadsViewOpened,
+            selector: #selector(onDownloadContentOpened),
+            name: .DownloadContentOpened,
             object: nil
         )
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(downloadsViewClosed),
-            name: .DownloadsViewClosed,
+            selector: #selector(onDownloadContentClosed),
+            name: .DownloadContentClosed,
             object: nil
         )
     }
@@ -87,7 +93,10 @@ public class DownloadingBarView: UIView, Reachabilitable {
 
     @objc
     public func show() {
-        if downloadsManager.activeEntries.isEmpty || downloadsOpened {
+        if !reachability.isConnected {
+            return
+        }
+        if downloadsManager.activeEntries.isEmpty || downloadContentOpened {
             return
         }
         mustBeHidden = false
@@ -95,13 +104,13 @@ public class DownloadingBarView: UIView, Reachabilitable {
     }
 
     @objc
-    public func downloadsViewOpened() {
-        downloadsOpened = true
+    public func onDownloadContentOpened() {
+        downloadContentOpened = true
     }
 
     @objc
-    public func downloadsViewClosed() {
-        downloadsOpened = false
+    public func onDownloadContentClosed() {
+        downloadContentOpened = false
         show()
     }
 

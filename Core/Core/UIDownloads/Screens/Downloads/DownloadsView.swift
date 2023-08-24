@@ -20,8 +20,8 @@ import Combine
 import SwiftUI
 
 extension NSNotification.Name {
-    public static var DownloadsViewOpened = NSNotification.Name("DownloadsViewOpened")
-    public static var DownloadsViewClosed = NSNotification.Name("DownloadsViewClosed")
+    public static var DownloadContentOpened = NSNotification.Name("DownloadContentOpened")
+    public static var DownloadContentClosed = NSNotification.Name("DownloadContentClosed")
 }
 
 public struct DownloadsView: View, Navigatable, DownloadsProgressBarHidden {
@@ -40,7 +40,7 @@ public struct DownloadsView: View, Navigatable, DownloadsProgressBarHidden {
 
     public init(onBack: (() -> Void)? = nil) {
         self.onBack = onBack
-        NotificationCenter.default.post(name: .DownloadsViewOpened, object: nil)
+        NotificationCenter.default.post(name: .DownloadContentOpened, object: nil)
     }
 
     // MARK: - Views -
@@ -64,7 +64,7 @@ public struct DownloadsView: View, Navigatable, DownloadsProgressBarHidden {
                 navigationController?.showAlert(
                     title: NSLocalizedString(newValue, comment: ""),
                     actions: [AlertAction(NSLocalizedString("Cancel", comment: ""), style: .cancel) { _ in }],
-                    style: .actionSheet
+                    style: UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
                 )
                 viewModel.error = ""
             }

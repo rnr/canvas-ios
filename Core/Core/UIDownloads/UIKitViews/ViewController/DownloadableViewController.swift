@@ -62,13 +62,11 @@ public class DownloadableViewController: UIViewController, ErrorViewController, 
     public override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         willDisappearing = true
-        toggleDownloadingBarView(hidden: false)
     }
 
     // MARK: - Configuration -
 
-    func set(downloadableItem: DownloadableItem) {
-        toggleDownloadingBarView(hidden: false)
+    func set(downloadableItem: DownloadableItem) { 
         if downloadableItem.objectId == self.downloadableItem?.objectId {
             return
         }

@@ -142,6 +142,7 @@ final class DownloadsViewModel: ObservableObject, Reachabilitable {
                         courseDataModel: courseStorageDataModel
                     )
                 }
+                self.sort()
                 self.state = .loaded
             }
             result.failure { _ in
@@ -299,6 +300,7 @@ final class DownloadsViewModel: ObservableObject, Reachabilitable {
                                     courseDataModel: courseDataModel
                                 )
                             )
+                            self.sort()
                             self.state = .updated
                         }
                     }
@@ -317,6 +319,12 @@ final class DownloadsViewModel: ObservableObject, Reachabilitable {
             }
         default:
             break
+        }
+    }
+
+    private func sort() {
+        courseViewModels.sort {
+             $0.name.compare($1.name, options: .numeric) == .orderedAscending
         }
     }
 }

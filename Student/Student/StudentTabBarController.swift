@@ -26,6 +26,8 @@ class StudentTabBarController: UITabBarController {
     lazy var downloadingBarView = DownloadingBarView()
     lazy var connectionBarView = NotConnectionBarView()
 
+    private let backgroundTaskProvider = BackgroundTaskProvider()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         delegate = self
@@ -211,7 +213,7 @@ extension StudentTabBarController: UITabBarControllerDelegate {
     }
 
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
-        if downloadingBarView.downloadsOpened { return }
+        if downloadingBarView.downloadContentOpened { return }
         if selectedIndex == 0 {
             downloadingBarView.show()
         } else {

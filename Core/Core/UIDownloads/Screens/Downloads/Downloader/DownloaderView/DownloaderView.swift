@@ -76,7 +76,7 @@ struct DownloaderView: View, Navigatable {
             navigationController?.showAlert(
                 title: NSLocalizedString(newValue, comment: ""),
                 actions: [AlertAction(NSLocalizedString("Cancel", comment: ""), style: .cancel) { _ in }],
-                style: .actionSheet
+                style: UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
             )
             viewModel.error = ""
         }
@@ -103,7 +103,7 @@ struct DownloaderView: View, Navigatable {
             navigationController?.showAlert(
                 title: NSLocalizedString("Are you sure you want to remove all downloading content?", comment: ""),
                 actions: [cancelAction, deleteAction],
-                style: .actionSheet
+                style: UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
             )
         }
         .foregroundColor(.white)
