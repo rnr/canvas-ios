@@ -42,31 +42,21 @@ public struct DownloaderClient {
             tag?.lowercased() == "iframe" ||
             tag?.lowercased() == "source",
             let image = UIImage(named: "PandaNoResults", in: .core, with: nil) {
-            let aspect = image.size.width / image.size.height
-            let width: CGFloat = 320
-            let height = width / aspect
-
-            return await withCheckedContinuation { continuation in
-                let imageRenderer = UIGraphicsImageRenderer(size: CGSize(width: width, height: height))
-                let newImage = imageRenderer.image { _ in
-                    image.draw(in: CGRect(x: 0, y: 0, width: width, height: height))
-                }
-                let image = newImage
-                    .pngData()?
-                    .base64EncodedString() ?? ""
-                let result = """
-                        <div style = "width:100%; border: 2px solid #e5146fff;" >
-                            <center>
-                                <div style="padding: 10px;">
-                                    <img width = "320" src="data:image/png;base64, \(image)">
-                                    <p> This content has not been downloaded. </p>
-                                </div>
-                            </center>
-                        </div>
-                    """
-                continuation.resume(returning: result)
-
-            }
+            let originWidth = image.size.width
+            let imageData = image
+                .pngData()?
+                .base64EncodedString() ?? ""
+            let result = """
+                    <div style = "width:100%; border: 2px solid #e5146fff;" >
+                        <center>
+                            <div style="padding: 10px;">
+                                <img width = "\(originWidth)" src="data:image/png;base64, \(imageData)">
+                                <p> This content has not been downloaded. </p>
+                            </div>
+                        </center>
+                    </div>
+                """
+            return result
         }
         return nil
     }
