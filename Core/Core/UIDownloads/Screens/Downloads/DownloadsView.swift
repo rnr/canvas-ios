@@ -71,6 +71,7 @@ public struct DownloadsView: View, Navigatable, DownloadsProgressBarHidden {
                 VStack {
                     if viewModel.isEmpty {
                         VStack {
+                            Spacer()
                             Image.pandaBlocks
                             Text("No Downloads")
                                 .font(.semibold18)
@@ -80,6 +81,7 @@ public struct DownloadsView: View, Navigatable, DownloadsProgressBarHidden {
                                 .font(.regular16)
                                 .foregroundColor(.textDarkest)
                                 .multilineTextAlignment(.center)
+                            Spacer()
                         }
                         .background(Color.backgroundLightest)
                     } else {
