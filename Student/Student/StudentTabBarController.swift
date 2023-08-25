@@ -26,6 +26,8 @@ class StudentTabBarController: UITabBarController {
     lazy var downloadingBarView = DownloadingBarView()
     lazy var connectionBarView = NotConnectionBarView()
 
+    private let backgroundTaskProvider = BackgroundTaskProvider()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         delegate = self

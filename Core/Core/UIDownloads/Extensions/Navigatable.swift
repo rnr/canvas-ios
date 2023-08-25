@@ -28,6 +28,10 @@ extension Navigatable {
             return nil
         }
 
+        if let navigationController = topViewController.viewControllers?.first?.children.last?.children.first as? UINavigationController {
+            return navigationController
+        }
+
         if let helmSplitViewController = topViewController.viewControllers?.first?.children.last?.children.first as? UISplitViewController,
            let navigationController = helmSplitViewController.masterNavigationController {
             return navigationController

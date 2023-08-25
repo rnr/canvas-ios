@@ -92,7 +92,7 @@ extension DownloadableItems {
                     )
                     completion(item)
                 }
-            } else if let fileDetails = vc as? FileDetailsViewController {
+            } else if assetType == .file, let fileDetails = vc as? FileDetailsViewController {
                 fileDetails.updated = { file, course in
                     guard var url = file.url  else {
                         return

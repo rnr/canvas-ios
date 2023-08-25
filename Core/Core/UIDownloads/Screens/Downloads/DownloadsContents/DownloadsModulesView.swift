@@ -29,6 +29,8 @@ struct DownloadsModulesView: View, Navigatable {
     // MARK: - Properties -
 
     @StateObject var viewModel: DownloadsModulesViewModel
+    @State private var selection: String?
+
     private let title: String
 
     @State private var isExpandedIndexes: [Int] = []
@@ -57,6 +59,14 @@ struct DownloadsModulesView: View, Navigatable {
             Color.backgroundLight
                 .ignoresSafeArea()
             content
+                .if(UIDevice.current.userInterfaceIdiom == .pad) { view in
+                    view.introspect(.viewController, on: .iOS(.v13, .v14, .v15, .v16, .v17)) { view in
+                        DispatchQueue.main.async {
+                            view.navigationController?.navigationBar.useContextColor(viewModel.color)
+                            view.navigationController?.navigationBar.prefersLargeTitles = false
+                        }
+                    }
+                }
             if viewModel.deleting {
                 LoadingDarkView()
             }
@@ -76,7 +86,7 @@ struct DownloadsModulesView: View, Navigatable {
             navigationController?.showAlert(
                 title: NSLocalizedString(newValue, comment: ""),
                 actions: [AlertAction(NSLocalizedString("Cancel", comment: ""), style: .cancel) { _ in }],
-                style: .actionSheet
+                style: UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
             )
             viewModel.error = ""
         }
@@ -111,16 +121,7 @@ struct DownloadsModulesView: View, Navigatable {
                             id: \.element.dataModel.id
                         ) { indexRow, entry in
                             VStack(spacing: 0) {
-                                DownloadsContentCellView(
-                                    viewModel: DownloadsModuleCellViewModel(entry: entry),
-                                    color: Color(viewModel.color),
-                                    onTap: {
-                                        destination(entry: entry)
-                                    },
-                                    onDelete: {
-                                        onDelete(section: indexSection, row: indexRow)
-                                    }
-                                )
+                                cell(indexRow: indexRow, indexSection: indexSection, entry: entry)
                                 Divider()
                             }
                         }
@@ -129,7 +130,49 @@ struct DownloadsModulesView: View, Navigatable {
             }
 
         }.onAppear {
+            if viewModel.content.isEmpty {
+                return
+            }
+
             isExpandedIndexes = Array((0...(viewModel.content.count - 1)))
+        }
+    }
+
+    @ViewBuilder
+    private func cell(indexRow: Int, indexSection: Int, entry: OfflineDownloaderEntry) -> some View {
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            DownloadsContentCellView(
+                viewModel: DownloadsModuleCellViewModel(entry: entry),
+                color: Color(viewModel.color),
+                onTap: {
+                    selection = entry.dataModel.id
+                },
+                onDelete: {
+                    onDelete(section: indexSection, row: indexRow)
+                }
+            )
+            .background(
+                NavigationLink(
+                    destination: ContentViewerView(
+                        entry: entry,
+                        courseDataModel: viewModel.courseDataModel,
+                        onDeleted: viewModel.delete
+                    ),
+                    tag: entry.dataModel.id,
+                    selection: $selection
+                ) { SwiftUI.EmptyView() }.hidden()
+            )
+        } else {
+            DownloadsContentCellView(
+                viewModel: DownloadsModuleCellViewModel(entry: entry),
+                color: Color(viewModel.color),
+                onTap: {
+                    destination(entry: entry)
+                },
+                onDelete: {
+                    onDelete(section: indexSection, row: indexRow)
+                }
+            )
         }
     }
 
@@ -169,7 +212,7 @@ struct DownloadsModulesView: View, Navigatable {
         navigationController?.showAlert(
             title: NSLocalizedString("Are you sure you want to remove content?", comment: ""),
             actions: [cancelAction, deleteAction],
-            style: .actionSheet
+            style: UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
         )
     }
 
@@ -183,7 +226,7 @@ struct DownloadsModulesView: View, Navigatable {
             navigationController?.showAlert(
                 title: NSLocalizedString("Are you sure you want to remove content?", comment: ""),
                 actions: [cancelAction, deleteAction],
-                style: .actionSheet
+                style: UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
             )
         }
         .foregroundColor(.white)

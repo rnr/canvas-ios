@@ -29,6 +29,8 @@ struct DownloadsContentView: View, Navigatable {
     // MARK: - Properties -
 
     @StateObject var viewModel: DownloadsContentViewModel
+    @State private var selection: String?
+
     private let title: String
 
     init(
@@ -55,6 +57,14 @@ struct DownloadsContentView: View, Navigatable {
             Color.backgroundLight
                 .ignoresSafeArea()
             content
+                .if(UIDevice.current.userInterfaceIdiom == .pad) { view in
+                    view.introspect(.viewController, on: .iOS(.v13, .v14, .v15, .v16, .v17)) { view in
+                        DispatchQueue.main.async {
+                            view.navigationController?.navigationBar.useContextColor(viewModel.color)
+                            view.navigationController?.navigationBar.prefersLargeTitles = false
+                        }
+                    }
+                }
             if viewModel.deleting {
                 LoadingDarkView()
             }
@@ -74,7 +84,7 @@ struct DownloadsContentView: View, Navigatable {
             navigationController?.showAlert(
                 title: NSLocalizedString(newValue, comment: ""),
                 actions: [AlertAction(NSLocalizedString("Cancel", comment: ""), style: .cancel) { _ in }],
-                style: .actionSheet
+                style: UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
             )
             viewModel.error = ""
         }
@@ -84,16 +94,40 @@ struct DownloadsContentView: View, Navigatable {
         DownloadsContentList {
             ForEach(Array(viewModel.content.enumerated()), id: \.element.dataModel.id) { indexRow, entry in
                 VStack(spacing: 0) {
-                    DownloadsContentCellView(
-                        viewModel: DownloadsModuleCellViewModel(entry: entry),
-                        color: Color(viewModel.color),
-                        onTap: {
-                            destination(entry: entry)
-                        },
-                        onDelete: {
-                            onDelete(index: indexRow)
-                        }
-                    )
+                    if UIDevice.current.userInterfaceIdiom == .pad {
+                        DownloadsContentCellView(
+                            viewModel: DownloadsModuleCellViewModel(entry: entry),
+                            color: Color(viewModel.color),
+                            onTap: {
+                                selection = entry.dataModel.id
+                            },
+                            onDelete: {
+                                onDelete(index: indexRow)
+                            }
+                        )
+                        .background(
+                            NavigationLink(
+                                destination: ContentViewerView(
+                                    entry: entry,
+                                    courseDataModel: viewModel.courseDataModel,
+                                    onDeleted: viewModel.delete
+                                ),
+                                tag: entry.dataModel.id,
+                                selection: $selection
+                            ) { SwiftUI.EmptyView() }.hidden()
+                        )
+                    } else {
+                        DownloadsContentCellView(
+                            viewModel: DownloadsModuleCellViewModel(entry: entry),
+                            color: Color(viewModel.color),
+                            onTap: {
+                                destination(entry: entry)
+                            },
+                            onDelete: {
+                                onDelete(index: indexRow)
+                            }
+                        )
+                    }
                     Divider()
                 }
             }
@@ -111,7 +145,7 @@ struct DownloadsContentView: View, Navigatable {
         navigationController?.showAlert(
             title: NSLocalizedString("Are you sure you want to remove content?", comment: ""),
             actions: [cancelAction, deleteAction],
-            style: .actionSheet
+            style: UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
         )
     }
 
@@ -125,7 +159,7 @@ struct DownloadsContentView: View, Navigatable {
             navigationController?.showAlert(
                 title: NSLocalizedString("Are you sure you want to remove content?", comment: ""),
                 actions: [cancelAction, deleteAction],
-                style: .actionSheet
+                style: UIDevice.current.userInterfaceIdiom == .pad ? .alert : .actionSheet
             )
         }
         .foregroundColor(.white)

@@ -18,6 +18,7 @@
 
 import UIKit
 import Combine
+import mobile_offline_downloader_ios
 
 public class NotConnectionBarView: UIView, Reachabilitable {
 
@@ -45,6 +46,11 @@ public class NotConnectionBarView: UIView, Reachabilitable {
 
         connection { [weak self] isConnected in
             self?.isHidden = isConnected
+            if isConnected {
+                OfflineDownloadsManager.shared.resumeAllActive()
+            } else {
+                OfflineDownloadsManager.shared.pauseAllActive()
+            }
         }
     }
 
