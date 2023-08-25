@@ -218,7 +218,7 @@ final class DownloadsViewModel: ObservableObject, Reachabilitable {
         switch event.status {
         case .removed:
             deleteDownloading(event)
-        case .completed:
+        case .completed, .partiallyDownloaded:
             deleteDownloading(event)
             if let object = event.object as? OfflineDownloadTypeProtocol {
                 addCompletedEntry(object: object)
