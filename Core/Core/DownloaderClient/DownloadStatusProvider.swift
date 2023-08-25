@@ -96,7 +96,7 @@ final class DownloadStatusProvider {
                 onState(.waiting, event.progress, eventObjectId)
             case .active:
                 onState(.downloading, event.progress, eventObjectId)
-            case .completed:
+            case .completed, .partiallyDownloaded:
                 onState(.downloaded, event.progress, eventObjectId)
             case .failed, .paused:
                 onState(.retry, event.progress, eventObjectId)

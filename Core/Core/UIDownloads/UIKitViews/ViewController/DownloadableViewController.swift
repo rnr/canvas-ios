@@ -221,7 +221,7 @@ public class DownloadableViewController: UIViewController, ErrorViewController, 
                 return
             }
             switch event.status {
-            case .completed:
+            case .completed, .partiallyDownloaded:
                 if downloadButton.currentState != .downloaded {
                     downloadButton.currentState = .downloaded
                 }
