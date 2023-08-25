@@ -42,6 +42,10 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
                     let item = try fromOfflineModel(dataModel)
                     continuation.resume(returning: item)
                 } catch {
+                    if error.isCancelled {
+                        continuation.resume(throwing: error)
+                    }
+
                     continuation.resume(throwing: ModuleItemError.cantGetItem(data: dataModel, error: error))
                 }
             }
@@ -161,6 +165,9 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
                 }
             }
         } catch {
+            if error.isCancelled {
+                throw error
+            }
             throw ModuleItemError.cantPrepareLTI(data: entry.dataModel, error: error)
         }
     }

@@ -43,7 +43,7 @@ public struct DownloaderClient {
             tag?.lowercased() == "source",
             let image = UIImage(named: "PandaNoResults", in: .core, with: nil) {
             let aspect = image.size.width / image.size.height
-            let width = await max(UIScreen.main.bounds.size.width, UIScreen.main.bounds.size.height)
+            let width: CGFloat = 320
             let height = width / aspect
 
             return await withCheckedContinuation { continuation in
@@ -58,7 +58,7 @@ public struct DownloaderClient {
                         <div style = "width:100%; border: 2px solid #e5146fff;" >
                             <center>
                                 <div style="padding: 10px;">
-                                    <img src="data:image/png;base64, \(image)">
+                                    <img width = "320" src="data:image/png;base64, \(image)">
                                     <p> This content has not been downloaded. </p>
                                 </div>
                             </center>
