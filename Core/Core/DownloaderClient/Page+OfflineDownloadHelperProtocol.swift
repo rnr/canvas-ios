@@ -26,16 +26,17 @@ extension Page: OfflineDownloadTypeProtocol {
 
     public static func prepareForDownload(entry: OfflineDownloaderEntry) async throws {
         try await withCheckedThrowingContinuation({[weak entry] continuation in
+            guard let entry = entry else { return }
             let env = AppEnvironment.shared
             var pages: Store<GetPage>?
-            if entry?.dataModel.type == OfflineContentType.page.rawValue {
-                if let dataModel = entry?.dataModel, let page = try? Page.fromOfflineModel(dataModel),
+            if entry.dataModel.type == OfflineContentType.page.rawValue {
+                let dataModel = entry.dataModel
+                if let page = try? Page.fromOfflineModel(dataModel),
                    let context = Context(canvasContextID: page.contextID) {
 
                     pages = env.subscribe(GetPage(context: context, url: page.url)) {}
 
                     pages?.refresh(force: true, callback: {[entry] page in
-                        guard let entry = entry else { return }
                         DispatchQueue.main.async {
                             if let body = page?.body {
                                 let fullHTML = CoreWebView().html(for: body)
@@ -50,7 +51,7 @@ extension Page: OfflineDownloadTypeProtocol {
                     return
                 }
             }
-            continuation.resume()
+            continuation.resume(throwing: PageError.cantGetPage(data: entry.dataModel))
         })
     }
 
@@ -69,8 +70,8 @@ extension Page: OfflineDownloadTypeProtocol {
         }
     }
 
-    public static func replaceHTML(tag: String?) -> String? {
-        DownloaderClient.replaceHtml(for: tag)
+    public static func replaceHTML(tag: String?) async -> String? {
+        await DownloaderClient.replaceHtml(for: tag)
     }
 }
 

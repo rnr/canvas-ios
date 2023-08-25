@@ -200,8 +200,8 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
 
     }
 
-    public static func replaceHTML(tag: String?) -> String? {
-        DownloaderClient.replaceHtml(for: tag)
+    public static func replaceHTML(tag: String?) async -> String? {
+        await DownloaderClient.replaceHtml(for: tag)
     }
 }
 
