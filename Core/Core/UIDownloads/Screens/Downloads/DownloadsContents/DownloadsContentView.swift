@@ -57,6 +57,14 @@ struct DownloadsContentView: View, Navigatable {
             Color.backgroundLight
                 .ignoresSafeArea()
             content
+                .if(UIDevice.current.userInterfaceIdiom == .pad) { view in
+                    view.introspect(.viewController, on: .iOS(.v13, .v14, .v15, .v16, .v17)) { view in
+                        DispatchQueue.main.async {
+                            view.navigationController?.navigationBar.useContextColor(viewModel.color)
+                            view.navigationController?.navigationBar.prefersLargeTitles = false
+                        }
+                    }
+                }
             if viewModel.deleting {
                 LoadingDarkView()
             }
@@ -90,6 +98,9 @@ struct DownloadsContentView: View, Navigatable {
                         DownloadsContentCellView(
                             viewModel: DownloadsModuleCellViewModel(entry: entry),
                             color: Color(viewModel.color),
+                            onTap: {
+                                selection = entry.dataModel.id
+                            },
                             onDelete: {
                                 onDelete(index: indexRow)
                             }
@@ -105,9 +116,6 @@ struct DownloadsContentView: View, Navigatable {
                                 selection: $selection
                             ) { SwiftUI.EmptyView() }.hidden()
                         )
-                        .onTapGesture {
-                            selection = entry.dataModel.id
-                        }
                     } else {
                         DownloadsContentCellView(
                             viewModel: DownloadsModuleCellViewModel(entry: entry),

@@ -47,43 +47,6 @@ public struct DownloadsView: View, Navigatable, DownloadsProgressBarHidden {
     // MARK: - Views -
 
     public var body: some View {
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            iPadBody
-        } else {
-            iPhoneBody
-        }
-    }
-
-    private var iPadBody: some View {
-        NavigationView {
-            content
-                .toolbar {
-                    ToolbarItem(placement: .principal) {
-                        Text("Downloads")
-                            .foregroundColor(.textDark)
-                            .font(.semibold16)
-                    }
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        deleteAllButton
-                    }
-                }
-        }
-        .navigationViewStyle(DoubleColumnNavigationViewStyle())
-        .introspect(
-            .navigationView(style: .columns),
-            on: .iOS(.v13, .v14, .v15, .v16, .v17)
-        ) { splitViewController in
-            splitViewController.preferredDisplayMode = .oneBesideSecondary
-        }
-        .introspect(
-            .navigationView(style: .stack),
-            on: .iOS(.v13, .v14, .v15, .v16, .v17)
-        ) { navViewController in
-            navViewController.navigationBar.prefersLargeTitles = false
-        }
-    }
-
-    private var iPhoneBody: some View {
         content
             .toolbar {
                 ToolbarItem(placement: .principal) {

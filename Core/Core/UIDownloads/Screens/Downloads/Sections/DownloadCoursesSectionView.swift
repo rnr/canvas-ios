@@ -54,11 +54,6 @@ struct DownloadCoursesSectionView: View {
                 }
         }
         .onDelete(perform: onDelete)
-        .onAppear {
-            if UIDevice.current.userInterfaceIdiom == .pad, selection == nil {
-                selection = viewModel.courseViewModels.first
-            }
-        }
     }
 
     private func onDelete(indexSet: IndexSet) {

@@ -53,6 +53,50 @@ struct DownloadsCourseDetailView: View, Navigatable {
     // MARK: - Views -
 
     var body: some View {
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            padBody
+        } else {
+            phoneBody
+        }
+    }
+
+    private var padBody: some View {
+        NavigationView {
+            content
+        }
+        .accentColor(.white)
+        .foregroundStyle(.white)
+        .navigationViewStyle(DoubleColumnNavigationViewStyle())
+        .onAppear {
+            if selection == nil {
+                selection = viewModel.categories.first
+            }
+        }
+        .introspect(
+            .navigationView(style: .columns),
+            on: .iOS(.v13, .v14, .v15, .v16, .v17)
+        ) { splitViewController in
+            DispatchQueue.main.async {
+                splitViewController.preferredDisplayMode = .oneBesideSecondary
+                splitViewController.preferredSplitBehavior = .displace
+            }
+         }
+        .introspect(
+            .navigationView(style: .stack),
+            on: .iOS(.v13, .v14, .v15, .v16, .v17)
+        ) { navigationController in
+            DispatchQueue.main.async {
+                navigationController.navigationBar.prefersLargeTitles = false
+                navigationController.navigationBar.useContextColor(viewModel.courseViewModel.color)
+            }
+        }
+    }
+
+    private var phoneBody: some View {
+        content
+    }
+
+    private var content: some View {
         GeometryReader { geometry in
             VStack(spacing: 0) {
                 switch viewModel.state {
@@ -75,6 +119,18 @@ struct DownloadsCourseDetailView: View, Navigatable {
         .onAppear {
             navigationController?.navigationBar.useContextColor(viewModel.courseViewModel.color)
         }
+        .if(UIDevice.current.userInterfaceIdiom == .pad) { view in
+            view.introspect(
+                .viewController,
+                on: .iOS(.v13, .v14, .v15, .v16, .v17)
+            ) { viewController in
+                DispatchQueue.main.async {
+                    viewController.navigationController?.navigationBar.prefersLargeTitles = false
+                    viewController.navigationController?.navigationBar.useContextColor(viewModel.courseViewModel.color)
+                }
+            }
+        }
+
     }
 
     @ViewBuilder
@@ -109,11 +165,6 @@ struct DownloadsCourseDetailView: View, Navigatable {
             }
             .iOS16HideListScrollContentBackground()
             .listStyle(.plain)
-            .introspect(.viewController, on: .iOS(.v13, .v14, .v15, .v16, .v17)) {
-                $0.navigationController?.navigationBar.useContextColor(viewModel.courseViewModel.color)
-                $0.navigationController?.navigationBar.barTintColor = .white
-                $0.navigationController?.navigationBar.tintColor = .white
-            }
         }
     }
 

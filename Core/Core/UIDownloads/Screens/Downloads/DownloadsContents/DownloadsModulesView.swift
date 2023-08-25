@@ -59,6 +59,14 @@ struct DownloadsModulesView: View, Navigatable {
             Color.backgroundLight
                 .ignoresSafeArea()
             content
+                .if(UIDevice.current.userInterfaceIdiom == .pad) { view in
+                    view.introspect(.viewController, on: .iOS(.v13, .v14, .v15, .v16, .v17)) { view in
+                        DispatchQueue.main.async {
+                            view.navigationController?.navigationBar.useContextColor(viewModel.color)
+                            view.navigationController?.navigationBar.prefersLargeTitles = false
+                        }
+                    }
+                }
             if viewModel.deleting {
                 LoadingDarkView()
             }
@@ -122,6 +130,10 @@ struct DownloadsModulesView: View, Navigatable {
             }
 
         }.onAppear {
+            if viewModel.content.isEmpty {
+                return
+            }
+
             isExpandedIndexes = Array((0...(viewModel.content.count - 1)))
         }
     }
