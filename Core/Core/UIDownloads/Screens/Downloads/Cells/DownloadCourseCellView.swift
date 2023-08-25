@@ -27,8 +27,16 @@ struct DownloadCourseCellView: View {
     // MARK: - Views -
 
     var body: some View {
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            padBody
+        } else {
+            phoneBody
+        }
+    }
+
+    private var padBody: some View {
         VStack(alignment: .leading) {
-            content
+            contentPad
         }
         .contentShape(Rectangle())
         .background(
@@ -45,11 +53,54 @@ struct DownloadCourseCellView: View {
         .buttonStyle(PlainButtonStyle())
     }
 
-    private var content: some View {
+    private var phoneBody: some View {
+        VStack(alignment: .leading) {
+            contentPhone
+        }
+        .contentShape(Rectangle())
+        .background(
+            RoundedRectangle(cornerRadius: 4)
+                .stroke(
+                    Color.gray,
+                    lineWidth: 1 / UIScreen.main.scale
+                )
+        )
+        .background(Color.backgroundLightest)
+        .cornerRadius(4)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 4)
+        .buttonStyle(PlainButtonStyle())
+    }
+
+    private var contentPad: some View {
+        HStack(alignment: .top, spacing: 3) {
+            ZStack {
+                Color(courseViewModel.color).frame(width: 177, height: 100)
+                padImage
+            }
+            VStack(alignment: .leading, spacing: 3) {
+                Text(courseViewModel.name)
+                    .font(.semibold18)
+                    .foregroundColor(Color(courseViewModel.textColor))
+                    .lineLimit(2)
+                    .multilineTextAlignment(.leading)
+                Text(courseViewModel.courseCode)
+                    .font(.semibold12)
+                    .foregroundColor(.textDark)
+                    .lineLimit(2)
+                    .multilineTextAlignment(.leading)
+            }
+            .padding(.all, 10)
+            .padding(.bottom, 20)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+    }
+
+    private var contentPhone: some View {
         VStack(alignment: .leading, spacing: 3) {
             ZStack {
                 Color(courseViewModel.color).frame(height: 80)
-                image
+                phoneImage
             }
             VStack(alignment: .leading, spacing: 3) {
                 Text(courseViewModel.name)
@@ -70,7 +121,7 @@ struct DownloadCourseCellView: View {
     }
 
     @ViewBuilder
-    private var image: some View {
+    private var phoneImage: some View {
         if let imageDownloadURL = courseViewModel.course?.imageDownloadURL,
            let image = ImageDownloader().loadImage(fileName: imageDownloadURL.lastPathComponent) {
             GeometryReader { reader  in
@@ -85,6 +136,24 @@ struct DownloadCourseCellView: View {
                 GeometryReader { reader in
                     RemoteImage(url, width: reader.size.width, height: 80)
                 }
+            }?
+            .opacity(0.4)
+            .clipped()
+        }
+    }
+
+    @ViewBuilder
+    private var padImage: some View {
+        if let imageDownloadURL = courseViewModel.course?.imageDownloadURL,
+           let image = ImageDownloader().loadImage(fileName: imageDownloadURL.lastPathComponent) {
+            Image(uiImage: image.withRenderingMode(.alwaysOriginal))
+                .resizable().scaledToFill()
+                .frame(width: 177, height: 100)
+                .opacity(0.4)
+                .clipped()
+        } else {
+            courseViewModel.course?.imageDownloadURL.map { url in
+                RemoteImage(url, width: 177, height: 100)
             }?
             .opacity(0.4)
             .clipped()

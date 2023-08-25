@@ -71,6 +71,12 @@ public struct ContentViewerView: View, Navigatable {
                     presentationMode.wrappedValue.dismiss()
                 }
             }
+            .if(UIDevice.current.userInterfaceIdiom == .pad) { view in
+                view.introspect(.viewController, on: .iOS(.v13, .v14, .v15, .v16, .v17)) {
+                    $0.navigationController?.navigationBar.prefersLargeTitles = false
+                    $0.navigationController?.navigationBar.tintColor = .white
+                }
+            }
         }
     }
 
