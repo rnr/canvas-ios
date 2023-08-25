@@ -1189,6 +1189,8 @@
 		BAB674C42A814E8500DF718B /* CoreWebViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAB674C32A814E8500DF718B /* CoreWebViewRepresentable.swift */; };
 		BAB674D42A83A0B200DF718B /* FileListCell+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAB674D32A83A0B200DF718B /* FileListCell+Extensions.swift */; };
 		BAF4758F2A93A5D100A951D0 /* BackgroundTaskProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF4758E2A93A5D100A951D0 /* BackgroundTaskProvider.swift */; };
+		BAF4759C2A978C9500A951D0 /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = BAF4759B2A978C9500A951D0 /* Introspect */; };
+		BAF4759E2A9791AD00A951D0 /* SwiftUIIntrospect in Frameworks */ = {isa = PBXBuildFile; productRef = BAF4759D2A9791AD00A951D0 /* SwiftUIIntrospect */; };
 		BB206552E39A0481AD10261A /* InboxAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D114C3F2B149C57DC9EAA7F /* InboxAssembly.swift */; };
 		BB4203A9042EAF729CC13DB6 /* RichContentEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74853D7E3A4FAF817AD060D /* RichContentEditor.swift */; };
 		BB4EF46850550E3621E96551 /* GetEnabledFeatureFlagsRequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76D702D639BBFCB710DD675 /* GetEnabledFeatureFlagsRequestTests.swift */; };
@@ -3521,8 +3523,10 @@
 				51B1D4ED7ECB508C4A97445F /* CombineExt in Frameworks */,
 				25C534647B7B805047B8E0C3 /* Lottie in Frameworks */,
 				0AC02ED0AAB62CEEF21FAACA /* PSPDFKit in Frameworks */,
+				BAF4759C2A978C9500A951D0 /* Introspect in Frameworks */,
 				AF3D4F61CDFF74B5749B35F1 /* CombineReachability in Frameworks */,
 				A50D35D12A7D1C2B006204F1 /* mobile-offline-downloader-ios in Frameworks */,
+				BAF4759E2A9791AD00A951D0 /* SwiftUIIntrospect in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9005,6 +9009,8 @@
 				8C5ECF283C56CEE5DC624958 /* PSPDFKit */,
 				06824168802A23727C271167 /* CombineReachability */,
 				A50D35D02A7D1C2B006204F1 /* mobile-offline-downloader-ios */,
+				BAF4759B2A978C9500A951D0 /* Introspect */,
+				BAF4759D2A9791AD00A951D0 /* SwiftUIIntrospect */,
 			);
 			productName = Core;
 			productReference = 4E249DD6423E938E1DE581C9 /* Core.framework */;
@@ -9081,6 +9087,7 @@
 				0123E127313854C775556360 /* XCRemoteSwiftPackageReference "combine-schedulers" */,
 				120AFC94F64412AA3A0FC3A7 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				C0C21C0C6F0179DCECB057F3 /* XCRemoteSwiftPackageReference "PSPDFKit-SP" */,
+				BAF4759A2A978C9400A951D0 /* XCRemoteSwiftPackageReference "swiftui-introspect" */,
 			);
 			projectDirPath = "";
 			projectReferences = (
@@ -11357,6 +11364,14 @@
 				kind = branch;
 			};
 		};
+		BAF4759A2A978C9400A951D0 /* XCRemoteSwiftPackageReference "swiftui-introspect" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/siteline/swiftui-introspect";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.11.0;
+			};
+		};
 		C0C21C0C6F0179DCECB057F3 /* XCRemoteSwiftPackageReference "PSPDFKit-SP" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/PSPDFKit/PSPDFKit-SP";
@@ -11399,6 +11414,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0123E127313854C775556360 /* XCRemoteSwiftPackageReference "combine-schedulers" */;
 			productName = CombineSchedulers;
+		};
+		BAF4759B2A978C9500A951D0 /* Introspect */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BAF4759A2A978C9400A951D0 /* XCRemoteSwiftPackageReference "swiftui-introspect" */;
+			productName = Introspect;
+		};
+		BAF4759D2A9791AD00A951D0 /* SwiftUIIntrospect */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BAF4759A2A978C9400A951D0 /* XCRemoteSwiftPackageReference "swiftui-introspect" */;
+			productName = SwiftUIIntrospect;
 		};
 		D784E9A4895EC777BDAD4BAD /* Lottie */ = {
 			isa = XCSwiftPackageProductDependency;
