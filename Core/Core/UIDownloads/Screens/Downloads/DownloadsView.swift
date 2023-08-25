@@ -163,7 +163,7 @@ public struct DownloadsView: View, Navigatable, DownloadsProgressBarHidden {
                 style: .alert
             )
         }
-        .foregroundColor(UIDevice.current.userInterfaceIdiom == .phone ? .white : Color(Brand.shared.linkColor))
+        .foregroundColor(.white)
         .hidden(viewModel.courseViewModels.isEmpty)
     }
 
