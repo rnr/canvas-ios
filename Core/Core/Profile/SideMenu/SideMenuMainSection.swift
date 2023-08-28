@@ -137,6 +137,10 @@ struct SideMenuMainSection: View {
     }
 
     func showDownloads() {
+        guard let tabs =  controller.value.presentingViewController as? UITabBarController else {
+            return
+        }
+        tabs.selectedIndex = 0
         let downloadsViewHostingController = CoreHostingController(
             DownloadsView()
         )

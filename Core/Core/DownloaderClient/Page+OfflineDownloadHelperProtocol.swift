@@ -26,10 +26,12 @@ extension Page: OfflineDownloadTypeProtocol {
 
     public static func prepareForDownload(entry: OfflineDownloaderEntry) async throws {
         try await withCheckedThrowingContinuation({[weak entry] continuation in
+            guard let entry = entry else { return }
             let env = AppEnvironment.shared
             var pages: Store<GetPage>?
-            if entry?.dataModel.type == OfflineContentType.page.rawValue {
-                if let dataModel = entry?.dataModel, let page = try? Page.fromOfflineModel(dataModel),
+            if entry.dataModel.type == OfflineContentType.page.rawValue {
+                let dataModel = entry.dataModel
+                if let page = try? Page.fromOfflineModel(dataModel),
                    let context = Context(canvasContextID: page.contextID) {
 
                     pages = env.subscribe(GetPage(context: context, url: page.url)) {}
@@ -38,21 +40,50 @@ extension Page: OfflineDownloadTypeProtocol {
                         DispatchQueue.main.async {
                             if let body = page?.body {
                                 let fullHTML = CoreWebView().html(for: body)
-                                entry?.parts.removeAll()
-                                entry?.addHtmlPart(fullHTML, baseURL: page?.html_url.absoluteString)
+                                entry.parts.removeAll()
+                                entry.addHtmlPart(fullHTML, baseURL: page?.html_url.absoluteString)
+                                continuation.resume()
+                            } else {
+                                continuation.resume(throwing: PageError.cantGetPage(data: entry.dataModel))
                             }
-                            continuation.resume()
                         }
                     })
                     return
                 }
             }
-            continuation.resume()
+            continuation.resume(throwing: PageError.cantGetPage(data: entry.dataModel))
         })
     }
 
     public func downloaderEntry() throws -> OfflineDownloaderEntry {
         let model = try self.toOfflineModel()
         return OfflineDownloaderEntry(dataModel: model, parts: [])
+    }
+
+    public static func isCritical(error: Error) -> Bool {
+        switch error {
+        case PageError.cantGetPage,
+            OfflineEntryPartDownloaderError.cantDownloadHTMLPart:
+            return true
+        default:
+            return false
+        }
+    }
+
+    public static func replaceHTML(tag: String?) async -> String? {
+        await DownloaderClient.replaceHtml(for: tag)
+    }
+}
+
+extension Page {
+    enum PageError: Error, LocalizedError {
+        case cantGetPage(data: OfflineStorageDataModel)
+
+        var errorDescription: String? {
+            switch self {
+            case let .cantGetPage(data):
+                return "Can't get page: \(data.json)."
+            }
+        }
     }
 }
