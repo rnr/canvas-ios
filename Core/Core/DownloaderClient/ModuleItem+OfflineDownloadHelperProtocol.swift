@@ -19,6 +19,7 @@
 import Foundation
 import mobile_offline_downloader_ios
 import SwiftSoup
+import Reachability
 
 extension ModuleItem: OfflineDownloadTypeProtocol {
     public static func canDownload(entry: OfflineDownloaderEntry) -> Bool {
@@ -53,6 +54,7 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
     }
 
     public static func prepareForDownload(entry: OfflineDownloaderEntry) async throws {
+        print("ALARM prepare")
         let item = try await getItem(with: entry.dataModel)
         if case let .externalTool(toolID, url) = item.type {
             try await prepareLTI(entry: entry, toolID: toolID, url: url)
@@ -72,7 +74,7 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
 
             pages = AppEnvironment.shared.subscribe(GetPage(context: context, url: url)) {}
 
-            pages?.refresh(force: true, callback: {[entry] page in
+            pages?.refresh(force: true, callback: {[entry, pages] page in
                 guard let entry = entry else { return }
                 DispatchQueue.main.async {
                     if let body = page?.body {
@@ -80,8 +82,14 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
                         entry.parts.removeAll()
                         entry.addHtmlPart(fullHTML, baseURL: page?.html_url.absoluteString)
                         continuation.resume()
+                    } else if let error = pages?.error {
+                        if error.isOfflineCancel {
+                            continuation.resume(throwing: error)
+                        } else {
+                            continuation.resume(throwing: ModuleItemError.cantGetPage(data: entry.dataModel, error: error))
+                        }
                     } else {
-                        continuation.resume(throwing: ModuleItemError.cantGetPage(data: entry.dataModel))
+                        continuation.resume(throwing: ModuleItemError.cantGetPage(data: entry.dataModel, error: nil))
                     }
                 }
             })
@@ -101,32 +109,41 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
         }
 
         return try await withCheckedThrowingContinuation({[weak entry] continuation in
-            let files: Store<GetFile> = AppEnvironment.shared.subscribe(GetFile(context: context, fileID: fileID)) {}
-            files.refresh(force: true, callback: {[entry] file in
+            let files: Store<GetFile>? = AppEnvironment.shared.subscribe(GetFile(context: context, fileID: fileID)) {}
+            files?.refresh(force: true, callback: {[entry] file in
                 guard let entry = entry else { return }
                 if let url = file?.url?.rawValue {
                     entry.parts.removeAll()
                     entry.addURLPart(url.absoluteString)
                     continuation.resume()
+                } else if let error = files?.error {
+                    if error.isOfflineCancel {
+                        continuation.resume(throwing: error)
+                    } else {
+                        continuation.resume(throwing: ModuleItemError.cantGetFile(data: entry.dataModel, error: error))
+                    }
+
                 } else {
-                    continuation.resume(throwing: ModuleItemError.cantGetFile(data: entry.dataModel))
+                    continuation.resume(throwing: ModuleItemError.cantGetFile(data: entry.dataModel, error: nil))
                 }
             })
         })
     }
 
     static func getLtiURL(from item: ModuleItem, toolID: String, url: URL) async throws -> URL {
-        let tools = LTITools(
+        let request = GetSessionlessLaunchURLRequest(
             context: .course(item.courseID),
             id: toolID,
             url: url,
+            assignmentID: nil,
+            moduleItemID: item.id,
             launchType: .module_item,
-            moduleID: item.moduleID,
-            moduleItemID: item.id
+            resourceLinkLookupUUID: nil
         )
 
+        let env = AppEnvironment.shared
         return try await withCheckedThrowingContinuation { continuation in
-            tools.getSessionlessLaunch { response in
+            let responseBlock: (APIGetSessionlessLaunchResponse?) -> Void = { response in
                 guard let response = response else {
                     continuation.resume(throwing: ModuleItemError.wrongSession)
                     return
@@ -138,6 +155,26 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
                 } else {
                     continuation.resume(returning: url)
                 }
+            }
+            if url.path.hasSuffix("/external_tools/sessionless_launch") {
+                env.api.makeRequest(url) { data, _, error in
+                    if let error = error {
+                        continuation.resume(throwing: error)
+                        return
+                    }
+                    guard let data = data else { return continuation.resume(throwing: ModuleItemError.wrongSession) }
+                    let response = try? APIJSONDecoder().decode(APIGetSessionlessLaunchResponse.self, from: data)
+                    responseBlock(response)
+                }
+                return
+            }
+            env.api.makeRequest(request) { response, _, error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                    return
+                }
+
+                responseBlock(response)
             }
         }
     }
@@ -165,7 +202,7 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
                 }
             }
         } catch {
-            if error.isCancelled {
+            if error.isOfflineCancel {
                 throw error
             }
             throw ModuleItemError.cantPrepareLTI(data: entry.dataModel, error: error)
@@ -218,8 +255,8 @@ extension ModuleItem {
         case unsupported(type: String, id: String)
         case cantGetItem(data: OfflineStorageDataModel, error: Error)
         case cantPrepareLTI(data: OfflineStorageDataModel, error: Error)
-        case cantGetPage(data: OfflineStorageDataModel)
-        case cantGetFile(data: OfflineStorageDataModel)
+        case cantGetPage(data: OfflineStorageDataModel, error: Error?)
+        case cantGetFile(data: OfflineStorageDataModel, error: Error?)
 
         var errorDescription: String? {
             switch self {
@@ -231,9 +268,15 @@ extension ModuleItem {
                 return "Can't get item for data: \(data.json). Error: \(error)"
             case let .cantPrepareLTI(data, error):
                 return "Can't get item for data: \(data.json). Error: \(error)"
-            case let .cantGetPage(data):
+            case let .cantGetPage(data, error):
+                if let error = error {
+                    return "Can't get page for data: \(data.json). Error: \(error)"
+                }
                 return "Can't get page for data: \(data.json)."
-            case let .cantGetFile(data):
+            case let .cantGetFile(data, error):
+                if let error = error {
+                    return "Can't get file for data: \(data.json). Error: \(error)"
+                }
                 return "Can't get file for data: \(data.json)."
 
             }
