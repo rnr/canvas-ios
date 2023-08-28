@@ -200,6 +200,8 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
                     let cookieString = await extractor.cookies().cookieString
                     entry.addHtmlPart(html, baseURL: latestURL.absoluteString, cookieString: cookieString)
                 }
+            } else {
+                throw ModuleItemError.cantPrepareLTI(data: entry.dataModel, error: nil)
             }
         } catch {
             if error.isOfflineCancel {
@@ -254,7 +256,7 @@ extension ModuleItem {
         case wrongSession
         case unsupported(type: String, id: String)
         case cantGetItem(data: OfflineStorageDataModel, error: Error)
-        case cantPrepareLTI(data: OfflineStorageDataModel, error: Error)
+        case cantPrepareLTI(data: OfflineStorageDataModel, error: Error?)
         case cantGetPage(data: OfflineStorageDataModel, error: Error?)
         case cantGetFile(data: OfflineStorageDataModel, error: Error?)
 
@@ -267,7 +269,10 @@ extension ModuleItem {
             case let .cantGetItem(data, error):
                 return "Can't get item for data: \(data.json). Error: \(error)"
             case let .cantPrepareLTI(data, error):
-                return "Can't get item for data: \(data.json). Error: \(error)"
+                if let error = error {
+                    return "Can't get item for data: \(data.json). Error: \(error)"
+                }
+                return "Can't get item for data: \(data.json)."
             case let .cantGetPage(data, error):
                 if let error = error {
                     return "Can't get page for data: \(data.json). Error: \(error)"
