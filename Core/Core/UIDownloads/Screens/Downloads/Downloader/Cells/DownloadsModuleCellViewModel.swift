@@ -110,6 +110,7 @@ final class DownloadsModuleCellViewModel: ObservableObject {
     }
 
     func pauseResume() {
+        OfflineAnalyticsMananger().logEventForStatus(entry.status, itemURL: entry.userInfo ?? "")
         switch entry.status {
         case .initialized, .active, .preparing:
             downloadsManager.pause(entry: entry)

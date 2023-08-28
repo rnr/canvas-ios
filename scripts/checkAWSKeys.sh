@@ -18,3 +18,8 @@ if [ ! -f "$AWS_KEYS_PATH/customPushDomain.dataset/customPushDomain" ]; then
 echo "error: customPushDomain is not present. Run in Terminal: yarn build-secrets \"customPushDomain=custom_push_domain_here\""
 exit 1
 fi
+
+if [ ! -f "$AWS_KEYS_PATH/bugfenderKey.dataset/bugfenderKey" ]; then
+echo "error: bugfenderKey is not present. Run in Terminal: yarn build-secrets \"bugfenderKey=bugfender_key_here\""
+exit 1
+fi

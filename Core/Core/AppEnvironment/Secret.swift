@@ -32,6 +32,9 @@ public enum Secret {
     case awsAccessKey, awsSecretKey, appArnTemplate
     case customPushDomain
 
+    /// Bugfender key
+    case bugfenderKey
+
     /// The value passed to `Heap.initialize`
     case heapID
 

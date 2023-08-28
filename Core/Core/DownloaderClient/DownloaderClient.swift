@@ -16,6 +16,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
+import BugfenderSDK
 import Foundation
 import mobile_offline_downloader_ios
 
@@ -25,6 +26,20 @@ public struct DownloaderClient {
         OfflineStorageManager.shared.setConfig(config: storageConfig)
 
         let downloaderConfig = OfflineDownloaderConfig()
+        downloaderConfig.errorsDescriptionHandler = { description, isCritical in
+            if description == nil && isCritical == false {
+                // successful downloading
+                OfflineAnalyticsMananger().logCompleted()
+            } else {
+                // was ended with error
+                // Analytic
+                OfflineAnalyticsMananger().logError()
+                // Bugfender
+                if let message = description {
+                    Bugfender.log(lineNumber: 0, method: "", file: "", level: .error, tag: "Offline", message: message)
+                }
+            }
+        }
         downloaderConfig.downloadTypes = [Page.self, ModuleItem.self, File.self]
         downloaderConfig.linksHandler = { urlString in
             if urlString.contains("/files/") && !urlString.contains("/download") && urlString.contains(AppEnvironment.shared.api.baseURL.absoluteString) {

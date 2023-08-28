@@ -154,6 +154,7 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
             guard let self = self, let page = self.page else {
                 return
             }
+            OfflineAnalyticsMananger().logEventForState(state, itemURL: page.url)
             switch state {
             case .downloaded:
                 self.downloadButtonHelper.delete(object: page)
