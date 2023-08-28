@@ -54,7 +54,6 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
     }
 
     public static func prepareForDownload(entry: OfflineDownloaderEntry) async throws {
-        print("ALARM prepare")
         let item = try await getItem(with: entry.dataModel)
         if case let .externalTool(toolID, url) = item.type {
             try await prepareLTI(entry: entry, toolID: toolID, url: url)
