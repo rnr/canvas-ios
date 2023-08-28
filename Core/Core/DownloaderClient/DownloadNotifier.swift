@@ -20,12 +20,15 @@ import Foundation
 import mobile_offline_downloader_ios
 import Combine
 
-final class DownloadNotifier {
+final class DownloadNotifier: Reachabilitable {
+
+    @Injected(\.reachability) var reachability: ReachabilityProvider
 
     private var downloadsManager: OfflineDownloadsManager = .shared
-    private var cancellables: [AnyCancellable] = []
+    var cancellables: [AnyCancellable] = []
 
     var canShowBanner: Bool = true
+    var isConnected: Bool = true
 
     init() {
         addObservers()
@@ -37,13 +40,17 @@ final class DownloadNotifier {
                 guard let self = self else { return }
                 switch event {
                 case .completed(let success):
-                    guard self.canShowBanner else { return }
+                    guard self.canShowBanner, self.isConnected else { return }
                     notifyAboutDownloadCompletion(success: success)
                 default:
                     break
                 }
             }
             .store(in: &cancellables)
+
+        connection { [weak self] isConnected in
+            self?.isConnected = isConnected
+        }
     }
 
     private func notifyAboutDownloadCompletion(success: Bool) {

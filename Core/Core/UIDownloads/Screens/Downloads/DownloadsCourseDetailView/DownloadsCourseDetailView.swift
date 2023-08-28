@@ -64,9 +64,25 @@ struct DownloadsCourseDetailView: View, Navigatable {
         NavigationView {
             content
         }
+        .navigationBarBackButtonHidden(true)
         .accentColor(.white)
         .foregroundStyle(.white)
         .navigationViewStyle(DoubleColumnNavigationViewStyle())
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    selection = nil
+                    presentationMode.wrappedValue.dismiss()
+                } label: {
+                    HStack {
+                        Image(systemName: "chevron.backward")
+                            .font(.system(size: 17, weight: .medium))
+                            .foregroundColor(.white)
+                            .padding(.leading, -8)
+                    }
+                }
+            }
+        }
         .onAppear {
             if selection == nil {
                 selection = viewModel.categories.first
