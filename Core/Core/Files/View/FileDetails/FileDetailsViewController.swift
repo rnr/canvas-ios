@@ -101,7 +101,6 @@ public class FileDetailsViewController: DownloadableViewController, CoreWebViewL
             addDoneButton(side: .left)
         }
         navigationItem.rightBarButtonItems = env.app == .teacher ? [downloadBarButtonItem, editButton] : [downloadBarButtonItem, shareButton]
-        downloadButton.isHidden = false
         editButton.accessibilityIdentifier = "FileDetails.editButton"
         shareButton.accessibilityIdentifier = "FileDetails.shareButton"
         shareButton.isEnabled = false
@@ -506,7 +505,6 @@ extension FileDetailsViewController: PDFViewControllerDelegate {
             annotate,
             search,
         ]
-        downloadButton.isHidden = false
         NotificationCenter.default.post(name: .init("FileViewControllerBarButtonItemsDidChange"), object: nil)
 
         doneLoading()
