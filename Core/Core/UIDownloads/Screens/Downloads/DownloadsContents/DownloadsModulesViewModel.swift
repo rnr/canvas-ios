@@ -133,6 +133,11 @@ final class DownloadsModulesViewModel: ObservableObject {
     }
 
     func delete(section: Int, row: Int) {
+        guard content.indices.contains(section),
+              content[section].content.indices.contains(row) else {
+            return
+        }
+
         do {
             let entry = content[section].content[row]
             try downloadsManager.delete(entry: entry)

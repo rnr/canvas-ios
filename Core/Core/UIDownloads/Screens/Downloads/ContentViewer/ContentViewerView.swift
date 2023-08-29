@@ -12,7 +12,14 @@ public struct ContentViewerView: View, Navigatable {
 
     // MARK: - Properties -
 
-    @StateObject var viewModel: ContentViewerViewModel
+    @StateObject private var viewModel: ContentViewerViewModel
+
+    @State private var url: URL? {
+        didSet {
+            isActiveWebView = true
+        }
+    }
+    @State private var isActiveWebView: Bool = false
 
     init(
         entry: OfflineDownloaderEntry,
@@ -35,7 +42,18 @@ public struct ContentViewerView: View, Navigatable {
                 configurator: .init(
                     requestType: type
                 ),
-                onLinkActivated: onLinkActivated
+                onLinkActivated: { url in
+                    if url.scheme?.contains("http") == true {
+                        openURL(url)
+                        return
+                    }
+
+                    if UIDevice.current.userInterfaceIdiom == .pad {
+                        self.url = url
+                    } else {
+                        onLinkActivated(url)
+                    }
+                }
             )
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -66,6 +84,16 @@ public struct ContentViewerView: View, Navigatable {
                     .foregroundColor(.white)
                 }
             }
+            .if(UIDevice.current.userInterfaceIdiom == .pad) { view in
+                view.background(
+                    NavigationLink(
+                        destination: destination,
+                        isActive: $isActiveWebView
+                    ) {
+                        SwiftUI.EmptyView()
+                    }.hidden()
+                )
+            }
             .onReceive(viewModel.viewDismissalModePublisher) { shouldDismiss in
                 if shouldDismiss {
                     presentationMode.wrappedValue.dismiss()
@@ -80,10 +108,23 @@ public struct ContentViewerView: View, Navigatable {
         }
     }
 
+    @ViewBuilder
+    private var destination: some View {
+        if let url = url, url.scheme?.contains("file") == true {
+            if DocViewerViewController.hasPSPDFKitLicense {
+                DocViewer(
+                    filename: url.lastPathComponent,
+                    previewURL: url,
+                    fallbackURL: url
+                )
+            } else {
+                CoreWebViewRepresentable(url: url)
+            }
+        }
+    }
+
     private func onLinkActivated(_ url: URL) {
-        if url.scheme?.contains("http") == true {
-            openURL(url)
-        } else if url.scheme?.contains("file") == true {
+        if url.scheme?.contains("file") == true {
             guard DocViewerViewController.hasPSPDFKitLicense else {
                 webView(for: url)
                 return
