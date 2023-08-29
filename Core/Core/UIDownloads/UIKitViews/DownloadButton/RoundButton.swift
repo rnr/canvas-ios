@@ -37,7 +37,7 @@ final class RoundButton: UIButton {
     }
 
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        return bounds.insetBy(dx: -20, dy: -20).contains(point)
+        return bounds.insetBy(dx: -40, dy: -40).contains(point)
     }
 
 }
