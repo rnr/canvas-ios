@@ -36,22 +36,28 @@ extension Page: OfflineDownloadTypeProtocol {
 
                     pages = env.subscribe(GetPage(context: context, url: page.url)) {}
 
-                    pages?.refresh(force: true, callback: {[entry] page in
+                    pages?.refresh(force: true, callback: {[entry, pages] page in
                         DispatchQueue.main.async {
                             if let body = page?.body {
                                 let fullHTML = CoreWebView().html(for: body)
                                 entry.parts.removeAll()
                                 entry.addHtmlPart(fullHTML, baseURL: page?.html_url.absoluteString)
                                 continuation.resume()
+                            } else if let error = pages?.error {
+                                if error.isOfflineCancel {
+                                    continuation.resume(throwing: error)
+                                } else {
+                                    continuation.resume(throwing: PageError.cantGetPage(data: entry.dataModel, error: error))
+                                }
                             } else {
-                                continuation.resume(throwing: PageError.cantGetPage(data: entry.dataModel))
+                                continuation.resume(throwing: PageError.cantGetPage(data: entry.dataModel, error: nil))
                             }
                         }
                     })
                     return
                 }
             }
-            continuation.resume(throwing: PageError.cantGetPage(data: entry.dataModel))
+            continuation.resume(throwing: PageError.cantGetPage(data: entry.dataModel, error: nil))
         })
     }
 
@@ -77,11 +83,14 @@ extension Page: OfflineDownloadTypeProtocol {
 
 extension Page {
     enum PageError: Error, LocalizedError {
-        case cantGetPage(data: OfflineStorageDataModel)
+        case cantGetPage(data: OfflineStorageDataModel, error: Error?)
 
         var errorDescription: String? {
             switch self {
-            case let .cantGetPage(data):
+            case let .cantGetPage(data, error):
+                if let error = error {
+                    return "Can't get page: \(data.json). Error: \(error)"
+                }
                 return "Can't get page: \(data.json)."
             }
         }
