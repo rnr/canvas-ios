@@ -26,8 +26,8 @@ public struct DownloaderClient {
         OfflineStorageManager.shared.setConfig(config: storageConfig)
 
         let downloaderConfig = OfflineDownloaderConfig()
-        downloaderConfig.errorsDescriptionHandler = { description, isCritical in
-            if description == nil && isCritical == false {
+        downloaderConfig.errorsDescriptionHandler = { errorInfo, isCritical in
+            if errorInfo == nil && isCritical == false {
                 // successful downloading
                 OfflineAnalyticsMananger().logCompleted()
             } else {
@@ -35,7 +35,33 @@ public struct DownloaderClient {
                 // Analytic
                 OfflineAnalyticsMananger().logError()
                 // Bugfender
-                if let message = description {
+                if let errorInfo = errorInfo {
+                    let decoder = JSONDecoder()
+                    var entryInfo: String = ""
+                    if let data = errorInfo.1.json.data(using: .utf8),
+                        let dictionary = (try? JSONSerialization.jsonObject(with: data) as? [String: Any]) {
+                        // name
+                        if let name = dictionary["title"] {
+                            entryInfo.append("for content \"\(name)\"")
+                        } else if let name = dictionary["displayName"] {
+                            entryInfo.append("for content \"\(name)\"")
+                        } else {
+                            entryInfo.append("for content \"Unknown\"")
+                        }
+                        // course ID
+                        entryInfo.append(", courseID: \(dictionary["courseID"] ?? "Unknown")")
+                        // link
+                        if let url = dictionary["htmlURL"] {
+                            entryInfo.append(", link: \(url)")
+                        } else if let url = dictionary["url"] {
+                            entryInfo.append(", link: \(url)")
+                        } else {
+                            entryInfo.append(", link: Unknown")
+                        }
+                    } else {
+                        entryInfo.append("for unknown content")
+                    }
+                    let message = errorInfo.0.replacingOccurrences(of: "###MODULE_DESCRIPTION###", with: entryInfo)
                     Bugfender.log(lineNumber: 0, method: "", file: "", level: .error, tag: "Offline", message: message)
                 }
             }
