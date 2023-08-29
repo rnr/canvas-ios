@@ -59,7 +59,7 @@ extension FileListCell {
             guard let self = self, let file = self.file else {
                 return
             }
-            OfflineAnalyticsMananger().logEventForState(state, itemURL: file.url?.absoluteString ?? "")
+            OfflineLogsMananger().logEventForState(state, itemURL: file.url?.absoluteString ?? "")
             switch state {
             case .downloaded:
                 self.downloadButtonHelper.delete(object: file)

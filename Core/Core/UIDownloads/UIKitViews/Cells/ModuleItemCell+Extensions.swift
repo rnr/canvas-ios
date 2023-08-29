@@ -54,7 +54,7 @@ extension ModuleItemCell {
             guard let self = self, let item = self.item else {
                 return
             }
-            OfflineAnalyticsMananger().logEventForState(state, itemURL: item.url?.absoluteString ?? "")
+            OfflineLogsMananger().logEventForState(state, itemURL: item.url?.absoluteString ?? "")
             switch state {
             case .downloaded:
                 self.downloadButtonHelper.delete(object: item)

@@ -86,7 +86,7 @@ public class DownloadableViewController: UIViewController, ErrorViewController, 
             guard let self = self else {
                 return
             }
-            OfflineAnalyticsMananger().logEventForState(state, itemURL: self.downloadableItem?.userInfo ?? "")
+            OfflineLogsMananger().logEventForState(state, itemURL: self.downloadableItem?.userInfo ?? "")
             switch state {
             case .downloaded:
                 self.delete()
