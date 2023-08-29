@@ -69,9 +69,9 @@ final class OfflineLogsMananger {
     func logError() {
         Analytics.shared.logEvent("offline_mode_error")
     }
-    func logBugfenderError(errorInfo: (String, OfflineStorageDataModel)) {
+    func logBugfenderError(errorInfo: (message: String, model: OfflineStorageDataModel)) {
         var entryInfo: String = ""
-        if let data = errorInfo.1.json.data(using: .utf8),
+        if let data = errorInfo.model.json.data(using: .utf8),
             let dictionary = (try? JSONSerialization.jsonObject(with: data) as? [String: Any]) {
             // name
             if let name = dictionary["title"] {
@@ -94,7 +94,7 @@ final class OfflineLogsMananger {
         } else {
             entryInfo.append("for unknown content")
         }
-        let message = errorInfo.0.replacingOccurrences(of: "###MODULE_DESCRIPTION###", with: entryInfo)
+        let message = errorInfo.message.replacingOccurrences(of: "###MODULE_DESCRIPTION###", with: entryInfo)
         Bugfender.log(lineNumber: 0, method: "", file: "", level: .error, tag: "Offline", message: message)
     }
 }
