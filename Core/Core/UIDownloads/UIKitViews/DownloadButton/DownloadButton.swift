@@ -24,17 +24,27 @@ public final class DownloadButton: UIView {
             retryButton.tintColor = mainTintColor
         }
     }
-    public var idleButtonImage: UIImage = UIImage(systemName: "arrow.down.circle")! {
+    let buttonConfiguration = UIImage.SymbolConfiguration(weight: .light)
+    public lazy var idleButtonImage: UIImage = UIImage(
+        systemName: "arrow.down.circle",
+        withConfiguration: buttonConfiguration
+    )! {
         didSet {
             self.idleButton.setImage(idleButtonImage, for: .normal)
         }
     }
-    public var downloadedButtonImage: UIImage = UIImage(systemName: "trash.circle")! {
+    public lazy var downloadedButtonImage: UIImage = UIImage(
+        systemName: "trash.circle",
+        withConfiguration: buttonConfiguration
+    )! {
         didSet {
             self.idleButton.setImage(idleButtonImage, for: .normal)
         }
     }
-    public var retryButtonImage: UIImage = UIImage(systemName: "arrow.clockwise.circle")! {
+    public lazy var retryButtonImage: UIImage = UIImage(
+        systemName: "arrow.clockwise.circle",
+        withConfiguration: buttonConfiguration
+    )! {
         didSet {
             self.idleButton.setImage(idleButtonImage, for: .normal)
         }
