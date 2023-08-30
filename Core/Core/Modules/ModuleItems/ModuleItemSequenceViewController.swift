@@ -24,7 +24,9 @@ public class ModuleItemSequenceViewController: UIViewController, DownloadableIte
 
     deinit {
         debugLog("☠️ Deinitialized -> \(String.init(describing: self))☠️")
-        toggleDownloadingBarView(hidden: false)
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            toggleDownloadingBarView(hidden: false)
+        }
         NotificationCenter.default.post(name: .DownloadContentClosed, object: nil)
     }
 
@@ -96,7 +98,9 @@ public class ModuleItemSequenceViewController: UIViewController, DownloadableIte
         spinnerView.isHidden = true
         if embed, let viewController = currentViewController() {
             setCurrentPage(viewController)
-            toggleDownloadingBarView(hidden: true)
+            if UIDevice.current.userInterfaceIdiom == .phone {
+                toggleDownloadingBarView(hidden: true)
+            }
             NotificationCenter.default.post(name: .DownloadContentOpened, object: nil)
         }
         showSequenceButtons(prev: sequence?.prev != nil, next: sequence?.next != nil)

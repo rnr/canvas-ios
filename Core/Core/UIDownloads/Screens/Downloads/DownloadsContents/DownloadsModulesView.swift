@@ -60,10 +60,10 @@ struct DownloadsModulesView: View, Navigatable {
                 .ignoresSafeArea()
             content
                 .if(UIDevice.current.userInterfaceIdiom == .pad) { view in
-                    view.introspect(.viewController, on: .iOS(.v13, .v14, .v15, .v16, .v17)) { view in
+                    view.introspect(.viewController, on: .iOS(.v13, .v14, .v15, .v16, .v17)) { viewController in
                         DispatchQueue.main.async {
-                            view.navigationController?.navigationBar.useContextColor(viewModel.color)
-                            view.navigationController?.navigationBar.prefersLargeTitles = false
+                            viewController.navigationController?.navigationBar.useContextColor(viewModel.color)
+                            viewController.navigationController?.navigationBar.prefersLargeTitles = false
                         }
                     }
                 }
@@ -140,40 +140,16 @@ struct DownloadsModulesView: View, Navigatable {
 
     @ViewBuilder
     private func cell(indexRow: Int, indexSection: Int, entry: OfflineDownloaderEntry) -> some View {
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            DownloadsContentCellView(
-                viewModel: DownloadsModuleCellViewModel(entry: entry),
-                color: Color(viewModel.color),
-                onTap: {
-                    selection = entry.dataModel.id
-                },
-                onDelete: {
-                    onDelete(section: indexSection, row: indexRow)
-                }
-            )
-            .background(
-                NavigationLink(
-                    destination: ContentViewerView(
-                        entry: entry,
-                        courseDataModel: viewModel.courseDataModel,
-                        onDeleted: viewModel.delete
-                    ),
-                    tag: entry.dataModel.id,
-                    selection: $selection
-                ) { SwiftUI.EmptyView() }.hidden()
-            )
-        } else {
-            DownloadsContentCellView(
-                viewModel: DownloadsModuleCellViewModel(entry: entry),
-                color: Color(viewModel.color),
-                onTap: {
-                    destination(entry: entry)
-                },
-                onDelete: {
-                    onDelete(section: indexSection, row: indexRow)
-                }
-            )
-        }
+        DownloadsContentCellView(
+            viewModel: DownloadsModuleCellViewModel(entry: entry),
+            color: Color(viewModel.color),
+            onTap: {
+                destination(entry: entry)
+            },
+            onDelete: {
+                onDelete(section: indexSection, row: indexRow)
+            }
+        )
     }
 
     private func header(title: String, isExpanded: Bool) -> some View {
@@ -182,14 +158,16 @@ struct DownloadsModulesView: View, Navigatable {
                 if isExpanded {
                     Image.miniArrowUpSolid
                         .frame(width: 24, height: 24)
+                        .foregroundColor(.textDarkest)
                 } else {
                     Image.miniArrowUpSolid
                         .frame(width: 24, height: 24)
                         .rotationEffect(.degrees(180))
+                        .foregroundColor(.textDarkest)
                 }
                 Text(title)
-                    .font(.bold20)
                     .foregroundColor(.textDarkest)
+                    .font(.bold20)
                     .padding(.leading, 16)
                 Spacer()
             }

@@ -84,9 +84,6 @@ public class DownloadingBarView: UIView, Reachabilitable {
 
     @objc
     public func hidden() {
-        if downloadsManager.activeEntries.isEmpty {
-            return
-        }
         mustBeHidden = true
         isHidden = true
     }
