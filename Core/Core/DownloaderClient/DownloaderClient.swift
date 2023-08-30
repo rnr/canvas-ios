@@ -25,6 +25,20 @@ public struct DownloaderClient {
         OfflineStorageManager.shared.setConfig(config: storageConfig)
 
         let downloaderConfig = OfflineDownloaderConfig()
+        downloaderConfig.errorsDescriptionHandler = { errorInfo, isCritical in
+            if errorInfo == nil && isCritical == false {
+                // successful downloading
+                OfflineLogsMananger().logCompleted()
+            } else {
+                // was ended with error
+                // Analytic
+                OfflineLogsMananger().logError()
+                // Bugfender
+                if let errorInfo = errorInfo {
+                    OfflineLogsMananger().logBugfenderError(errorInfo: errorInfo)
+                }
+            }
+        }
         downloaderConfig.downloadTypes = [Page.self, ModuleItem.self, File.self]
         downloaderConfig.linksHandler = { urlString in
             if urlString.contains("/files/") && !urlString.contains("/download") && urlString.contains(AppEnvironment.shared.api.baseURL.absoluteString) {

@@ -1046,6 +1046,8 @@
 		A4F54E00F32E74C6BDA3090B /* QuizListViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CA3953E307CAF39AF2668A96 /* QuizListViewController.storyboard */; };
 		A50D35D12A7D1C2B006204F1 /* mobile-offline-downloader-ios in Frameworks */ = {isa = PBXBuildFile; productRef = A50D35D02A7D1C2B006204F1 /* mobile-offline-downloader-ios */; };
 		A52DD3FE31F0D22A7653EA69 /* RichContentEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059C04AF01A45E8B17C56177 /* RichContentEditorViewController.swift */; };
+		A5601C5B2A9C99D600382F03 /* OfflineLogsMananger.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5601C5A2A9C99D600382F03 /* OfflineLogsMananger.swift */; };
+		A5601C5C2A9C99D600382F03 /* OfflineLogsMananger.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5601C5A2A9C99D600382F03 /* OfflineLogsMananger.swift */; };
 		A5959DA96F69FA53D44D345B /* ComposeViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85D0E3FC18C36A8077C654DD /* ComposeViewController.storyboard */; };
 		A595C76ACB992B4367498A96 /* FileSubmissionErrorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216A59538283224E9F555B27 /* FileSubmissionErrorsTests.swift */; };
 		A5CEB0CE792C299DA75F6D44 /* PreviewStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B251845DF66CF32D328FF75 /* PreviewStore.swift */; };
@@ -2905,6 +2907,7 @@
 		A521299CB8FC225619DE6BB0 /* UITableViewHeaderFooterViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewHeaderFooterViewExtensions.swift; sourceTree = "<group>"; };
 		A54CFDBD18BCE51A7498A22B /* CourseSyncFilesInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseSyncFilesInteractor.swift; sourceTree = "<group>"; };
 		A54E2246CD24105513606843 /* Avatar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Avatar.swift; sourceTree = "<group>"; };
+		A5601C5A2A9C99D600382F03 /* OfflineLogsMananger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineLogsMananger.swift; sourceTree = "<group>"; };
 		A56C8EAEDD96E8716CB5A484 /* FileUploadProgressObserversCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUploadProgressObserversCacheTests.swift; sourceTree = "<group>"; };
 		A571497F76E9694BCC7A70D8 /* DynamicLabelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicLabelTests.swift; sourceTree = "<group>"; };
 		A59435E04AD83E555BDE51AE /* NSManagedObjectContextExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSManagedObjectContextExtensions.swift; sourceTree = "<group>"; };
@@ -7910,6 +7913,7 @@
 				D8F1555917A1C92470376619 /* Page+OfflineStorageDataProtocol.swift */,
 				06A8F6F82A82598700306E23 /* File+OfflineStorageDataProtocol.swift */,
 				06A8F6FA2A82599C00306E23 /* File+OfflineDownloadHelperProtocol.swift */,
+				A5601C5A2A9C99D600382F03 /* OfflineLogsMananger.swift */,
 			);
 			path = DownloaderClient;
 			sourceTree = "<group>";
@@ -9688,6 +9692,7 @@
 				CD96C3E67DE10AEB1F1F7955 /* PageViewSessionTests.swift in Sources */,
 				0136C36E9F7523014976D17C /* PagesViewControllerTests.swift in Sources */,
 				D2B4D80284108211DE8F5B88 /* PairWithObserverViewControllerTests.swift in Sources */,
+				A5601C5C2A9C99D600382F03 /* OfflineLogsMananger.swift in Sources */,
 				E09DAEEE4EECF56D57290386 /* PeopleListViewControllerTests.swift in Sources */,
 				AFF760295D0817ADA36C48AD /* PermissionsTests.swift in Sources */,
 				EB350800E1C457365D892996 /* PersistencyTests.swift in Sources */,
@@ -10526,6 +10531,7 @@
 				962EE0E270F4A8375F5D148A /* ModuleSectionHeaderView.swift in Sources */,
 				9BF29645B89F0AC60F35C35E /* ModulesPanda.swift in Sources */,
 				49D777908625C66E5A8A2AE7 /* MotionDetector.swift in Sources */,
+				A5601C5B2A9C99D600382F03 /* OfflineLogsMananger.swift in Sources */,
 				0F1EB64D08AA16B83FC72ABC /* MotionModifier.swift in Sources */,
 				A1D426AE94CB293CBCEC0B04 /* MotionScene.swift in Sources */,
 				686F0FBCD2422B63DC728856 /* NSAttributedString.swift in Sources */,

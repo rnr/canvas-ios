@@ -78,6 +78,7 @@ final class DownloadsViewModel: ObservableObject, Reachabilitable {
 
     func deleteAll() {
         state = .deleting
+        OfflineLogsMananger().logDeleteAll()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             do {
                 try self.downloadsManager.deleteCompletedEntries { [weak self] in

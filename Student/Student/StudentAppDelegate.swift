@@ -19,6 +19,7 @@
 import AVKit
 import AWSLambda
 import AWSSNS
+import BugfenderSDK
 import CanvasCore
 import Core
 import Firebase
@@ -83,6 +84,7 @@ class StudentAppDelegate: UIResponder, UIApplicationDelegate, AppEnvironmentDele
         }
         setupOffline()
         setupAWS()
+        setupBugfender()
         return true
     }
 
@@ -96,6 +98,10 @@ class StudentAppDelegate: UIResponder, UIApplicationDelegate, AppEnvironmentDele
             AWSSNS.register(with: awsConfiguration, forKey: "mySNS")
             AWSLambda.register(with: awsConfiguration, forKey: "myLambda")
         }
+    }
+    func setupBugfender() {
+        guard let bugfenderKey = Secret.bugfenderKey.string else { return }
+        Bugfender.activateLogger(bugfenderKey)
     }
 
     func setup(session: LoginSession) {
@@ -260,6 +266,7 @@ extension StudentAppDelegate: Core.AnalyticsHandler {
            let screenClass = parameters?["screen_class"] as? String {
             Firebase.Crashlytics.crashlytics().log("\(screenName) (\(screenClass))")
         }
+        Analytics.logEvent(name, parameters: parameters)
     }
 
     private func initializeTracking() {

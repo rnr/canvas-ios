@@ -28,6 +28,15 @@
       }
     },
     {
+      "identity" : "bugfendersdk-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/bugfender/BugfenderSDK-iOS",
+      "state" : {
+        "revision" : "d15edbcd5b3bd8d1ab0c0e3511cc30776a5aad52",
+        "version" : "1.12.1"
+      }
+    },
+    {
       "identity" : "combine-schedulers",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/combine-schedulers",
