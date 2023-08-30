@@ -51,5 +51,9 @@ struct DownloadButtonRepresentable: UIViewRepresentable {
         uiView.currentState = currentState
         uiView.onState = onState
         uiView.onTap = onTap
+
+        if currentState == .waiting {
+            uiView.waitingView.startSpinning()
+        }
     }
 }

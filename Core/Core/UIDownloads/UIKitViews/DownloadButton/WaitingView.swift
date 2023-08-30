@@ -8,7 +8,7 @@ class WaitingView: UIView {
     var rotationEndingAngle = 3 * CGFloat.pi/2
     var shouldSpin = true
     var isClockwise = false
-    var strokeWidth: CGFloat = 3
+    var strokeWidth: CGFloat = 2
 
     var strokeColor = UIColor.systemBlue {
         didSet {
