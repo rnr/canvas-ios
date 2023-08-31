@@ -56,7 +56,7 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
     public static func prepareForDownload(entry: OfflineDownloaderEntry) async throws {
         let item = try await getItem(with: entry.dataModel)
         if case let .externalTool(toolID, url) = item.type {
-            try await prepareLTI(entry: entry, toolID: toolID, url: url)
+            try await prepareLTI(entry: entry, toolID: toolID, sourceURL: url)
         } else if case let .page(url) = item.type {
             try await preparePage(entry: entry, url: url, courseID: item.courseID)
         } else if case let .file(fileId) = item.type {
@@ -156,12 +156,13 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
                 }
             }
             if url.path.hasSuffix("/external_tools/sessionless_launch") {
-                env.api.makeRequest(url) { data, _, error in
+                env.api.makeRequest(url) { data, response, error in
                     if let error = error {
                         continuation.resume(throwing: error)
                         return
                     }
                     guard let data = data else { return continuation.resume(throwing: ModuleItemError.wrongSession) }
+                    print("!!! LTI DATA = \(String(data: data, encoding: .utf8))")
                     let response = try? APIJSONDecoder().decode(APIGetSessionlessLaunchResponse.self, from: data)
                     responseBlock(response)
                 }
@@ -178,36 +179,63 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
         }
     }
 
-    static func prepareLTI(entry: OfflineDownloaderEntry, toolID: String, url: URL) async throws {
+    static func prepareLTI(entry: OfflineDownloaderEntry, toolID: String, sourceURL: URL, repeatCount: Int = 0) async throws {
+        guard repeatCount < 3 else {
+            throw ModuleItemError.cantPrepareLTI(data: entry.dataModel, error: ModuleItemError.retryCountLimitReached)
+        }
         do {
+            print("1. prepareLTI \(entry.dataModel.json)")
             let item = try fromOfflineModel(entry.dataModel)
-            let url: URL = try await getLtiURL(from: item, toolID: toolID, url: url)
+            let url: URL = try await getLtiURL(from: item, toolID: toolID, url: sourceURL)
+            print("2. prepareLTI \(entry.dataModel.json). URL = \(url)")
             let extractor = await OfflineHTMLDynamicsLinksExtractor(
                 url: url,
                 linksHandler: OfflineDownloadsManager.shared.config.linksHandler
             )
+            print("3. prepareLTI \(entry.dataModel.json)")
             try await extractor.fetch()
+            print("4. prepareLTI \(entry.dataModel.json)")
             if let latestURL = await extractor.latestRedirectURL, let html = await extractor.html {
                 if html.contains(latestURL.absoluteString) {
                     let downloader = OfflineLinkDownloader()
+                    print("5a. prepareLTI \(entry.dataModel.json)")
                     let cookieString = await extractor.cookies().cookieString
+                    print("6a. prepareLTI \(entry.dataModel.json)")
                     downloader.additionCookies = cookieString
                     let ltiContents = try await downloader.contents(urlString: latestURL.absoluteString)
-                    entry.addHtmlPart(ltiContents, baseURL: latestURL.absoluteString, cookieString: cookieString)
+                    print("7a. prepareLTI \(entry.dataModel.json), html = \(ltiContents)")
+                    if shouldRetry(for: html) {
+                        print("8a. retry")
+                        try await prepareLTI(entry: entry, toolID: toolID, sourceURL: sourceURL, repeatCount: repeatCount + 1)
+                    } else {
+                        entry.addHtmlPart(ltiContents, baseURL: latestURL.absoluteString, cookieString: cookieString)
+                    }
                 } else {
                     let html = try prepare(html: html)
+                    print("5b. prepareLTI \(entry.dataModel.json), html = \(html)")
                     let cookieString = await extractor.cookies().cookieString
-                    entry.addHtmlPart(html, baseURL: latestURL.absoluteString, cookieString: cookieString)
+                    print("6b. prepareLTI \(entry.dataModel.json)")
+                    if shouldRetry(for: html) {
+                        print("7b. retry")
+                        try await prepareLTI(entry: entry, toolID: toolID, sourceURL: sourceURL, repeatCount: repeatCount + 1)
+                    } else {
+                        entry.addHtmlPart(html, baseURL: latestURL.absoluteString, cookieString: cookieString)
+                    }
                 }
             } else {
                 throw ModuleItemError.cantPrepareLTI(data: entry.dataModel, error: nil)
             }
         } catch {
+            print("1. prepareLTI error \(entry.dataModel.json). Error: \(error)")
             if error.isOfflineCancel {
                 throw error
             }
             throw ModuleItemError.cantPrepareLTI(data: entry.dataModel, error: error)
         }
+    }
+
+    static func shouldRetry(for html: String) -> Bool {
+        html.contains("https://frostplatform.zendesk.com/hc/en-us/articles/4411059795865-Enabling-Third-Party-Cookies")
     }
 
     static func prepare(html: String) throws -> String {
@@ -258,6 +286,7 @@ extension ModuleItem {
         case cantPrepareLTI(data: OfflineStorageDataModel, error: Error?)
         case cantGetPage(data: OfflineStorageDataModel, error: Error?)
         case cantGetFile(data: OfflineStorageDataModel, error: Error?)
+        case retryCountLimitReached
 
         var errorDescription: String? {
             switch self {
@@ -282,6 +311,8 @@ extension ModuleItem {
                     return "Can't get file for data: \(data.json). Error: \(error)"
                 }
                 return "Can't get file for data: \(data.json)."
+            case .retryCountLimitReached:
+                return "Max retry count was reached"
 
             }
         }
