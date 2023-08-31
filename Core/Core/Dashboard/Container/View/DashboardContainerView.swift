@@ -98,6 +98,11 @@ public struct DashboardContainerView: View, ScreenViewTrackable, DownloadsProgre
             NotificationCenter.default.post(name: .DownloadContentClosed, object: nil)
             toggleDownloadingBarView(hidden: false)
         }
+        .onDisappear {
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                toggleDownloadingBarView(hidden: true)
+            }
+        }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             fileUploadNotificationCardViewModel.sceneDidBecomeActive.send()
         }

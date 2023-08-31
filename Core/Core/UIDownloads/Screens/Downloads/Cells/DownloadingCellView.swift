@@ -24,6 +24,7 @@ struct DownloadingCellView: View {
     // MARK: - Properties -
 
     @ObservedObject var viewModel: DownloadsModuleCellViewModel
+    @State private var currentState: DownloadButton.State = .idle
 
     // MARK: - Views -
 
@@ -56,7 +57,7 @@ struct DownloadingCellView: View {
             Spacer()
             DownloadButtonRepresentable(
                 progress: .constant(viewModel.progress),
-                currentState: .constant(currentState),
+                currentState: $currentState,
                 mainTintColor: Brand.shared.linkColor,
                 onState: { state in
                     debugLog(state)
@@ -64,22 +65,38 @@ struct DownloadingCellView: View {
                 onTap: { _ in
                     viewModel.pauseResume()
                 }
-            ).frame(width: 30, height: 30)
+            )
+            .frame(width: 30, height: 30)
+            .onReceive(
+                NotificationCenter.default.publisher(
+                    for: UIApplication.willEnterForegroundNotification
+                )
+            ) { _ in
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    setCurrentState(viewModel.downloaderStatus)
+                }
+            }
         }
         .padding(.all, 10)
+        .onAppear {
+            setCurrentState(viewModel.downloaderStatus)
+        }
+        .onChange(
+            of: viewModel.downloaderStatus,
+            perform: setCurrentState
+        )
     }
 
-    private var currentState: DownloadButton.State {
-        switch viewModel.downloaderStatus {
+    private func setCurrentState(_ newValue: OfflineDownloaderStatus) {
+        switch newValue {
         case .initialized, .preparing:
-            return .waiting
+            currentState = .waiting
         case .active:
-            return .downloading
+            currentState = .downloading
         case .paused, .failed:
-            return .retry
+            currentState = .retry
         default:
-            return .retry
+            currentState = .retry
         }
     }
-
 }

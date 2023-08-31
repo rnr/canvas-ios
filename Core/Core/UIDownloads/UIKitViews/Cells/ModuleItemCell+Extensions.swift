@@ -74,6 +74,11 @@ extension ModuleItemCell {
         downloadButton.mainTintColor = Brand.shared.linkColor
         downloadButton.currentState = .idle
         hStackView.addArrangedSubview(downloadButton)
+        if let index = hStackView.arrangedSubviews.firstIndex(where: {$0 == completedStatusView}) {
+            hStackView.insertArrangedSubview(downloadButton, at: index)
+        } else {
+            hStackView.addArrangedSubview(downloadButton)
+        }
         downloadButton.translatesAutoresizingMaskIntoConstraints = false
         downloadButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
         return downloadButton
