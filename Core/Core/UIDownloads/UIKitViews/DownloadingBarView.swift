@@ -104,11 +104,17 @@ public class DownloadingBarView: UIView, Reachabilitable {
 
     @objc
     public func onDownloadContentOpened() {
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            return
+        }
         downloadContentOpened = true
     }
 
     @objc
     public func onDownloadContentClosed() {
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            return
+        }
         downloadContentOpened = false
         show()
     }
