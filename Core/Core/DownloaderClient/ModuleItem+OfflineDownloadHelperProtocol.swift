@@ -180,29 +180,40 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
 
     static func prepareLTI(entry: OfflineDownloaderEntry, toolID: String, url: URL) async throws {
         do {
+            print("1. prepareLTI \(entry.dataModel.json)")
             let item = try fromOfflineModel(entry.dataModel)
             let url: URL = try await getLtiURL(from: item, toolID: toolID, url: url)
+            print("2. prepareLTI \(entry.dataModel.json). URL = \(url)")
             let extractor = await OfflineHTMLDynamicsLinksExtractor(
                 url: url,
                 linksHandler: OfflineDownloadsManager.shared.config.linksHandler
             )
+            print("3. prepareLTI \(entry.dataModel.json)")
             try await extractor.fetch()
+            print("4. prepareLTI \(entry.dataModel.json)")
             if let latestURL = await extractor.latestRedirectURL, let html = await extractor.html {
                 if html.contains(latestURL.absoluteString) {
                     let downloader = OfflineLinkDownloader()
+                    print("5a. prepareLTI \(entry.dataModel.json)")
                     let cookieString = await extractor.cookies().cookieString
+                    print("6a. prepareLTI \(entry.dataModel.json)")
                     downloader.additionCookies = cookieString
                     let ltiContents = try await downloader.contents(urlString: latestURL.absoluteString)
+                    print("7a. prepareLTI \(entry.dataModel.json), html = \(ltiContents)")
                     entry.addHtmlPart(ltiContents, baseURL: latestURL.absoluteString, cookieString: cookieString)
                 } else {
                     let html = try prepare(html: html)
+                    print("5b. prepareLTI \(entry.dataModel.json), html = \(html)")
                     let cookieString = await extractor.cookies().cookieString
+                    print("6b. prepareLTI \(entry.dataModel.json)")
                     entry.addHtmlPart(html, baseURL: latestURL.absoluteString, cookieString: cookieString)
                 }
+                print("!!! current thread = ", Thread.current.isMainThread)
             } else {
                 throw ModuleItemError.cantPrepareLTI(data: entry.dataModel, error: nil)
             }
         } catch {
+            print("1. prepareLTI error \(entry.dataModel.json). Error: \(error)")
             if error.isOfflineCancel {
                 throw error
             }

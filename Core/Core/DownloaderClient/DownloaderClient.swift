@@ -34,6 +34,9 @@ public struct DownloaderClient {
             return urlString
         }
         OfflineDownloadsManager.shared.setConfig(downloaderConfig)
+        DispatchQueue.main.async {
+            OfflineHTMLDynamicsLinksExtractor.processPool = CoreWebView.processPool
+        }
     }
 
     public static func replaceHtml(for tag: String?) async -> String? {
