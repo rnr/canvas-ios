@@ -68,7 +68,7 @@ public struct DownloaderClient {
                         <center>
                             <div style="padding: 10px;">
                                 <img width = "\(originWidth)" src="data:image/png;base64, \(imageData)">
-                                <p> This content has not been downloaded. </p>
+                                <p> Content available online only </p>
                             </div>
                         </center>
                     </div>
