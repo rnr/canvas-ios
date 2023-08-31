@@ -28,6 +28,12 @@ class StudentTabBarController: UITabBarController {
 
     private let backgroundTaskProvider = BackgroundTaskProvider()
 
+    override var selectedIndex: Int {
+        didSet {
+            downloadingBarView.tabSelected = selectedIndex
+        }
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         delegate = self
@@ -216,7 +222,14 @@ extension StudentTabBarController: UITabBarControllerDelegate {
         downloadingBarView.tabSelected = selectedIndex
         if downloadingBarView.downloadContentOpened { return }
         if selectedIndex == 0 {
-            downloadingBarView.show()
+            if UIDevice.current.userInterfaceIdiom == .pad,
+               let navigationController = viewController as? UINavigationController,
+               navigationController.viewControllers.count == 1,
+               navigationController.viewControllers.first is CoreHostingController<DashboardContainerView> {
+                downloadingBarView.show()
+            } else if UIDevice.current.userInterfaceIdiom == .phone {
+                downloadingBarView.show()
+            }
         } else {
             downloadingBarView.hidden()
         }
