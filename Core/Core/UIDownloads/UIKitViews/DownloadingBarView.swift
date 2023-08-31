@@ -29,6 +29,8 @@ public class DownloadingBarView: UIView, Reachabilitable {
 
     public var onTap: (() -> Void)?
     public var downloadContentOpened: Bool = false
+    public var tabSelected: Int = 0
+
     var cancellables: [AnyCancellable] = []
 
     private let titleLabel: UILabel = {
@@ -93,7 +95,7 @@ public class DownloadingBarView: UIView, Reachabilitable {
         if !reachability.isConnected {
             return
         }
-        if downloadsManager.activeEntries.isEmpty || downloadContentOpened {
+        if downloadsManager.activeEntries.isEmpty || downloadContentOpened || tabSelected != 0 {
             return
         }
         mustBeHidden = false

@@ -213,6 +213,7 @@ extension StudentTabBarController: UITabBarControllerDelegate {
     }
 
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        downloadingBarView.tabSelected = selectedIndex
         if downloadingBarView.downloadContentOpened { return }
         if selectedIndex == 0 {
             downloadingBarView.show()
