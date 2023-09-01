@@ -197,6 +197,10 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
             if let latestURL = await extractor.latestRedirectURL,
                 let html = await extractor.html {
 
+                if shouldRetry(for: html, latestURL: latestURL) {
+                    try await prepareLTI(entry: entry, toolID: toolID, sourceURL: sourceURL, repeatCount: repeatCount + 1)
+                    return
+                }
                 if !isLTISupported(with: html, latestURL: latestURL) {
                     // TODO: Save entry to base
                     throw ModuleItemError.unsupported(type: item.type?.label ?? "", id: item.id)
@@ -207,19 +211,11 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
                     let cookieString = await extractor.cookies().cookieString
                     downloader.additionCookies = cookieString
                     let ltiContents = try await downloader.contents(urlString: latestURL.absoluteString)
-                    if shouldRetry(for: html, latestURL: latestURL) {
-                        try await prepareLTI(entry: entry, toolID: toolID, sourceURL: sourceURL, repeatCount: repeatCount + 1)
-                    } else {
-                        entry.addHtmlPart(ltiContents, baseURL: latestURL.absoluteString, cookieString: cookieString)
-                    }
+                    entry.addHtmlPart(ltiContents, baseURL: latestURL.absoluteString, cookieString: cookieString)
                 } else {
                     let html = try prepare(html: html)
                     let cookieString = await extractor.cookies().cookieString
-                    if shouldRetry(for: html, latestURL: latestURL) {
-                        try await prepareLTI(entry: entry, toolID: toolID, sourceURL: sourceURL, repeatCount: repeatCount + 1)
-                    } else {
-                        entry.addHtmlPart(html, baseURL: latestURL.absoluteString, cookieString: cookieString)
-                    }
+                    entry.addHtmlPart(html, baseURL: latestURL.absoluteString, cookieString: cookieString)
                 }
             } else {
                 throw ModuleItemError.cantPrepareLTI(data: entry.dataModel, error: nil)
