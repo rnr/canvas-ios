@@ -100,8 +100,8 @@ public class ModuleItemSequenceViewController: UIViewController, DownloadableIte
             setCurrentPage(viewController)
             if UIDevice.current.userInterfaceIdiom == .phone {
                 toggleDownloadingBarView(hidden: true)
+                NotificationCenter.default.post(name: .DownloadContentOpened, object: nil)
             }
-            NotificationCenter.default.post(name: .DownloadContentOpened, object: nil)
         }
         showSequenceButtons(prev: sequence?.prev != nil, next: sequence?.next != nil)
     }

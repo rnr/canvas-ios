@@ -29,7 +29,11 @@ public class DownloadingBarView: UIView, Reachabilitable {
 
     public var onTap: (() -> Void)?
     public var downloadContentOpened: Bool = false
-    public var tabSelected: Int = 0
+    public var tabSelected: Int = 0 {
+        didSet {
+            downloadNotifier.canShowBanner = tabSelected != 0
+        }
+    }
 
     var cancellables: [AnyCancellable] = []
 
@@ -49,12 +53,6 @@ public class DownloadingBarView: UIView, Reachabilitable {
 
     private let progressView = CustomCircleProgressView(frame: .zero)
     var mustBeHidden: Bool = false
-
-    public override var isHidden: Bool {
-        willSet {
-            downloadNotifier.canShowBanner = isHidden && !downloadContentOpened
-        }
-    }
 
     public convenience init() {
         self.init(frame: .zero)
@@ -104,11 +102,17 @@ public class DownloadingBarView: UIView, Reachabilitable {
 
     @objc
     public func onDownloadContentOpened() {
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            return
+        }
         downloadContentOpened = true
     }
 
     @objc
     public func onDownloadContentClosed() {
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            return
+        }
         downloadContentOpened = false
         show()
     }

@@ -40,7 +40,7 @@ final class DownloadNotifier: Reachabilitable {
                 guard let self = self else { return }
                 switch event {
                 case .completed(let success):
-                    guard self.canShowBanner, self.isConnected else { return }
+                    guard self.canShowBanner, success, self.isConnected else { return }
                     notifyAboutDownloadCompletion(success: success)
                 default:
                     break

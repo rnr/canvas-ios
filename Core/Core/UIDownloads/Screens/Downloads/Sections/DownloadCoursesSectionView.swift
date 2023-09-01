@@ -57,7 +57,9 @@ struct DownloadCoursesSectionView: View {
     }
 
     private func onDelete(indexSet: IndexSet) {
-        let cancelAction = AlertAction(NSLocalizedString("Cancel", comment: ""), style: .cancel) { _ in }
+        let cancelAction = AlertAction(NSLocalizedString("Cancel", comment: ""), style: .cancel) { _ in
+            viewModel.state = .updated
+        }
         let deleteAction = AlertAction(NSLocalizedString("Delete", comment: ""), style: .destructive) { _ in
             viewModel.swipeDelete(indexSet: indexSet)
         }
