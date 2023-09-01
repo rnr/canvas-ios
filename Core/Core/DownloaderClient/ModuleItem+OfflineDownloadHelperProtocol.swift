@@ -196,6 +196,7 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
             try await extractor.fetch()
             print("4. prepareLTI \(entry.dataModel.json)")
             if let latestURL = await extractor.latestRedirectURL, let html = await extractor.html {
+                print("4.1. prepareLTI latestURL = \(latestURL)")
                 if html.contains(latestURL.absoluteString) {
                     let downloader = OfflineLinkDownloader()
                     print("5a. prepareLTI \(entry.dataModel.json)")
@@ -204,7 +205,7 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
                     downloader.additionCookies = cookieString
                     let ltiContents = try await downloader.contents(urlString: latestURL.absoluteString)
                     print("7a. prepareLTI \(entry.dataModel.json), html = \(ltiContents)")
-                    if shouldRetry(for: html) {
+                    if shouldRetry(for: html, latestURL: latestURL) {
                         print("8a. retry")
                         try await prepareLTI(entry: entry, toolID: toolID, sourceURL: sourceURL, repeatCount: repeatCount + 1)
                     } else {
@@ -215,7 +216,7 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
                     print("5b. prepareLTI \(entry.dataModel.json), html = \(html)")
                     let cookieString = await extractor.cookies().cookieString
                     print("6b. prepareLTI \(entry.dataModel.json)")
-                    if shouldRetry(for: html) {
+                    if shouldRetry(for: html, latestURL: latestURL) {
                         print("7b. retry")
                         try await prepareLTI(entry: entry, toolID: toolID, sourceURL: sourceURL, repeatCount: repeatCount + 1)
                     } else {
@@ -234,8 +235,8 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
         }
     }
 
-    static func shouldRetry(for html: String) -> Bool {
-        html.contains("https://frostplatform.zendesk.com/hc/en-us/articles/4411059795865-Enabling-Third-Party-Cookies")
+    static func shouldRetry(for html: String, latestURL: URL) -> Bool {
+        latestURL.absoluteString.lowercased().contains("3rd-cookie-check/checkpage.html")
     }
 
     static func prepare(html: String) throws -> String {
