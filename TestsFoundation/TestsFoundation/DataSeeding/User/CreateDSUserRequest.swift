@@ -22,14 +22,21 @@ struct CreateDSUserRequest: APIRequestable {
     public typealias Response = DSUser
 
     public let method = APIMethod.post
-    public var path: String { "accounts/self/users" }
+    public let path: String
     public let body: Body?
+
+    public init(body: Body?, isK5: Bool = false) {
+        self.body = body
+        let accountId = isK5 ? Secret.k5SubAccountId.string! : "self"
+        self.path = "accounts/\(accountId)/users"
+    }
 }
 
 extension CreateDSUserRequest {
     public struct Body: Encodable, Equatable {
         struct User: Encodable, Equatable {
             let name: String
+            let time_zone: String = "Europe/Budapest"
         }
 
         struct Pseudonym: Encodable, Equatable {

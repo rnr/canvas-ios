@@ -145,6 +145,17 @@ class CourseListCell: UITableViewCell {
             }
         }
 
+        if course.hideQuantitativeData == true {
+            if let grade {
+                return grade
+            } else if let score {
+                return enrollment.convertedLetterGrade(gradingPeriodID: enrollment.currentGradingPeriodID,
+                                                       gradingScheme: course.gradingScheme)
+            } else {
+                return NSLocalizedString("No Grade", comment: "")
+            }
+        }
+
         guard let scoreNoNil = score, let scoreString = Course.scoreFormatter.string(from: NSNumber(value: scoreNoNil)) else {
             return grade ?? NSLocalizedString("No Grade", comment: "")
         }
