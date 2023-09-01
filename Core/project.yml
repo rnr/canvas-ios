@@ -8,7 +8,7 @@ options:
   createIntermediateGroups: true
 settings:
   CODE_SIGN_STYLE: Automatic
-  DEVELOPMENT_TEAM: B6333T4PXQ
+  DEVELOPMENT_TEAM: 58GH9WB284
   APPLICATION_EXTENSION_API_ONLY: true
   CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED: true
   platform: iOS
@@ -28,6 +28,9 @@ packages:
   CombineReachability:
     url: https://github.com/istvan-kreisz/CombineReachability.git
     branch: master
+  swiftuiIntrospect:
+    url: https://github.com/siteline/swiftui-introspect
+    exactVersion: 0.11.0
 projectReferences:
   TestsFoundation:
     path: ../TestsFoundation/TestsFoundation.xcodeproj
@@ -43,6 +46,7 @@ targets:
       - package: Lottie
       - package: PSPDFKit
       - package: CombineReachability
+      - package: swiftuiIntrospect
     preBuildScripts:
       - path: ../scripts/swiftLint.sh
         name: SwiftLint
