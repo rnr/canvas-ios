@@ -28,9 +28,6 @@ packages:
   CombineReachability:
     url: https://github.com/istvan-kreisz/CombineReachability.git
     branch: master
-  swiftuiIntrospect:
-    url: https://github.com/siteline/swiftui-introspect
-    exactVersion: 0.11.0
 projectReferences:
   TestsFoundation:
     path: ../TestsFoundation/TestsFoundation.xcodeproj
@@ -46,7 +43,6 @@ targets:
       - package: Lottie
       - package: PSPDFKit
       - package: CombineReachability
-      - package: swiftuiIntrospect
     preBuildScripts:
       - path: ../scripts/swiftLint.sh
         name: SwiftLint
