@@ -46,11 +46,8 @@ end
 abstract_target 'needs-pspdfkit' do
   use_frameworks!
   pspdfkit
-  target 'StudentUITests' do project 'Student/Student.xcodeproj' end
   target 'StudentE2ETests' do project 'Student/Student.xcodeproj' end
-  target 'TeacherUITests' do project 'rn/Teacher/ios/Teacher.xcodeproj' end
   target 'TeacherE2ETests' do project 'rn/Teacher/ios/Teacher.xcodeproj' end
-  target 'ParentUITests' do project 'Parent/Parent.xcodeproj' end
   target 'ParentE2ETests' do project 'Parent/Parent.xcodeproj' end
 end
 
@@ -110,6 +107,8 @@ pre_install do |installer|
 end
 
 post_install do |installer|
+  puts "\nPost Install Hooks"
+  
   installer.pod_targets.each do |target|
     silenceWarningsInUmbrellas = %w[ React-Core ]
     next unless silenceWarningsInUmbrellas.include? target.name
@@ -146,18 +145,21 @@ post_install do |installer|
       react-native-wkwebview
     ]
     next unless usesNonAppExAPI.include? target.name
-    puts "*** Setting #{target.name} target to APPLICATION_EXTENSION_API_ONLY = NO ***"
+    puts "- Disable APPLICATION_EXTENSION_API_ONLY on #{target.name}"
     target.build_configurations.each do |config|
       config.build_settings['APPLICATION_EXTENSION_API_ONLY'] = 'NO'
     end
   end
-
-  # Xcode 13 CODE_SIGNING_ALLOWED was set to NO by default. In Xcode 14 it defaults to YES. 
+  
+  # Non-executable bundles shouldn't be code signed
   installer.pods_project.targets.each do |target|
     if target.respond_to?(:product_type) and target.product_type == "com.apple.product-type.bundle"
       target.build_configurations.each do |config|
-          config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
+        puts "- Disable CODE_SIGNING_ALLOWED on #{target} (#{config})"
+        config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
       end
     end
   end
+  
+  puts "\n"
 end

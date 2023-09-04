@@ -62,6 +62,7 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
         } else if case let .file(fileId) = item.type {
             try await prepareFile(entry: entry, item: item, fileId: fileId)
         } else {
+            // TODO: Save entry to base
             throw ModuleItemError.unsupported(type: item.type?.label ?? "", id: item.id)
         }
     }
@@ -96,7 +97,9 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
     }
 
     public static func prepareFile(entry: OfflineDownloaderEntry, item: ModuleItem, fileId: String) async throws {
-        guard let url = item.url, let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
+        guard let url = item.url,
+            let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
+            // TODO: Save entry to base
             throw ModuleItemError.unsupported(type: item.type?.label ?? "", id: item.id)
         }
 
@@ -150,6 +153,7 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
 
                 let url = response.url.appendingQueryItems(URLQueryItem(name: "platform", value: "mobile"))
                 if response.name == "Google Apps" {
+                    // TODO: Save entry to base
                     continuation.resume(throwing: ModuleItemError.unsupported(type: item.type?.label ?? "", id: item.id))
                 } else {
                     continuation.resume(returning: url)
@@ -162,7 +166,6 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
                         return
                     }
                     guard let data = data else { return continuation.resume(throwing: ModuleItemError.wrongSession) }
-                    print("!!! LTI DATA = \(String(data: data, encoding: .utf8))")
                     let response = try? APIJSONDecoder().decode(APIGetSessionlessLaunchResponse.self, from: data)
                     responseBlock(response)
                 }
@@ -184,50 +187,40 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
             throw ModuleItemError.cantPrepareLTI(data: entry.dataModel, error: ModuleItemError.retryCountLimitReached)
         }
         do {
-            print("1. prepareLTI \(entry.dataModel.json)")
             let item = try fromOfflineModel(entry.dataModel)
             let url: URL = try await getLtiURL(from: item, toolID: toolID, url: sourceURL)
-            print("2. prepareLTI \(entry.dataModel.json). URL = \(url)")
             let extractor = await OfflineHTMLDynamicsLinksExtractor(
                 url: url,
                 linksHandler: OfflineDownloadsManager.shared.config.linksHandler
             )
-            print("3. prepareLTI \(entry.dataModel.json)")
             try await extractor.fetch()
-            print("4. prepareLTI \(entry.dataModel.json)")
-            if let latestURL = await extractor.latestRedirectURL, let html = await extractor.html {
-                print("4.1. prepareLTI latestURL = \(latestURL)")
+            if let latestURL = await extractor.latestRedirectURL,
+                let html = await extractor.html {
+
+                if shouldRetry(for: html, latestURL: latestURL) {
+                    try await prepareLTI(entry: entry, toolID: toolID, sourceURL: sourceURL, repeatCount: repeatCount + 1)
+                    return
+                }
+                if !isLTISupported(with: html, latestURL: latestURL) {
+                    // TODO: Save entry to base
+                    throw ModuleItemError.unsupported(type: item.type?.label ?? "", id: item.id)
+                }
+
                 if html.contains(latestURL.absoluteString) {
                     let downloader = OfflineLinkDownloader()
-                    print("5a. prepareLTI \(entry.dataModel.json)")
                     let cookieString = await extractor.cookies().cookieString
-                    print("6a. prepareLTI \(entry.dataModel.json)")
                     downloader.additionCookies = cookieString
                     let ltiContents = try await downloader.contents(urlString: latestURL.absoluteString)
-                    print("7a. prepareLTI \(entry.dataModel.json), html = \(ltiContents)")
-                    if shouldRetry(for: html, latestURL: latestURL) {
-                        print("8a. retry")
-                        try await prepareLTI(entry: entry, toolID: toolID, sourceURL: sourceURL, repeatCount: repeatCount + 1)
-                    } else {
-                        entry.addHtmlPart(ltiContents, baseURL: latestURL.absoluteString, cookieString: cookieString)
-                    }
+                    entry.addHtmlPart(ltiContents, baseURL: latestURL.absoluteString, cookieString: cookieString)
                 } else {
                     let html = try prepare(html: html)
-                    print("5b. prepareLTI \(entry.dataModel.json), html = \(html)")
                     let cookieString = await extractor.cookies().cookieString
-                    print("6b. prepareLTI \(entry.dataModel.json)")
-                    if shouldRetry(for: html, latestURL: latestURL) {
-                        print("7b. retry")
-                        try await prepareLTI(entry: entry, toolID: toolID, sourceURL: sourceURL, repeatCount: repeatCount + 1)
-                    } else {
-                        entry.addHtmlPart(html, baseURL: latestURL.absoluteString, cookieString: cookieString)
-                    }
+                    entry.addHtmlPart(html, baseURL: latestURL.absoluteString, cookieString: cookieString)
                 }
             } else {
                 throw ModuleItemError.cantPrepareLTI(data: entry.dataModel, error: nil)
             }
         } catch {
-            print("1. prepareLTI error \(entry.dataModel.json). Error: \(error)")
             if error.isOfflineCancel {
                 throw error
             }
@@ -235,6 +228,31 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
         }
     }
 
+    static func isLTISupported(with html: String, latestURL: URL) -> Bool {
+        // we can't download course player with multiple cards
+        if latestURL.absoluteString.lowercased().contains("/course-player") {
+            let regexPattern = "<div[^>]*NavigationItem[^>]*>"
+            if let matches = results(for: regexPattern, in: html) {
+                if !matches.isEmpty {
+                    return false
+                } else if let errors = results(for: "<div[^>]*ErrorStyles[^>]*>", in: html),
+                    !errors.isEmpty {
+                    return false
+                }
+            }
+        }
+        return true
+    }
+
+    static func results(for regexp: String, in html: String) -> [NSTextCheckingResult]? {
+        do {
+            let regex = try NSRegularExpression(pattern: regexp, options: [])
+
+            return regex.matches(in: html, options: [], range: NSRange(location: 0, length: html.count))
+        } catch {
+            return nil
+        }
+    }
     static func shouldRetry(for html: String, latestURL: URL) -> Bool {
         latestURL.absoluteString.lowercased().contains("3rd-cookie-check/checkpage.html")
     }
