@@ -59,7 +59,7 @@ public struct DownloadsContentCellView: View {
                     onDelete?()
                 }
             )
-            .frame(width: 30, height: 30)
+            .frame(width: 35, height: 35)
         }
         .fixedSize(horizontal: false, vertical: true)
         .frame(height: 60)

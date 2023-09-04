@@ -66,7 +66,7 @@ struct DownloadingCellView: View {
                     viewModel.pauseResume()
                 }
             )
-            .frame(width: 30, height: 30)
+            .frame(width: 35, height: 35)
             .onReceive(
                 NotificationCenter.default.publisher(
                     for: UIApplication.willEnterForegroundNotification

@@ -51,6 +51,13 @@ public class DownloadingBarView: UIView, Reachabilitable {
         return titleLabel
     }()
 
+    private let procentLabel: UILabel = {
+        let titleLabel = UILabel()
+        titleLabel.font = .systemFont(ofSize: 9, weight: .medium)
+        titleLabel.text = ""
+        return titleLabel
+    }()
+
     private let progressView = CustomCircleProgressView(frame: .zero)
     var mustBeHidden: Bool = false
 
@@ -157,12 +164,17 @@ public class DownloadingBarView: UIView, Reachabilitable {
 
     private func attachProgressView() {
         addSubview(progressView)
+        addSubview(procentLabel)
         progressView.translatesAutoresizingMaskIntoConstraints = false
+        procentLabel.translatesAutoresizingMaskIntoConstraints = false
 
         progressView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         progressView.heightAnchor.constraint(equalToConstant: 35).isActive = true
         progressView.widthAnchor.constraint(equalToConstant: 35).isActive = true
         progressView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 15).isActive = true
+
+        procentLabel.centerXAnchor.constraint(equalTo: progressView.centerXAnchor).isActive = true
+        procentLabel.centerYAnchor.constraint(equalTo: progressView.centerYAnchor).isActive = true
 
         progressView.progress = 0.01
         progressView.mainTintColor = Brand.shared.linkColor
@@ -249,6 +261,7 @@ public class DownloadingBarView: UIView, Reachabilitable {
                 return
             }
             progressView.progress = Float(event.progress)
+            procentLabel.text = "\(Int(round(event.progress * 100)))%"
         } catch {}
     }
 }

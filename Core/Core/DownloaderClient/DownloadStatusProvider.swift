@@ -151,6 +151,10 @@ final class DownloadStatusProvider {
         downloadsManager.canDownload(object: object)
     }
 
+    func isSupport(object: OfflineDownloadTypeProtocol) -> Bool {
+        true
+    }
+
     private func addOrUpdateCourse() {
         guard let course = course else {
             return

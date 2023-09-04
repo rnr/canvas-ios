@@ -31,6 +31,24 @@ extension FileListCell {
         guard !downloadButton.isHidden else {
             return
         }
+
+        let isSupport = downloadButtonHelper.isSupport(object: file)
+        downloadButton.isUserInteractionEnabled = isSupport
+        if isSupport {
+            downloadButton.defaultImageForStates()
+        } else {
+            downloadButton.setImageForAllStates(
+                uiImage: UIImage(
+                    systemName: "icloud.slash",
+                    withConfiguration: UIImage.SymbolConfiguration(weight: .light)
+                ) ?? UIImage()
+            )
+        }
+
+        guard downloadButton.isUserInteractionEnabled else {
+            return
+        }
+
         var url = file.url
         if let fileURL = url, DownloadsHelper.getCourseId(userInfo: fileURL.absoluteString) == nil {
             url = fileURL.appendingPathComponent("/courses/\(course.id)")
@@ -80,8 +98,8 @@ extension FileListCell {
         downloadButton.backgroundColor = .backgroundLightest
         contentView.addSubview(downloadButton)
         downloadButton.translatesAutoresizingMaskIntoConstraints = false
-        downloadButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        downloadButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        downloadButton.widthAnchor.constraint(equalToConstant: 35).isActive = true
+        downloadButton.heightAnchor.constraint(equalToConstant: 35).isActive = true
         downloadButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
         downloadButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15).isActive = true
         return downloadButton

@@ -157,6 +157,24 @@ public class DownloadableViewController: UIViewController, ErrorViewController, 
             downloadButton.isHidden = true
             return
         }
+
+        let isSupport = true
+        downloadButton.isUserInteractionEnabled = isSupport
+        if isSupport {
+            downloadButton.defaultImageForStates()
+        } else {
+            downloadButton.setImageForAllStates(
+                uiImage: UIImage(
+                    systemName: "icloud.slash",
+                    withConfiguration: UIImage.SymbolConfiguration(weight: .light)
+                ) ?? UIImage()
+            )
+        }
+
+        guard downloadButton.isUserInteractionEnabled else {
+            return
+        }
+
         downloadsSubscriber = downloadsManager
             .publisher
             .sink { [weak self] event in

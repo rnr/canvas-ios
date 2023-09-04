@@ -91,6 +91,15 @@ class CustomCircleProgressView: UIView {
         }
     }
 
+    var backgroundCircleLayer: WaitingView = {
+        let layer = WaitingView()
+        layer.rotationStartingAngle = -CGFloat.pi/2
+        layer.rotationEndingAngle = layer.rotationStartingAngle + 2*CGFloat.pi
+        layer.shouldSpin = false
+        layer.isClockwise = true
+        return layer
+    }()
+
     var circleLayer: WaitingView = {
         let layer = WaitingView()
         layer.rotationStartingAngle = -CGFloat.pi/2
@@ -116,8 +125,12 @@ class CustomCircleProgressView: UIView {
         backgroundColor = .clear
         /// progress circle view
         circleLayer.strokeColor = mainTintColor
+        backgroundCircleLayer.strokeColor = .lightGray
+
+        self.addSubview(backgroundCircleLayer)
         self.addSubview(circleLayer)
         circleLayer.pinToSuperview()
+        backgroundCircleLayer.pinToSuperview()
     }
 
     private func animateProgress(from startValue: CGFloat? = 0, to endValue: CGFloat) {

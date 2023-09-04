@@ -17,6 +17,7 @@
 //
 
 import mobile_offline_downloader_ios
+import UIKit
 
 extension ModuleItemCell {
 
@@ -27,9 +28,28 @@ extension ModuleItemCell {
         let downloadButton = addDownloadButton()
         let canDonwload = downloadButtonHelper.canDownload(object: item)
         downloadButton.isHidden = !canDonwload || !reachability.isConnected
+
         guard !downloadButton.isHidden else {
             return
         }
+
+        let isSupport = downloadButtonHelper.isSupport(object: item)
+        downloadButton.isUserInteractionEnabled = isSupport
+        if isSupport {
+            downloadButton.defaultImageForStates()
+        } else {
+            downloadButton.setImageForAllStates(
+                uiImage: UIImage(
+                    systemName: "icloud.slash",
+                    withConfiguration: UIImage.SymbolConfiguration(weight: .light)
+                ) ?? UIImage()
+            )
+        }
+
+        guard downloadButton.isUserInteractionEnabled else {
+            return
+        }
+
         let userInfo = item.htmlURL?.changeScheme("ModuleItem")?.absoluteString ?? "ModuleItem://site.com/courses/\(course.id)/modules"
         downloadButtonHelper.update(
             object: item,
@@ -80,7 +100,7 @@ extension ModuleItemCell {
             hStackView.addArrangedSubview(downloadButton)
         }
         downloadButton.translatesAutoresizingMaskIntoConstraints = false
-        downloadButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        downloadButton.widthAnchor.constraint(equalToConstant: 35).isActive = true
         return downloadButton
     }
 
