@@ -58,7 +58,7 @@ public struct DownloaderClient {
             tag?.lowercased() == "audio" ||
             tag?.lowercased() == "iframe" ||
             tag?.lowercased() == "source",
-            let image = UIImage(named: "PandaNoResults", in: .core, with: nil) {
+            let image = UIImage(named: "PandaBlindfold", in: .core, with: nil) {
             let originWidth = image.size.width
             let imageData = image
                 .pngData()?
