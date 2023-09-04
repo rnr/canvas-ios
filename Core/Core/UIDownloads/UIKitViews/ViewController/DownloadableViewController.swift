@@ -66,7 +66,7 @@ public class DownloadableViewController: UIViewController, ErrorViewController, 
 
     // MARK: - Configuration -
 
-    func set(downloadableItem: DownloadableItem) { 
+    func set(downloadableItem: DownloadableItem) {
         if downloadableItem.objectId == self.downloadableItem?.objectId {
             return
         }

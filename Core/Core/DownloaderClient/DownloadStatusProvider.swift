@@ -152,7 +152,7 @@ final class DownloadStatusProvider {
     }
 
     func isSupport(object: OfflineDownloadTypeProtocol) -> Bool {
-        true
+        downloadsManager.isSupported(object: object)
     }
 
     private func addOrUpdateCourse() {

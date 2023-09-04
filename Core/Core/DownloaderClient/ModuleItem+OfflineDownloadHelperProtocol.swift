@@ -62,7 +62,7 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
         } else if case let .file(fileId) = item.type {
             try await prepareFile(entry: entry, item: item, fileId: fileId)
         } else {
-            // TODO: Save entry to base
+            entry.markAsUnsupported()
             throw ModuleItemError.unsupported(type: item.type?.label ?? "", id: item.id)
         }
     }
@@ -99,7 +99,7 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
     public static func prepareFile(entry: OfflineDownloaderEntry, item: ModuleItem, fileId: String) async throws {
         guard let url = item.url,
             let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
-            // TODO: Save entry to base
+            entry.markAsUnsupported()
             throw ModuleItemError.unsupported(type: item.type?.label ?? "", id: item.id)
         }
 
@@ -132,7 +132,8 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
         })
     }
 
-    static func getLtiURL(from item: ModuleItem, toolID: String, url: URL) async throws -> URL {
+    static func getLtiURL(from entry: OfflineDownloaderEntry, toolID: String, url: URL) async throws -> URL {
+        let item = try fromOfflineModel(entry.dataModel)
         let request = GetSessionlessLaunchURLRequest(
             context: .course(item.courseID),
             id: toolID,
@@ -153,7 +154,7 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
 
                 let url = response.url.appendingQueryItems(URLQueryItem(name: "platform", value: "mobile"))
                 if response.name == "Google Apps" {
-                    // TODO: Save entry to base
+                    entry.markAsUnsupported()
                     continuation.resume(throwing: ModuleItemError.unsupported(type: item.type?.label ?? "", id: item.id))
                 } else {
                     continuation.resume(returning: url)
@@ -187,8 +188,7 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
             throw ModuleItemError.cantPrepareLTI(data: entry.dataModel, error: ModuleItemError.retryCountLimitReached)
         }
         do {
-            let item = try fromOfflineModel(entry.dataModel)
-            let url: URL = try await getLtiURL(from: item, toolID: toolID, url: sourceURL)
+            let url: URL = try await getLtiURL(from: entry, toolID: toolID, url: sourceURL)
             let extractor = await OfflineHTMLDynamicsLinksExtractor(
                 url: url,
                 linksHandler: OfflineDownloadsManager.shared.config.linksHandler
@@ -202,7 +202,8 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
                     return
                 }
                 if !isLTISupported(with: html, latestURL: latestURL) {
-                    // TODO: Save entry to base
+                    entry.markAsUnsupported()
+                    let item = try fromOfflineModel(entry.dataModel)
                     throw ModuleItemError.unsupported(type: item.type?.label ?? "", id: item.id)
                 }
 
