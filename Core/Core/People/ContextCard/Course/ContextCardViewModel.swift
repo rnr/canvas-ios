@@ -36,6 +36,9 @@ public class ContextCardViewModel: ObservableObject {
     public let isLastActivityVisible: Bool
     public let isModal: Bool
     public var enrollment: Enrollment?
+    public var hideQuantitativeData: Bool {
+        course.first?.hideQuantitativeData == true
+    }
 
     private let env = AppEnvironment.shared
     private var isFirstAppear = true

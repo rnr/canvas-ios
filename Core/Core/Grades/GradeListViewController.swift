@@ -98,7 +98,7 @@ public class GradeListViewController: ScreenViewTrackableViewController, Colored
     public static func create(courseID: String,
                               userID: String? = nil,
                               colorDelegate: ColorDelegate? = nil,
-                              offlineModeInteractor: OfflineModeInteractor = OfflineModeInteractorLive.shared)
+                              offlineModeInteractor: OfflineModeInteractor = OfflineModeAssembly.make())
     -> GradeListViewController {
         let controller = loadFromStoryboard()
         controller.colorDelegate = colorDelegate
@@ -187,9 +187,32 @@ public class GradeListViewController: ScreenViewTrackableViewController, Colored
         gradingPeriodLabel.text = gradingPeriodID == nil && gradingPeriodLoaded
             ? NSLocalizedString("All", bundle: .core, comment: "")
             : gradingPeriods.first(where: { $0.id == gradingPeriodID })?.title
+        let hideQuantitativeData = courses.first?.hideQuantitativeData == true
 
         if courses.first?.hideFinalGrades == true {
             totalGradeLabel.text = NSLocalizedString("N/A", bundle: .core, comment: "")
+        } else if hideQuantitativeData {
+            if let gradingScheme = courses.first?.gradingScheme {
+                if let gradingPeriodID = gradingPeriodID {
+                    if let letterGrade = gradeEnrollment?.currentGrade(gradingPeriodID: gradingPeriodID) ?? gradeEnrollment?.finalGrade(gradingPeriodID: gradingPeriodID) {
+                        totalGradeLabel.text = letterGrade
+                    } else {
+                        totalGradeLabel.text = gradeEnrollment?.convertedLetterGrade(gradingPeriodID: gradingPeriodID,
+                                                                                     gradingScheme: gradingScheme)
+                    }
+                } else {
+                    if courseEnrollment?.multipleGradingPeriodsEnabled == true, courseEnrollment?.totalsForAllGradingPeriodsOption == false {
+                        totalGradeLabel.text = nil
+                    } else if let letterGrade = courseEnrollment?.computedCurrentGrade ?? courseEnrollment?.computedFinalGrade ?? courseEnrollment?.computedCurrentLetterGrade {
+                        totalGradeLabel.text = letterGrade
+                    } else {
+                        totalGradeLabel.text = courseEnrollment?.convertedLetterGrade(gradingPeriodID: nil,
+                                                                                      gradingScheme: gradingScheme)
+                    }
+                }
+            } else {
+                totalGradeLabel.text = ""
+            }
         } else {
             var letterGrade: String?
             if let gradingPeriodID = gradingPeriodID {
@@ -200,9 +223,10 @@ public class GradeListViewController: ScreenViewTrackableViewController, Colored
                 if courseEnrollment?.multipleGradingPeriodsEnabled == true, courseEnrollment?.totalsForAllGradingPeriodsOption == false {
                     letterGrade = nil
                 } else {
-                    letterGrade = courseEnrollment?.computedCurrentGrade ?? courseEnrollment?.computedFinalGrade
+                    letterGrade = courseEnrollment?.computedCurrentGrade ?? courseEnrollment?.computedFinalGrade ?? courseEnrollment?.computedCurrentLetterGrade
                 }
             }
+
             if let scoreText = totalGradeLabel.text, let letterGrade = letterGrade {
                 totalGradeLabel.text = scoreText + " (\(letterGrade))"
             }

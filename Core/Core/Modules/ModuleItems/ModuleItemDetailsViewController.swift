@@ -164,7 +164,14 @@ public class ModuleItemDetailsViewController: DownloadableViewController, Colore
             return LTIWebViewController.create(tools: tools, moduleItem: item)
         default:
             guard let url = item.url else { return nil }
-            return env.router.match(url.appendingOrigin("module_item_details"))
+            let preparedURL = url.appendingOrigin("module_item_details")
+            let itemViewController = env.router.match(preparedURL)
+
+            if let itemViewController, let routeTemplate = env.router.template(for: preparedURL) {
+                Analytics.shared.logScreenView(route: routeTemplate, viewController: itemViewController)
+            }
+
+            return itemViewController
         }
     }
 
