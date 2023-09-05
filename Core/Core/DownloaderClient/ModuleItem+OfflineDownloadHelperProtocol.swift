@@ -241,6 +241,14 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
                     return false
                 }
             }
+        } else  if latestURL.absoluteString.lowercased().contains("/media-player") {
+            let oysterPattern = "<script[^>]*oyster[^>]*>"
+            let slidePattern = "<div[^>]*slide[^>]*>"
+            if let oysterScripts = results(for: oysterPattern, in: html),
+               let slideContainers = results(for: slidePattern, in: html),
+               !oysterScripts.isEmpty, !slideContainers.isEmpty {
+                return false
+            }
         }
         return true
     }
