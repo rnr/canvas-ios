@@ -20,7 +20,7 @@ import Foundation
 import Combine
 import mobile_offline_downloader_ios
 
-final class DownloadStatusProvider {
+final class DownloadStatusProvider: DownloadsProgressBarHidden {
 
     private let downloadsManager = OfflineDownloadsManager.shared
     private let storageManager = OfflineStorageManager.shared
@@ -119,6 +119,7 @@ final class DownloadStatusProvider {
                 userInfo: userInfo
             )
             addOrUpdateCourse()
+            toggleDownloadingBarView(hidden: false)
         } catch {
             debugLog(error.localizedDescription)
         }
@@ -150,10 +151,6 @@ final class DownloadStatusProvider {
 
     func canDownload(object: OfflineDownloadTypeProtocol) -> Bool {
         downloadsManager.canDownload(object: object)
-    }
-
-    func isSupport(object: OfflineDownloadTypeProtocol) -> Bool {
-        true
     }
 
     private func addOrUpdateCourse() {
