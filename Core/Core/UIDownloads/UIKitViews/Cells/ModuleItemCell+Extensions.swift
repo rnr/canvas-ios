@@ -33,23 +33,6 @@ extension ModuleItemCell {
             return
         }
 
-        let isSupport = downloadButtonHelper.isSupport(object: item)
-        downloadButton.isUserInteractionEnabled = isSupport
-        if isSupport {
-            downloadButton.defaultImageForStates()
-        } else {
-            downloadButton.setImageForAllStates(
-                uiImage: UIImage(
-                    systemName: "icloud.slash",
-                    withConfiguration: UIImage.SymbolConfiguration(weight: .light)
-                ) ?? UIImage()
-            )
-        }
-
-        guard downloadButton.isUserInteractionEnabled else {
-            return
-        }
-
         let userInfo = item.htmlURL?.changeScheme("ModuleItem")?.absoluteString ?? "ModuleItem://site.com/courses/\(course.id)/modules"
         downloadButtonHelper.update(
             object: item,
@@ -58,13 +41,31 @@ extension ModuleItemCell {
         )
         downloadButtonHelper.status(
             for: item,
-            onState: {  [weak self] state, progress, eventObjectId in
+            onState: {  [weak self] isSupported, state, progress, eventObjectId in
                 guard let self = self, eventObjectId == self.item?.id else {
                     return
                 }
-               downloadButton.progress = Float(progress)
-               debugLog(downloadButton.progress, "downloadButton.progress")
-               downloadButton.currentState = state
+
+                downloadButton.isUserInteractionEnabled = isSupported
+                if isSupported {
+                    downloadButton.defaultImageForStates()
+                } else {
+                    downloadButton.currentState = .idle
+                    downloadButton.setImageForAllStates(
+                        uiImage: UIImage(
+                            systemName: "icloud.slash",
+                            withConfiguration: UIImage.SymbolConfiguration(weight: .light)
+                        ) ?? UIImage()
+                    )
+                }
+
+                if !isSupported {
+                    return
+                }
+
+                downloadButton.progress = Float(progress)
+                debugLog(downloadButton.progress, "downloadButton.progress")
+                downloadButton.currentState = state
                 if state == .waiting {
                     downloadButton.waitingView.startSpinning()
                 }

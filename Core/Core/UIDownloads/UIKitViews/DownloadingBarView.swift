@@ -256,12 +256,13 @@ public class DownloadingBarView: UIView, Reachabilitable {
             guard eventObjectId == objectId else {
                 return
             }
-            if event.progress == 0.0 {
-                progressView.progress = 0.01
-                return
-            }
             progressView.progress = Float(event.progress)
             procentLabel.text = "\(Int(round(event.progress * 100)))%"
+
+            if event.progress == 1 {
+                progressView.progress = 0.0
+                procentLabel.text = "0%"
+            }
         } catch {}
     }
 }

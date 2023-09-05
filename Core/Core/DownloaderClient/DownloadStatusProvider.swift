@@ -43,7 +43,7 @@ final class DownloadStatusProvider {
 
     func status(
         for object: OfflineDownloadTypeProtocol,
-        onState: @escaping ((DownloadButton.State, Double, String) -> Void)
+        onState: @escaping ((Bool, DownloadButton.State, Double, String) -> Void)
     ) {
         downloadsManager.eventObject(for: object) { [weak self] result in
             guard let self = self else {
@@ -56,7 +56,7 @@ final class DownloadStatusProvider {
                 )
             }
             result.failure {  _ in
-                onState(.idle, 0.0, "")
+                onState(false, .idle, 0.0, "")
             }
         }
 
@@ -80,7 +80,8 @@ final class DownloadStatusProvider {
 
     private func statusChanged(
         event: OfflineDownloadsManagerEventObject,
-        onState: @escaping ((DownloadButton.State, Double, String) -> Void)
+        onState: @escaping ((Bool, DownloadButton.State, Double, String) -> Void)
+
     ) {
         guard let object = self.object else {
             return
@@ -93,18 +94,18 @@ final class DownloadStatusProvider {
             }
             switch event.status {
             case .initialized, .preparing:
-                onState(.waiting, event.progress, eventObjectId)
+                onState(event.isSupported, .waiting, event.progress, eventObjectId)
             case .active:
-                onState(.downloading, event.progress, eventObjectId)
+                onState(event.isSupported, .downloading, event.progress, eventObjectId)
             case .completed, .partiallyDownloaded:
-                onState(.downloaded, event.progress, eventObjectId)
+                onState(event.isSupported, .downloaded, event.progress, eventObjectId)
             case .failed, .paused:
-                onState(.retry, event.progress, eventObjectId)
+                onState(event.isSupported, .retry, event.progress, eventObjectId)
             default:
-                onState(.idle, event.progress, eventObjectId)
+                onState(event.isSupported, .idle, event.progress, eventObjectId)
             }
         } catch {
-            onState(.idle, event.progress, "")
+            onState(event.isSupported, .idle, event.progress, "")
         }
     }
 

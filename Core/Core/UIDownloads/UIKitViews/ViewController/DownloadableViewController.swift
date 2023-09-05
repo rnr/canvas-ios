@@ -158,23 +158,6 @@ public class DownloadableViewController: UIViewController, ErrorViewController, 
             return
         }
 
-        let isSupport = true
-        downloadButton.isUserInteractionEnabled = isSupport
-        if isSupport {
-            downloadButton.defaultImageForStates()
-        } else {
-            downloadButton.setImageForAllStates(
-                uiImage: UIImage(
-                    systemName: "icloud.slash",
-                    withConfiguration: UIImage.SymbolConfiguration(weight: .light)
-                ) ?? UIImage()
-            )
-        }
-
-        guard downloadButton.isUserInteractionEnabled else {
-            return
-        }
-
         downloadsSubscriber = downloadsManager
             .publisher
             .sink { [weak self] event in
@@ -239,6 +222,24 @@ public class DownloadableViewController: UIViewController, ErrorViewController, 
             guard eventObjectId == objectId else {
                 return
             }
+
+            downloadButton.isUserInteractionEnabled = event.isSupported
+            if event.isSupported {
+                downloadButton.defaultImageForStates()
+            } else {
+                downloadButton.currentState = .idle
+                downloadButton.setImageForAllStates(
+                    uiImage: UIImage(
+                        systemName: "icloud.slash",
+                        withConfiguration: UIImage.SymbolConfiguration(weight: .light)
+                    ) ?? UIImage()
+                )
+            }
+
+            if !event.isSupported {
+                return
+            }
+
             switch event.status {
             case .completed, .partiallyDownloaded:
                 if downloadButton.currentState != .downloaded {

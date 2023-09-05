@@ -131,23 +131,6 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
             return
         }
 
-        let isSupport = downloadButtonHelper.isSupport(object: page)
-        downloadButton.isUserInteractionEnabled = isSupport
-        if isSupport {
-            downloadButton.defaultImageForStates()
-        } else {
-            downloadButton.setImageForAllStates(
-                uiImage: UIImage(
-                    systemName: "icloud.slash",
-                    withConfiguration: UIImage.SymbolConfiguration(weight: .light)
-                ) ?? UIImage()
-            )
-        }
-
-        guard downloadButton.isUserInteractionEnabled else {
-            return
-        }
-
         let userInfo = page.htmlURL?.changeScheme("Page")?.absoluteString ?? "Page://site.com/courses/\(course.id)/modules"
         downloadButtonHelper.update(
             object: page,
@@ -156,13 +139,31 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
         )
         downloadButtonHelper.status(
             for: page,
-            onState: { [weak self] state, progress, eventObjectId in
+            onState: { [weak self] isSupported, state, progress, eventObjectId in
                 guard let self = self, eventObjectId == self.page?.id else {
                     return
                 }
-               debugLog(downloadButton.progress, "downloadButton.progress")
-               downloadButton.progress = Float(progress)
-               downloadButton.currentState = state
+
+                downloadButton.isUserInteractionEnabled = isSupported
+                if isSupported {
+                    downloadButton.defaultImageForStates()
+                } else {
+                    downloadButton.currentState = .idle
+                    downloadButton.setImageForAllStates(
+                        uiImage: UIImage(
+                            systemName: "icloud.slash",
+                            withConfiguration: UIImage.SymbolConfiguration(weight: .light)
+                        ) ?? UIImage()
+                    )
+                }
+
+                if !isSupported {
+                    return
+                }
+
+                debugLog(downloadButton.progress, "downloadButton.progress")
+                downloadButton.progress = Float(progress)
+                downloadButton.currentState = state
                 if state == .waiting {
                     downloadButton.waitingView.startSpinning()
                 }
