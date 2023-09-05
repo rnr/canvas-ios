@@ -195,7 +195,7 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
             )
             try await extractor.fetch()
             if let latestURL = await extractor.latestRedirectURL,
-                let html = await extractor.html {
+                var html = await extractor.html {
 
                 if shouldRetry(for: html, latestURL: latestURL) {
                     try await prepareLTI(entry: entry, toolID: toolID, sourceURL: sourceURL, repeatCount: repeatCount + 1)
@@ -205,6 +205,10 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
                     entry.markAsUnsupported()
                     let item = try fromOfflineModel(entry.dataModel)
                     throw ModuleItemError.unsupported(type: item.type?.label ?? "", id: item.id)
+                }
+
+                if isOyster(with: html, latestURL: latestURL) {
+                    html = try changeOyster(html: html)
                 }
 
                 if html.contains(latestURL.absoluteString) {
@@ -227,6 +231,17 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
             }
             throw ModuleItemError.cantPrepareLTI(data: entry.dataModel, error: error)
         }
+    }
+
+    static func isOyster(with html: String, latestURL: URL) -> Bool {
+        if latestURL.absoluteString.lowercased().contains("/media-player") {
+            let oysterPattern = "<script[^>]*oyster[^>]*>"
+            if let oysterScripts = results(for: oysterPattern, in: html),
+               !oysterScripts.isEmpty {
+                return true
+            }
+        }
+        return false
     }
 
     static func isLTISupported(with html: String, latestURL: URL) -> Bool {
@@ -279,6 +294,48 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
                 try app.replaceWith(tag)
             }
         }
+        return try document.html()
+    }
+
+    static func changeOyster(html: String) throws -> String {
+        let document = try SwiftSoup.parse(html)
+        var newContent = Element(Tag("div"), "")
+        // search video and move it to body begin
+        let videoTags = try document.getElementsByTag("video")
+        for tag in videoTags {
+            try newContent.append(try tag.outerHtml())
+        }
+        // search transcription remove copy button and move it under video
+        let transcriptionContainer = Element(Tag("div"), "")
+        try transcriptionContainer.attr("style", "padding:10px;")
+        let transcriptions = try document.getElementsByClass("oyster-grid-transcript")
+        for transcription in transcriptions {
+            let buttons = try transcription.getElementsByTag("button")
+            for button in buttons {
+                try button.remove()
+            }
+            try transcriptionContainer.append(try transcription.outerHtml())
+        }
+        try newContent.append(try transcriptionContainer.outerHtml())
+        // clean all body
+        if let children = document.body()?.children() {
+            try children.forEach { child in
+                try child.remove()
+            }
+        }
+
+        // func remove scripts
+        if let scripts = try document.head()?.getElementsByTag("script") {
+            try scripts.forEach {
+                if $0.hasAttr("src") {
+                    try $0.remove()
+                }
+            }
+        }
+
+        // insert content
+        try document.body()?.insertChildren(0, [newContent])
+
         return try document.html()
     }
 
