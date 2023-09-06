@@ -211,6 +211,10 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
                     html = try changeOyster(html: html)
                 }
 
+                if isCoursePlayer(with: html, latestURL: latestURL) {
+                    html = try changeCoursePlayer(html: html)
+                }
+
                 if html.contains(latestURL.absoluteString) {
                     let downloader = OfflineLinkDownloader()
                     let cookieString = await extractor.cookies().cookieString
@@ -244,9 +248,17 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
         return false
     }
 
+    static func isCoursePlayer(with html: String, latestURL: URL) -> Bool {
+        latestURL.absoluteString.lowercased().contains("/course-player")
+    }
+
+    static func isReport(with html: String, latestURL: URL) -> Bool {
+        latestURL.absoluteString.lowercased().contains("/report")
+    }
+
     static func isLTISupported(with html: String, latestURL: URL) -> Bool {
         // we can't download course player with multiple cards
-        if latestURL.absoluteString.lowercased().contains("/course-player") {
+        if isCoursePlayer(with: html, latestURL: latestURL) {
             let regexPattern = "<div[^>]*NavigationItem[^>]*>"
             if let matches = results(for: regexPattern, in: html) {
                 if !matches.isEmpty {
@@ -257,7 +269,7 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
                 }
             }
         }
-        if latestURL.absoluteString.lowercased().contains("/report") {
+        if isReport(with: html, latestURL: latestURL) {
             return false
         }
         // Oyster
@@ -313,6 +325,16 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
         return try document.html()
     }
 
+    static func changeCoursePlayer(html: String) throws -> String {
+        let document = try SwiftSoup.parse(html)
+        // remove scripts
+        let scripts = try document.getElementsByTag("script")
+        try scripts.forEach {
+            try $0.remove()
+        }
+        return try document.html()
+    }
+
     static func changeOyster(html: String) throws -> String {
         let document = try SwiftSoup.parse(html)
         let newContent = Element(Tag("div"), "")
@@ -340,13 +362,10 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
             }
         }
 
-        // func remove scripts
-        if let scripts = try document.head()?.getElementsByTag("script") {
-            try scripts.forEach {
-                if $0.hasAttr("src") {
-                    try $0.remove()
-                }
-            }
+        // remove scripts
+        let scripts = try document.getElementsByTag("script")
+        try scripts.forEach {
+            try $0.remove()
         }
 
         // insert content
