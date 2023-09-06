@@ -284,8 +284,11 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
             return true
         }
         
-        if isOyster(with: html, latestURL: latestURL), !html.contains("oyster-wrapper") {
-            return true
+        if isOyster(with: html, latestURL: latestURL) {
+            let regexPattern = "<div[^>]*oyster-wrapper[^>]*>"
+            if let matches = results(for: regexPattern, in: html), matches.isEmpty {                
+                return true
+            }
         }
         
         return false
