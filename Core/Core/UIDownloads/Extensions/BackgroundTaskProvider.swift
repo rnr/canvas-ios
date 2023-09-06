@@ -31,8 +31,8 @@ public final class BackgroundTaskProvider {
     public init() {
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(willResignActiveNotification),
-            name: UIApplication.willResignActiveNotification,
+            selector: #selector(didEnterBackgroundNotification),
+            name: UIApplication.didEnterBackgroundNotification,
             object: nil
         )
         NotificationCenter.default.addObserver(
@@ -44,7 +44,7 @@ public final class BackgroundTaskProvider {
     }
 
     @objc
-    func willResignActiveNotification() {
+    func didEnterBackgroundNotification() {
         registerBackgroundTask()
         OfflineDownloadsManager.shared.pauseAllActive()
     }
