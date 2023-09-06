@@ -257,6 +257,9 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
                 }
             }
         }
+        if latestURL.absoluteString.lowercased().contains("/report") {
+            return false
+        }
         // Oyster
 //        else  if latestURL.absoluteString.lowercased().contains("/media-player") {
 //            let oysterPattern = "<script[^>]*oyster[^>]*>"
@@ -279,18 +282,20 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
             return nil
         }
     }
+
     static func shouldRetry(for html: String, latestURL: URL) -> Bool {
         if latestURL.absoluteString.lowercased().contains("3rd-cookie-check/checkpage.html") {
             return true
         }
-        
+
         if isOyster(with: html, latestURL: latestURL) {
             let regexPattern = "<div[^>]*oyster-wrapper[^>]*>"
-            if let matches = results(for: regexPattern, in: html), matches.isEmpty {                
+            if let matches = results(for: regexPattern, in: html),
+                matches.isEmpty {
                 return true
             }
         }
-        
+
         return false
     }
 
@@ -310,7 +315,7 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
 
     static func changeOyster(html: String) throws -> String {
         let document = try SwiftSoup.parse(html)
-        var newContent = Element(Tag("div"), "")
+        let newContent = Element(Tag("div"), "")
         // search video and move it to body begin
         let videoTags = try document.getElementsByTag("video")
         for tag in videoTags {
