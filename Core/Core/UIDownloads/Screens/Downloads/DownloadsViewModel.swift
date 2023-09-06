@@ -216,6 +216,10 @@ final class DownloadsViewModel: ObservableObject, Reachabilitable {
     }
 
     private func statusChanged(_ event: OfflineDownloadsManagerEventObject) {
+        if !event.isSupported {
+            deleteDownloading(event)
+            return
+        }
         switch event.status {
         case .removed:
             deleteDownloading(event)
