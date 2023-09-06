@@ -130,6 +130,7 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
         guard !downloadButton.isHidden else {
             return
         }
+
         let userInfo = page.htmlURL?.changeScheme("Page")?.absoluteString ?? "Page://site.com/courses/\(course.id)/modules"
         downloadButtonHelper.update(
             object: page,
@@ -138,13 +139,31 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
         )
         downloadButtonHelper.status(
             for: page,
-            onState: { [weak self] state, progress, eventObjectId in
+            onState: { [weak self] isSupported, state, progress, eventObjectId in
                 guard let self = self, eventObjectId == self.page?.id else {
                     return
                 }
-               debugLog(downloadButton.progress, "downloadButton.progress")
-               downloadButton.progress = Float(progress)
-               downloadButton.currentState = state
+
+                downloadButton.isUserInteractionEnabled = isSupported
+                if isSupported {
+                    downloadButton.defaultImageForStates()
+                } else {
+                    downloadButton.currentState = .idle
+                    downloadButton.setImageForAllStates(
+                        uiImage: UIImage(
+                            systemName: "icloud.slash",
+                            withConfiguration: UIImage.SymbolConfiguration(weight: .light)
+                        ) ?? UIImage()
+                    )
+                }
+
+                if !isSupported {
+                    return
+                }
+
+                debugLog(downloadButton.progress, "downloadButton.progress")
+                downloadButton.progress = Float(progress)
+                downloadButton.currentState = state
                 if state == .waiting {
                     downloadButton.waitingView.startSpinning()
                 }
@@ -175,8 +194,8 @@ final public class DownloadPageListTableViewCell: UITableViewCell {
         downloadButton.currentState = .idle
         contentView.addSubview(downloadButton)
         downloadButton.translatesAutoresizingMaskIntoConstraints = false
-        downloadButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        downloadButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        downloadButton.widthAnchor.constraint(equalToConstant: 35).isActive = true
+        downloadButton.heightAnchor.constraint(equalToConstant: 35).isActive = true
         downloadButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
         downloadButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15).isActive = true
         return downloadButton

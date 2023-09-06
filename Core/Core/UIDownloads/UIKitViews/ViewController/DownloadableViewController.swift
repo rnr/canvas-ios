@@ -25,6 +25,11 @@ public class DownloadableViewController: UIViewController, ErrorViewController, 
 
     deinit {
         print("☠️ Deinitialized -> \(String.init(describing: self))☠️")
+        NotificationCenter.default.removeObserver(
+            self,
+            name: UIApplication.didBecomeActiveNotification,
+            object: nil
+        )
     }
 
     // MARK: - Injected -
@@ -54,6 +59,16 @@ public class DownloadableViewController: UIViewController, ErrorViewController, 
 
     // MARK: - Lifecycle -
 
+    public override func viewDidLoad() {
+        super.viewDidLoad()
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(didBecomeActiveNotification),
+            name: UIApplication.didBecomeActiveNotification,
+            object: nil
+        )
+    }
+
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configure()
@@ -66,7 +81,7 @@ public class DownloadableViewController: UIViewController, ErrorViewController, 
 
     // MARK: - Configuration -
 
-    func set(downloadableItem: DownloadableItem) { 
+    func set(downloadableItem: DownloadableItem) {
         if downloadableItem.objectId == self.downloadableItem?.objectId {
             return
         }
@@ -157,6 +172,7 @@ public class DownloadableViewController: UIViewController, ErrorViewController, 
             downloadButton.isHidden = true
             return
         }
+
         downloadsSubscriber = downloadsManager
             .publisher
             .sink { [weak self] event in
@@ -199,6 +215,13 @@ public class DownloadableViewController: UIViewController, ErrorViewController, 
         }
     }
 
+    @objc
+    private func didBecomeActiveNotification() {
+        if !downloadButton.isHidden, downloadButton.currentState == .waiting {
+            downloadButton.waitingView.startSpinning()
+        }
+    }
+
     private func connection(_ isConnected: Bool) {
         guard let downloadableItem = downloadableItem else {
             return
@@ -221,6 +244,24 @@ public class DownloadableViewController: UIViewController, ErrorViewController, 
             guard eventObjectId == objectId else {
                 return
             }
+
+            downloadButton.isUserInteractionEnabled = event.isSupported
+            if event.isSupported {
+                downloadButton.defaultImageForStates()
+            } else {
+                downloadButton.currentState = .idle
+                downloadButton.setImageForAllStates(
+                    uiImage: UIImage(
+                        systemName: "icloud.slash",
+                        withConfiguration: UIImage.SymbolConfiguration(weight: .light)
+                    ) ?? UIImage()
+                )
+            }
+
+            if !event.isSupported {
+                return
+            }
+
             switch event.status {
             case .completed, .partiallyDownloaded:
                 if downloadButton.currentState != .downloaded {

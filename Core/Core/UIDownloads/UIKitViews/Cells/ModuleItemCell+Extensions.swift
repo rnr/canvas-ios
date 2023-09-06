@@ -17,6 +17,7 @@
 //
 
 import mobile_offline_downloader_ios
+import UIKit
 
 extension ModuleItemCell {
 
@@ -27,9 +28,11 @@ extension ModuleItemCell {
         let downloadButton = addDownloadButton()
         let canDonwload = downloadButtonHelper.canDownload(object: item)
         downloadButton.isHidden = !canDonwload || !reachability.isConnected
+
         guard !downloadButton.isHidden else {
             return
         }
+
         let userInfo = item.htmlURL?.changeScheme("ModuleItem")?.absoluteString ?? "ModuleItem://site.com/courses/\(course.id)/modules"
         downloadButtonHelper.update(
             object: item,
@@ -38,13 +41,31 @@ extension ModuleItemCell {
         )
         downloadButtonHelper.status(
             for: item,
-            onState: {  [weak self] state, progress, eventObjectId in
+            onState: {  [weak self] isSupported, state, progress, eventObjectId in
                 guard let self = self, eventObjectId == self.item?.id else {
                     return
                 }
-               downloadButton.progress = Float(progress)
-               debugLog(downloadButton.progress, "downloadButton.progress")
-               downloadButton.currentState = state
+
+                downloadButton.isUserInteractionEnabled = isSupported
+                if isSupported {
+                    downloadButton.defaultImageForStates()
+                } else {
+                    downloadButton.currentState = .idle
+                    downloadButton.setImageForAllStates(
+                        uiImage: UIImage(
+                            systemName: "icloud.slash",
+                            withConfiguration: UIImage.SymbolConfiguration(weight: .light)
+                        ) ?? UIImage()
+                    )
+                }
+
+                if !isSupported {
+                    return
+                }
+
+                downloadButton.progress = Float(progress)
+                debugLog(downloadButton.progress, "downloadButton.progress")
+                downloadButton.currentState = state
                 if state == .waiting {
                     downloadButton.waitingView.startSpinning()
                 }
@@ -80,7 +101,7 @@ extension ModuleItemCell {
             hStackView.addArrangedSubview(downloadButton)
         }
         downloadButton.translatesAutoresizingMaskIntoConstraints = false
-        downloadButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        downloadButton.widthAnchor.constraint(equalToConstant: 35).isActive = true
         return downloadButton
     }
 

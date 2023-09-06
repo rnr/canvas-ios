@@ -31,6 +31,7 @@ public final class DownloadButton: UIView {
     )! {
         didSet {
             self.idleButton.setImage(idleButtonImage, for: .normal)
+            self.idleButton.imageView?.contentMode = .scaleAspectFit
         }
     }
     public lazy var downloadedButtonImage: UIImage = UIImage(
@@ -38,7 +39,8 @@ public final class DownloadButton: UIView {
         withConfiguration: buttonConfiguration
     )! {
         didSet {
-            self.idleButton.setImage(idleButtonImage, for: .normal)
+            self.downloadedButton.setImage(downloadedButtonImage, for: .normal)
+            self.downloadedButton.imageView?.contentMode = .scaleAspectFit
         }
     }
     public lazy var retryButtonImage: UIImage = UIImage(
@@ -46,7 +48,8 @@ public final class DownloadButton: UIView {
         withConfiguration: buttonConfiguration
     )! {
         didSet {
-            self.idleButton.setImage(idleButtonImage, for: .normal)
+            self.retryButton.setImage(retryButtonImage, for: .normal)
+            self.retryButton.imageView?.contentMode = .scaleAspectFit
         }
     }
 
@@ -88,6 +91,27 @@ public final class DownloadButton: UIView {
 
         super.init(coder: aDecoder)
         commonInit()
+    }
+
+    public func setImageForAllStates(uiImage: UIImage) {
+        idleButtonImage = uiImage
+        downloadedButtonImage = uiImage
+        retryButtonImage = uiImage
+    }
+
+    public func defaultImageForStates() {
+        idleButtonImage = UIImage(
+            systemName: "arrow.down.circle",
+            withConfiguration: buttonConfiguration
+        ) ?? UIImage()
+        downloadedButtonImage = UIImage(
+            systemName: "trash.circle",
+            withConfiguration: buttonConfiguration
+        ) ?? UIImage()
+        retryButtonImage = UIImage(
+            systemName: "arrow.clockwise.circle",
+            withConfiguration: buttonConfiguration
+        ) ?? UIImage()
     }
 
     private func commonInit() {

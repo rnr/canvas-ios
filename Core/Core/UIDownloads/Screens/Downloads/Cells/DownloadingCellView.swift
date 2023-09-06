@@ -66,16 +66,7 @@ struct DownloadingCellView: View {
                     viewModel.pauseResume()
                 }
             )
-            .frame(width: 30, height: 30)
-            .onReceive(
-                NotificationCenter.default.publisher(
-                    for: UIApplication.willEnterForegroundNotification
-                )
-            ) { _ in
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    setCurrentState(viewModel.downloaderStatus)
-                }
-            }
+            .frame(width: 35, height: 35)
         }
         .padding(.all, 10)
         .onAppear {

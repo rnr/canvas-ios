@@ -31,6 +31,7 @@ extension FileListCell {
         guard !downloadButton.isHidden else {
             return
         }
+
         var url = file.url
         if let fileURL = url, DownloadsHelper.getCourseId(userInfo: fileURL.absoluteString) == nil {
             url = fileURL.appendingPathComponent("/courses/\(course.id)")
@@ -43,13 +44,30 @@ extension FileListCell {
         )
         downloadButtonHelper.status(
             for: file,
-            onState: { [weak self] state, progress, eventObjectId in
+            onState: { [weak self] isSupported, state, progress, eventObjectId in
                 guard let self = self, eventObjectId == self.file?.id else {
                     return
                 }
-               debugLog(downloadButton.progress, "downloadButton.progress")
-               downloadButton.progress = Float(progress)
-               downloadButton.currentState = state
+
+                downloadButton.isUserInteractionEnabled = isSupported
+                if isSupported {
+                    downloadButton.defaultImageForStates()
+                } else {
+                    downloadButton.currentState = .idle
+                    downloadButton.setImageForAllStates(
+                        uiImage: UIImage(
+                            systemName: "icloud.slash",
+                            withConfiguration: UIImage.SymbolConfiguration(weight: .light)
+                        ) ?? UIImage()
+                    )
+                }
+
+                if !isSupported {
+                    return
+                }
+                debugLog(downloadButton.progress, "downloadButton.progress")
+                downloadButton.progress = Float(progress)
+                downloadButton.currentState = state
                 if state == .waiting {
                     downloadButton.waitingView.startSpinning()
                 }
@@ -80,8 +98,8 @@ extension FileListCell {
         downloadButton.backgroundColor = .backgroundLightest
         contentView.addSubview(downloadButton)
         downloadButton.translatesAutoresizingMaskIntoConstraints = false
-        downloadButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        downloadButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        downloadButton.widthAnchor.constraint(equalToConstant: 35).isActive = true
+        downloadButton.heightAnchor.constraint(equalToConstant: 35).isActive = true
         downloadButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
         downloadButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15).isActive = true
         return downloadButton

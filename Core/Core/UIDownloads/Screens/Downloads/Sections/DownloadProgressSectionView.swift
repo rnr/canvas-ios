@@ -34,6 +34,17 @@ struct DownloadProgressSectionView: View {
         .onDelete { indexSet in
             viewModel.swipeDeleteDownloading(indexSet: indexSet)
         }
+        .onReceive(
+            NotificationCenter.default.publisher(
+                for: UIApplication.didBecomeActiveNotification
+            )
+        ) { _ in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                viewModel.downloadingModules.forEach {
+                    $0.getCurrentEventObject()
+                }
+            }
+        }
     }
 
     // MARK: - Views -

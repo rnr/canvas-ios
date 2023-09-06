@@ -17,6 +17,7 @@
 //
 
 import Foundation
+import mobile_offline_downloader_ios
 
 @available(iOSApplicationExtension, unavailable)
 public final class BackgroundTaskProvider {
@@ -30,8 +31,8 @@ public final class BackgroundTaskProvider {
     public init() {
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(willResignActiveNotification),
-            name: UIApplication.willResignActiveNotification,
+            selector: #selector(didEnterBackgroundNotification),
+            name: UIApplication.didEnterBackgroundNotification,
             object: nil
         )
         NotificationCenter.default.addObserver(
@@ -43,13 +44,15 @@ public final class BackgroundTaskProvider {
     }
 
     @objc
-    func willResignActiveNotification() {
+    func didEnterBackgroundNotification() {
         registerBackgroundTask()
+        OfflineDownloadsManager.shared.pauseAllActive()
     }
 
     @objc
     func didBecomeActiveNotification() {
         endBackgroundTaskIfActive()
+        OfflineDownloadsManager.shared.resumeAllActive()
     }
 
     // MARK: - Background Task -
