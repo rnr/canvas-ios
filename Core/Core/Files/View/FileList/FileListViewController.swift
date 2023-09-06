@@ -20,6 +20,15 @@ import UIKit
 import mobile_offline_downloader_ios
 
 public class FileListViewController: ScreenViewTrackableViewController, ColoredNavViewProtocol {
+
+    deinit {
+        NotificationCenter.default.removeObserver(
+            self,
+            name: UIApplication.didBecomeActiveNotification,
+            object: nil
+        )
+    }
+
     @IBOutlet weak var emptyImageView: UIImageView!
     @IBOutlet weak var emptyMessageLabel: UILabel!
     @IBOutlet weak var emptyTitleLabel: UILabel!
@@ -119,6 +128,13 @@ public class FileListViewController: ScreenViewTrackableViewController, ColoredN
         course?.refresh()
         group?.refresh()
         folder.refresh()
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(didBecomeActiveNotification),
+            name: UIApplication.didBecomeActiveNotification,
+            object: nil
+        )
     }
 
     public override func viewWillAppear(_ animated: Bool) {
@@ -283,6 +299,11 @@ extension FileListViewController: UISearchBarDelegate {
         loadingView.isHidden = true
         emptyView.isHidden = !results.isEmpty
         errorView.isHidden = error == nil
+        tableView.reloadData()
+    }
+
+    @objc
+    private func didBecomeActiveNotification() {
         tableView.reloadData()
     }
 }

@@ -25,6 +25,11 @@ public class DownloadableViewController: UIViewController, ErrorViewController, 
 
     deinit {
         print("☠️ Deinitialized -> \(String.init(describing: self))☠️")
+        NotificationCenter.default.removeObserver(
+            self,
+            name: UIApplication.didBecomeActiveNotification,
+            object: nil
+        )
     }
 
     // MARK: - Injected -
@@ -53,6 +58,16 @@ public class DownloadableViewController: UIViewController, ErrorViewController, 
     }()
 
     // MARK: - Lifecycle -
+
+    public override func viewDidLoad() {
+        super.viewDidLoad()
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(didBecomeActiveNotification),
+            name: UIApplication.didBecomeActiveNotification,
+            object: nil
+        )
+    }
 
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -197,6 +212,13 @@ public class DownloadableViewController: UIViewController, ErrorViewController, 
                 }
                 self.downloadButton.isHidden = false
             }
+        }
+    }
+
+    @objc
+    private func didBecomeActiveNotification() {
+        if !downloadButton.isHidden, downloadButton.currentState == .waiting {
+            downloadButton.waitingView.startSpinning()
         }
     }
 

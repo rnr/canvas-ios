@@ -22,6 +22,14 @@ import Combine
 
 public class ModuleListViewController: ScreenViewTrackableViewController, ColoredNavViewProtocol, ErrorViewController, Reachabilitable {
 
+    deinit {
+        NotificationCenter.default.removeObserver(
+            self,
+            name: UIApplication.didBecomeActiveNotification,
+            object: nil
+        )
+    }
+
     @Injected(\.reachability) var reachability: ReachabilityProvider
     var cancellables: [AnyCancellable] = []
 
@@ -111,6 +119,13 @@ public class ModuleListViewController: ScreenViewTrackableViewController, Colore
         connection { [weak self] _ in
             self?.tableView.reloadData()
         }
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(didBecomeActiveNotification),
+            name: UIApplication.didBecomeActiveNotification,
+            object: nil
+        )
     }
 
     public override func viewWillAppear(_ animated: Bool) {
@@ -188,6 +203,11 @@ public class ModuleListViewController: ScreenViewTrackableViewController, Colore
                     : .bottom
             )
         }
+    }
+
+    @objc
+    private func didBecomeActiveNotification() {
+        tableView.reloadData()
     }
 }
 
