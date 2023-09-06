@@ -102,15 +102,24 @@ final class DownloaderViewModel: ObservableObject, Reachabilitable {
     }
 
     private func statusChanged(_ event: OfflineDownloadsManagerEventObject) {
+        if !event.isSupported {
+            remove(event: event)
+            return
+        }
+        
+        switch event.status {
+        case .completed, .removed, .partiallyDownloaded:
+            remove(event: event)
+        default:
+            break
+        }
+    }
+
+    private func remove(event: OfflineDownloadsManagerEventObject) {
         do {
-            switch event.status {
-            case .completed, .removed, .partiallyDownloaded:
-                let object = event.object
-                let model = try object.toOfflineModel()
-                downloadingModules.removeAll(where: { $0.moduleId == model.id })
-            default:
-                break
-            }
+            let object = event.object
+            let model = try object.toOfflineModel()
+            downloadingModules.removeAll(where: { $0.moduleId == model.id })
         } catch {
             self.error = error.localizedDescription
         }
