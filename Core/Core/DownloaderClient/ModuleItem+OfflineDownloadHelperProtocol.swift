@@ -195,7 +195,7 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
             )
             try await extractor.fetch()
             if let latestURL = await extractor.latestRedirectURL,
-                let html = await extractor.html {
+                var html = await extractor.html {
 
                 if shouldRetry(for: html, latestURL: latestURL) {
                     try await prepareLTI(entry: entry, toolID: toolID, sourceURL: sourceURL, repeatCount: repeatCount + 1)
@@ -205,6 +205,14 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
                     entry.markAsUnsupported()
                     let item = try fromOfflineModel(entry.dataModel)
                     throw ModuleItemError.unsupported(type: item.type?.label ?? "", id: item.id)
+                }
+
+                if isOyster(with: html, latestURL: latestURL) {
+                    html = try changeOyster(html: html)
+                }
+
+                if isCoursePlayer(with: html, latestURL: latestURL) {
+                    html = try changeCoursePlayer(html: html)
                 }
 
                 if html.contains(latestURL.absoluteString) {
@@ -229,9 +237,28 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
         }
     }
 
+    static func isOyster(with html: String, latestURL: URL) -> Bool {
+        if latestURL.absoluteString.lowercased().contains("/media-player") {
+            let oysterPattern = "<script[^>]*oyster[^>]*>"
+            if let oysterScripts = results(for: oysterPattern, in: html),
+               !oysterScripts.isEmpty {
+                return true
+            }
+        }
+        return false
+    }
+
+    static func isCoursePlayer(with html: String, latestURL: URL) -> Bool {
+        latestURL.absoluteString.lowercased().contains("/course-player")
+    }
+
+    static func isReport(with html: String, latestURL: URL) -> Bool {
+        latestURL.absoluteString.lowercased().contains("/report")
+    }
+
     static func isLTISupported(with html: String, latestURL: URL) -> Bool {
         // we can't download course player with multiple cards
-        if latestURL.absoluteString.lowercased().contains("/course-player") {
+        if isCoursePlayer(with: html, latestURL: latestURL) {
             let regexPattern = "<div[^>]*NavigationItem[^>]*>"
             if let matches = results(for: regexPattern, in: html) {
                 if !matches.isEmpty {
@@ -242,6 +269,19 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
                 }
             }
         }
+        if isReport(with: html, latestURL: latestURL) {
+            return false
+        }
+        // Oyster
+//        else  if latestURL.absoluteString.lowercased().contains("/media-player") {
+//            let oysterPattern = "<script[^>]*oyster[^>]*>"
+//            let slidePattern = "<div[^>]*class=\"slide\"[^>]*>"
+//            if let oysterScripts = results(for: oysterPattern, in: html),
+//               let slideContainers = results(for: slidePattern, in: html),
+//               !oysterScripts.isEmpty, !slideContainers.isEmpty {
+//                return false
+//            }
+//        }
         return true
     }
 
@@ -254,8 +294,21 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
             return nil
         }
     }
+
     static func shouldRetry(for html: String, latestURL: URL) -> Bool {
-        latestURL.absoluteString.lowercased().contains("3rd-cookie-check/checkpage.html")
+        if latestURL.absoluteString.lowercased().contains("3rd-cookie-check/checkpage.html") {
+            return true
+        }
+
+        if isOyster(with: html, latestURL: latestURL) {
+            let regexPattern = "<div[^>]*oyster-wrapper[^>]*>"
+            if let matches = results(for: regexPattern, in: html),
+                matches.isEmpty {
+                return true
+            }
+        }
+
+        return false
     }
 
     static func prepare(html: String) throws -> String {
@@ -269,6 +322,55 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
                 try app.replaceWith(tag)
             }
         }
+        return try document.html()
+    }
+
+    static func changeCoursePlayer(html: String) throws -> String {
+        let document = try SwiftSoup.parse(html)
+        // remove scripts
+        let scripts = try document.getElementsByTag("script")
+        try scripts.forEach {
+            try $0.remove()
+        }
+        return try document.html()
+    }
+
+    static func changeOyster(html: String) throws -> String {
+        let document = try SwiftSoup.parse(html)
+        let newContent = Element(Tag("div"), "")
+        // search video and move it to body begin
+        let videoTags = try document.getElementsByTag("video")
+        for tag in videoTags {
+            try newContent.append(try tag.outerHtml())
+        }
+        // search transcription remove copy button and move it under video
+        let transcriptionContainer = Element(Tag("div"), "")
+        try transcriptionContainer.attr("style", "padding:10px;")
+        let transcriptions = try document.getElementsByClass("oyster-grid-transcript")
+        for transcription in transcriptions {
+            let buttons = try transcription.getElementsByTag("button")
+            for button in buttons {
+                try button.remove()
+            }
+            try transcriptionContainer.append(try transcription.outerHtml())
+        }
+        try newContent.append(try transcriptionContainer.outerHtml())
+        // clean all body
+        if let children = document.body()?.children() {
+            try children.forEach { child in
+                try child.remove()
+            }
+        }
+
+        // remove scripts
+        let scripts = try document.getElementsByTag("script")
+        try scripts.forEach {
+            try $0.remove()
+        }
+
+        // insert content
+        try document.body()?.insertChildren(0, [newContent])
+
         return try document.html()
     }
 
