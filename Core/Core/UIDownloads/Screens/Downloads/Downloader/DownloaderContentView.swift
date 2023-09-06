@@ -49,5 +49,16 @@ struct DownloaderContentView: View {
         .listRowBackground(Color.backgroundLightest)
         .listRowSeparator(.hidden)
         .listRowInsets(EdgeInsets())
+        .onReceive(
+            NotificationCenter.default.publisher(
+                for: UIApplication.didBecomeActiveNotification
+            )
+        ) { _ in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                viewModel.downloadingModules.forEach {
+                    $0.getCurrentEventObject()
+                }
+            }
+        }
     }
 }

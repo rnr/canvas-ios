@@ -121,6 +121,16 @@ final class DownloadsModuleCellViewModel: ObservableObject {
         }
     }
 
+    func getCurrentEventObject() {
+        item.flatMap {
+            downloadsManager.eventObject(for: $0) { [weak self] result in
+                result.success { event in
+                    self?.statusChanged(event)
+                }
+            }
+        }
+    }
+
     private func image(_ type: ModuleItemType?) -> UIImage? {
         var uiImage = UIImage()
         switch type {
@@ -147,13 +157,7 @@ final class DownloadsModuleCellViewModel: ObservableObject {
                     self?.progressChanged(event)
                 }
             }
-        item.flatMap {
-            downloadsManager.eventObject(for: $0) { [weak self] result in
-                result.success { event in
-                    self?.statusChanged(event)
-                }
-            }
-        }
+        getCurrentEventObject()
     }
 
     private func statusChanged(_ event: OfflineDownloadsManagerEventObject) {
@@ -163,6 +167,7 @@ final class DownloadsModuleCellViewModel: ObservableObject {
             return
         }
         downloaderStatus = event.status
+        progress = Float(event.progress)
     }
 
     private func progressChanged(_ event: OfflineDownloadsManagerEventObject) {
@@ -177,6 +182,7 @@ final class DownloadsModuleCellViewModel: ObservableObject {
             }
             downloaderStatus = event.status
             progress = Float(event.progress)
+            debugLog(eventObjectId, event.progress, "progress")
         } catch {
             debugLog(error.localizedDescription)
         }
