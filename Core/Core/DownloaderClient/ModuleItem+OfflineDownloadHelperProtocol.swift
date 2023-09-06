@@ -280,7 +280,15 @@ extension ModuleItem: OfflineDownloadTypeProtocol {
         }
     }
     static func shouldRetry(for html: String, latestURL: URL) -> Bool {
-        latestURL.absoluteString.lowercased().contains("3rd-cookie-check/checkpage.html")
+        if latestURL.absoluteString.lowercased().contains("3rd-cookie-check/checkpage.html") {
+            return true
+        }
+        
+        if isOyster(with: html, latestURL: latestURL), !html.contains("oyster-wrapper") {
+            return true
+        }
+        
+        return false
     }
 
     static func prepare(html: String) throws -> String {
