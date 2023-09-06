@@ -21,6 +21,14 @@ import Combine
 
 public class PageListViewController: ScreenViewTrackableViewController, ColoredNavViewProtocol, Reachabilitable {
 
+    deinit {
+        NotificationCenter.default.removeObserver(
+            self,
+            name: UIApplication.didBecomeActiveNotification,
+            object: nil
+        )
+    }
+
     @Injected(\.reachability) var reachability: ReachabilityProvider
     var cancellables: [AnyCancellable] = []
 
@@ -102,6 +110,13 @@ public class PageListViewController: ScreenViewTrackableViewController, ColoredN
         connection { [weak self] _  in
             self?.tableView.reloadData()
         }
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(didBecomeActiveNotification),
+            name: UIApplication.didBecomeActiveNotification,
+            object: nil
+        )
     }
 
     public override func viewWillAppear(_ animated: Bool) {
@@ -170,6 +185,11 @@ public class PageListViewController: ScreenViewTrackableViewController, ColoredN
         }
         Page.save(item, in: env.database.viewContext)
         try? env.database.viewContext.save()
+    }
+
+    @objc
+    private func didBecomeActiveNotification() {
+        tableView.reloadData()
     }
 }
 
